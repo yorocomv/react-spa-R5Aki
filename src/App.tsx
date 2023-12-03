@@ -1,41 +1,18 @@
-import { useState } from 'react';
-import reactLogo from './assets/react.svg';
-import viteLogo from '../../../../../../../vite.svg';
-import './App.css';
+import { Suspense, lazy } from 'react';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import Home from './home';
 
-function App() {
-  const [count, setCount] = useState(0);
+const CustomerRoutes = lazy(() => import('./routes/customers/customer-routes'));
 
+const router = createBrowserRouter([
+  { path: '/', element: <Home /> },
+  { path: 'customers/*', element: <CustomerRoutes /> },
+]);
+
+export default function App() {
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank" rel="noreferrer">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button type="button" onClick={() => { setCount((cnt) => cnt + 1); }}>
-          count is
-          {' '}
-          {count}
-        </button>
-        <p>
-          Edit
-          {' '}
-          <code>src/App.tsx</code>
-          {' '}
-          and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <Suspense fallback={<div>読み込み中</div>}>
+      <RouterProvider router={router} />
+    </Suspense>
   );
 }
-
-export default App;
