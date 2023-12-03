@@ -1,6 +1,7 @@
 {
   "name": "react-spa-r5aki",
   "private": true,
+  "homepage": "/spa",
   "version": "0.0.0",
   "type": "module",
   "packageManager": "pnpm@8.6.12",

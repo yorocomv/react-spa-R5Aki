@@ -4,10 +4,15 @@ import Home from './home';
 
 const CustomerRoutes = lazy(() => import('./routes/customers/customer-routes'));
 
-const router = createBrowserRouter([
-  { path: '/', element: <Home /> },
-  { path: 'customers/*', element: <CustomerRoutes /> },
-]);
+const router = createBrowserRouter(
+  [
+    { path: '/', element: <Home /> },
+    { path: 'customers/*', element: <CustomerRoutes /> },
+  ],
+  {
+    basename: '/spa',
+  },
+);
 
 export default function App() {
   return (
