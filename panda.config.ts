@@ -2,10 +2,31 @@ import { defineConfig, defineGlobalStyles } from '@pandacss/dev';
 
 const globalCss = defineGlobalStyles({
   'html, body': {
-    fontFamily: '"Segoe UI Emoji", "BIZ UDPGothic", sans-serif',
-    lineHeight: 1.8,
     bg: '#dcd0c0',
     color: '#0e0e0e',
+    fontFamily: '"Segoe UI Emoji", "BIZ UDPGothic", sans-serif',
+    lineHeight: '1.75rem',
+  },
+  input: {
+    fontWeight: 'bold',
+    py: 1,
+    px: 3,
+    m: 0.5,
+    borderRadius: 'sm',
+    boxShadow: 'sm',
+    _focus: {
+      outline: 'solid 0.125rem #2dd4bf',
+    },
+  },
+  button: {
+    color: { base: 'teal.950', _active: 'teal.100' },
+    bg: { base: 'teal.400', _hover: 'teal.500', _active: 'teal.600' },
+    fontWeight: 'bold',
+    py: 1,
+    px: 3,
+    m: 0.5,
+    borderRadius: 'sm',
+    boxShadow: 'sm',
   },
 });
 
