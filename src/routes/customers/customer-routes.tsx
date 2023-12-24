@@ -1,5 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
-import SearchCustomer from './search-customer';
+import SearchCustomer from './SearchCustomer';
 
 export default function CustomerRoutes() {
   return (
