@@ -1,6 +1,14 @@
+import React, { useState } from 'react';
 import { css } from '../../styled-system/css';
 
 export default function SearchInput() {
+  const [searchString, setSearchString] = useState('');
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => setSearchString(e.target.value);
+  const handleReset = () => {
+    setSearchString('');
+    document.getElementById('input-search-form')?.focus();
+  };
+
   return (
     <nav className={css({ display: 'grid', placeItems: 'center' })}>
       <form className={css({ display: 'flex', alignItems: 'center' })}>
@@ -36,6 +44,10 @@ export default function SearchInput() {
             <input
               id="input-search-form"
               type="text"
+              // eslint-disable-next-line jsx-a11y/no-autofocus
+              autoFocus
+              value={searchString}
+              onChange={handleChange}
               className={css({
                 w: '26.125rem',
                 py: 1,
@@ -51,7 +63,8 @@ export default function SearchInput() {
           </label>
           <button
             type="button"
-            // disabled
+            disabled={searchString.length === 0}
+            onClick={handleReset}
             className={css({
               display: 'flex',
               pos: 'absolute',
