@@ -1,17 +1,34 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { css } from '../../styled-system/css';
 
-export default function SearchInput() {
-  const [searchString, setSearchString] = useState('');
+interface SearchInputProps {
+  searchString: string;
+  setSearchString: React.Dispatch<React.SetStateAction<string>>;
+  searchTrigger: boolean;
+  setSearchTrigger: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export default function SearchInput({
+  searchString,
+  setSearchString,
+  searchTrigger,
+  setSearchTrigger,
+}: SearchInputProps): React.ReactElement {
+  // 親コンポーネントから渡された State を制御する関数群
+  // 内部で渡された set 関数を使用
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => setSearchString(e.target.value);
   const handleReset = () => {
     setSearchString('');
     document.getElementById('input-search-form')?.focus();
   };
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setSearchTrigger(!searchTrigger);
+  };
 
   return (
     <nav className={css({ display: 'grid', placeItems: 'center' })}>
-      <form className={css({ display: 'flex', alignItems: 'center' })}>
+      <form onSubmit={handleSubmit} className={css({ display: 'flex', alignItems: 'center' })}>
         <div className={css({ pos: 'relative', display: 'inline-block' })}>
           <label
             htmlFor="input-search-form"

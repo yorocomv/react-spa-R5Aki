@@ -4,5 +4,5 @@
     "source.fixAll": "explicit"
   },
   "editor.formatOnSave": true,
-  "cSpell.words": ["hoge", "fuga", "piyo", "preinstall", "vstack"]
+  "cSpell.words": ["hoge", "fuga", "piyo", "preinstall", "tanstack", "vstack"]
 }

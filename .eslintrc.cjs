@@ -11,6 +11,7 @@ module.exports = {
     'plugin:react/recommended',
     'plugin:react/jsx-runtime',
     'plugin:react-hooks/recommended',
+    'plugin:@tanstack/eslint-plugin-query/recommended',
     'prettier',
   ],
   ignorePatterns: ['dist', 'styled-system', 'panda.config.ts', '.eslintrc.cjs'],
@@ -23,6 +24,9 @@ module.exports = {
   plugins: ['react-refresh'],
   rules: {
     'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
+    '@tanstack/query/exhaustive-deps': 'error',
+    '@tanstack/query/no-rest-destructuring': 'warn',
+    '@tanstack/query/stable-query-client': 'error',
     quotes: ['error', 'single', { avoidEscape: true }],
     'no-console': 'off',
     'no-restricted-syntax': [
