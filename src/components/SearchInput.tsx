@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { css } from '../../styled-system/css';
 
 interface SearchInputProps {
@@ -14,6 +14,9 @@ export default function SearchInput({
   searchTrigger,
   setSearchTrigger,
 }: SearchInputProps): React.ReactElement {
+  // https://ja.react.dev/reference/react/useRef#manipulating-the-dom-with-a-ref
+  // https://qiita.com/akifumii/items/539e4af7ed4d068c0144
+  const inputRef = useRef<HTMLInputElement>(null);
   // 親コンポーネントから渡された State を制御する関数群
   // 内部で渡された set 関数を使用
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => setSearchString(e.target.value);
@@ -24,6 +27,8 @@ export default function SearchInput({
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSearchTrigger(!searchTrigger);
+    // document.${id}.focus() よりは高確率で成功する
+    inputRef.current?.focus();
   };
 
   return (
@@ -59,6 +64,7 @@ export default function SearchInput({
               <path d="M10.68 11.74a6 6 0 0 1-7.922-8.982 6 6 0 0 1 8.982 7.922l3.04 3.04a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215ZM11.5 7a4.499 4.499 0 1 0-8.997 0A4.499 4.499 0 0 0 11.5 7Z" />
             </svg>
             <input
+              ref={inputRef}
               id="input-search-form"
               type="text"
               // eslint-disable-next-line jsx-a11y/no-autofocus

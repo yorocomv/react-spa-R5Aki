@@ -1,5 +1,7 @@
 import { Suspense, lazy } from 'react';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import ErrorBoundaryProvider from './components/providers/ErrorBoundaryProvider';
+import AxiosErrorHandleProvider from './components/providers/AxiosErrorHandleProvider';
 import Home from './Home';
 
 const CustomerRoutes = lazy(() => import('./routes/customers/customer-routes'));
@@ -16,8 +18,12 @@ const router = createBrowserRouter(
 
 export default function App() {
   return (
-    <Suspense fallback={<div>読み込み中</div>}>
-      <RouterProvider router={router} />
-    </Suspense>
+    <ErrorBoundaryProvider>
+      <AxiosErrorHandleProvider>
+        <Suspense fallback={<div>読み込み中</div>}>
+          <RouterProvider router={router} />
+        </Suspense>
+      </AxiosErrorHandleProvider>
+    </ErrorBoundaryProvider>
   );
 }
