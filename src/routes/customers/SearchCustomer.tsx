@@ -18,11 +18,16 @@ export default function SearchCustomer() {
     // useSuspenseQuery には enabled オプションが無いので
     // コンポーネントのマウント時に queryFn が走ってしまう 👇一行はその対策
     if (searchString.length === 0) return [];
-    // おまけ機能前処理🐢
+    // おまけ機能（データ取得時間計測⏱）の前処理🐢
     const preRunTime = performance.now();
-    const result: AxiosResponse<CustomersTbRow[]> = await axiosInst.get(`/customers?search_name=${searchString}`);
+    const result: void | AxiosResponse<CustomersTbRow[]> = await axiosInst
+      .get(`/customers?search_name=${searchString}`)
+      .catch((err: string) => {
+        console.error(`💥💥💥 /customers?search_name=${searchString} からのエラーをキャッチ❢ ${err} 💀💀💀`);
+        return Promise.reject(new Error(err));
+      });
 
-    // おまけ機能でも useState() ひとつ使ってる😅💦
+    // おまけ機能で useState() をひとつ使ってる😅💦
     const runTime = performance.now() - preRunTime;
     const runTimeString = runTime.toString();
     if (runTime < 1000) {
@@ -30,6 +35,7 @@ export default function SearchCustomer() {
     } else {
       setLatestCommunicationTime(runTimeString.replace(/([0-9]{3})$/, '.$1'));
     }
+    if (!result) return [];
 
     return result.data;
   };

@@ -4,7 +4,7 @@ import { css } from '../../../styled-system/css';
 
 const fallback = ({ error }: FallbackProps) => {
   if (error instanceof AxiosError) {
-    console.error(`👻${error.status ? error.status : '???'}:`, error.stack?.split(/\r\n|\n/));
+    console.error(`👻 ${error.status ? error.status : '???'} :`, error.stack?.split(/\r\n|\n/));
 
     return (
       <section

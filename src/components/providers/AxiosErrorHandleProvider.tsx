@@ -10,7 +10,7 @@ export default function AxiosErrorHandleProvider({ children }: { children: React
     const responseIntercept = axiosInst.interceptors.response.use(
       (res: AxiosResponse) => res,
       (err: AxiosError) => {
-        console.error('💥💀👻 Axios 通信エラー❢');
+        console.error('👻 Axios 通信エラー❢');
         showBoundary(err);
         return Promise.reject(err);
       },
