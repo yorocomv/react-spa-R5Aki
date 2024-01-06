@@ -1,14 +1,12 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useState } from 'react';
-import { z } from 'zod';
 import { AxiosResponse } from 'axios';
 import { css } from '../../../styled-system/css';
 import { vstack } from '../../../styled-system/patterns/vstack';
+import { CustomersTbRow } from './customers.types';
 import SearchInput from '../../components/SearchInput';
 import axiosInst from '../../util/axios-instance';
-import { customersTbRowSchema } from './customers.schemas';
-
-type CustomersTbRow = z.infer<typeof customersTbRowSchema>;
+import CustomerSummary from '../../components/CustomerSummary';
 
 export default function SearchCustomer() {
   const [searchString, setSearchString] = useState('');
@@ -66,9 +64,23 @@ export default function SearchCustomer() {
       <section className={vstack()}>
         <div>
           <div>{latestCommunicationTime}</div>
-          <ul>
-            {data.length ? data.map((customer) => <li key={customer.id}>{customer.name1}</li>) : <div>Hit 0</div>}
-          </ul>
+          {data.length ? (
+            data.map((customer) => (
+              <CustomerSummary
+                key={customer.id}
+                tel={customer.tel}
+                address1={customer.address1}
+                address2={customer.address2}
+                address3={customer.address3}
+                name1={customer.name1}
+                name2={customer.name2}
+                notes={customer.notes}
+                invoice_type_id={customer.invoice_type_id}
+              />
+            ))
+          ) : (
+            <div>Hit 0</div>
+          )}
         </div>
       </section>
     </>

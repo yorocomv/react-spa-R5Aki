@@ -13,7 +13,7 @@ export default function SearchInput({
   setSearchString,
   searchTrigger,
   setSearchTrigger,
-}: SearchInputProps): React.ReactElement {
+}: SearchInputProps): JSX.Element {
   // https://ja.react.dev/reference/react/useRef#manipulating-the-dom-with-a-ref
   // https://qiita.com/akifumii/items/539e4af7ed4d068c0144
   const inputRef = useRef<HTMLInputElement>(null);
@@ -119,7 +119,9 @@ export default function SearchInput({
             </svg>
           </button>
         </div>
-        <button type="submit">検索</button>
+        <button type="submit" className={css({ minW: '3.5rem' })}>
+          検索
+        </button>
       </form>
     </nav>
   );
