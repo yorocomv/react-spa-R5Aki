@@ -1,7 +1,8 @@
 /* eslint no-irregular-whitespace: ["error", { "skipTemplates": true }] */
-import { FaFaceTired, FaFilePen } from 'react-icons/fa6';
+import { FaFilePen } from 'react-icons/fa6';
 import { css } from '../../styled-system/css';
 import { RequiredCustomerSummary } from '../routes/customers/customers.types';
+import InvoiceIconSwitcher from './InvoiceIconSwitcher';
 
 export default function CustomerSummary({
   tel,
@@ -16,6 +17,7 @@ export default function CustomerSummary({
   const nameII = name2.replace(/\s{2,}/g, '　');
   const addressII = address2.replace(/\s{2,}/g, '　');
   const addressIII = address3.replace(/\s{2,}/g, '　');
+
   return (
     <div
       className={css({
@@ -31,22 +33,42 @@ export default function CustomerSummary({
         borderColor: 'rgba(255, 255, 255, 0.36)',
         boxShadow: 'md',
         _hover: { bgColor: '#E7DED3' },
+        '&:hover ._react-icons_file-pen': {
+          color: 'sky.600',
+        },
+        '&:hover ._react-icons_tired': {
+          fontSize: 'lg',
+          color: 'rose.600',
+        },
+        '&:hover ._react-icons_pen-nib': {
+          color: 'orange.600',
+        },
       })}
     >
-      <div className={css({ fontSize: 'sm', fontWeight: 'bold' })}>{tel}</div>
-      <div>
+      <div
+        className={css({
+          fontSize: 'sm',
+          fontWeight: 'bold',
+        })}
+      >
+        <span className={css({ verticalAlign: 'middle' })}>{tel}</span>
         {notes ? (
-          <FaFilePen className={css({ color: 'red.500' })} />
+          <FaFilePen
+            title="メモがあり〼"
+            className={`_react-icons_file-pen ${css({
+              display: 'inline-block',
+              verticalAlign: 'middle',
+              m: 1,
+              color: 'sky.400',
+              '&:has(+ svg)': {
+                mr: 0,
+              },
+            })}`}
+          />
         ) : (
-          <FaFilePen className={css({ color: 'red.500' })} />
+          ''
         )}
-      </div>
-      <div>
-        {invoice_type_id === 2 ? (
-          <FaFaceTired className={css({ color: 'red.500' })} />
-        ) : (
-          <FaFaceTired className={css({ color: 'red.500' })} />
-        )}
+        <InvoiceIconSwitcher invoiceType={invoice_type_id} />
       </div>
       <div className={css({ textWrap: 'balance', fontSize: 'md', fontWeight: 'bold' })}>
         {address1}
