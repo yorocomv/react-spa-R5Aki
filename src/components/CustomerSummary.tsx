@@ -1,4 +1,5 @@
 /* eslint no-irregular-whitespace: ["error", { "skipTemplates": true }] */
+import { FaFaceTired, FaFilePen } from 'react-icons/fa6';
 import { css } from '../../styled-system/css';
 import { RequiredCustomerSummary } from '../routes/customers/customers.types';
 
@@ -33,6 +34,20 @@ export default function CustomerSummary({
       })}
     >
       <div className={css({ fontSize: 'sm', fontWeight: 'bold' })}>{tel}</div>
+      <div>
+        {notes ? (
+          <FaFilePen className={css({ color: 'red.500' })} />
+        ) : (
+          <FaFilePen className={css({ color: 'red.500' })} />
+        )}
+      </div>
+      <div>
+        {invoice_type_id === 2 ? (
+          <FaFaceTired className={css({ color: 'red.500' })} />
+        ) : (
+          <FaFaceTired className={css({ color: 'red.500' })} />
+        )}
+      </div>
       <div className={css({ textWrap: 'balance', fontSize: 'md', fontWeight: 'bold' })}>
         {address1}
         {`　${addressII}`}
@@ -50,8 +65,6 @@ export default function CustomerSummary({
         {name1}
         {`　${nameII}`}
       </div>
-      <div>{notes ? '📝' : '📝'}</div>
-      <div>{invoice_type_id === 2 ? '😫' : '😫'}</div>
     </div>
   );
 }
