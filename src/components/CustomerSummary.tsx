@@ -18,8 +18,8 @@ export default function CustomerSummary({
   return (
     <div
       className={css({
-        maxWidth: '37rem',
-        minWidth: '32rem',
+        maxW: '36rem',
+        minW: '27.75rem',
         mx: 1,
         my: 6,
         px: 2,
@@ -44,7 +44,7 @@ export default function CustomerSummary({
           fontSize: 'xl',
           fontWeight: 'bold',
           color: 'lime.800',
-          textShadow: '1px 1px 1px rgba(255, 255, 255, 0.6)',
+          textShadow: '-1px 1px 0 rgba(255, 255, 255, 0.6)',
         })}
       >
         {name1}

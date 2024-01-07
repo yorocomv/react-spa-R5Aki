@@ -34,7 +34,7 @@ export default function SearchInput({
   return (
     <nav className={css({ display: 'grid', placeItems: 'center' })}>
       <form onSubmit={handleSubmit} className={css({ display: 'flex', alignItems: 'center' })}>
-        <div className={css({ pos: 'relative', display: 'inline-block' })}>
+        <div className={css({ pos: 'relative' })}>
           <label
             htmlFor="input-search-form"
             className={css({
@@ -42,8 +42,7 @@ export default function SearchInput({
               pos: 'relative',
               alignItems: 'center',
               pl: '0.625rem',
-              m: 0.5,
-              w: '28rem',
+              m: 0,
               color: '#0a1612',
               bgColor: '#f5eeee',
               borderColor: '#fefefe',
@@ -72,7 +71,8 @@ export default function SearchInput({
               value={searchString}
               onChange={handleChange}
               className={css({
-                w: '26.125rem',
+                w: '100%',
+                minW: '20.75rem',
                 py: 1,
                 pr: 3,
                 pl: '0.625rem',
@@ -80,6 +80,12 @@ export default function SearchInput({
                 fontWeight: 'bold',
                 _focus: {
                   outline: 'none',
+                },
+                // Firefox と Edge の描画の違いを吸収するためメディアクエリを使用😅💦
+                '@media (min-width: 35em)': { minW: '28rem' },
+                // ブラウザ（Edge で確認）の自動補完時の独自スタイルを N 秒後 N 秒かけて適用する
+                _autofill: {
+                  transition: 'background-color 9999s 9999s',
                 },
               })}
             />
@@ -96,7 +102,7 @@ export default function SearchInput({
               borderRadius: '50%',
               bg: 'none',
               boxShadow: 'none',
-              top: '0.625rem',
+              top: '0.5rem',
               right: '0.625rem',
               '&:disabled > svg': {
                 display: 'none',
@@ -119,7 +125,7 @@ export default function SearchInput({
             </svg>
           </button>
         </div>
-        <button type="submit" className={css({ minW: '3.5rem' })}>
+        <button type="submit" className={css({ minW: '3.5rem', ml: '0.25rem' })}>
           検索
         </button>
       </form>

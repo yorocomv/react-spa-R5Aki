@@ -27,7 +27,7 @@ export default function SearchCustomer() {
 
     // おまけ機能で useState() をひとつ使ってる😅💦
     const runTime = performance.now() - preRunTime;
-    const runTimeString = runTime.toString();
+    const runTimeString = runTime.toString().replace('.', '');
     if (runTime < 1000) {
       setLatestCommunicationTime(`0.${runTimeString.padStart(3, '0')}`);
     } else {
