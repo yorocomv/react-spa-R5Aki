@@ -50,8 +50,8 @@ export default function CustomerSummary({
       </div>
       <div className={css({ textWrap: 'balance', fontSize: 'md', fontWeight: 'bold' })}>
         {address1}
-        {`　${addressII}`}
-        {`　${addressIII}`}
+        {addressII ? `　${addressII}` : ''}
+        {addressIII ? `　${addressIII}` : ''}
       </div>
       <div
         className={css({
@@ -60,10 +60,15 @@ export default function CustomerSummary({
           fontWeight: 'bold',
           color: 'lime.800',
           textShadow: '-1px 1px 0 rgba(255, 255, 255, 0.6)',
+          '&::selection': {
+            color: 'slate.50',
+            bgColor: 'indigo.300',
+            textShadow: 'none',
+          },
         })}
       >
         {name1}
-        {`　${nameII}`}
+        {nameII ? `　${nameII}` : ''}
       </div>
     </div>
   );
