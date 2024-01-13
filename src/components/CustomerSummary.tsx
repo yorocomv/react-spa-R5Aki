@@ -1,4 +1,3 @@
-/* eslint no-irregular-whitespace: ["error", { "skipTemplates": true }] */
 import { FaFilePen } from 'react-icons/fa6';
 import { css } from '../../styled-system/css';
 import { RequiredCustomerSummary } from '../routes/customers/customers.types';
@@ -80,7 +79,9 @@ export default function CustomerSummary({
       </div>
       <div className={css({ textWrap: 'balance', fontSize: 'md', fontWeight: 'bold' })}>
         {address1}
+        {/* eslint-disable-next-line no-irregular-whitespace */}
         {addressII ? `　${addressII}` : ''}
+        {/* eslint-disable-next-line no-irregular-whitespace */}
         {addressIII ? `　${addressIII}` : ''}
       </div>
       <div
@@ -98,6 +99,7 @@ export default function CustomerSummary({
         })}
       >
         {name1}
+        {/* eslint-disable-next-line no-irregular-whitespace */}
         {nameII ? `　${nameII}` : ''}
       </div>
     </div>
