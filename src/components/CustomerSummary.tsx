@@ -37,7 +37,7 @@ export default function CustomerSummary({
           color: 'sky.600',
         },
         '&:hover ._react-icons_tired': {
-          fontSize: 'lg',
+          fontSize: '2xl',
           color: 'rose.600',
         },
         '&:hover ._react-icons_pen-nib': {
@@ -49,16 +49,24 @@ export default function CustomerSummary({
         className={css({
           fontSize: 'sm',
           fontWeight: 'bold',
+          '&> span, svg': {
+            verticalAlign: 'middle',
+          },
+          '&> svg': {
+            display: 'inline-block',
+            fontSize: 'lg',
+            m: 1,
+          },
+          '&:has(> svg._react-icons_tired)': {
+            lineHeight: '2rem',
+          },
         })}
       >
-        <span className={css({ verticalAlign: 'middle' })}>{tel}</span>
+        <span>{tel}</span>
         {notes ? (
           <FaFilePen
             title="メモがあり〼"
             className={`_react-icons_file-pen ${css({
-              display: 'inline-block',
-              verticalAlign: 'middle',
-              m: 1,
               color: 'sky.400',
               '&:has(+ svg)': {
                 mr: 0,

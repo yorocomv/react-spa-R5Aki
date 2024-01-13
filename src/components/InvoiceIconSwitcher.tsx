@@ -12,9 +12,6 @@ export default function InvoiceIconSwitcher({ invoiceType }: InvoiceIconSwitcher
         <FaFaceTired
           title="本伝 (SMILE)"
           className={`_react-icons_tired ${css({
-            display: 'inline-block',
-            verticalAlign: 'middle',
-            m: 1,
             color: 'rose.400',
           })}`}
         />
@@ -24,9 +21,6 @@ export default function InvoiceIconSwitcher({ invoiceType }: InvoiceIconSwitcher
         <FaPenNib
           title="専用伝票"
           className={`_react-icons_pen-nib ${css({
-            display: 'inline-block',
-            verticalAlign: 'middle',
-            m: 1,
             color: 'orange.400',
           })}`}
         />
