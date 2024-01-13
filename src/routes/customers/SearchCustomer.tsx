@@ -27,12 +27,23 @@ export default function SearchCustomer() {
 
     // おまけ機能で useState() をひとつ使ってる😅💦
     const runTime = performance.now() - preRunTime;
-    const runTimeString = runTime.toString().replace('.', '');
+    let runTimeString = runTime.toString();
+    // 小数点付きミリ秒か否かを記録
+    const index = runTimeString.indexOf('.');
+    // ミリ秒の小数点（0.000.00秒）を取る
+    runTimeString = runTimeString.replace('.', '');
+    // 一秒未満
     if (runTime < 1000) {
       setLatestCommunicationTime(`0.${runTimeString.padStart(3, '0')}`);
-    } else {
+      // 一秒以上かつ精度はミリ秒まで
+    } else if (index === -1) {
       setLatestCommunicationTime(runTimeString.replace(/([0-9]{3})$/, '.$1'));
+      // 一秒以上かつ小数点付きミリ秒
+    } else {
+      const patternStr = `^([0-9]{${index - 3}})`;
+      setLatestCommunicationTime(runTimeString.replace(new RegExp(patternStr), '$1.'));
     }
+
     if (!result) return [];
 
     return result.data;
