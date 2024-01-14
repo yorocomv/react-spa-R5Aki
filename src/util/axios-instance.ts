@@ -4,6 +4,7 @@ let baseURL: string;
 
 switch (import.meta.env.MODE) {
   case 'development':
+  case 'development__with-msw__':
     baseURL = (import.meta.env.VITE_AXIOS_BASE_URL_IN_DEV_MODE as string) ?? 'http://localhost:3000';
     break;
   case 'production':

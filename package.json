@@ -9,6 +9,7 @@
     "preinstall": "npx only-allow pnpm",
     "prepare": "panda codegen",
     "dev": "vite",
+    "dev:msw": "vite --mode development__with-msw__",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0 --fix",
     "format": "prettier --write \"**/*.+(cjs|mjs|js|json|yml|ts)\"",
@@ -38,8 +39,12 @@
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.3",
+    "msw": "^2.0.14",
     "prettier": "^3.0.3",
     "typescript": "^5.0.2",
     "vite": "^4.4.5"
+  },
+  "msw": {
+    "workerDirectory": "public"
   }
 }
