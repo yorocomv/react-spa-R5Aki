@@ -12,7 +12,7 @@ export default function InvoiceIconSwitcher({ invoiceType }: InvoiceIconSwitcher
         <FaFaceTired
           title="本伝 (SMILE)"
           className={`_react-icons_tired ${css({
-            color: 'rose.400',
+            color: 'red.400',
           })}`}
         />
       );

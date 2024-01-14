@@ -1,4 +1,4 @@
-import { FaFilePen } from 'react-icons/fa6';
+import { FaFilePen, FaPhone } from 'react-icons/fa6';
 import { css } from '../../styled-system/css';
 import { RequiredCustomerSummary } from '../routes/customers/customers.types';
 import InvoiceIconSwitcher from './InvoiceIconSwitcher';
@@ -33,11 +33,11 @@ export default function CustomerSummary({
         boxShadow: 'md',
         _hover: { bgColor: '#E7DED3' },
         '&:hover ._react-icons_file-pen': {
-          color: 'sky.600',
+          color: 'blue.600',
         },
         '&:hover ._react-icons_tired': {
           fontSize: '2xl',
-          color: 'rose.600',
+          color: 'red.600',
         },
         '&:hover ._react-icons_pen-nib': {
           color: 'orange.600',
@@ -48,7 +48,7 @@ export default function CustomerSummary({
         className={css({
           fontSize: 'sm',
           fontWeight: 'bold',
-          '&> span, svg': {
+          '& span, & svg': {
             verticalAlign: 'middle',
           },
           '&> svg': {
@@ -61,12 +61,21 @@ export default function CustomerSummary({
           },
         })}
       >
-        <span>{tel}</span>
+        <span>
+          <FaPhone
+            className={css({
+              display: 'inline-block',
+              fontSize: '0.75rem',
+              mr: '1px',
+            })}
+          />
+          {tel}
+        </span>
         {notes ? (
           <FaFilePen
             title="メモがあり〼"
             className={`_react-icons_file-pen ${css({
-              color: 'sky.400',
+              color: 'blue.400',
               '&:has(+ svg)': {
                 mr: 0,
               },
