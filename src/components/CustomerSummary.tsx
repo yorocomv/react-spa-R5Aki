@@ -49,15 +49,15 @@ export default function CustomerSummary({
           fontSize: 'sm',
           fontWeight: 'bold',
           '& span, & svg': {
+            display: 'inline-block',
             verticalAlign: 'middle',
           },
-          '&> svg': {
-            display: 'inline-block',
+          '& svg': {
             fontSize: 'lg',
             m: 1,
           },
-          '&:has(> svg._react-icons_tired)': {
-            lineHeight: '2rem',
+          '&:has(svg._react-icons_tired)': {
+            lineHeight: '2.375rem',
           },
         })}
       >
@@ -65,26 +65,26 @@ export default function CustomerSummary({
           <FaPhone
             className={css({
               display: 'inline-block',
-              fontSize: '0.75rem',
+              fontSize: '0.75rem !important',
               mr: '1px',
             })}
           />
           {tel}
+          {notes ? (
+            <FaFilePen
+              title="メモがあり〼"
+              className={`_react-icons_file-pen ${css({
+                color: 'blue.400',
+                '&:has(+ svg)': {
+                  mr: 0,
+                },
+              })}`}
+            />
+          ) : (
+            ''
+          )}
+          <InvoiceIconSwitcher invoiceType={invoice_type_id} />
         </span>
-        {notes ? (
-          <FaFilePen
-            title="メモがあり〼"
-            className={`_react-icons_file-pen ${css({
-              color: 'blue.400',
-              '&:has(+ svg)': {
-                mr: 0,
-              },
-            })}`}
-          />
-        ) : (
-          ''
-        )}
-        <InvoiceIconSwitcher invoiceType={invoice_type_id} />
       </div>
       <div className={css({ textWrap: 'balance', fontSize: 'md', fontWeight: 'bold' })}>
         {address1}
