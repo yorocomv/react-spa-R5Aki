@@ -103,7 +103,7 @@ export default function CustomerSummary({
           textShadow: '-1px 1px 0 rgba(255, 255, 255, 0.6)',
           '&::selection': {
             color: 'slate.50',
-            bgColor: 'indigo.300',
+            bgColor: 'indigo.600',
             textShadow: 'none',
           },
         })}

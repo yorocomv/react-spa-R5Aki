@@ -1,6 +1,7 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { AxiosResponse } from 'axios';
+import { Link } from 'react-router-dom';
 import { css } from '../../../styled-system/css';
 import { vstack } from '../../../styled-system/patterns/vstack';
 import { CustomersTbRow } from './customers.types';
@@ -77,17 +78,18 @@ export default function SearchCustomer() {
           <div>{latestCommunicationTime}</div>
           {data.length ? (
             data.map((customer) => (
-              <CustomerSummary
-                key={customer.id}
-                tel={customer.tel}
-                address1={customer.address1}
-                address2={customer.address2}
-                address3={customer.address3}
-                name1={customer.name1}
-                name2={customer.name2}
-                notes={customer.notes}
-                invoice_type_id={customer.invoice_type_id}
-              />
+              <Link key={customer.id} to={`./${customer.id}`} state={customer}>
+                <CustomerSummary
+                  tel={customer.tel}
+                  address1={customer.address1}
+                  address2={customer.address2}
+                  address3={customer.address3}
+                  name1={customer.name1}
+                  name2={customer.name2}
+                  notes={customer.notes}
+                  invoice_type_id={customer.invoice_type_id}
+                />
+              </Link>
             ))
           ) : (
             <div>Hit 0</div>

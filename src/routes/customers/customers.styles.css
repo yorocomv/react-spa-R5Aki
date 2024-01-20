@@ -1,0 +1,27 @@
+html:has(#chosen-customer-details) {
+  height: 100lvh;
+  background-color: #fde68a;
+  background-image: repeating-linear-gradient(
+      60deg,
+      rgba(245, 158, 11, 1) 0px 3px,
+      rgba(254, 249, 195, 0.5) 3px 63px,
+      rgba(245, 158, 11, 0.5) 63px 183px,
+      rgba(254, 249, 195, 0.5) 183px 243px
+    ),
+    repeating-linear-gradient(
+      -60deg,
+      rgba(245, 158, 11, 1) 0px 3px,
+      rgba(254, 249, 195, 0.5) 3px 63px,
+      rgba(245, 158, 11, 0.5) 63px 183px,
+      rgba(254, 249, 195, 0.5) 183px 243px
+    );
+}
+body:has(#chosen-customer-details) {
+  background: transparent;
+}
+#chosen-customer-details > div > div strong {
+  margin-left: 0.125rem;
+  margin-right: 0.125rem;
+  font-weight: bold;
+  text-shadow: -1px 1px 0 rgba(255, 255, 255, 0.6);
+}

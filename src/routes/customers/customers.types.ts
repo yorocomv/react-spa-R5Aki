@@ -6,3 +6,7 @@ export type RequiredCustomerSummary = Pick<
   CustomersTbRow,
   'tel' | 'address1' | 'address2' | 'address3' | 'name1' | 'name2' | 'notes' | 'invoice_type_id'
 >;
+export type RequiredChoiceCustomer = Pick<
+  CustomersTbRow,
+  'tel' | 'zip_code' | 'address1' | 'address2' | 'address3' | 'name1' | 'name2' | 'nja_city' | 'invoice_type_id'
+>;
