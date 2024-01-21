@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { css } from '../../../../styled-system/css';
 
 interface SearchInputProps {
@@ -24,8 +25,10 @@ export default function SearchInput({
     setSearchString('');
     document.getElementById('input-search-form')?.focus();
   };
+  const navigate = useNavigate();
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    navigate('/customers');
     setSearchTrigger(!searchTrigger);
     // document.${id}.focus() よりは高確率で成功する
     inputRef.current?.focus();

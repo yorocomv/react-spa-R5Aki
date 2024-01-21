@@ -1,13 +1,11 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { AxiosResponse } from 'axios';
-import { Link } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import { css } from '../../../styled-system/css';
-import { vstack } from '../../../styled-system/patterns/vstack';
 import { CustomersTbRow } from './customers.types';
 import SearchInput from './components/SearchInput';
 import axiosInst from '../../util/axios-instance';
-import CustomerSummary from './components/CustomerSummary';
 
 export default function SearchCustomer() {
   const [searchString, setSearchString] = useState('');
@@ -49,7 +47,7 @@ export default function SearchCustomer() {
 
     return result.data;
   };
-  const { data } = useSuspenseQuery({
+  const { data: customers } = useSuspenseQuery({
     queryKey: ['customers?search_name', searchTrigger],
     queryFn: fetchSelectedCustomersQueryFn,
   });
@@ -73,29 +71,7 @@ export default function SearchCustomer() {
           setSearchTrigger={setSearchTrigger}
         />
       </header>
-      <section className={vstack()}>
-        <div>
-          <div>{latestCommunicationTime}</div>
-          {data.length ? (
-            data.map((customer) => (
-              <Link key={customer.id} to={`./${customer.id}`} state={customer}>
-                <CustomerSummary
-                  tel={customer.tel}
-                  address1={customer.address1}
-                  address2={customer.address2}
-                  address3={customer.address3}
-                  name1={customer.name1}
-                  name2={customer.name2}
-                  notes={customer.notes}
-                  invoice_type_id={customer.invoice_type_id}
-                />
-              </Link>
-            ))
-          ) : (
-            <div>Hit 0</div>
-          )}
-        </div>
-      </section>
+      <Outlet context={{ latestCommunicationTime, customers }} />
     </>
   );
 }

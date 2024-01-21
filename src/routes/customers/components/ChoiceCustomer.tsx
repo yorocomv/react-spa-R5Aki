@@ -51,7 +51,8 @@ export default function ChoiceCustomer({
             mb: 4,
           })}
         >
-          {invoice_type_id === 1 ? '仮伝' : '本伝 その他'}
+          {/* TODO: コンポーネント化 */}
+          {invoice_type_id === 2 ? '仮伝' : '本伝 その他'}
         </div>
         <div
           className={css({
