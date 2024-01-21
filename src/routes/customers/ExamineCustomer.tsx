@@ -1,6 +1,6 @@
 import { useLocation } from 'react-router-dom';
 import { CustomersTbRow } from './customers.types';
-import ChoiceCustomer from '../../components/ChoiceCustomer';
+import ChoiceCustomer from './components/ChoiceCustomer';
 
 export default function ExamineCustomer() {
   const customer = useLocation().state as CustomersTbRow;

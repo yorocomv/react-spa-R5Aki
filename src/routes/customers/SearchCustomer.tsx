@@ -5,9 +5,9 @@ import { Link } from 'react-router-dom';
 import { css } from '../../../styled-system/css';
 import { vstack } from '../../../styled-system/patterns/vstack';
 import { CustomersTbRow } from './customers.types';
-import SearchInput from '../../components/SearchInput';
+import SearchInput from './components/SearchInput';
 import axiosInst from '../../util/axios-instance';
-import CustomerSummary from '../../components/CustomerSummary';
+import CustomerSummary from './components/CustomerSummary';
 
 export default function SearchCustomer() {
   const [searchString, setSearchString] = useState('');

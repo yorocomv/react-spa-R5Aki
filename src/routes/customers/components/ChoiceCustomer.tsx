@@ -1,7 +1,7 @@
 import parse from 'html-react-parser';
-import { css } from '../../styled-system/css';
-import { RequiredChoiceCustomer } from '../routes/customers/customers.types';
-import '../routes/customers/customers.styles.css';
+import { css } from '../../../../styled-system/css';
+import { RequiredChoiceCustomer } from '../customers.types';
+import '../customers.styles.css';
 
 export default function ChoiceCustomer({
   tel,

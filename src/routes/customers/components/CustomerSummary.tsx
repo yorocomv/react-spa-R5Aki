@@ -1,6 +1,6 @@
 import { FaFilePen, FaPhone } from 'react-icons/fa6';
-import { css } from '../../styled-system/css';
-import { RequiredCustomerSummary } from '../routes/customers/customers.types';
+import { css } from '../../../../styled-system/css';
+import { RequiredCustomerSummary } from '../customers.types';
 import InvoiceIconSwitcher from './InvoiceIconSwitcher';
 
 export default function CustomerSummary({

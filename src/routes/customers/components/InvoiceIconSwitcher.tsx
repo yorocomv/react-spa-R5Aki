@@ -1,5 +1,5 @@
 import { FaFaceTired, FaPenNib } from 'react-icons/fa6';
-import { css } from '../../styled-system/css';
+import { css } from '../../../../styled-system/css';
 
 interface InvoiceIconSwitcherProps {
   invoiceType: number;
