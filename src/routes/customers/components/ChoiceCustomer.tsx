@@ -1,5 +1,6 @@
 import parse from 'html-react-parser';
 import { css } from '../../../../styled-system/css';
+import InvoiceNameSwitcher from './InvoiceNameSwitcher';
 import { RequiredChoiceCustomer } from '../customers.types';
 import '../customers.styles.css';
 
@@ -51,8 +52,7 @@ export default function ChoiceCustomer({
             mb: 4,
           })}
         >
-          {/* TODO: コンポーネント化 */}
-          {invoice_type_id === 2 ? '仮伝' : '本伝 その他'}
+          <InvoiceNameSwitcher invoiceType={invoice_type_id} />
         </div>
         <div
           className={css({
