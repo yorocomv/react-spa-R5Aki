@@ -41,7 +41,8 @@ export default function ChoiceCustomer({
           m: 8,
           py: 3,
           px: 4,
-          border: '1px solid rgba(255, 255, 255, .5)',
+          border: '1px solid rgba(0, 0, 0, .2)',
+          bgColor: 'rgba(0, 0, 0, .2)',
           backdropFilter: 'blur(20px)',
           borderRadius: 'xl',
           boxShadow: 'xl',
@@ -58,8 +59,8 @@ export default function ChoiceCustomer({
           className={css({
             fontSize: '3xl',
             fontWeight: 'bold',
-            color: 'lime.800',
-            textShadow: '-1px 1px 0 rgba(255, 255, 255, 0.6)',
+            color: 'lime.600',
+            textShadow: '-1px 1px 0 rgba(0, 0, 0, 0.6)',
             '&::selection': {
               color: 'slate.50',
               bgColor: 'indigo.600',
@@ -73,8 +74,8 @@ export default function ChoiceCustomer({
           className={css({
             fontSize: '2xl',
             fontWeight: 'bold',
-            color: 'lime.800',
-            textShadow: '-1px 1px 0 rgba(255, 255, 255, 0.6)',
+            color: 'lime.600',
+            textShadow: '-1px 1px 0 rgba(0, 0, 0, 0.6)',
             '&::selection': {
               color: 'slate.50',
               bgColor: 'indigo.600',
@@ -102,6 +103,15 @@ export default function ChoiceCustomer({
           </div>
         </div>
       </div>
+      <ul id="css-anima-bg-circles">
+        {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+          [...Array(10)].map((_, i) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <li key={`css-anima-bg-circles-${i}`} />
+          ))
+        }
+      </ul>
     </section>
   );
 }
