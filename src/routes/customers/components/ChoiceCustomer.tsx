@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import parse from 'html-react-parser';
 import { css } from '../../../../styled-system/css';
 import InvoiceNameSwitcher from './InvoiceNameSwitcher';
@@ -14,6 +15,7 @@ export default function ChoiceCustomer({
   name2,
   nja_city,
   invoice_type_id,
+  setIsContinued,
 }: RequiredChoiceCustomer): JSX.Element {
   let zipCodeHyphen = zip_code;
   if (/^[0-9]{7}$/.test(zipCodeHyphen)) {
@@ -24,6 +26,15 @@ export default function ChoiceCustomer({
     const patternStr = `(${nja_city})`;
     address1WithCityEmphasis = address1.replace(new RegExp(patternStr), '<strong>$1</strong>');
   }
+
+  // ブラウザバック時に ExamineCustomer コンポーネントの isContinued ステートを
+  // 常に false にする
+  useEffect(() => {
+    const browserBackFunc = () => setIsContinued(false);
+    window.addEventListener('popstate', browserBackFunc);
+
+    return () => window.removeEventListener('popstate', browserBackFunc);
+  }, [setIsContinued]);
 
   return (
     <section

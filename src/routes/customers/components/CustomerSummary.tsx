@@ -19,30 +19,32 @@ export default function CustomerSummary({
 
   return (
     <div
-      className={css({
-        maxW: '36rem',
-        minW: '27.75rem',
-        mx: 1,
-        my: 6,
-        px: 2,
-        py: 1,
-        borderRadius: 'md',
-        bgColor: '#E1D7C9',
-        borderWidth: '1px',
-        borderColor: 'rgba(255, 255, 255, 0.36)',
-        boxShadow: 'md',
-        _hover: { bgColor: '#E7DED3' },
-        '&:hover ._react-icons_file-pen': {
-          color: 'blue.600',
-        },
-        '&:hover ._react-icons_tired': {
-          fontSize: '2xl',
-          color: 'red.600',
-        },
-        '&:hover ._react-icons_pen-nib': {
-          color: 'orange.600',
-        },
-      })}
+      className={`
+        customer-summary
+        ${css({
+          maxW: '36rem',
+          minW: '27.75rem',
+          mx: 1,
+          my: 6,
+          px: 2,
+          py: 1,
+          borderRadius: 'md',
+          bgColor: '#E1D7C9',
+          borderWidth: '1px',
+          borderColor: 'rgba(255, 255, 255, 0.36)',
+          boxShadow: 'md',
+          _hover: { bgColor: '#E7DED3' },
+          '&:hover ._react-icons_file-pen': {
+            color: 'blue.600',
+          },
+          '&:hover ._react-icons_tired': {
+            fontSize: '2xl',
+            color: 'red.600',
+          },
+          '&:hover ._react-icons_pen-nib': {
+            color: 'orange.600',
+          },
+        })}`}
     >
       <div
         className={css({
