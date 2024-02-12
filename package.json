@@ -12,7 +12,7 @@
     "dev:msw": "vite --mode development__with-msw__",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0 --fix",
-    "format": "prettier --write \"**/*.+(cjs|mjs|js|json|yml|ts)\"",
+    "format": "prettier --check \"**/*.+(cjs|mjs|js|jsx|json|yml|ts|tsx)\" || prettier --write \"**/*.+(cjs|mjs|js|jsx|json|yml|ts|tsx)\"",
     "preview": "vite preview"
   },
   "dependencies": {
