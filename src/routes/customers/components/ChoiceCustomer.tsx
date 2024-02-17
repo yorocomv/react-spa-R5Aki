@@ -3,7 +3,7 @@ import parse from 'html-react-parser';
 import { css } from '../../../../styled-system/css';
 import InvoiceNameSwitcher from './InvoiceNameSwitcher';
 import { RequiredChoiceCustomer } from '../customers.types';
-import '../customers.styles.css';
+import '../customers.css';
 
 export default function ChoiceCustomer({
   tel,

@@ -48,10 +48,15 @@ export default function SearchInput({
               m: 0,
               color: '#0a1612',
               bgColor: '#f5eeee',
+              borderWidth: '1px',
               borderColor: '#fefefe',
               borderRadius: 'sm',
               boxShadow: 'sm',
+              _hover: {
+                borderColor: 'slate.400',
+              },
               '&:focus-within': {
+                borderWidth: 0,
                 outline: 'solid 0.125rem #2dd4bf',
               },
             })}

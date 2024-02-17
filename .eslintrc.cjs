@@ -24,6 +24,15 @@ module.exports = {
   plugins: ['react-refresh'],
   rules: {
     'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
+    'jsx-a11y/label-has-associated-control': [
+      2,
+      {
+        labelComponents: ['InputLabel'],
+        labelAttributes: ['label'],
+        controlComponents: ['Input', 'Select'],
+        depth: 3,
+      },
+    ],
     '@tanstack/query/exhaustive-deps': 'error',
     '@tanstack/query/no-rest-destructuring': 'warn',
     '@tanstack/query/stable-query-client': 'error',
