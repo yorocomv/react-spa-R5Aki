@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { css } from '../../../../styled-system/css';
+import Button from './elements/Button';
 
 interface SearchInputProps {
   searchString: string;
@@ -106,7 +107,7 @@ export default function SearchInput({
               display: 'flex',
               pos: 'absolute',
               p: 0,
-              m: 0,
+              m: '0',
               borderRadius: '50%',
               bg: 'none',
               boxShadow: 'none',
@@ -133,9 +134,9 @@ export default function SearchInput({
             </svg>
           </button>
         </div>
-        <button type="submit" className={css({ minW: '3.5rem', ml: '0.25rem' })}>
+        <Button type="submit" className={css({ minW: '3.5rem', ml: '0.25rem' })}>
           検索
-        </button>
+        </Button>
       </form>
     </nav>
   );
