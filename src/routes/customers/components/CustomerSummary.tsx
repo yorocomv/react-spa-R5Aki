@@ -38,6 +38,7 @@ export default function CustomerSummary({
             color: 'blue.600',
           },
           '&:hover ._react-icons_tired': {
+            ml: '-0.125rem',
             fontSize: '2xl',
             color: 'red.600',
           },
@@ -48,17 +49,18 @@ export default function CustomerSummary({
     >
       <div
         className={css({
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr',
           fontSize: 'sm',
           fontWeight: 'bold',
-          '&> span, &> svg': {
+          '& span, & svg': {
             display: 'inline-block',
-            verticalAlign: 'middle',
           },
-          '&> svg': {
+          '& .property-svg-icons svg': {
             fontSize: 'lg',
-            m: 1,
+            mx: 1,
           },
-          '&:has(> svg._react-icons_tired)': {
+          '&:has(svg._react-icons_tired)': {
             lineHeight: '2rem',
           },
         })}
@@ -74,20 +76,26 @@ export default function CustomerSummary({
           />
           {tel}
         </span>
-        {notes ? (
-          <FaFilePen
-            title="メモがあり〼"
-            className={`_react-icons_file-pen ${css({
-              color: 'blue.400',
-              '&:has(+ svg)': {
-                mr: 0,
-              },
-            })}`}
-          />
-        ) : (
-          ''
-        )}
-        <InvoiceIconSwitcher invoiceType={invoice_type_id} />
+        <span
+          className={`property-svg-icons ${css({
+            justifySelf: 'end',
+          })}`}
+        >
+          {notes ? (
+            <FaFilePen
+              title="メモがあり〼"
+              className={`_react-icons_file-pen ${css({
+                color: 'blue.400',
+                '&:has(+ svg)': {
+                  mr: 0,
+                },
+              })}`}
+            />
+          ) : (
+            ''
+          )}
+          <InvoiceIconSwitcher invoiceType={invoice_type_id} />
+        </span>
       </div>
       <div className={css({ textWrap: 'balance', fontSize: 'md', fontWeight: 'bold' })}>
         {address1}
