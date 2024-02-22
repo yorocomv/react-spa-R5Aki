@@ -2,7 +2,7 @@ import { styled } from '../../../../../styled-system/jsx';
 
 const FormContainer = styled('div', {
   base: {
-    w: 'prose',
+    w: '37rem',
     mx: 'auto',
     my: '1rem',
     p: '1rem',

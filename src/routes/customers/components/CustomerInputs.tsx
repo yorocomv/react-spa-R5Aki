@@ -4,7 +4,13 @@ import Select from './elements/Select';
 
 export default function CustomerInputs() {
   return (
-    <>
+    <div
+      className={css({
+        '&> label': {
+          pl: '0.125rem',
+        },
+      })}
+    >
       <label>
         電話番号
         <Input
@@ -26,22 +32,41 @@ export default function CustomerInputs() {
           })}
         />
       </label>
-      <label>
-        住所
-        <Input type="text" placeholder="住所1" />
-      </label>
+      <label htmlFor="address1">住所</label>
+      <Input
+        id="address1"
+        type="text"
+        placeholder="住所1"
+        className={css({
+          w: '34.5rem',
+        })}
+      />
       <Input
         type="text"
         placeholder="住所2"
         className={css({
-          my: '0.125rem',
+          w: '34.5rem',
+          mt: '0.125rem',
         })}
       />
-      <Input type="text" placeholder="住所3" />
-      <label>
+      <Input
+        type="text"
+        placeholder="住所3"
+        className={css({
+          w: '34.5rem',
+          mt: '0.125rem',
+        })}
+      />
+      <label
+        htmlFor="name1"
+        className={css({
+          pr: '0.275rem',
+          bg: 'linear-gradient(transparent 40%, rgba(255, 105, 180, 0.6) 40%)',
+        })}
+      >
         名称
-        <Input type="text" placeholder="名称1" />
       </label>
+      <Input id="name1" type="text" placeholder="名称1" />
       <Input
         type="text"
         placeholder="名称2"
@@ -61,6 +86,6 @@ export default function CustomerInputs() {
           <option>ぴよ</option>
         </Select>
       </label>
-    </>
+    </div>
   );
 }
