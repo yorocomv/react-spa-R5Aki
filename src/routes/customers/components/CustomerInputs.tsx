@@ -1,8 +1,11 @@
 import { css } from '../../../../styled-system/css';
 import Input from './elements/Input';
 import Select from './elements/Select';
+import { useFetchInvoiceTypes } from './hooks/useFetchInvoiceTypes';
 
 export default function CustomerInputs() {
+  const { invoiceTypes } = useFetchInvoiceTypes();
+
   return (
     <div
       className={css({
@@ -81,9 +84,11 @@ export default function CustomerInputs() {
       <label>
         伝票の種類
         <Select>
-          <option>ほげ</option>
-          <option>ふが</option>
-          <option>ぴよ</option>
+          {invoiceTypes.map(({ id, name }) => (
+            <option key={id} value={id}>
+              {name}
+            </option>
+          ))}
         </Select>
       </label>
     </div>
