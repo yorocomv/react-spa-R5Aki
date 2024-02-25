@@ -12,6 +12,7 @@ export default function CustomerRoutes() {
         <Route path="/:id" element={<ExamineCustomer />} />
       </Route>
       <Route path="/new" element={<RegisterCustomer />} />
+      <Route path="/:id/edit" element={<RegisterCustomer />} />
     </Routes>
   );
 }

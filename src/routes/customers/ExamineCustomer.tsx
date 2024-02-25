@@ -10,6 +10,9 @@ import axiosInst from '../../util/axios-instance';
 export default function ExamineCustomer() {
   const customer = useLocation().state as CustomersTbRow;
   const [isContinued, setIsContinued] = useState(false);
+  const sessionIsContinued = sessionStorage.getItem('isContinued')
+    ? sessionStorage.getItem('isContinued') === 'true'
+    : false;
 
   const fetchPossiblyOverlapCustomersQueryFn = async () => {
     const result: void | AxiosResponse<CustomersTbRow[]> = await axiosInst
@@ -30,7 +33,7 @@ export default function ExamineCustomer() {
     queryFn: fetchPossiblyOverlapCustomersQueryFn,
   });
 
-  if (customers.length >= 2 && !isContinued) {
+  if (customers.length >= 2 && !isContinued && !sessionIsContinued) {
     return <PossiblyOverlapCustomers id={customer.id} customers={customers} setIsContinued={setIsContinued} />;
   }
 

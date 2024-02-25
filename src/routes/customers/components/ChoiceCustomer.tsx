@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import parse from 'html-react-parser';
 import { css } from '../../../../styled-system/css';
 import InvoiceNameSwitcher from './InvoiceNameSwitcher';
@@ -29,12 +30,36 @@ export default function ChoiceCustomer({
 
   // ブラウザバック時に ExamineCustomer コンポーネントの isContinued ステートを
   // 常に false にする
+  // https://qiita.com/tf_okrt/items/0cf72e5fe082cdec6801
+  // https://developer.mozilla.org/en-US/docs/Web/API/PerformanceNavigationTiming/type
+  let load = '';
+  window.addEventListener('pageshow', (event) => {
+    if (event.persisted) {
+      load = 'CASH';
+    }
+  });
+  const entries = performance.getEntriesByType('navigation') as unknown[] as PerformanceNavigationTiming[];
+  entries.forEach((entry) => {
+    if (entry.type === 'back_forward') {
+      load = 'BACK';
+    }
+    if (entry.type === 'reload') {
+      load = 'RELOAD';
+    }
+    console.log(entry);
+  });
+
   useEffect(() => {
-    const browserBackFunc = () => setIsContinued(false);
+    const browserBackFunc = () => {
+      setIsContinued(false);
+      if (sessionStorage.getItem('isContinued')) {
+        sessionStorage.removeItem('isContinued');
+      }
+    };
     window.addEventListener('popstate', browserBackFunc);
 
     return () => window.removeEventListener('popstate', browserBackFunc);
-  }, [setIsContinued]);
+  }, [setIsContinued, load]);
 
   return (
     <section
@@ -114,6 +139,9 @@ export default function ChoiceCustomer({
           </div>
         </div>
       </div>
+      <Link to="./edit">
+        <div>編集</div>
+      </Link>
       <ul id="css-anima-bg-circles">
         {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment

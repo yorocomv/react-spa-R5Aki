@@ -35,6 +35,7 @@ export default function PossiblyOverlapCustomers({
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     (_: React.MouseEvent<HTMLAnchorElement> | undefined): void => {
       setIsContinued(isContinued);
+      sessionStorage.setItem('isContinued', isContinued.toString());
     };
 
   return (
