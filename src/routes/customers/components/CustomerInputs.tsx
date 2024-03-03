@@ -1,13 +1,26 @@
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { css } from '../../../../styled-system/css';
 import Input from './elements/Input';
 import Select from './elements/Select';
 import { useFetchInvoiceTypes } from './hooks/useFetchInvoiceTypes';
+import { customerInputsSchema } from '../customers.schemas';
+import { CustomerInputs as CustomerInputsTypes } from '../customers.types';
 
 export default function CustomerInputs() {
   const { invoiceTypes } = useFetchInvoiceTypes();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<CustomerInputsTypes>({
+    mode: 'all',
+    resolver: zodResolver(customerInputsSchema),
+  });
 
   return (
-    <div
+    <form
+      onSubmit={handleSubmit((d: CustomerInputsTypes) => console.log(d))}
       className={css({
         '&> label': {
           pl: '0.125rem',
@@ -17,6 +30,7 @@ export default function CustomerInputs() {
       <label>
         電話番号
         <Input
+          {...register('tel')}
           type="text"
           autoFocus
           placeholder="電話番号"
@@ -25,6 +39,7 @@ export default function CustomerInputs() {
           })}
         />
       </label>
+      {errors.tel?.message && <p>{errors.tel.message}</p>}
       <label>
         郵便番号
         <Input
@@ -91,6 +106,7 @@ export default function CustomerInputs() {
           ))}
         </Select>
       </label>
-    </div>
+      <button type="submit">TODO: remove this</button>
+    </form>
   );
 }

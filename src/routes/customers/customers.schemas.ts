@@ -7,11 +7,13 @@ export const customersTbSchema = z
     id: z.number().int().positive(),
     tel: z
       .string()
+      .min(1, { message: '電話番号は入力必須です' })
       .min(3)
       .max(15)
       .regex(/^[0-9-]+$/),
     zip_code: z
       .string()
+      .min(1, { message: '郵便番号は入力必須です' })
       .min(3)
       .max(8)
       .regex(/^[0-9-]+$/),

@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { customersTbRowSchema } from './customers.schemas';
+import { customerInputsSchema, customersTbRowSchema } from './customers.schemas';
 
 // 使わなくなったが型マージの見本としてコメントで残している
 // type Merge<T> = {
@@ -15,6 +15,7 @@ export type RequiredChooseCustomerTbRow = Pick<
   CustomersTbRow,
   'tel' | 'zip_code' | 'address1' | 'address2' | 'address3' | 'name1' | 'name2' | 'nja_city' | 'invoice_type_id'
 >;
+export type CustomerInputs = z.infer<typeof customerInputsSchema>;
 
 // 使わなくなったが型マージの見本としてコメントで残している
 // export type RequiredChooseCustomer = Merge<
