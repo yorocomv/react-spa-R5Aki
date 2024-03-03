@@ -1,23 +1,15 @@
-import { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import parse from 'html-react-parser';
-import { css } from '../../../../styled-system/css';
-import InvoiceNameSwitcher from './InvoiceNameSwitcher';
-import { RequiredChoiceCustomer } from '../customers.types';
-import '../customers.css';
+import { css } from '../../../styled-system/css';
+import InvoiceNameSwitcher from './components/InvoiceNameSwitcher';
+import { CustomersTbRow, RequiredChooseCustomerTbRow } from './customers.types';
+import './customers.css';
 
-export default function ChoiceCustomer({
-  tel,
-  zip_code,
-  address1,
-  address2,
-  address3,
-  name1,
-  name2,
-  nja_city,
-  invoice_type_id,
-  setIsContinued,
-}: RequiredChoiceCustomer): JSX.Element {
+export default function ChooseCustomer(): JSX.Element {
+  const customer = useLocation().state as CustomersTbRow;
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  const { tel, zip_code, address1, address2, address3, name1, name2, nja_city, invoice_type_id } =
+    customer as RequiredChooseCustomerTbRow;
   let zipCodeHyphen = zip_code;
   if (/^[0-9]{7}$/.test(zipCodeHyphen)) {
     zipCodeHyphen = `${zipCodeHyphen.slice(0, 3)}-${zipCodeHyphen.slice(3)}`;
@@ -27,39 +19,6 @@ export default function ChoiceCustomer({
     const patternStr = `(${nja_city})`;
     address1WithCityEmphasis = address1.replace(new RegExp(patternStr), '<strong>$1</strong>');
   }
-
-  // ブラウザバック時に ExamineCustomer コンポーネントの isContinued ステートを
-  // 常に false にする
-  // https://qiita.com/tf_okrt/items/0cf72e5fe082cdec6801
-  // https://developer.mozilla.org/en-US/docs/Web/API/PerformanceNavigationTiming/type
-  let load = '';
-  window.addEventListener('pageshow', (event) => {
-    if (event.persisted) {
-      load = 'CASH';
-    }
-  });
-  const entries = performance.getEntriesByType('navigation') as unknown[] as PerformanceNavigationTiming[];
-  entries.forEach((entry) => {
-    if (entry.type === 'back_forward') {
-      load = 'BACK';
-    }
-    if (entry.type === 'reload') {
-      load = 'RELOAD';
-    }
-    console.log(entry);
-  });
-
-  useEffect(() => {
-    const browserBackFunc = () => {
-      setIsContinued(false);
-      if (sessionStorage.getItem('isContinued')) {
-        sessionStorage.removeItem('isContinued');
-      }
-    };
-    window.addEventListener('popstate', browserBackFunc);
-
-    return () => window.removeEventListener('popstate', browserBackFunc);
-  }, [setIsContinued, load]);
 
   return (
     <section
@@ -139,7 +98,7 @@ export default function ChoiceCustomer({
           </div>
         </div>
       </div>
-      <Link to="./edit">
+      <Link to="../edit" relative="path">
         <div>編集</div>
       </Link>
       <ul id="css-anima-bg-circles">

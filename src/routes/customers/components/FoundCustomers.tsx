@@ -6,9 +6,6 @@ import { CustomersTbRow } from '../customers.types';
 export default function FoundCustomers() {
   const { latestCommunicationTime, customers }: { latestCommunicationTime: string; customers: CustomersTbRow[] } =
     useOutletContext();
-  if (sessionStorage.getItem('isContinued')) {
-    sessionStorage.removeItem('isContinued');
-  }
 
   return (
     <section className={vstack()}>

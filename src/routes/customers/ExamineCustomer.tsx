@@ -1,18 +1,15 @@
-import { useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { AxiosResponse } from 'axios';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { useState } from 'react';
 import { CustomersTbRow } from './customers.types';
-import ChoiceCustomer from './components/ChoiceCustomer';
-import PossiblyOverlapCustomers from './components/PossiblyOverlapCustomers';
 import axiosInst from '../../util/axios-instance';
 
 export default function ExamineCustomer() {
+  const navigate = useNavigate();
   const customer = useLocation().state as CustomersTbRow;
-  const [isContinued, setIsContinued] = useState(false);
-  const sessionIsContinued = sessionStorage.getItem('isContinued')
-    ? sessionStorage.getItem('isContinued') === 'true'
-    : false;
+
+  if (!customer) throw new Error('不正なルートでのアクセスを検知しました❢');
 
   const fetchPossiblyOverlapCustomersQueryFn = async () => {
     const result: void | AxiosResponse<CustomersTbRow[]> = await axiosInst
@@ -33,22 +30,14 @@ export default function ExamineCustomer() {
     queryFn: fetchPossiblyOverlapCustomersQueryFn,
   });
 
-  if (customers.length >= 2 && !isContinued && !sessionIsContinued) {
-    return <PossiblyOverlapCustomers id={customer.id} customers={customers} setIsContinued={setIsContinued} />;
-  }
+  useEffect(() => {
+    // 遷移先からこのページにブラウザバックできなくなるが仕様とする❢
+    if (customers.length >= 2) {
+      navigate('./checking-overlap', { state: { id: customer.id, customers } });
+    } else {
+      navigate('./decide', { state: customer });
+    }
+  }, [customer, customers, navigate]);
 
-  return (
-    <ChoiceCustomer
-      tel={customer.tel}
-      zip_code={customer.zip_code}
-      address1={customer.address1}
-      address2={customer.address2}
-      address3={customer.address3}
-      name1={customer.name1}
-      name2={customer.name2}
-      nja_city={customer.nja_city}
-      invoice_type_id={customer.invoice_type_id}
-      setIsContinued={setIsContinued}
-    />
-  );
+  return <h1>意図せずこのページが見えていますか？</h1>;
 }

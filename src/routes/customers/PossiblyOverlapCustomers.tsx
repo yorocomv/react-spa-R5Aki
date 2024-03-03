@@ -1,22 +1,18 @@
-import { Link } from 'react-router-dom';
-import React, { useMemo } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { useMemo } from 'react';
 import { TbArrowBigRightLinesFilled } from 'react-icons/tb';
-import { vstack } from '../../../../styled-system/patterns/vstack';
-import CustomerSummary from './CustomerSummary';
-import { CustomersTbRow } from '../customers.types';
-import { css } from '../../../../styled-system/css';
+import { vstack } from '../../../styled-system/patterns/vstack';
+import CustomerSummary from './components/CustomerSummary';
+import { CustomersTbRow } from './customers.types';
+import { css } from '../../../styled-system/css';
 
-interface PossiblyOverlapCustomersProps {
+interface PossiblyOverlapCustomersState {
   id: number;
   customers: CustomersTbRow[];
-  setIsContinued: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function PossiblyOverlapCustomers({
-  id,
-  customers,
-  setIsContinued,
-}: PossiblyOverlapCustomersProps): JSX.Element {
+export default function PossiblyOverlapCustomers(): JSX.Element {
+  const { id, customers } = useLocation().state as PossiblyOverlapCustomersState;
   const sortedCustomers = useMemo(
     () =>
       [...customers].sort((a, b) => {
@@ -30,13 +26,6 @@ export default function PossiblyOverlapCustomers({
       }),
     [id, customers],
   );
-  const handleClick =
-    (isContinued: boolean) =>
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    (_: React.MouseEvent<HTMLAnchorElement> | undefined): void => {
-      setIsContinued(isContinued);
-      sessionStorage.setItem('isContinued', isContinued.toString());
-    };
 
   return (
     <section className={vstack()}>
@@ -78,9 +67,8 @@ export default function PossiblyOverlapCustomers({
           sortedCustomers.map((customer) => (
             <Link
               key={customer.id}
-              to={`/customers/${customer.id}`}
+              to={id === customer.id ? `/customers/${customer.id}/decide` : `/customers/${customer.id}`}
               state={customer}
-              onClick={handleClick(id === customer.id)}
               className={css({
                 '&:has(#chosen)': {
                   display: 'flex',
