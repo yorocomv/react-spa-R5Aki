@@ -7,9 +7,20 @@ import './customers.css';
 
 export default function ChooseCustomer(): JSX.Element {
   const customer = useLocation().state as CustomersTbRow;
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  const { tel, zip_code, address1, address2, address3, name1, name2, nja_city, invoice_type_id } =
-    customer as RequiredChooseCustomerTbRow;
+  const {
+    tel,
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    zip_code,
+    address1,
+    address2,
+    address3,
+    name1,
+    name2,
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    nja_city,
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    invoice_type_id,
+  }: RequiredChooseCustomerTbRow = customer;
   let zipCodeHyphen = zip_code;
   if (/^[0-9]{7}$/.test(zipCodeHyphen)) {
     zipCodeHyphen = `${zipCodeHyphen.slice(0, 3)}-${zipCodeHyphen.slice(3)}`;

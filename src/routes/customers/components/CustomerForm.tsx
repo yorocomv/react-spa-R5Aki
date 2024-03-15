@@ -1,3 +1,4 @@
+import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { css } from '../../../../styled-system/css';
@@ -5,32 +6,27 @@ import Input from './elements/Input';
 import Select from './elements/Select';
 import Button from './elements/Button';
 import { useFetchInvoiceTypes } from './hooks/useFetchInvoiceTypes';
-import { customerInputsSchema } from '../customers.schemas';
-import { CustomerInputs as CustomerInputsTypes } from '../customers.types';
+import { customerFormSchema } from '../customers.schemas';
+import { CustomerForm as CustomerFormTypes } from '../customers.types';
 import FormErrorMessage from './elementSwitchers/FormErrorMessage';
 
-export default function CustomerInputs() {
+export default function CustomerForm() {
   const { invoiceTypes } = useFetchInvoiceTypes();
   const {
     register,
     handleSubmit,
-    setError,
     formState: { errors },
-  } = useForm<CustomerInputsTypes>({
+  } = useForm<CustomerFormTypes>({
     mode: 'all',
-    resolver: zodResolver(customerInputsSchema),
+    resolver: zodResolver(customerFormSchema),
   });
 
-  const onSubmit: SubmitHandler<CustomerInputsTypes> = async (data) => {
-    try {
-      await new Promise((resolve) => setTimeout(resolve(data), 1000));
-      console.log(data);
-    } catch (error) {
-      setError('root', {
-        message: 'This email is already taken',
-      });
-    }
+  // https://github.com/react-hook-form/react-hook-form/discussions/2549
+  const checkKeyDown = (e: React.KeyboardEvent<HTMLInputElement | HTMLButtonElement>) => {
+    if (e.key === 'Enter') e.preventDefault();
   };
+
+  const onSubmit: SubmitHandler<CustomerFormTypes> = (d) => console.log(d);
 
   return (
     <form
@@ -46,6 +42,7 @@ export default function CustomerInputs() {
         <Input
           // eslint-disable-next-line react/jsx-props-no-spreading
           {...register('tel')}
+          onKeyDown={checkKeyDown}
           type="text"
           autoFocus
           placeholder="電話番号"
@@ -60,6 +57,7 @@ export default function CustomerInputs() {
         <Input
           // eslint-disable-next-line react/jsx-props-no-spreading
           {...register('zip_code')}
+          onKeyDown={checkKeyDown}
           type="text"
           placeholder="郵便番号"
           className={css({
@@ -72,6 +70,7 @@ export default function CustomerInputs() {
       <Input
         // eslint-disable-next-line react/jsx-props-no-spreading
         {...register('address1')}
+        onKeyDown={checkKeyDown}
         id="address1"
         type="text"
         placeholder="住所1"
@@ -83,6 +82,7 @@ export default function CustomerInputs() {
       <Input
         // eslint-disable-next-line react/jsx-props-no-spreading
         {...register('address2')}
+        onKeyDown={checkKeyDown}
         type="text"
         placeholder="住所2"
         className={css({
@@ -94,6 +94,7 @@ export default function CustomerInputs() {
       <Input
         // eslint-disable-next-line react/jsx-props-no-spreading
         {...register('address3')}
+        onKeyDown={checkKeyDown}
         type="text"
         placeholder="住所3"
         className={css({
@@ -114,6 +115,7 @@ export default function CustomerInputs() {
       <Input
         // eslint-disable-next-line react/jsx-props-no-spreading
         {...register('name1')}
+        onKeyDown={checkKeyDown}
         id="name1"
         type="text"
         placeholder="名称1"
@@ -122,6 +124,7 @@ export default function CustomerInputs() {
       <Input
         // eslint-disable-next-line react/jsx-props-no-spreading
         {...register('name2')}
+        onKeyDown={checkKeyDown}
         type="text"
         placeholder="名称2"
         className={css({
@@ -134,6 +137,7 @@ export default function CustomerInputs() {
         <Input
           // eslint-disable-next-line react/jsx-props-no-spreading
           {...register('alias')}
+          onKeyDown={checkKeyDown}
           type="text"
           placeholder="検索用の別名"
         />
@@ -141,7 +145,8 @@ export default function CustomerInputs() {
       <FormErrorMessage message={errors.alias?.message} />
       <label>
         伝票の種類
-        <Select>
+        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+        <Select {...register('invoice_type_id')}>
           {invoiceTypes.map(({ id, name }) => (
             <option key={id} value={id}>
               {name}
@@ -149,6 +154,7 @@ export default function CustomerInputs() {
           ))}
         </Select>
       </label>
+      <FormErrorMessage message={errors.invoice_type_id?.message} />
       <div
         className={css({
           mt: 4,
@@ -156,6 +162,7 @@ export default function CustomerInputs() {
       >
         <Button type="submit">登録</Button>
         <Button
+          onKeyDown={checkKeyDown}
           variant="redo"
           className={css({
             ml: 1,
