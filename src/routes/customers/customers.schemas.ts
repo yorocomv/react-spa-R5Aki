@@ -42,7 +42,7 @@ export const customersTbSchema = z
 
 export const customersTbRowSchema = customersTbSchema.required();
 
-export const customerInputsSchema = customersTbSchema
+const customerInputsSchema = customersTbSchema
   .pick({
     tel: true,
     zip_code: true,
@@ -55,3 +55,7 @@ export const customerInputsSchema = customersTbSchema
     invoice_type_id: true,
   })
   .required();
+
+const invoiceTypeSelectSchema = z.object({ invoice_type_id: z.coerce.number().int().positive() });
+
+export const customerFormSchema = customerInputsSchema.merge(invoiceTypeSelectSchema);

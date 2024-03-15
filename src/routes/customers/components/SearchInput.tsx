@@ -111,7 +111,7 @@ export default function SearchInput({
               borderRadius: '50%',
               bg: 'none',
               boxShadow: 'none',
-              top: '0.5rem',
+              top: '0.55rem',
               right: '0.625rem',
               '&:disabled > svg': {
                 display: 'none',

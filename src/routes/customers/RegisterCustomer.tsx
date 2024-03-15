@@ -1,5 +1,5 @@
 import { css } from '../../../styled-system/css';
-import CustomerInputs from './components/CustomerInputs';
+import CustomerForm from './components/CustomerForm';
 import FormContainer from './components/elements/FormContainer';
 
 export default function RegisterCustomer() {
@@ -17,7 +17,7 @@ export default function RegisterCustomer() {
         新規顧客情報登録
       </h2>
       <FormContainer>
-        <CustomerInputs />
+        <CustomerForm />
       </FormContainer>
     </>
   );
