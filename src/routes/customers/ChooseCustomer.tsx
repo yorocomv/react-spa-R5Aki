@@ -109,7 +109,7 @@ export default function ChooseCustomer(): JSX.Element {
           </div>
         </div>
       </div>
-      <Link to="../edit" relative="path">
+      <Link to="../edit" relative="path" state={customer}>
         <div>編集</div>
       </Link>
       <ul id="css-anima-bg-circles">

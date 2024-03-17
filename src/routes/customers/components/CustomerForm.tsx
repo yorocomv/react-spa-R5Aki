@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLocation, useParams } from 'react-router-dom';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { css } from '../../../../styled-system/css';
@@ -7,17 +8,36 @@ import Select from './elements/Select';
 import Button from './elements/Button';
 import { useFetchInvoiceTypes } from './hooks/useFetchInvoiceTypes';
 import { customerFormSchema } from '../customers.schemas';
-import { CustomerForm as CustomerFormTypes } from '../customers.types';
+import { CustomerForm as CustomerFormTypes, CustomersTbRow } from '../customers.types';
 import FormErrorMessage from './elementSwitchers/FormErrorMessage';
 
 export default function CustomerForm() {
+  const customer = (useLocation().state as CustomersTbRow) || {};
+  const { id: customerId } = useParams();
+
+  if (customerId && customerId !== customer.id.toString()) throw new Error('不正なルートでのアクセスを検知しました❢');
+
+  const defaultValues: CustomerFormTypes = {
+    tel: customer.tel || '',
+    zip_code: customer.zip_code || '',
+    address1: customer.address1 || '',
+    address2: customer.address2 || '',
+    address3: customer.address3 || '',
+    name1: customer.name1 || '',
+    name2: customer.name2 || '',
+    alias: customer.alias || '',
+    // invoice_type_id に 0 は無い
+    invoice_type_id: customer.invoice_type_id || 1,
+  };
   const { invoiceTypes } = useFetchInvoiceTypes();
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    reset,
+    formState: { errors, isSubmitting },
   } = useForm<CustomerFormTypes>({
     mode: 'all',
+    defaultValues,
     resolver: zodResolver(customerFormSchema),
   });
 
@@ -27,10 +47,15 @@ export default function CustomerForm() {
   };
 
   const onSubmit: SubmitHandler<CustomerFormTypes> = (d) => console.log(d);
+  const handleReset: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.preventDefault();
+    reset();
+  };
 
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
+      autoComplete="off"
       className={css({
         '&> label': {
           pl: '0.125rem',
@@ -160,15 +185,19 @@ export default function CustomerForm() {
           mt: 4,
         })}
       >
-        <Button type="submit">登録</Button>
+        <Button disabled={isSubmitting} type="submit">
+          {customerId ? '修正' : '登録'}
+        </Button>
         <Button
+          onClick={handleReset}
           onKeyDown={checkKeyDown}
+          disabled={isSubmitting}
           variant="redo"
           className={css({
             ml: 1,
           })}
         >
-          クリア
+          {customerId ? 'リセット' : 'クリア'}
         </Button>
       </div>
     </form>
