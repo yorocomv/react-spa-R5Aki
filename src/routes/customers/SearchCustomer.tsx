@@ -5,6 +5,7 @@ import { Outlet } from 'react-router-dom';
 import { css } from '../../../styled-system/css';
 import { CustomersTbRow } from './customers.types';
 import SearchInput from './components/SearchInput';
+import LinkNewRegistration from './components/LinkNewRegistration';
 import axiosInst from '../../util/axios-instance';
 
 export default function SearchCustomer() {
@@ -64,12 +65,25 @@ export default function SearchCustomer() {
           boxShadow: '0 0.125rem 0.25rem rgba(0,0,0,.02),0 1px 0 rgba(0,0,0,.06)',
         })}
       >
-        <SearchInput
-          searchString={searchString}
-          setSearchString={setSearchString}
-          searchTrigger={searchTrigger}
-          setSearchTrigger={setSearchTrigger}
-        />
+        <nav
+          className={css({
+            display: 'grid',
+            alignItems: 'center',
+            gridTemplateColumns: '1fr auto 1fr',
+          })}
+        >
+          <div className={css({ gridColumn: '2/3' })}>
+            <SearchInput
+              searchString={searchString}
+              setSearchString={setSearchString}
+              searchTrigger={searchTrigger}
+              setSearchTrigger={setSearchTrigger}
+            />
+          </div>
+          <div className={css({ gridColumn: '3/4', justifySelf: 'end', mr: '0.75rem' })}>
+            <LinkNewRegistration path="/new" height="2rem" />
+          </div>
+        </nav>
       </header>
       <Outlet context={{ latestCommunicationTime, customers }} />
     </>

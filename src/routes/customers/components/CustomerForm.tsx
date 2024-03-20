@@ -12,9 +12,13 @@ import { CustomerForm as CustomerFormTypes, CustomersTbRow } from '../customers.
 import FormErrorMessage from './elementSwitchers/FormErrorMessage';
 
 export default function CustomerForm() {
-  const customer = (useLocation().state as CustomersTbRow) || {};
+  const location = useLocation();
+  const url = location.pathname;
+  const customer = (location.state as CustomersTbRow) || {};
   const { id: customerId } = useParams();
 
+  // 新規登録のパスをベタ書き。id に 0 は無い
+  if (!customer.id && url !== '/customers/new') throw new Error('不正なルートでのアクセスを検知しました❢');
   if (customerId && customerId !== customer.id.toString()) throw new Error('不正なルートでのアクセスを検知しました❢');
 
   const defaultValues: CustomerFormTypes = {
