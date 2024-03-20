@@ -2,17 +2,25 @@ import { Link } from 'react-router-dom';
 import { css } from '../../../../styled-system/css';
 
 interface LinkNewRegistrationProps {
-  path: string;
+  relativePath: string;
   height: string;
+  bgMode?: 'light' | 'dark';
 }
 
-export default function LinkNewRegistration({ path, height }: LinkNewRegistrationProps): JSX.Element {
+export default function LinkNewRegistration({
+  relativePath,
+  height,
+  bgMode = 'light',
+}: LinkNewRegistrationProps): JSX.Element {
+  const isLightMode = bgMode === 'light';
   return (
-    <Link to={path}>
+    <Link to={relativePath} relative="path">
       <svg
+        id="_new-registration-svg"
         viewBox="0 0 113.3 122.9"
         className={css({
           h: height,
+          fill: isLightMode ? '#042f2e' : '#e7ded3',
         })}
       >
         <path

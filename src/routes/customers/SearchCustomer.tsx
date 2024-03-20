@@ -81,7 +81,7 @@ export default function SearchCustomer() {
             />
           </div>
           <div className={css({ gridColumn: '3/4', justifySelf: 'end', mr: '0.75rem' })}>
-            <LinkNewRegistration path="/new" height="2rem" />
+            <LinkNewRegistration relativePath="/customers/new" height="1.875rem" />
           </div>
         </nav>
       </header>

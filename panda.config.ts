@@ -2,7 +2,7 @@ import { defineConfig, defineGlobalStyles } from '@pandacss/dev';
 
 const globalCss = defineGlobalStyles({
   'html, body': {
-    bg: '#dcd0c0',
+    bg: 'radial-gradient(#57534e 1px,transparent 0) 0 0/20px 20px fixed #dcd0c0',
     color: '#0e0e0e',
     fontFamily: '"Segoe UI Emoji", "BIZ UDPGothic", sans-serif',
     lineHeight: '1.75rem',
