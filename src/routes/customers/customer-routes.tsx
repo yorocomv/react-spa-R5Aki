@@ -15,7 +15,7 @@ export default function CustomerRoutes() {
         <Route path=":id/checking-overlap" element={<PossiblyOverlapCustomers />} />
         <Route path=":id/decide" element={<ChooseCustomer />} />
       </Route>
-      <Route path="/new" element={<RegisterCustomer />} />
+      <Route path="/register" element={<RegisterCustomer />} />
       <Route path="/:id/edit" element={<RegisterCustomer />} />
     </Routes>
   );

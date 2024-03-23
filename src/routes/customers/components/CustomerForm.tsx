@@ -18,7 +18,7 @@ export default function CustomerForm() {
   const { id: customerId } = useParams();
 
   // 新規登録のパスをベタ書き。id に 0 は無い
-  if (!customer.id && url !== '/customers/new') throw new Error('不正なルートでのアクセスを検知しました❢');
+  if (!customer.id && url !== '/customers/register') throw new Error('不正なルートでのアクセスを検知しました❢');
   if (customerId && customerId !== customer.id.toString()) throw new Error('不正なルートでのアクセスを検知しました❢');
 
   const defaultValues: CustomerFormTypes = {
