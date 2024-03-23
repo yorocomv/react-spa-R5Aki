@@ -59,6 +59,7 @@ export default function SearchCustomer() {
         className={css({
           pos: 'sticky',
           top: 0,
+          zIndex: '1',
           backdropFilter: 'blur(8px)',
           px: 2,
           py: 2.5,

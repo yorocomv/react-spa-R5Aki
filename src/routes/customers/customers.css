@@ -2,7 +2,7 @@ html:has(#chosen-customer-details) {
   height: 100lvh;
   color: #e7ded3;
   background-color: #51a475;
-  background-attachment: scroll;
+  background-attachment: fixed;
   background-size: auto auto;
   background-image: linear-gradient(45deg, #244a35 0%, #51a475 100%);
 }
@@ -22,7 +22,7 @@ body:has(#chosen-customer-details) {
 }
 
 #css-anima-bg-circles {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
@@ -32,7 +32,7 @@ body:has(#chosen-customer-details) {
 }
 
 #css-anima-bg-circles li {
-  position: absolute;
+  position: fixed;
   display: block;
   list-style: none;
   width: 20px;
