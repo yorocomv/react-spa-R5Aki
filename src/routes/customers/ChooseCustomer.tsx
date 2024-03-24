@@ -1,12 +1,16 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import parse from 'html-react-parser';
 import { css } from '../../../styled-system/css';
 import InvoiceNameSwitcher from './components/InvoiceNameSwitcher';
-import { CustomersTbRow, RequiredChooseCustomerTbRow } from './customers.types';
+import { CustomersTbRow, RequiredChooseCustomer } from './customers.types';
 import './customers.css';
 
 export default function ChooseCustomer(): JSX.Element {
   const customer = useLocation().state as CustomersTbRow;
+  const { id: customerId } = useParams();
+
+  if (customerId && customerId !== customer.id.toString()) throw new Error('不正なルートでのアクセスを検知しました❢');
+
   const {
     tel,
     // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -20,7 +24,7 @@ export default function ChooseCustomer(): JSX.Element {
     nja_city,
     // eslint-disable-next-line @typescript-eslint/naming-convention
     invoice_type_id,
-  }: RequiredChooseCustomerTbRow = customer;
+  }: RequiredChooseCustomer = customer;
   let zipCodeHyphen = zip_code;
   if (/^[0-9]{7}$/.test(zipCodeHyphen)) {
     zipCodeHyphen = `${zipCodeHyphen.slice(0, 3)}-${zipCodeHyphen.slice(3)}`;

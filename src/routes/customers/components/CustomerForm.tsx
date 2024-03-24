@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { css } from '../../../../styled-system/css';
@@ -10,12 +10,14 @@ import { useFetchInvoiceTypes } from './hooks/useFetchInvoiceTypes';
 import { customerFormSchema } from '../customers.schemas';
 import { CustomerForm as CustomerFormTypes, CustomersTbRow } from '../customers.types';
 import FormErrorMessage from './elementSwitchers/FormErrorMessage';
+import { useRegisterCustomer } from './hooks/useRegisterCustomer';
 
 export default function CustomerForm() {
   const location = useLocation();
   const url = location.pathname;
   const customer = (location.state as CustomersTbRow) || {};
   const { id: customerId } = useParams();
+  const navigate = useNavigate();
 
   // 新規登録のパスをベタ書き。id に 0 は無い
   if (!customer.id && url !== '/customers/register') throw new Error('不正なルートでのアクセスを検知しました❢');
@@ -33,6 +35,7 @@ export default function CustomerForm() {
     // invoice_type_id に 0 は無い
     invoice_type_id: customer.invoice_type_id || 1,
   };
+  const { registerCustomer } = useRegisterCustomer();
   const { invoiceTypes } = useFetchInvoiceTypes();
   const {
     register,
@@ -50,7 +53,30 @@ export default function CustomerForm() {
     if (e.key === 'Enter') e.preventDefault();
   };
 
-  const onSubmit: SubmitHandler<CustomerFormTypes> = (d) => console.log(d);
+  const onSubmit: SubmitHandler<CustomerFormTypes> = async (values): Promise<void> => {
+    try {
+      let response: CustomersTbRow;
+      if (customer.id) {
+        response = await registerCustomer({ mode: customer.id, values });
+      } else {
+        response = await registerCustomer({ mode: 'create', values });
+      }
+      reset();
+      navigate(`/customers/${response.id}/decide`, { state: response });
+    } catch (err: unknown) {
+      console.error('💥💥💥 ', err, ' 💀💀💀');
+    }
+  };
+  // https://github.com/orgs/react-hook-form/discussions/8020#discussioncomment-2584580
+  function onPromise<T>(promise: (event: React.SyntheticEvent) => Promise<T>) {
+    return (event: React.SyntheticEvent) => {
+      if (promise) {
+        promise(event).catch((error) => {
+          console.error('Unexpected error', error);
+        });
+      }
+    };
+  }
   const handleReset: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
     reset();
@@ -58,7 +84,7 @@ export default function CustomerForm() {
 
   return (
     <form
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={onPromise(handleSubmit(onSubmit))}
       autoComplete="off"
       className={css({
         '&> label': {
