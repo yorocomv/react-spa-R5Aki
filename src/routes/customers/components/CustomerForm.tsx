@@ -61,7 +61,6 @@ export default function CustomerForm() {
       } else {
         response = await registerCustomer({ mode: 'create', values });
       }
-      reset();
       navigate(`/customers/${response.id}/decide`, { state: response });
     } catch (err: unknown) {
       console.error('💥💥💥 ', err, ' 💀💀💀');
@@ -174,6 +173,9 @@ export default function CustomerForm() {
         id="name1"
         type="text"
         placeholder="名称1"
+        className={css({
+          w: '32.5rem',
+        })}
       />
       <FormErrorMessage message={errors.name1?.message} />
       <Input
@@ -183,6 +185,7 @@ export default function CustomerForm() {
         type="text"
         placeholder="名称2"
         className={css({
+          w: '32.5rem',
           mt: '0.125rem',
         })}
       />
@@ -195,6 +198,9 @@ export default function CustomerForm() {
           onKeyDown={checkKeyDown}
           type="text"
           placeholder="検索用の別名"
+          className={css({
+            w: '32.5rem',
+          })}
         />
       </label>
       <FormErrorMessage message={errors.alias?.message} />

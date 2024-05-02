@@ -103,13 +103,23 @@ export default function ChooseCustomer(): JSX.Element {
               justifySelf: 'right',
             })}
           >
-            <div>
-              {/* eslint-disable-next-line no-irregular-whitespace */}
-              {`〒${zipCodeHyphen}　`}
-              {address1WithCityEmphasis !== '' ? parse(address1WithCityEmphasis) : address1}
+            <div
+              className={css({
+                display: 'grid',
+                gridTemplateColumns: 'auto auto',
+              })}
+            >
+              <div
+                className={css({
+                  mr: '0.8rem',
+                })}
+              >{`〒${zipCodeHyphen}`}</div>
+              <div>
+                <div>{address1WithCityEmphasis !== '' ? parse(address1WithCityEmphasis) : address1}</div>
+                <div>{address2}</div>
+                <div>{address3}</div>
+              </div>
             </div>
-            <div>{address2}</div>
-            <div>{address3}</div>
             <div>
               Tel:<strong>{tel}</strong>
             </div>

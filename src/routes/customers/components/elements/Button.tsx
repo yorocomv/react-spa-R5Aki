@@ -2,6 +2,7 @@ import { styled } from '../../../../../styled-system/jsx';
 
 const Button = styled('button', {
   base: {
+    whiteSpace: 'nowrap',
     color: {
       base: 'teal.950',
       _active: { base: 'teal.100', _disabled: 'stone.300' },

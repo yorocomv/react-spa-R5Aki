@@ -79,6 +79,7 @@ export default function SearchCustomer() {
               setSearchString={setSearchString}
               searchTrigger={searchTrigger}
               setSearchTrigger={setSearchTrigger}
+              placeholder="スペース区切りアンド検索、末尾に ：都道府県 or ：：市区町村 絞り込"
             />
           </div>
           <div className={css({ gridColumn: '3/4', justifySelf: 'end', mr: '0.75rem' })}>

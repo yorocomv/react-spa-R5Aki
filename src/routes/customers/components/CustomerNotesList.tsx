@@ -16,6 +16,26 @@ export default function CustomerNotesList({ customerId }: { customerId: number }
         className={css({
           m: 0,
           listStyleType: 'none',
+          '& li:nth-child(odd)': {
+            color: 'emerald.200',
+          },
+          '& li:nth-child(odd)::before': {
+            borderColor: 'emerald.600',
+            bgColor: 'emerald.600',
+          },
+          '& li:nth-child(odd)::after': {
+            borderColor: 'emerald.600',
+          },
+          '& li:nth-child(even)': {
+            color: 'indigo.200',
+          },
+          '& li:nth-child(even)::before': {
+            borderColor: 'indigo.600',
+            bgColor: 'indigo.600',
+          },
+          '& li:nth-child(even)::after': {
+            borderColor: 'indigo.600',
+          },
           '& li:last-child': {
             paddingBottom: 0,
             marginBottom: '1.25rem',
@@ -30,6 +50,7 @@ export default function CustomerNotesList({ customerId }: { customerId: number }
                 pos: 'relative',
                 p: '0 0 1.25rem 3.125rem',
                 m: 0,
+                textShadow: '-1px 1px 0 rgba(0, 0, 0, 0.9)',
                 _before: {
                   pos: 'absolute',
                   top: '0.1rem',
