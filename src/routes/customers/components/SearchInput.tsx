@@ -8,6 +8,7 @@ interface SearchInputProps {
   setSearchString: React.Dispatch<React.SetStateAction<string>>;
   searchTrigger: boolean;
   setSearchTrigger: React.Dispatch<React.SetStateAction<boolean>>;
+  placeholder?: string;
 }
 
 export default function SearchInput({
@@ -15,6 +16,7 @@ export default function SearchInput({
   setSearchString,
   searchTrigger,
   setSearchTrigger,
+  placeholder = '',
 }: SearchInputProps): JSX.Element {
   // https://ja.react.dev/reference/react/useRef#manipulating-the-dom-with-a-ref
   // https://qiita.com/akifumii/items/539e4af7ed4d068c0144
@@ -74,8 +76,10 @@ export default function SearchInput({
             ref={inputRef}
             id="input-search-form"
             type="text"
+            placeholder={placeholder}
             // eslint-disable-next-line jsx-a11y/no-autofocus
             autoFocus
+            autoComplete="off"
             value={searchString}
             onChange={handleChange}
             className={css({
@@ -91,6 +95,9 @@ export default function SearchInput({
               },
               // Firefox と Edge の描画の違いを吸収するためメディアクエリを使用😅💦
               '@media (min-width: 35em)': { minW: '28rem' },
+              _placeholder: {
+                fontSize: '0.825rem',
+              },
               // ブラウザ（Edge で確認）の自動補完時の独自スタイルを N 秒後 N 秒かけて適用する
               _autofill: {
                 transition: 'background-color 9999s 9999s',
@@ -122,6 +129,7 @@ export default function SearchInput({
             className={css({
               w: '1.25rem',
               h: '1.25rem',
+              color: '#0e0e0e',
               _active: { color: 'red.500' },
             })}
           >
