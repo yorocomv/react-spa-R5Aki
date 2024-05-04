@@ -21,20 +21,20 @@ export default function CustomerNotesList({ customerId }: { customerId: number }
           },
           '& li:nth-child(odd)::before': {
             borderColor: 'emerald.600',
-            bgColor: 'emerald.600',
           },
           '& li:nth-child(odd)::after': {
             borderColor: 'emerald.600',
+            bgColor: 'emerald.700',
           },
           '& li:nth-child(even)': {
             color: 'indigo.200',
           },
           '& li:nth-child(even)::before': {
-            borderColor: 'indigo.600',
-            bgColor: 'indigo.600',
+            borderColor: 'indigo.500',
           },
           '& li:nth-child(even)::after': {
-            borderColor: 'indigo.600',
+            borderColor: 'indigo.500',
+            bgColor: 'indigo.700',
           },
           '& li:last-child': {
             paddingBottom: 0,
@@ -54,6 +54,18 @@ export default function CustomerNotesList({ customerId }: { customerId: number }
                 _before: {
                   pos: 'absolute',
                   top: '0.1rem',
+                  left: '0.615rem',
+                  // Before and After: Ensure you wrap the content value in double quotes
+                  content: '""',
+                  h: '100%',
+                  w: 0,
+                  borderStyle: 'solid',
+                  borderWidth: '2px',
+                  borderColor: 'lime.600',
+                },
+                _after: {
+                  pos: 'absolute',
+                  top: '0.1rem',
                   left: 0,
                   // Before and After: Ensure you wrap the content value in double quotes
                   content: '""',
@@ -67,18 +79,6 @@ export default function CustomerNotesList({ customerId }: { customerId: number }
                   lineHeight: '1.5rem',
                   textAlign: 'center',
                   bgColor: 'lime.600',
-                },
-                _after: {
-                  pos: 'absolute',
-                  top: '0.1rem',
-                  left: '0.615rem',
-                  // Before and After: Ensure you wrap the content value in double quotes
-                  content: '""',
-                  h: '100%',
-                  w: 0,
-                  borderStyle: 'solid',
-                  borderWidth: '2px',
-                  borderColor: 'lime.600',
                 },
               })}
             >
