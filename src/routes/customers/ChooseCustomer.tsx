@@ -5,6 +5,7 @@ import InvoiceNameSwitcher from './components/InvoiceNameSwitcher';
 import CustomerNotesList from './components/CustomerNotesList';
 import { CustomersTbRow, RequiredChooseCustomer } from './customers.types';
 import './customers.css';
+import DropdownMenu from './components/DropdownMenu';
 
 export default function ChooseCustomer(): JSX.Element {
   const customer = useLocation().state as CustomersTbRow;
@@ -128,6 +129,7 @@ export default function ChooseCustomer(): JSX.Element {
         <Link to="../edit" relative="path" state={customer}>
           <div>編集</div>
         </Link>
+        <DropdownMenu />
       </section>
       <CustomerNotesList customerId={customer.id} />
       <ul id="css-anima-bg-circles">
