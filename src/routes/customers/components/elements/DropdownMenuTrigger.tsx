@@ -1,39 +1,46 @@
 import React from 'react';
 import { Button } from 'react-aria-components';
 import { css } from '../../../../../styled-system/css';
+import { SystemStyleObject } from '../../../../../styled-system/types';
 
-export default function DropdownMenuTrigger({ children }: { children: React.ReactNode }) {
+export default function DropdownMenuTrigger({
+  children,
+  marginStyle = undefined,
+}: {
+  children: React.ReactNode;
+  marginStyle?: SystemStyleObject;
+}): JSX.Element {
+  const buttonStyles = css.raw({
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    whiteSpace: 'nowrap',
+    color: {
+      base: 'teal.950',
+      _active: { base: 'teal.100', _disabled: 'stone.300' },
+      _disabled: 'stone.300',
+    },
+    bg: {
+      base: 'teal.400',
+      _hover: { base: 'teal.300', _disabled: 'stone.200' },
+      _active: 'teal.600',
+      _disabled: 'stone.200',
+    },
+    fontWeight: 'bold',
+    py: 0.5,
+    px: 1.5,
+    gap: 1,
+    borderWidth: '1px',
+    borderColor: { base: 'teal.300', _disabled: 'stone.300' },
+    borderRadius: 'sm',
+    boxShadow: 'sm',
+    w: 'fit-content',
+    fontSize: 'sm',
+    lineHeight: 1.5,
+  });
+
   return (
-    <Button
-      className={css({
-        display: 'inline-flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        whiteSpace: 'nowrap',
-        color: {
-          base: 'teal.950',
-          _active: { base: 'teal.100', _disabled: 'stone.300' },
-          _disabled: 'stone.300',
-        },
-        bg: {
-          base: 'teal.400',
-          _hover: { base: 'teal.300', _disabled: 'stone.200' },
-          _active: 'teal.600',
-          _disabled: 'stone.200',
-        },
-        fontWeight: 'bold',
-        py: 0.5,
-        px: 1.5,
-        gap: 1,
-        borderWidth: '1px',
-        borderColor: { base: 'teal.300', _disabled: 'stone.300' },
-        borderRadius: 'sm',
-        boxShadow: 'sm',
-        w: 'fit-content',
-        fontSize: 'sm',
-        lineHeight: 1.5,
-      })}
-    >
+    <Button className={css(buttonStyles, marginStyle)}>
       {children}
       <svg
         viewBox="0 0 15 15"
