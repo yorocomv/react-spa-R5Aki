@@ -1,8 +1,12 @@
+import { useState } from 'react';
+import { Dialog, Modal } from 'react-aria-components';
 import { css } from '../../../../styled-system/css';
 import { useFetchNotes } from './hooks/useFetchNotes';
 
 export default function CustomerNotesList({ customerId }: { customerId: number }): JSX.Element {
   const { notes } = useFetchNotes(customerId);
+  const [selectedNote, setSelectedNote] = useState(-1);
+  const openModal = (i: number) => setSelectedNote(i);
 
   return (
     <section
@@ -43,7 +47,7 @@ export default function CustomerNotesList({ customerId }: { customerId: number }
         })}
       >
         {notes.length ? (
-          notes.map((note) => (
+          notes.map((note, i) => (
             <li
               key={note.rank}
               className={css({
@@ -82,7 +86,12 @@ export default function CustomerNotesList({ customerId }: { customerId: number }
                 },
               })}
             >
-              {note.body}
+              <span onClick={() => openModal(i)} onKeyDown={() => openModal(i)} role="button" tabIndex={i}>
+                {note.body}
+              </span>
+              <Modal isDismissable isOpen={selectedNote === i} onOpenChange={() => openModal(-1)}>
+                <Dialog>{note.body}</Dialog>
+              </Modal>
             </li>
           ))
         ) : (
