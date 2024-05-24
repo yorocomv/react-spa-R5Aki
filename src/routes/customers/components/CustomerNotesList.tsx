@@ -1,12 +1,11 @@
 import { useState } from 'react';
-import { Dialog, Modal } from 'react-aria-components';
 import { css } from '../../../../styled-system/css';
 import { useFetchNotes } from './hooks/useFetchNotes';
+import ModalDialog from './ModalDialog';
 
 export default function CustomerNotesList({ customerId }: { customerId: number }): JSX.Element {
   const { notes } = useFetchNotes(customerId);
   const [selectedNote, setSelectedNote] = useState(-1);
-  const openModal = (i: number) => setSelectedNote(i);
 
   return (
     <section
@@ -86,12 +85,16 @@ export default function CustomerNotesList({ customerId }: { customerId: number }
                 },
               })}
             >
-              <span onClick={() => openModal(i)} onKeyDown={() => openModal(i)} role="button" tabIndex={i}>
+              <span onClick={() => setSelectedNote(i)} onKeyDown={() => setSelectedNote(i)} role="button" tabIndex={i}>
                 {note.body}
               </span>
-              <Modal isDismissable isOpen={selectedNote === i} onOpenChange={() => openModal(-1)}>
-                <Dialog>{note.body}</Dialog>
-              </Modal>
+              <ModalDialog
+                currentPage={i + 1}
+                totalPages={notes.length}
+                isOpen={selectedNote === i}
+                closeModal={setSelectedNote}
+                body={note.body}
+              />
             </li>
           ))
         ) : (
