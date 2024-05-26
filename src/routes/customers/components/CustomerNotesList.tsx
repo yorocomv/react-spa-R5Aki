@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { css } from '../../../../styled-system/css';
 import { useFetchNotes } from './hooks/useFetchNotes';
-import ModalDialog from './ModalDialog';
+import NoteInDialog from './NoteInDialog';
 
 export default function CustomerNotesList({ customerId }: { customerId: number }): JSX.Element {
   const { notes } = useFetchNotes(customerId);
@@ -88,7 +88,7 @@ export default function CustomerNotesList({ customerId }: { customerId: number }
               <span onClick={() => setSelectedNote(i)} onKeyDown={() => setSelectedNote(i)} role="button" tabIndex={i}>
                 {note.body}
               </span>
-              <ModalDialog
+              <NoteInDialog
                 currentPage={i + 1}
                 totalPages={notes.length}
                 isOpen={selectedNote === i}
