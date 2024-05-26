@@ -48,6 +48,11 @@ export default function NoteInDialog({ currentPage, totalPages, body, isOpen, cl
               className={css({
                 gridColumn: '3/4',
                 justifySelf: 'end',
+                p: '0.125rem',
+                borderRadius: '50%',
+                _hover: {
+                  bgColor: 'amber.200',
+                },
               })}
             >
               <FaX />
