@@ -2,9 +2,10 @@ import { useState } from 'react';
 import { css } from '../../../../styled-system/css';
 import { useFetchNotes } from './hooks/useFetchNotes';
 import NoteInDialog from './NoteInDialog';
+import { CustomersTbRow } from '../customers.types';
 
-export default function CustomerNotesList({ customerId }: { customerId: number }): JSX.Element {
-  const { notes } = useFetchNotes(customerId);
+export default function CustomerNotesList({ customer }: { customer: CustomersTbRow }): JSX.Element {
+  const { notes } = useFetchNotes(customer.id);
   const [selectedNote, setSelectedNote] = useState(-1);
 
   return (
@@ -85,7 +86,15 @@ export default function CustomerNotesList({ customerId }: { customerId: number }
                 },
               })}
             >
-              <span onClick={() => setSelectedNote(i)} onKeyDown={() => setSelectedNote(i)} role="button" tabIndex={i}>
+              <span
+                onClick={() => setSelectedNote(i)}
+                onKeyDown={() => setSelectedNote(i)}
+                role="button"
+                tabIndex={i}
+                className={css({
+                  cursor: 'pointer',
+                })}
+              >
                 {note.body}
               </span>
               <NoteInDialog
@@ -94,6 +103,8 @@ export default function CustomerNotesList({ customerId }: { customerId: number }
                 isOpen={selectedNote === i}
                 closeModal={setSelectedNote}
                 body={note.body}
+                currentRank={note.rank}
+                customer={customer}
               />
             </li>
           ))

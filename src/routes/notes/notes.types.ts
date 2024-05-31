@@ -1,6 +1,5 @@
 import { z } from 'zod';
-import { notesTbRowSchemas } from './notes.schemas';
+import { noteFormSchema, notesTbRowSchemas } from './notes.schemas';
 
-type NotesTbRow = z.infer<typeof notesTbRowSchemas>;
-
-export default NotesTbRow;
+export type NotesTbRow = z.infer<typeof notesTbRowSchemas>;
+export type NoteForm = z.infer<typeof noteFormSchema>;

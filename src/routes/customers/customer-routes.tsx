@@ -5,6 +5,7 @@ import FoundCustomers from './components/FoundCustomers';
 import RegisterCustomer from './RegisterCustomer';
 import PossiblyOverlapCustomers from './PossiblyOverlapCustomers';
 import ChooseCustomer from './ChooseCustomer';
+import TakeANoteAboutCustomer from './TakeANoteAboutCustomer';
 
 export default function CustomerRoutes() {
   return (
@@ -17,6 +18,7 @@ export default function CustomerRoutes() {
       </Route>
       <Route path="/register" element={<RegisterCustomer />} />
       <Route path="/:id/edit" element={<RegisterCustomer />} />
+      <Route path="/:id/take-a-note" element={<TakeANoteAboutCustomer />} />
     </Routes>
   );
 }
