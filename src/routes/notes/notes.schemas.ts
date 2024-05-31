@@ -11,3 +11,8 @@ export const notesTbSchemas = z
   .partial();
 
 export const notesTbRowSchemas = notesTbSchemas.required();
+
+export const noteFormSchema = z.object({
+  rank: z.coerce.number().int().positive(),
+  body: z.string().min(1),
+});

@@ -5,10 +5,10 @@ import { SystemStyleObject } from '../../../../../styled-system/types';
 
 export default function DropdownMenuTrigger({
   children,
-  marginStyle = undefined,
+  mergeStyles = undefined,
 }: {
   children: React.ReactNode;
-  marginStyle?: SystemStyleObject;
+  mergeStyles?: SystemStyleObject;
 }): JSX.Element {
   const buttonStyles = css.raw({
     display: 'inline-flex',
@@ -40,7 +40,7 @@ export default function DropdownMenuTrigger({
   });
 
   return (
-    <Button className={css(buttonStyles, marginStyle)}>
+    <Button className={css(buttonStyles, mergeStyles)}>
       {children}
       <svg
         viewBox="0 0 15 15"

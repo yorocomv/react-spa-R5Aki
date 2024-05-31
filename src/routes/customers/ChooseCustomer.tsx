@@ -128,11 +128,14 @@ export default function ChooseCustomer(): JSX.Element {
         </div>
         <DropdownMenu
           label="編集 / メモを追加"
-          marginStyle={css.raw({ margin: '0 0 2rem auto' })}
-          menuItems={[{ label: '編集', toRelativePath: '../edit', state: customer }]}
+          mergeStyles={css.raw({ margin: '0 0 2rem auto' })}
+          menuItems={[
+            { label: '編集', toRelativePath: '../edit', state: customer },
+            { label: 'メモを追加', toRelativePath: '../take-a-note', state: customer },
+          ]}
         />
       </section>
-      <CustomerNotesList customerId={customer.id} />
+      <CustomerNotesList customer={customer} />
       <ul id="css-anima-bg-circles">
         {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment

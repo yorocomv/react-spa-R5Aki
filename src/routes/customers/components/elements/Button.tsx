@@ -36,6 +36,18 @@ const Button = styled('button', {
         },
         borderColor: { base: 'orange.300', _disabled: 'stone.300' },
       },
+      edit: {
+        color: {
+          base: 'violet.50',
+          _active: { base: 'violet.800', _disabled: 'stone.300' },
+        },
+        bg: {
+          base: 'violet.500',
+          _hover: { base: 'violet.600', _disabled: 'stone.200' },
+          _active: 'violet.300',
+        },
+        borderColor: { base: 'violet.600', _disabled: 'stone.300' },
+      },
     },
   },
 });
