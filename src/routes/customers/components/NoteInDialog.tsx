@@ -63,8 +63,8 @@ export default function NoteInDialog({
               className={css({
                 gridColumn: '3/4',
                 justifySelf: 'end',
-                p: '0.125rem',
-                borderRadius: '50%',
+                p: '0.175rem',
+                borderRadius: '35%',
                 _hover: {
                   bgColor: 'amber.200',
                 },

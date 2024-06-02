@@ -1,18 +1,20 @@
-import { Link } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { css } from '../../../../styled-system/css';
 import { SystemStyleObject } from '../../../../styled-system/types';
 import { NotesTbRow } from '../../notes/notes.types';
 import { CustomersTbRow } from '../customers.types';
 
 export default function ListOfSummaryNotesAboutCustomer({
-  customer,
   notes,
+  customer,
   mergeStyles = undefined,
 }: {
-  customer: CustomersTbRow;
   notes: NotesTbRow[];
+  customer: CustomersTbRow;
   mergeStyles?: SystemStyleObject;
 }): JSX.Element {
+  // eslint-disable-next-line @typescript-eslint/naming-convention, @typescript-eslint/no-unused-vars
+  const [_, setSearchParams] = useSearchParams();
   const strLen = 30;
   const olStyles = css.raw({
     listStylePosition: 'inside',
@@ -33,19 +35,29 @@ export default function ListOfSummaryNotesAboutCustomer({
   return (
     <ol className={css(olStyles, mergeStyles)}>
       {notes.length ? (
-        notes.map((note) => (
-          <Link
-            key={note.rank}
-            reloadDocument
-            to={`/customers/${customer.id}/take-a-note?rank=${note.rank}`}
-            relative="path"
-            state={customer}
-          >
-            <li>{note.body.length < strLen ? note.body : `${note.body.slice(0, strLen)} ...`}</li>
-          </Link>
+        notes.map((note, i) => (
+          <li key={note.rank}>
+            <span
+              onClick={() => setSearchParams({ rank: note.rank.toString() }, { state: { ...customer } })}
+              onKeyDown={() => setSearchParams({ rank: note.rank.toString() }, { state: { ...customer } })}
+              role="button"
+              tabIndex={i}
+              className={css({
+                cursor: 'pointer',
+              })}
+            >
+              {note.body.length < strLen ? note.body : `${note.body.slice(0, strLen)} ...`}
+            </span>
+          </li>
         ))
       ) : (
-        <li>この顧客のメモはまだありません</li>
+        <li
+          className={css({
+            listStyleType: 'none',
+          })}
+        >
+          この顧客のメモはまだありません
+        </li>
       )}
     </ol>
   );

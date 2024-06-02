@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -6,31 +7,52 @@ import Select from './elements/Select';
 import TextArea from './elements/TextArea';
 import { NoteForm, NotesTbRow } from '../../notes/notes.types';
 import { noteFormSchema } from '../../notes/notes.schemas';
+import Button from './elements/Button';
 
 export default function CustomerNoteForm({ notes }: { notes: NotesTbRow[] }): JSX.Element {
+  const notesLength = notes.length;
   const [searchParams] = useSearchParams();
-  const currentRank = searchParams.get('rank') ?? 0;
   const defaultValues: NoteForm = {
-    rank: notes.length + 1,
+    rank: notesLength + 1,
     body: '',
   };
+  const currentRank = searchParams.get('rank') ?? 0;
+  let optionsLength = notesLength + 1;
   if (currentRank !== 0) {
     const iNum = notes.findIndex((note) => note.rank === parseInt(currentRank, 10));
     if (iNum !== -1) {
       defaultValues.rank = iNum + 1;
       defaultValues.body = notes[iNum].body;
+      optionsLength = notesLength;
     }
   }
   const {
     register,
+    setValue,
     // handleSubmit,
-    // reset,
     // formState: { errors, isSubmitting },
   } = useForm<NoteForm>({
     mode: 'all',
     defaultValues,
     resolver: zodResolver(noteFormSchema),
   });
+
+  // https://zenn.dev/catnose99/scraps/30c623ba72d6b5
+  const isFirstRender = useRef(true);
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+    } else {
+      setValue('rank', defaultValues.rank);
+      setValue('body', defaultValues.body);
+    }
+  }, [defaultValues.body, defaultValues.rank, setValue]);
+
+  const handleReset: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.preventDefault();
+    setValue('rank', defaultValues.rank);
+    setValue('body', defaultValues.body);
+  };
 
   return (
     <form
@@ -50,7 +72,7 @@ export default function CustomerNoteForm({ notes }: { notes: NotesTbRow[] }): JS
           ) : (
             (() => {
               const options = [];
-              for (let i = 1; i <= notes.length + 1; i += 1) {
+              for (let i = 1; i <= optionsLength; i += 1) {
                 options.push(
                   <option value={i} key={i}>
                     {i}
@@ -75,6 +97,23 @@ export default function CustomerNoteForm({ notes }: { notes: NotesTbRow[] }): JS
           })}
         />
       </label>
+      <div
+        className={css({
+          mt: 4,
+        })}
+      >
+        <Button
+          onClick={handleReset}
+          // onKeyDown={checkKeyDown}
+          // disabled={isSubmitting}
+          variant="redo"
+          className={css({
+            ml: 1,
+          })}
+        >
+          {currentRank ? 'リセット' : 'クリア'}
+        </Button>
+      </div>
     </form>
   );
 }
