@@ -1,6 +1,6 @@
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { css } from '../../../../styled-system/css';
 import Select from './elements/Select';
@@ -8,6 +8,8 @@ import TextArea from './elements/TextArea';
 import { NoteForm, NotesTbRow } from '../../notes/notes.types';
 import { noteFormSchema } from '../../notes/notes.schemas';
 import Button from './elements/Button';
+import FormErrorMessage from './elementSwitchers/FormErrorMessage';
+import FloatingDeleteButton from './FloatingDeleteButton';
 
 export default function CustomerNoteForm({ notes }: { notes: NotesTbRow[] }): JSX.Element {
   const notesLength = notes.length;
@@ -29,8 +31,8 @@ export default function CustomerNoteForm({ notes }: { notes: NotesTbRow[] }): JS
   const {
     register,
     setValue,
-    // handleSubmit,
-    // formState: { errors, isSubmitting },
+    handleSubmit,
+    formState: { errors, isSubmitting },
   } = useForm<NoteForm>({
     mode: 'all',
     defaultValues,
@@ -48,6 +50,19 @@ export default function CustomerNoteForm({ notes }: { notes: NotesTbRow[] }): JS
     }
   }, [defaultValues.body, defaultValues.rank, setValue]);
 
+  const onSubmit: SubmitHandler<NoteForm> = (d) => {
+    alert(`${d.rank}: ${d.body}`);
+  };
+  // https://github.com/orgs/react-hook-form/discussions/8020#discussioncomment-2584580
+  function onPromise<T>(promise: (event: React.SyntheticEvent) => Promise<T>) {
+    return (event: React.SyntheticEvent) => {
+      if (promise) {
+        promise(event).catch((error) => {
+          console.error('Unexpected error', error);
+        });
+      }
+    };
+  }
   const handleReset: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
     setValue('rank', defaultValues.rank);
@@ -55,65 +70,72 @@ export default function CustomerNoteForm({ notes }: { notes: NotesTbRow[] }): JS
   };
 
   return (
-    <form
-      autoComplete="off"
-      className={css({
-        '&> label': {
-          pl: '0.125rem',
-        },
-      })}
-    >
-      <label>
-        表示順
-        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        <Select {...register('rank')}>
-          {notes.length === 0 ? (
-            <option value="1">1</option>
-          ) : (
-            (() => {
-              const options = [];
-              for (let i = 1; i <= optionsLength; i += 1) {
-                options.push(
-                  <option value={i} key={i}>
-                    {i}
-                  </option>,
-                );
-              }
-              return options;
-            })()
-          )}
-        </Select>
-      </label>
-      <label htmlFor="customerNote">
-        留意事項
-        <TextArea
-          // eslint-disable-next-line react/jsx-props-no-spreading
-          {...register('body')}
-          name="customerNote"
-          id="customerNote"
-          className={css({
-            w: '34.5rem',
-            h: '8lh',
-          })}
-        />
-      </label>
-      <div
+    <>
+      <form
+        onSubmit={onPromise(handleSubmit(onSubmit))}
+        autoComplete="off"
         className={css({
-          mt: 4,
+          '&> label': {
+            pl: '0.125rem',
+          },
         })}
       >
-        <Button
-          onClick={handleReset}
-          // onKeyDown={checkKeyDown}
-          // disabled={isSubmitting}
-          variant="redo"
+        <label>
+          表示順
+          {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+          <Select {...register('rank')}>
+            {notes.length === 0 ? (
+              <option value="1">1</option>
+            ) : (
+              (() => {
+                const options = [];
+                for (let i = 1; i <= optionsLength; i += 1) {
+                  options.push(
+                    <option value={i} key={i}>
+                      {i}
+                    </option>,
+                  );
+                }
+                return options;
+              })()
+            )}
+          </Select>
+        </label>
+        <FormErrorMessage message={errors.rank?.message} />
+        <label htmlFor="body">
+          留意事項
+          <TextArea
+            // eslint-disable-next-line react/jsx-props-no-spreading
+            {...register('body')}
+            id="body"
+            className={css({
+              w: '34.5rem',
+              h: '8lh',
+            })}
+          />
+        </label>
+        <FormErrorMessage message={errors.body?.message} />
+        <div
           className={css({
-            ml: 1,
+            mt: 4,
           })}
         >
-          {currentRank ? 'リセット' : 'クリア'}
-        </Button>
-      </div>
-    </form>
+          <Button disabled={isSubmitting} type="submit">
+            {currentRank ? '修正' : '登録'}
+          </Button>
+          <Button
+            onClick={handleReset}
+            disabled={isSubmitting}
+            variant="redo"
+            className={css({
+              ml: 1,
+            })}
+          >
+            {currentRank ? 'リセット' : 'クリア'}
+          </Button>
+        </div>
+      </form>
+      {currentRank ? <FloatingDeleteButton label={`メモ ${currentRank} を削除`} /> : null}
+    </>
   );
 }

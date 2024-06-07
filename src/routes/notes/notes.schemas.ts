@@ -14,5 +14,5 @@ export const notesTbRowSchemas = notesTbSchemas.required();
 
 export const noteFormSchema = z.object({
   rank: z.coerce.number().int().positive(),
-  body: z.string().min(1),
+  body: z.string().min(1, { message: 'メモ本文は必須項目です' }),
 });

@@ -1,4 +1,5 @@
 import { useSearchParams } from 'react-router-dom';
+import { TbArrowBigLeftLinesFilled } from 'react-icons/tb';
 import { css } from '../../../../styled-system/css';
 import { SystemStyleObject } from '../../../../styled-system/types';
 import { NotesTbRow } from '../../notes/notes.types';
@@ -14,7 +15,8 @@ export default function ListOfSummaryNotesAboutCustomer({
   mergeStyles?: SystemStyleObject;
 }): JSX.Element {
   // eslint-disable-next-line @typescript-eslint/naming-convention, @typescript-eslint/no-unused-vars
-  const [_, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const currentRank = searchParams.get('rank') ?? '0';
   const strLen = 30;
   const olStyles = css.raw({
     listStylePosition: 'inside',
@@ -22,13 +24,13 @@ export default function ListOfSummaryNotesAboutCustomer({
     fontSize: 'sm',
     fontWeight: 'bold',
     color: 'fuchsia.700',
-    textShadow: '-1px 1px 0 rgba(255, 255, 255, 0.8)',
+    textShadow: '-1px 1px 0 #fff',
     w: 'fit-content',
     '& li:nth-child(odd)': {
       color: 'fuchsia.700',
     },
     '& li:nth-child(even)': {
-      color: 'fuchsia.900',
+      color: 'fuchsia.950',
     },
   });
 
@@ -48,6 +50,12 @@ export default function ListOfSummaryNotesAboutCustomer({
             >
               {note.body.length < strLen ? note.body : `${note.body.slice(0, strLen)} ...`}
             </span>
+            {note.rank === parseInt(currentRank, 10) ? (
+              <>
+                <TbArrowBigLeftLinesFilled className={css({ display: 'inline-block' })} />
+                <span>編集中</span>
+              </>
+            ) : null}
           </li>
         ))
       ) : (
