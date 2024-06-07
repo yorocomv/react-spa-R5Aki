@@ -14,7 +14,7 @@ export default function RegisterCustomer() {
           fontWeight: 'bold',
         })}
       >
-        新規顧客情報登録
+        得意先情報
       </h2>
       <FormContainer>
         <CustomerForm />

@@ -48,6 +48,18 @@ const Button = styled('button', {
         },
         borderColor: { base: 'violet.600', _disabled: 'stone.300' },
       },
+      unsafe: {
+        color: {
+          base: 'rose.50',
+          _active: { base: 'rose.800', _disabled: 'stone.300' },
+        },
+        bg: {
+          base: 'rose.500',
+          _hover: { base: 'rose.600', _disabled: 'stone.200' },
+          _active: 'rose.300',
+        },
+        borderColor: { base: 'rose.600', _disabled: 'stone.300' },
+      },
     },
   },
 });
