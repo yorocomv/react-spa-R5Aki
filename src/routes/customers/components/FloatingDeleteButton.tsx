@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { FaRegTrashCan } from 'react-icons/fa6';
 import Button from './elements/Button';
 import { css } from '../../../../styled-system/css';
@@ -10,6 +11,18 @@ interface FloatingDeleteButtonProps {
 export default function FloatingDeleteButton({ label }: FloatingDeleteButtonProps) {
   const [isInvalid, setIsInvalid] = useState(true);
   const handleCheck = () => setIsInvalid(!isInvalid);
+  const [searchParams] = useSearchParams();
+  const currentRank = searchParams.get('rank') ?? 0;
+
+  useEffect(() => {
+    const checkBox = document.getElementById('validate-delete-checkbox') as HTMLInputElement;
+    if (currentRank) {
+      if (checkBox) {
+        checkBox.checked = false;
+      }
+      setIsInvalid(true);
+    }
+  }, [currentRank]);
 
   return (
     <div
@@ -37,7 +50,7 @@ export default function FloatingDeleteButton({ label }: FloatingDeleteButtonProp
         <FaRegTrashCan className={css({ display: 'inline-block' })} />
         {label}
       </Button>
-      <input type="checkbox" onChange={handleCheck} />
+      <input id="validate-delete-checkbox" type="checkbox" onChange={handleCheck} />
     </div>
   );
 }

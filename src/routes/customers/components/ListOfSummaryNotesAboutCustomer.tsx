@@ -38,24 +38,42 @@ export default function ListOfSummaryNotesAboutCustomer({
     <ol className={css(olStyles, mergeStyles)}>
       {notes.length ? (
         notes.map((note, i) => (
-          <li key={note.rank}>
-            <span
-              onClick={() => setSearchParams({ rank: note.rank.toString() }, { state: { ...customer } })}
-              onKeyDown={() => setSearchParams({ rank: note.rank.toString() }, { state: { ...customer } })}
-              role="button"
-              tabIndex={i}
+          <li
+            key={note.rank}
+            className={css({
+              px: '0.5rem',
+              '&:has(em)': {
+                bgImage: 'linear-gradient(90deg, rgba(253, 224, 71, 0.7), rgba(254, 249, 195, 0.3))',
+                borderRadius: 'lg',
+              },
+            })}
+          >
+            <div
               className={css({
-                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 1,
               })}
             >
-              {note.body.length < strLen ? note.body : `${note.body.slice(0, strLen)} ...`}
-            </span>
-            {note.rank === parseInt(currentRank, 10) ? (
-              <>
-                <TbArrowBigLeftLinesFilled className={css({ display: 'inline-block' })} />
-                <span>編集中</span>
-              </>
-            ) : null}
+              <span
+                onClick={() => setSearchParams({ rank: note.rank.toString() }, { state: { ...customer } })}
+                onKeyDown={() => setSearchParams({ rank: note.rank.toString() }, { state: { ...customer } })}
+                role="button"
+                tabIndex={i}
+                className={css({
+                  cursor: 'pointer',
+                })}
+              >
+                {note.body.length < strLen ? note.body : `${note.body.slice(0, strLen)} ...`}
+              </span>
+              {note.rank === parseInt(currentRank, 10) ? (
+                <>
+                  <TbArrowBigLeftLinesFilled className={css({ display: 'inline-block', color: 'rose.600' })} />
+                  <em className={css({ whiteSpace: 'nowrap', color: 'rose.500', textShadow: 'none' })}>編集中</em>
+                </>
+              ) : null}
+            </div>
           </li>
         ))
       ) : (
