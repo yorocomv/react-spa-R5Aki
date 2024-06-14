@@ -33,8 +33,10 @@ export default function NoteInDialog({
       <Dialog
         className={css({
           pos: 'relative',
-          maxW: '36.5rem',
+          maxW: '39.5rem',
           minW: '17.5rem',
+          maxH: '95lvh',
+          overflow: 'scroll',
           p: '0.125rem 1rem 1rem',
           bgColor: 'amber.50',
           color: 'amber.950',
@@ -43,6 +45,8 @@ export default function NoteInDialog({
           borderWidth: '1px',
           borderRadius: 'md',
           boxShadow: 'md',
+          scrollbarWidth: 'none',
+          '&::-webkit-scrollbar': { display: 'none' },
         })}
       >
         <>

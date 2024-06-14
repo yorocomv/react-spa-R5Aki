@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useMemo } from 'react';
-import { TbArrowBigRightLinesFilled } from 'react-icons/tb';
+import { TbArrowBigLeftLinesFilled } from 'react-icons/tb';
 import { vstack } from '../../../styled-system/patterns/vstack';
 import CustomerSummary from './components/CustomerSummary';
 import { CustomersTbRow } from './customers.types';
@@ -94,19 +94,31 @@ export default function PossiblyOverlapCustomers(): JSX.Element {
                 <div
                   id="chosen"
                   className={css({
+                    display: 'flex',
+                    gap: '0.25rem',
                     position: 'relative',
-                    left: 11,
-                    w: 11,
-                    ml: -11,
+                    left: '5rem',
+                    w: '5rem',
+                    ml: '-5rem',
                   })}
                 >
-                  <TbArrowBigRightLinesFilled
+                  <TbArrowBigLeftLinesFilled
                     className={css({
                       fontSize: '1.75rem',
-                      mx: 'auto',
-                      color: 'lime.950',
+                      color: 'teal.800',
+                      filter: 'drop-shadow(-1px 1px 0 rgba(255, 255, 255, 0.8))',
                     })}
                   />
+                  <em
+                    className={css({
+                      whiteSpace: 'nowrap',
+                      fontWeight: 'bold',
+                      color: 'teal.800',
+                      textShadow: '-1px 1px 0 rgba(255, 255, 255, 0.8)',
+                    })}
+                  >
+                    選択中
+                  </em>
                 </div>
               ) : null}
             </Link>

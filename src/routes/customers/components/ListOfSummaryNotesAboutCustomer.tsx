@@ -17,7 +17,6 @@ export default function ListOfSummaryNotesAboutCustomer({
   // eslint-disable-next-line @typescript-eslint/naming-convention, @typescript-eslint/no-unused-vars
   const [searchParams, setSearchParams] = useSearchParams();
   const currentRank = searchParams.get('rank') ?? '0';
-  const strLen = 30;
   const olStyles = css.raw({
     listStylePosition: 'inside',
     listStyleType: 'decimal',
@@ -50,6 +49,7 @@ export default function ListOfSummaryNotesAboutCustomer({
           >
             <div
               className={css({
+                maxW: '88vw',
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -63,15 +63,28 @@ export default function ListOfSummaryNotesAboutCustomer({
                 tabIndex={i}
                 className={css({
                   cursor: 'pointer',
+                  '@media(max-width: 1231px)': {
+                    maxW: '73vw',
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                  },
                 })}
               >
-                {note.body.length < strLen ? note.body : `${note.body.slice(0, strLen)} ...`}
+                {note.body}
               </span>
               {note.rank === parseInt(currentRank, 10) ? (
-                <>
+                <div
+                  className={css({
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: 1,
+                  })}
+                >
                   <TbArrowBigLeftLinesFilled className={css({ display: 'inline-block', color: 'rose.600' })} />
                   <em className={css({ whiteSpace: 'nowrap', color: 'rose.500', textShadow: 'none' })}>編集中</em>
-                </>
+                </div>
               ) : null}
             </div>
           </li>
