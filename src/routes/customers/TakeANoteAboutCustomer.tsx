@@ -34,7 +34,10 @@ export default function TakeANoteAboutCustomer(): JSX.Element {
       <div
         className={css({
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(35rem, 45rem))',
+          px: '1rem',
+          alignItems: 'center',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(37rem, 1fr))',
+          gridGap: '1rem',
         })}
       >
         <ListOfSummaryNotesAboutCustomer notes={notes} customer={customer} mergeStyles={css.raw({ mx: 'auto' })} />
