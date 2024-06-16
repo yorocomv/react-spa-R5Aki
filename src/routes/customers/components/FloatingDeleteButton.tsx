@@ -1,22 +1,57 @@
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { FaRegTrashCan } from 'react-icons/fa6';
 import Button from './elements/Button';
 import { css } from '../../../../styled-system/css';
+import { useDeleteNote } from '../../notes/components/hooks/useDeleteNote';
+import { CustomersTbRow } from '../customers.types';
 
 interface FloatingDeleteButtonProps {
+  customer: CustomersTbRow;
   label: string;
 }
 
-export default function FloatingDeleteButton({ label }: FloatingDeleteButtonProps) {
+export default function FloatingDeleteButton({ customer, label }: FloatingDeleteButtonProps) {
+  // `/:id/edit` と `/:id/take-a-note` の２パターン
+  const { id: customerId } = useParams();
+
+  if (customerId && customerId !== customer.id.toString()) throw new Error('不正なルートでのアクセスを検知しました❢');
+
   const [isInvalid, setIsInvalid] = useState(true);
   const handleCheck = () => setIsInvalid(!isInvalid);
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const currentRank = searchParams.get('rank') ?? 0;
 
+  const { deleteNote } = useDeleteNote(parseInt(customerId ?? '0', 10));
+
+  const handleClickDelete = async () => {
+    try {
+      if (customerId) {
+        if (currentRank) {
+          const response = await deleteNote(parseInt(currentRank, 10));
+          console.log(response);
+          navigate(`/customers/${customer.id}/decide`, { state: customer });
+        }
+      }
+    } catch (err: unknown) {
+      console.error('💥💥💥 ', err, ' 💀💀💀');
+    }
+  };
+  // https://github.com/orgs/react-hook-form/discussions/8020#discussioncomment-2584580
+  function onPromise<T>(promise: (event: React.SyntheticEvent) => Promise<T>) {
+    return (event: React.SyntheticEvent) => {
+      if (promise) {
+        promise(event).catch((error) => {
+          console.error('Unexpected error', error);
+        });
+      }
+    };
+  }
+
   useEffect(() => {
-    const checkBox = document.getElementById('validate-delete-checkbox') as HTMLInputElement;
     if (currentRank) {
+      const checkBox = document.getElementById('validate-delete-checkbox') as HTMLInputElement;
       if (checkBox) {
         checkBox.checked = false;
       }
@@ -37,6 +72,7 @@ export default function FloatingDeleteButton({ label }: FloatingDeleteButtonProp
       })}
     >
       <Button
+        onClick={onPromise(handleClickDelete)}
         disabled={isInvalid}
         variant="unsafe"
         className={css({

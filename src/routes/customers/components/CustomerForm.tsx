@@ -239,7 +239,7 @@ export default function CustomerForm() {
           </Button>
         </div>
       </form>
-      {customerId ? <FloatingDeleteButton label="削除" /> : null}
+      {customerId ? <FloatingDeleteButton customer={customer} label="削除" /> : null}
     </>
   );
 }

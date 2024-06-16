@@ -42,7 +42,7 @@ export default function TakeANoteAboutCustomer(): JSX.Element {
       >
         <ListOfSummaryNotesAboutCustomer notes={notes} customer={customer} mergeStyles={css.raw({ mx: 'auto' })} />
         <FormContainer>
-          <CustomerNoteForm customerId={customer.id} notes={notes} />
+          <CustomerNoteForm customer={customer} notes={notes} />
         </FormContainer>
       </div>
     </>

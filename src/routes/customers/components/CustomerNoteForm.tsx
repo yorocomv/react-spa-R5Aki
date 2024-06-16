@@ -14,10 +14,10 @@ import { CustomersTbRow } from '../customers.types';
 import { useRegisterNote } from '../../notes/components/hooks/useRegisterNote';
 
 export default function CustomerNoteForm({
-  customerId,
+  customer,
   notes,
 }: {
-  customerId: number;
+  customer: CustomersTbRow;
   notes: NotesTbRow[];
 }): JSX.Element {
   const notesLength = notes.length;
@@ -37,7 +37,7 @@ export default function CustomerNoteForm({
       optionsLength = notesLength;
     }
   }
-  const { registerNote } = useRegisterNote(customerId);
+  const { registerNote } = useRegisterNote(customer.id);
   const {
     register,
     setValue,
@@ -65,9 +65,9 @@ export default function CustomerNoteForm({
     try {
       let response: { customer: CustomersTbRow; note: NotesTbRow };
       if (currentRank) {
-        response = await registerNote({ customerId, mode: parseInt(currentRank, 10), values });
+        response = await registerNote({ customerId: customer.id, mode: parseInt(currentRank, 10), values });
       } else {
-        response = await registerNote({ customerId, mode: 'add', values });
+        response = await registerNote({ customerId: customer.id, mode: 'add', values });
       }
       navigate(`/customers/${response.customer.id}/decide`, { state: response.customer });
     } catch (err: unknown) {
@@ -156,7 +156,7 @@ export default function CustomerNoteForm({
           </Button>
         </div>
       </form>
-      {currentRank ? <FloatingDeleteButton label={`メモ ${defaultValues.rank} を削除`} /> : null}
+      {currentRank ? <FloatingDeleteButton customer={customer} label={`メモ ${defaultValues.rank} を削除`} /> : null}
     </>
   );
 }
