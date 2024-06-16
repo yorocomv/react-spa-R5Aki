@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { css } from '../../../../styled-system/css';
@@ -10,9 +10,18 @@ import { noteFormSchema } from '../../notes/notes.schemas';
 import Button from './elements/Button';
 import FormErrorMessage from './elementSwitchers/FormErrorMessage';
 import FloatingDeleteButton from './FloatingDeleteButton';
+import { CustomersTbRow } from '../customers.types';
+import { useRegisterNote } from '../../notes/components/hooks/useRegisterNote';
 
-export default function CustomerNoteForm({ notes }: { notes: NotesTbRow[] }): JSX.Element {
+export default function CustomerNoteForm({
+  customerId,
+  notes,
+}: {
+  customerId: number;
+  notes: NotesTbRow[];
+}): JSX.Element {
   const notesLength = notes.length;
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const defaultValues: NoteForm = {
     rank: notesLength + 1,
@@ -28,6 +37,7 @@ export default function CustomerNoteForm({ notes }: { notes: NotesTbRow[] }): JS
       optionsLength = notesLength;
     }
   }
+  const { registerNote } = useRegisterNote(customerId);
   const {
     register,
     setValue,
@@ -40,6 +50,7 @@ export default function CustomerNoteForm({ notes }: { notes: NotesTbRow[] }): JS
   });
 
   // https://zenn.dev/catnose99/scraps/30c623ba72d6b5
+  // コンポーネント初回マウント時には setValue() しない
   const isFirstRender = useRef(true);
   useEffect(() => {
     if (isFirstRender.current) {
@@ -50,8 +61,18 @@ export default function CustomerNoteForm({ notes }: { notes: NotesTbRow[] }): JS
     }
   }, [defaultValues.body, defaultValues.rank, setValue]);
 
-  const onSubmit: SubmitHandler<NoteForm> = (d) => {
-    alert(`${d.rank}: ${d.body}`);
+  const onSubmit: SubmitHandler<NoteForm> = async (values): Promise<void> => {
+    try {
+      let response: { customer: CustomersTbRow; note: NotesTbRow };
+      if (currentRank) {
+        response = await registerNote({ customerId, mode: parseInt(currentRank, 10), values });
+      } else {
+        response = await registerNote({ customerId, mode: 'add', values });
+      }
+      navigate(`/customers/${response.customer.id}/decide`, { state: response.customer });
+    } catch (err: unknown) {
+      console.error('💥💥💥 ', err, ' 💀💀💀');
+    }
   };
   // https://github.com/orgs/react-hook-form/discussions/8020#discussioncomment-2584580
   function onPromise<T>(promise: (event: React.SyntheticEvent) => Promise<T>) {
@@ -135,7 +156,7 @@ export default function CustomerNoteForm({ notes }: { notes: NotesTbRow[] }): JS
           </Button>
         </div>
       </form>
-      {currentRank ? <FloatingDeleteButton label={`メモ ${currentRank} を削除`} /> : null}
+      {currentRank ? <FloatingDeleteButton label={`メモ ${defaultValues.rank} を削除`} /> : null}
     </>
   );
 }

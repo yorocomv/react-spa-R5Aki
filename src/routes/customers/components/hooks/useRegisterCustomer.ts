@@ -17,7 +17,7 @@ const registerCustomerMutationFn = async ({ mode, values }: UseRegisterCustomerP
     });
   } else {
     response = await axiosInstance.put(`/customers/${mode}`, values).catch((err: string) => {
-      console.error(`💥💥💥 /customers からのエラーをキャッチ❢ ${err} 💀💀💀`);
+      console.error(`💥💥💥 /customers/${mode} からのエラーをキャッチ❢ ${err} 💀💀💀`);
       return Promise.reject(new Error(err));
     });
   }
