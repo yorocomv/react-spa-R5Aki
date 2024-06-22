@@ -40,6 +40,7 @@ export default function SearchInput({
   return (
     <form onSubmit={handleSubmit} className={css({ display: 'flex', alignItems: 'center' })}>
       <div className={css({ pos: 'relative' })}>
+        {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
         <label
           htmlFor="input-search-form"
           className={css({
@@ -107,6 +108,7 @@ export default function SearchInput({
         </label>
         <button
           type="button"
+          aria-label="Clear"
           disabled={searchString.length === 0}
           onClick={handleReset}
           className={css({

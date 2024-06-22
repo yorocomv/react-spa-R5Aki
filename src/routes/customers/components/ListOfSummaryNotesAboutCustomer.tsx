@@ -14,7 +14,6 @@ export default function ListOfSummaryNotesAboutCustomer({
   customer: CustomersTbRow;
   mergeStyles?: SystemStyleObject;
 }): JSX.Element {
-  // eslint-disable-next-line @typescript-eslint/naming-convention, @typescript-eslint/no-unused-vars
   const [searchParams, setSearchParams] = useSearchParams();
   const currentRank = searchParams.get('rank') ?? '0';
   const olStyles = css.raw({
