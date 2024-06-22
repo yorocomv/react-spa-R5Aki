@@ -3,6 +3,7 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { FaRegTrashCan } from 'react-icons/fa6';
 import Button from './elements/Button';
 import { css } from '../../../../styled-system/css';
+import { useDeleteCustomer } from './hooks/useDeleteCustomer';
 import { useDeleteNote } from '../../notes/components/hooks/useDeleteNote';
 import { CustomersTbRow } from '../customers.types';
 
@@ -23,6 +24,7 @@ export default function FloatingDeleteButton({ customer, label }: FloatingDelete
   const [searchParams] = useSearchParams();
   const currentRank = searchParams.get('rank') ?? 0;
 
+  const { deleteCustomer } = useDeleteCustomer(parseInt(customerId ?? '0', 10));
   const { deleteNote } = useDeleteNote(parseInt(customerId ?? '0', 10));
 
   const handleClickDelete = async () => {
@@ -32,6 +34,10 @@ export default function FloatingDeleteButton({ customer, label }: FloatingDelete
           const response = await deleteNote(parseInt(currentRank, 10));
           console.log(response);
           navigate(`/customers/${customer.id}/decide`, { state: customer });
+        } else {
+          const response = await deleteCustomer();
+          console.log(response);
+          navigate('/customers');
         }
       }
     } catch (err: unknown) {
