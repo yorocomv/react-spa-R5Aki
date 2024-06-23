@@ -1,7 +1,8 @@
-import { FaFilePen, FaPhone } from 'react-icons/fa6';
+import { FaPhone } from 'react-icons/fa6';
 import { css } from '../../../../styled-system/css';
 import { RequiredCustomerSummary } from '../customers.types';
 import InvoiceIconSwitcher from './InvoiceIconSwitcher';
+import NoteIconSwitcher from './elementSwitchers/NoteIconSwitcher';
 
 export default function CustomerSummary({
   tel,
@@ -34,10 +35,10 @@ export default function CustomerSummary({
           borderColor: 'rgba(255, 255, 255, 0.36)',
           boxShadow: 'md',
           _hover: { bgColor: '#E7DED3' },
-          '&:hover ._react-icons_file-pen': {
+          '&:hover ._react-icons_go-comment, &:hover ._react-icons_go-comment + span': {
             color: 'blue.600',
           },
-          '&:hover ._react-icons_tired': {
+          '&:hover ._react-icons_db-smile': {
             ml: '-0.125rem',
             fontSize: '2xl',
             color: 'red.600',
@@ -60,7 +61,7 @@ export default function CustomerSummary({
             fontSize: 'lg',
             mx: 1,
           },
-          '&:has(svg._react-icons_tired)': {
+          '&:has(svg._react-icons_db-smile)': {
             lineHeight: '2rem',
           },
         })}
@@ -81,19 +82,7 @@ export default function CustomerSummary({
             justifySelf: 'end',
           })}`}
         >
-          {notes ? (
-            <FaFilePen
-              title="メモがあり〼"
-              className={`_react-icons_file-pen ${css({
-                color: 'blue.400',
-                '&:has(+ svg)': {
-                  mr: 0,
-                },
-              })}`}
-            />
-          ) : (
-            ''
-          )}
+          <NoteIconSwitcher notes={notes} />
           <InvoiceIconSwitcher invoiceType={invoice_type_id} />
         </span>
       </div>

@@ -1,4 +1,5 @@
-import { FaFaceTired, FaPenNib } from 'react-icons/fa6';
+import { FaPenNib } from 'react-icons/fa6';
+import { TbDatabaseSmile } from 'react-icons/tb';
 import { css } from '../../../../styled-system/css';
 
 interface InvoiceIconSwitcherProps {
@@ -9,9 +10,9 @@ export default function InvoiceIconSwitcher({ invoiceType }: InvoiceIconSwitcher
   switch (invoiceType) {
     case 3:
       return (
-        <FaFaceTired
+        <TbDatabaseSmile
           title="本伝 (SMILE)"
-          className={`_react-icons_tired ${css({
+          className={`_react-icons_db-smile ${css({
             color: 'red.400',
           })}`}
         />
