@@ -12,6 +12,7 @@ import { CustomerForm as CustomerFormTypes, CustomersTbRow } from '../customers.
 import FormErrorMessage from './elementSwitchers/FormErrorMessage';
 import { useRegisterCustomer } from './hooks/useRegisterCustomer';
 import FloatingDeleteButton from './FloatingDeleteButton';
+import { useFetchAddressData } from '../../address-data-by-zip-code/components/hooks/useFetchAddressData';
 
 export default function CustomerForm() {
   const location = useLocation();
@@ -38,10 +39,15 @@ export default function CustomerForm() {
   };
   const { registerCustomer } = useRegisterCustomer();
   const { invoiceTypes } = useFetchInvoiceTypes();
+  const { ejpcReturnData, setZipCodeStr, hasResultOfQuery, setHasResultOfQuery } = useFetchAddressData();
+
   const {
     register,
     handleSubmit,
     reset,
+    getValues,
+    setValue,
+    setFocus,
     formState: { errors, isSubmitting },
   } = useForm<CustomerFormTypes>({
     mode: 'all',
@@ -77,10 +83,27 @@ export default function CustomerForm() {
       }
     };
   }
+  // 郵便番号入力欄のみを監視
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setZipCodeStr(e.currentTarget.value);
+  };
   const handleReset: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
     reset();
   };
+
+  if (hasResultOfQuery && ejpcReturnData.address !== null) {
+    const { prefectures, city, other } = ejpcReturnData.address;
+    const town = other.replace(/[(（][^(（]+$/, '');
+    const address1 = getValues('address1');
+    // eslint-disable-next-line no-irregular-whitespace
+    if (/^[ 　]*$/.test(address1)) {
+      setValue('address1', prefectures + city + town);
+    }
+    setHasResultOfQuery(false);
+    setZipCodeStr('');
+    setFocus('address1');
+  }
 
   return (
     <>
@@ -114,6 +137,8 @@ export default function CustomerForm() {
             // eslint-disable-next-line react/jsx-props-no-spreading
             {...register('zip_code')}
             onKeyDown={checkKeyDown}
+            onChange={handleChange}
+            id="zip_code"
             type="text"
             placeholder="郵便番号"
             className={css({
