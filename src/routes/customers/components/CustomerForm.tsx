@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -47,6 +47,7 @@ export default function CustomerForm() {
     reset,
     getValues,
     setValue,
+    setError,
     setFocus,
     formState: { errors, isSubmitting },
   } = useForm<CustomerFormTypes>({
@@ -92,18 +93,41 @@ export default function CustomerForm() {
     reset();
   };
 
-  if (hasResultOfQuery && ejpcReturnData.address !== null) {
-    const { prefectures, city, other } = ejpcReturnData.address;
-    const town = other.replace(/[(（][^(（]+$/, '');
-    const address1 = getValues('address1');
-    // eslint-disable-next-line no-irregular-whitespace
-    if (/^[ 　]*$/.test(address1)) {
-      setValue('address1', prefectures + city + town);
+  useEffect(() => {
+    if (hasResultOfQuery && ejpcReturnData.address !== null) {
+      const { prefectures, city, other } = ejpcReturnData.address;
+      const town = other.replace(/[(（][^(（]+$/, '');
+      const address1 = getValues('address1');
+      // eslint-disable-next-line no-irregular-whitespace
+      if (/^[ 　]*$/.test(address1)) {
+        setValue('address1', prefectures + city + town);
+      }
+      setHasResultOfQuery(false);
+      setZipCodeStr('');
+      setFocus('address1');
+    } else if (hasResultOfQuery && ejpcReturnData.error !== null) {
+      const { noFirstThreeDigits, notFound } = ejpcReturnData.error;
+      if (noFirstThreeDigits ?? notFound) {
+        setError('zip_code', {
+          type: 'manual',
+          message: '⚠️郵便番号が見つかりません⚠️',
+        });
+      }
+      setHasResultOfQuery(false);
+      setZipCodeStr('');
+      setFocus('zip_code');
     }
-    setHasResultOfQuery(false);
-    setZipCodeStr('');
-    setFocus('address1');
-  }
+  }, [
+    ejpcReturnData.address,
+    ejpcReturnData.error,
+    getValues,
+    hasResultOfQuery,
+    setError,
+    setFocus,
+    setHasResultOfQuery,
+    setValue,
+    setZipCodeStr,
+  ]);
 
   return (
     <>
@@ -133,11 +157,15 @@ export default function CustomerForm() {
         <FormErrorMessage message={errors.tel?.message} />
         <label>
           郵便番号
+          <a href="https://www.post.japanpost.jp/zipcode/index.html" target="_blank" rel="noreferrer">
+            {' '}
+            🔎
+          </a>
           <Input
             // eslint-disable-next-line react/jsx-props-no-spreading
-            {...register('zip_code')}
+            {...register('zip_code', { onChange: handleChange })}
             onKeyDown={checkKeyDown}
-            onChange={handleChange}
+            // onChange={handleChange}
             id="zip_code"
             type="text"
             placeholder="郵便番号"
