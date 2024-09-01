@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import parse from 'html-react-parser';
 import { css } from '../../../styled-system/css';
@@ -6,10 +7,12 @@ import CustomerNotesList from './components/CustomerNotesList';
 import { CustomersTbRow, RequiredChooseCustomer } from './customers.types';
 import './customers.css';
 import DropdownMenu from './components/DropdownMenu';
+import { useCreateCustomerTsv } from './components/hooks/useCreateCustomerTsv';
 
 export default function ChooseCustomer(): JSX.Element {
   const customer = useLocation().state as CustomersTbRow;
   const { id: customerId } = useParams();
+  const { createCustomerTsv } = useCreateCustomerTsv();
 
   if (customerId && customerId !== customer.id.toString()) throw new Error('不正なルートでのアクセスを検知しました❢');
 
@@ -36,6 +39,12 @@ export default function ChooseCustomer(): JSX.Element {
     const patternStr = `(${nja_city})`;
     address1WithCityEmphasis = address1.replace(new RegExp(patternStr), '<strong>$1</strong>');
   }
+
+  useEffect(() => {
+    createCustomerTsv(customer)
+      .then((result) => console.log(result))
+      .catch((err) => console.error(err));
+  }, [createCustomerTsv, customer]);
 
   return (
     <>
