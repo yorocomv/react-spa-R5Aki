@@ -8,7 +8,7 @@ import './index.css';
 
 const queryClient = new QueryClient();
 
-if (import.meta.env.DEV && import.meta.env.MODE === 'development__with-msw__') {
+if (import.meta.env.DEV && import.meta.env.MODE === 'msw4dev') {
   import('./mocks/browser')
     .then((worker) => worker.default.start())
     .catch((err: string) => {

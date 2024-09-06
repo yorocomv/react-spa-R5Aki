@@ -1,6 +1,7 @@
 import { css } from '../../../styled-system/css';
 import CustomerForm from './components/CustomerForm';
 import FormContainer from './components/elements/FormContainer';
+import FloatingLinkIcon from './components/FloatingLinkIcon';
 
 export default function RegisterCustomer() {
   return (
@@ -16,6 +17,7 @@ export default function RegisterCustomer() {
       >
         得意先情報
       </h2>
+      <FloatingLinkIcon relativePath="/customers" size="2rem" />
       <FormContainer>
         <CustomerForm />
       </FormContainer>
