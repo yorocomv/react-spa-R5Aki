@@ -5,6 +5,7 @@ import FormContainer from './components/elements/FormContainer';
 import CustomerNoteForm from './components/CustomerNoteForm';
 import ListOfSummaryNotesAboutCustomer from './components/ListOfSummaryNotesAboutCustomer';
 import { useFetchNotes } from './components/hooks/useFetchNotes';
+import FloatingLinkIcon from './components/FloatingLinkIcon';
 
 export default function TakeANoteAboutCustomer(): JSX.Element {
   const customer = useLocation().state as CustomersTbRow;
@@ -31,6 +32,7 @@ export default function TakeANoteAboutCustomer(): JSX.Element {
           {`${customer.name1}　${customer.name2}`}
         </Link>
       </h2>
+      <FloatingLinkIcon relativePath="/customers" size="2rem" />
       <div
         className={css({
           display: 'grid',
