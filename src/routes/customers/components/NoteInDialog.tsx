@@ -33,8 +33,7 @@ export default function NoteInDialog({
       <Dialog
         className={css({
           pos: 'relative',
-          maxW: '39.5rem',
-          minW: '17.5rem',
+          w: 'clamp(17.5rem, 104%, 96vw)',
           maxH: '95lvh',
           overflow: 'scroll',
           p: '0.125rem 1rem 1rem',

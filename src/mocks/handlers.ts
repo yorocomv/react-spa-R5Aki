@@ -1,5 +1,6 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { HttpResponse, http } from 'msw';
+import env from '@/env';
 import customers from './dummy-data/customers.json';
 import customer from './dummy-data/customer.json';
 import customerTsv from './dummy-data/customers_-_output.json';
@@ -7,7 +8,7 @@ import invoiceTypes from './dummy-data/invoice-types.json';
 import notes from './dummy-data/notes.json';
 import zipCode from './dummy-data/address-data-by-zip-code.json';
 
-const baseURL = (import.meta.env.VITE_AXIOS_BASE_URL_IN_DEV_MODE as string) ?? 'http://localhost:3000';
+const baseURL = `http://${env.VITE_BEP_HOST}:${env.VITE_BEP_PORT}/api`;
 
 export default [
   http.get(`${baseURL}/customers`, () => HttpResponse.json(customers, { status: 200 })),

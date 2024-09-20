@@ -3,12 +3,13 @@ import ReactDOM from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import env from '@/env';
 import App from './App';
 import './index.css';
 
 const queryClient = new QueryClient();
 
-if (import.meta.env.DEV && import.meta.env.MODE === 'msw4dev') {
+if (env.DEV && env.MODE === 'msw4dev') {
   import('./mocks/browser')
     .then((worker) => worker.default.start())
     .catch((err: string) => {
