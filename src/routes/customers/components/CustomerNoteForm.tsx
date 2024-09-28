@@ -129,6 +129,7 @@ export default function CustomerNoteForm({
             // eslint-disable-next-line react/jsx-props-no-spreading
             {...register('body')}
             id="body"
+            autoFocus
             className={css({
               w: '34.5rem',
               h: '8lh',
