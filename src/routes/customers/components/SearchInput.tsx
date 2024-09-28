@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { css } from '../../../../styled-system/css';
 import Button from './elements/Button';
@@ -18,9 +18,12 @@ export default function SearchInput({
   setSearchTrigger,
   placeholder = '',
 }: SearchInputProps): JSX.Element {
-  // https://ja.react.dev/reference/react/useRef#manipulating-the-dom-with-a-ref
-  // https://qiita.com/akifumii/items/539e4af7ed4d068c0144
-  const inputRef = useRef<HTMLInputElement>(null);
+  // https://qiita.com/70ki8suda/items/831727af51c572e10ba8#callback-refs
+  // https://ja.react.dev/reference/react-dom/components/common#ref-callback
+  // ref callback function でインプットに「フォーカス」+ 再レンダー間で関数定義をキャッシュ
+  const inputRef = useCallback((node: HTMLInputElement | null) => {
+    if (node !== null) node.focus();
+  }, []);
   // 親コンポーネントから渡された State を制御する関数群
   // 内部で渡された set 関数を使用
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => setSearchString(e.target.value);
@@ -33,8 +36,6 @@ export default function SearchInput({
     e.preventDefault();
     navigate('/customers');
     setSearchTrigger(!searchTrigger);
-    // document.${id}.focus() よりは高確率で成功する
-    inputRef.current?.focus();
   };
 
   return (
