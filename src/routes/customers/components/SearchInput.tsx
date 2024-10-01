@@ -79,6 +79,7 @@ export default function SearchInput({
             id="input-search-form"
             type="text"
             placeholder={placeholder}
+            title={`🔍️${placeholder}`}
             // eslint-disable-next-line jsx-a11y/no-autofocus
             autoFocus
             autoComplete="off"

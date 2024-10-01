@@ -9,7 +9,7 @@ interface FloatingLinkIconProps {
 
 export default function FloatingLinkIcon({ relativePath, size }: FloatingLinkIconProps): JSX.Element {
   return (
-    <Link to={relativePath} relative="path" title="検索画面に戻る">
+    <Link to={relativePath} relative="path" title="🔎検索画面に戻る">
       <VscGoToSearch
         className={css({
           pos: 'fixed',
