@@ -79,6 +79,7 @@ export default function NoteInDialog({
           <pre
             className={css({
               overflowWrap: 'break-word',
+              fontFamily: '"Segoe UI Emoji", "BIZ UDPGothic", sans-serif',
             })}
           >
             {body}

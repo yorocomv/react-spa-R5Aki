@@ -14,7 +14,7 @@ export default function LinkNewRegistration({
 }: LinkNewRegistrationProps): JSX.Element {
   const isLightMode = bgMode === 'light';
   return (
-    <Link to={relativePath} relative="path">
+    <Link title="👤新規登録" to={relativePath} relative="path">
       <svg
         id="_new-registration-svg"
         viewBox="0 0 113.3 122.9"
