@@ -157,7 +157,13 @@ export default function CustomerForm() {
         <FormErrorMessage message={errors.tel?.message} />
         <label>
           郵便番号
-          <a href="https://www.post.japanpost.jp/zipcode/index.html" target="_blank" rel="noreferrer" tabIndex={-1}>
+          <a
+            href="https://www.post.japanpost.jp/zipcode/index.html"
+            target="_blank"
+            title="〒郵便局のサイトへ"
+            rel="noreferrer"
+            tabIndex={-1}
+          >
             {' '}
             🔎
           </a>
