@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { css } from '../../../../styled-system/css';
 import { useFetchNotes } from './hooks/useFetchNotes';
 import NoteInDialog from './NoteInDialog';
@@ -7,6 +7,18 @@ import { CustomersTbRow } from '../customers.types';
 export default function CustomerNotesList({ customer }: { customer: CustomersTbRow }): JSX.Element {
   const { notes } = useFetchNotes(customer.id);
   const [selectedNote, setSelectedNote] = useState(-1);
+
+  useEffect(() => {
+    if (notes.length && notes[notes.length - 1].created_at !== 'DUMMY') {
+      notes.push({
+        created_at: 'DUMMY',
+        updated_at: 'DUMMY',
+        customer_id: customer.id,
+        rank: 88888888,
+        body: ' ----- 以上 ----- ',
+      });
+    }
+  }, [customer.id, notes]);
 
   return (
     <section
@@ -43,6 +55,16 @@ export default function CustomerNotesList({ customer }: { customer: CustomersTbR
           '& li:last-child': {
             paddingBottom: 0,
             marginBottom: '1.25rem',
+          },
+          '& li:last-child:has(> .DUMMY)': {
+            color: 'pink.200',
+          },
+          '& li:last-child:has(> .DUMMY)::before': {
+            borderColor: 'pink.500',
+          },
+          '& li:last-child:has(> .DUMMY)::after': {
+            borderColor: 'pink.500',
+            bgColor: 'pink.700',
           },
         })}
       >
@@ -86,26 +108,32 @@ export default function CustomerNotesList({ customer }: { customer: CustomersTbR
                 },
               })}
             >
-              <span
-                onClick={() => setSelectedNote(i)}
-                onKeyDown={() => setSelectedNote(i)}
-                role="button"
-                tabIndex={i}
-                className={css({
-                  cursor: 'pointer',
-                })}
-              >
-                {note.body}
-              </span>
-              <NoteInDialog
-                currentPage={i + 1}
-                totalPages={notes.length}
-                isOpen={selectedNote === i}
-                closeModal={setSelectedNote}
-                body={note.body}
-                currentRank={note.rank}
-                customer={customer}
-              />
+              {note.created_at !== 'DUMMY' ? (
+                <>
+                  <span
+                    onClick={() => setSelectedNote(i)}
+                    onKeyDown={() => setSelectedNote(i)}
+                    role="button"
+                    tabIndex={i}
+                    className={css({
+                      cursor: 'pointer',
+                    })}
+                  >
+                    {note.body}
+                  </span>
+                  <NoteInDialog
+                    currentPage={i + 1}
+                    totalPages={notes.length - 1}
+                    isOpen={selectedNote === i}
+                    closeModal={setSelectedNote}
+                    body={note.body}
+                    currentRank={note.rank}
+                    customer={customer}
+                  />
+                </>
+              ) : (
+                <span className="DUMMY">{note.body}</span>
+              )}
             </li>
           ))
         ) : (
