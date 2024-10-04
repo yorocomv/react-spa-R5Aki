@@ -1,24 +1,23 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { css } from '../../../../styled-system/css';
 import { useFetchNotes } from './hooks/useFetchNotes';
 import NoteInDialog from './NoteInDialog';
 import { CustomersTbRow } from '../customers.types';
+import { NotesTbRow } from '../../notes/notes.types';
 
 export default function CustomerNotesList({ customer }: { customer: CustomersTbRow }): JSX.Element {
   const { notes } = useFetchNotes(customer.id);
   const [selectedNote, setSelectedNote] = useState(-1);
 
-  useEffect(() => {
-    if (notes.length && notes[notes.length - 1].created_at !== 'DUMMY') {
-      notes.push({
-        created_at: 'DUMMY',
-        updated_at: 'DUMMY',
-        customer_id: customer.id,
-        rank: 88888888,
-        body: ' ----- 以上 ----- ',
-      });
-    }
-  }, [customer.id, notes]);
+  const dummy = {
+    created_at: 'DUMMY',
+    updated_at: 'DUMMY',
+    customer_id: customer.id,
+    rank: 88888888,
+    body: ' ----- 以上 ----- ',
+  };
+
+  const endMarkerWithNotes: NotesTbRow[] = notes.length ? [...notes, dummy] : [];
 
   return (
     <section
@@ -68,8 +67,8 @@ export default function CustomerNotesList({ customer }: { customer: CustomersTbR
           },
         })}
       >
-        {notes.length ? (
-          notes.map((note, i) => (
+        {endMarkerWithNotes.length ? (
+          endMarkerWithNotes.map((note, i) => (
             <li
               key={note.rank}
               className={css({
@@ -123,7 +122,7 @@ export default function CustomerNotesList({ customer }: { customer: CustomersTbR
                   </span>
                   <NoteInDialog
                     currentPage={i + 1}
-                    totalPages={notes.length - 1}
+                    totalPages={endMarkerWithNotes.length - 1}
                     isOpen={selectedNote === i}
                     closeModal={setSelectedNote}
                     body={note.body}
