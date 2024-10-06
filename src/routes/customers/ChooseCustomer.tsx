@@ -60,8 +60,8 @@ export default function ChooseCustomer(): JSX.Element {
             display: 'grid',
             gridTemplateColumns: '100%',
             fontSize: 'lg',
-            m: 8,
-            py: 3,
+            m: 4,
+            py: 2,
             px: 4,
             border: '1px solid rgba(0, 0, 0, .2)',
             bgColor: 'rgba(0, 0, 0, .2)',
@@ -137,7 +137,7 @@ export default function ChooseCustomer(): JSX.Element {
         </div>
         <DropdownMenu
           label="編集 / メモを追加"
-          mergeStyles={css.raw({ margin: '0 0 2rem auto' })}
+          mergeStyles={css.raw({ margin: '0 0 1.5rem auto' })}
           menuItems={[
             { label: '編集', toRelativePath: '../edit', state: customer },
             { label: 'メモを追加', toRelativePath: '../take-a-note', state: customer },

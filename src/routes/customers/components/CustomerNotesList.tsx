@@ -73,7 +73,7 @@ export default function CustomerNotesList({ customer }: { customer: CustomersTbR
               key={note.rank}
               className={css({
                 pos: 'relative',
-                p: '0 0 1.25rem 3.125rem',
+                p: '0 0 0.75rem 2.75rem',
                 m: 0,
                 textShadow: '-1px 1px 0 rgba(0, 0, 0, 0.9)',
                 _before: {
