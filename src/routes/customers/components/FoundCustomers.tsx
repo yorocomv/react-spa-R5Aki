@@ -13,16 +13,21 @@ export default function FoundCustomers() {
       <div>
         <div
           className={css({
-            w: 'fit-content',
-            lineHeight: 1.1,
-            marginX: 'auto',
+            textAlign: 'center',
             marginY: '1rem',
-            px: '0.125rem',
-            fontWeight: 'bold',
-            color: 'orange.900',
-            bgColor: 'orange.200',
           })}
-        >{`${customers.length} hit(s) / ${latestCommunicationTime} sec`}</div>
+        >
+          <span
+            className={css({
+              display: 'inline-block',
+              lineHeight: 1.1,
+              px: '0.125rem',
+              fontWeight: 'bold',
+              color: 'orange.900',
+              bgColor: 'orange.200',
+            })}
+          >{`${customers.length} hit(s) / ${latestCommunicationTime} sec`}</span>
+        </div>
         {customers.length
           ? customers.map((customer) => (
               <Link key={customer.id} to={`./${customer.id}`} state={customer}>
@@ -38,7 +43,13 @@ export default function FoundCustomers() {
                 />
               </Link>
             ))
-          : latestCommunicationTime !== '0' && <div>🔍️検索ワードを変えて再度お試しください🙇</div>}
+          : latestCommunicationTime !== '0' && (
+              <div>
+                <span className={css({ bg: 'linear-gradient(transparent 40%, rgba(255, 105, 180, 0.6) 40%)' })}>
+                  🔍️検索ワードを変えて再度お試しください🙇‍♂️
+                </span>
+              </div>
+            )}
       </div>
     </section>
   );
