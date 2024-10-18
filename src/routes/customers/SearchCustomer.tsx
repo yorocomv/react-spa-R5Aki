@@ -1,4 +1,4 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet, ScrollRestoration } from 'react-router-dom';
 import { css } from '../../../styled-system/css';
 import SearchInput from './components/SearchInput';
 import LinkNewRegistration from './components/LinkNewRegistration';
@@ -43,6 +43,8 @@ export default function SearchCustomer() {
         </nav>
       </header>
       <Outlet context={{ latestCommunicationTime, customers }} />
+      {/* ブラウザのスクロール復元をエミュレート */}
+      <ScrollRestoration />
     </>
   );
 }
