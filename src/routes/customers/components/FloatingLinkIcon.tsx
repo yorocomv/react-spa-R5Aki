@@ -25,7 +25,7 @@ export default function FloatingLinkIcon({ relativePath, size }: FloatingLinkIco
           _hover: {
             bgColor: 'teal.100',
           },
-          boxShadow: 'muiMd',
+          boxShadow: '2xl',
         })}
         size={size}
       />
