@@ -57,8 +57,13 @@ export default function CustomerForm() {
   });
 
   // https://github.com/react-hook-form/react-hook-form/discussions/2549
-  const checkKeyDown = (e: React.KeyboardEvent<HTMLInputElement | HTMLButtonElement>) => {
-    if (e.key === 'Enter') e.preventDefault();
+  const checkKeyDown = (e: React.KeyboardEvent<HTMLInputElement | HTMLButtonElement>, nextId?: string) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      if (nextId) {
+        document.getElementById(nextId)?.focus();
+      }
+    }
   };
 
   const onSubmit: SubmitHandler<CustomerFormTypes> = async (values): Promise<void> => {
@@ -145,8 +150,9 @@ export default function CustomerForm() {
           <Input
             // eslint-disable-next-line react/jsx-props-no-spreading
             {...register('tel')}
-            onKeyDown={checkKeyDown}
-            type="text"
+            onKeyDown={(e) => checkKeyDown(e, 'zip_code')}
+            id="tel"
+            type="tel"
             autoFocus
             placeholder="電話番号"
             className={css({
@@ -170,10 +176,9 @@ export default function CustomerForm() {
           <Input
             // eslint-disable-next-line react/jsx-props-no-spreading
             {...register('zip_code', { onChange: handleChange })}
-            onKeyDown={checkKeyDown}
-            // onChange={handleChange}
+            onKeyDown={(e) => checkKeyDown(e, 'address1')}
             id="zip_code"
-            type="text"
+            type="tel"
             placeholder="郵便番号"
             className={css({
               w: 28,
@@ -185,7 +190,7 @@ export default function CustomerForm() {
         <Input
           // eslint-disable-next-line react/jsx-props-no-spreading
           {...register('address1')}
-          onKeyDown={checkKeyDown}
+          onKeyDown={(e) => checkKeyDown(e, 'address2')}
           id="address1"
           type="text"
           placeholder="住所1"
@@ -197,7 +202,8 @@ export default function CustomerForm() {
         <Input
           // eslint-disable-next-line react/jsx-props-no-spreading
           {...register('address2')}
-          onKeyDown={checkKeyDown}
+          onKeyDown={(e) => checkKeyDown(e, 'address3')}
+          id="address2"
           type="text"
           placeholder="住所2"
           className={css({
@@ -209,7 +215,8 @@ export default function CustomerForm() {
         <Input
           // eslint-disable-next-line react/jsx-props-no-spreading
           {...register('address3')}
-          onKeyDown={checkKeyDown}
+          onKeyDown={(e) => checkKeyDown(e, 'name1')}
+          id="address3"
           type="text"
           placeholder="住所3"
           className={css({
@@ -230,7 +237,7 @@ export default function CustomerForm() {
         <Input
           // eslint-disable-next-line react/jsx-props-no-spreading
           {...register('name1')}
-          onKeyDown={checkKeyDown}
+          onKeyDown={(e) => checkKeyDown(e, 'name2')}
           id="name1"
           type="text"
           placeholder="名称1"
@@ -242,7 +249,8 @@ export default function CustomerForm() {
         <Input
           // eslint-disable-next-line react/jsx-props-no-spreading
           {...register('name2')}
-          onKeyDown={checkKeyDown}
+          onKeyDown={(e) => checkKeyDown(e, 'alias')}
+          id="name2"
           type="text"
           placeholder="名称2"
           className={css({
@@ -256,7 +264,8 @@ export default function CustomerForm() {
           <Input
             // eslint-disable-next-line react/jsx-props-no-spreading
             {...register('alias')}
-            onKeyDown={checkKeyDown}
+            onKeyDown={(e) => checkKeyDown(e, 'tel')}
+            id="alias"
             type="text"
             placeholder="検索用の別名"
             className={css({
