@@ -11,7 +11,14 @@ const queryClient = new QueryClient();
 
 if (env.DEV && env.MODE === 'msw4dev') {
   import('./mocks/browser')
-    .then((worker) => worker.default.start())
+    .then((worker) =>
+      worker.default.start({
+        serviceWorker: {
+          // 追加: vite v5 マイグレーション
+          url: `${env.BASE_URL}/mockServiceWorker.js`,
+        },
+      }),
+    )
     .catch((err: string) => {
       console.error(`💥💥💥 [MSW?] Mocking disabled. ${err} 💀💀💀`);
       return Promise.reject(new Error(err));
