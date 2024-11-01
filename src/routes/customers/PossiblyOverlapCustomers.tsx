@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { TbArrowBigLeftLinesFilled } from 'react-icons/tb';
 import { vstack } from '../../../styled-system/patterns/vstack';
 import CustomerSummary from './components/CustomerSummary';
@@ -27,6 +27,14 @@ export default function PossiblyOverlapCustomers(): JSX.Element {
     [id, customers],
   );
 
+  const [deleteFlagNumbers, setDeleteFlagNumbers] = useState<number[]>([]);
+  const handleCheck = (customerId: number) => {
+    const newDeleteFlagNumbers = deleteFlagNumbers.filter((delId) => customerId !== delId);
+    newDeleteFlagNumbers.push(customerId);
+    setDeleteFlagNumbers(newDeleteFlagNumbers);
+  };
+  console.log(deleteFlagNumbers);
+
   return (
     <section className={vstack()}>
       <h2
@@ -50,46 +58,52 @@ export default function PossiblyOverlapCustomers(): JSX.Element {
       </h2>
       <div
         className={css({
-          '& a:first-of-type': {
+          '& article:first-of-type': {
             pos: 'sticky',
             top: '2.25rem',
           },
-          '& :first-child .customer-summary': {
+          '& :first-child a .customer-summary': {
             bgColor: '#AAD9BB',
             borderColor: '#80BCBD',
           },
-          '& :first-child .customer-summary div:last-of-type': {
+          '& :first-child a .customer-summary div:last-of-type': {
             color: 'indigo.800',
           },
         })}
       >
         {customers.length ? (
           sortedCustomers.map((customer) => (
-            <Link
+            <article
               key={customer.id}
-              to={id === customer.id ? `/customers/${customer.id}/decide` : `/customers/${customer.id}`}
-              state={customer}
               className={css({
-                '&:has(#chosen)': {
+                '&:has(#chosen), &:has(.flag2del)': {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                 },
-                '&:has(#chosen) div:first-of-type': {
+                '&:has(#chosen) :first-child, &:has(.flag2del) :first-child': {
                   flex: '1',
+                },
+                '&:has(.flag2del > input:checked) a .customer-summary': {
+                  bgColor: 'red.400',
                 },
               })}
             >
-              <CustomerSummary
-                tel={customer.tel}
-                address1={customer.address1}
-                address2={customer.address2}
-                address3={customer.address3}
-                name1={customer.name1}
-                name2={customer.name2}
-                notes={customer.notes}
-                invoice_type_id={customer.invoice_type_id}
-              />
+              <Link
+                to={id === customer.id ? `/customers/${customer.id}/decide` : `/customers/${customer.id}`}
+                state={customer}
+              >
+                <CustomerSummary
+                  tel={customer.tel}
+                  address1={customer.address1}
+                  address2={customer.address2}
+                  address3={customer.address3}
+                  name1={customer.name1}
+                  name2={customer.name2}
+                  notes={customer.notes}
+                  invoice_type_id={customer.invoice_type_id}
+                />
+              </Link>
               {id === customer.id ? (
                 <div
                   id="chosen"
@@ -120,8 +134,22 @@ export default function PossiblyOverlapCustomers(): JSX.Element {
                     選択中
                   </em>
                 </div>
-              ) : null}
-            </Link>
+              ) : (
+                customer.notes === 0 && (
+                  <div
+                    className={`flag2del ${css({
+                      display: 'flex',
+                      position: 'relative',
+                      left: '2.5rem',
+                      w: '2.5rem',
+                      ml: '-2.5rem',
+                    })}`}
+                  >
+                    <input type="checkbox" onChange={() => handleCheck(customer.id)} />
+                  </div>
+                )
+              )}
+            </article>
           ))
         ) : (
           <div>Oops!</div>
