@@ -87,6 +87,9 @@ export default function PossiblyOverlapCustomers(): JSX.Element {
                 '&:has(.flag2del > input:checked) a .customer-summary': {
                   bgColor: 'red.400',
                 },
+                '&:has(.flag2del > input:checked) a .customer-summary div:last-of-type': {
+                  color: 'yellow.800',
+                },
               })}
             >
               <Link
