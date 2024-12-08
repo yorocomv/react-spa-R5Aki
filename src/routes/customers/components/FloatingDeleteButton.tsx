@@ -1,19 +1,26 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { FaRegTrashCan } from 'react-icons/fa6';
 import Button from './elements/Button';
 import { css } from '../../../../styled-system/css';
 import { useDeleteCustomer } from './hooks/useDeleteCustomer';
+import { useDeleteAnyCustomers } from './hooks/useDeleteAnyCustomers';
 import { useDeleteNote } from '../../notes/components/hooks/useDeleteNote';
 import { CustomersTbRow } from '../customers.types';
 
 interface FloatingDeleteButtonProps {
   customer: CustomersTbRow;
   label: string;
+  deleteFlaggedNumbers?: number[];
 }
 
-export default function FloatingDeleteButton({ customer, label }: FloatingDeleteButtonProps) {
-  // `/:id/edit` と `/:id/take-a-note` の２パターン
+export default function FloatingDeleteButton({
+  customer,
+  label,
+  deleteFlaggedNumbers = [],
+}: FloatingDeleteButtonProps) {
+  // `/:id/edit` と `/:id/take-a-note` と `/:id/checking-overlap` の３パターン
+  const { pathname } = useLocation();
   const { id: customerId } = useParams();
 
   if (customerId && customerId !== customer.id.toString()) throw new Error('不正なルートでのアクセスを検知しました❢');
@@ -25,6 +32,7 @@ export default function FloatingDeleteButton({ customer, label }: FloatingDelete
   const currentRank = searchParams.get('rank') ?? 0;
 
   const { deleteCustomer } = useDeleteCustomer(parseInt(customerId ?? '0', 10));
+  const { deleteAnyCustomers } = useDeleteAnyCustomers();
   const { deleteNote } = useDeleteNote(parseInt(customerId ?? '0', 10));
 
   const handleClickDelete = async () => {
@@ -34,7 +42,11 @@ export default function FloatingDeleteButton({ customer, label }: FloatingDelete
           const response = await deleteNote(parseInt(currentRank, 10));
           console.log(response);
           navigate(`/customers/${customer.id}/decide`, { state: customer });
-        } else {
+        } else if (/\/checking-overlap/.test(pathname) && deleteFlaggedNumbers.length > 0) {
+          const response = await deleteAnyCustomers(deleteFlaggedNumbers);
+          console.log(response);
+          navigate(`/customers/${customer.id}/decide`, { state: customer });
+        } else if (deleteFlaggedNumbers.length === 0) {
           const response = await deleteCustomer();
           console.log(response);
           navigate('/customers');

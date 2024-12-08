@@ -1,12 +1,15 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
+import { useState } from 'react';
 import axiosInstance from '../../../../util/axios-instance';
 
 // eslint-disable-next-line import/prefer-default-export
-export const useDeleteAnyCustomers = (customersIds: number[]) => {
+export const useDeleteAnyCustomers = () => {
+  const [deleteFlaggedNumbers, setDeleteFlaggedNumbers] = useState<number[]>([]);
+
   const queryClient = useQueryClient();
   const { mutateAsync: deleteAnyCustomers } = useMutation({
-    mutationFn: async () => {
+    mutationFn: async (customersIds: number[]) => {
       if (customersIds.length === 0) {
         throw new Error('Customer is Not Found !!');
       }
@@ -18,8 +21,8 @@ export const useDeleteAnyCustomers = (customersIds: number[]) => {
         });
       return response.data;
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['customers?search_name'] }),
+    onSuccess: () => queryClient.removeQueries({ queryKey: ['/customers/checkingOverlap'] }),
   });
 
-  return { deleteAnyCustomers };
+  return { deleteFlaggedNumbers, setDeleteFlaggedNumbers, deleteAnyCustomers };
 };

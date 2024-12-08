@@ -26,7 +26,7 @@ export default function ExamineCustomer() {
     return result.data;
   };
   const { data: customers } = useSuspenseQuery({
-    queryKey: [`/customers/${customer.id}/checkingOverlap`],
+    queryKey: ['/customers/checkingOverlap', customer.id],
     queryFn: fetchPossiblyOverlapCustomersQueryFn,
   });
 
