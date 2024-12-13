@@ -38,7 +38,7 @@ export default function FloatingDeleteButton({
   const handleClickDelete = async () => {
     try {
       if (customerId) {
-        if (currentRank) {
+        if (/\/take-a-note/.test(pathname) && currentRank) {
           const response = await deleteNote(parseInt(currentRank, 10));
           console.log(response);
           navigate(`/customers/${customer.id}/decide`, { state: customer });
@@ -46,10 +46,12 @@ export default function FloatingDeleteButton({
           const response = await deleteAnyCustomers(deleteFlaggedNumbers);
           console.log(response);
           navigate(`/customers/${customer.id}/decide`, { state: customer });
-        } else if (deleteFlaggedNumbers.length === 0) {
+        } else if (/\/edit/.test(pathname) && deleteFlaggedNumbers.length === 0) {
           const response = await deleteCustomer();
           console.log(response);
           navigate('/customers');
+        } else {
+          throw new Error('想定外の削除イベントが発生しました🔥');
         }
       }
     } catch (err: unknown) {

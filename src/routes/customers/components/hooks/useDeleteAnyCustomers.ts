@@ -9,6 +9,7 @@ export const useDeleteAnyCustomers = () => {
 
   const queryClient = useQueryClient();
   const { mutateAsync: deleteAnyCustomers } = useMutation({
+    // customersIds には deleteFlaggedNumbers のコピーを指定
     mutationFn: async (customersIds: number[]) => {
       if (customersIds.length === 0) {
         throw new Error('Customer is Not Found !!');

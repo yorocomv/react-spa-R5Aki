@@ -152,7 +152,11 @@ export default function PossiblyOverlapCustomers(): JSX.Element {
                         ml: '-2.5rem',
                       })}`}
                     >
-                      <input type="checkbox" onChange={(e) => handleCheck(e, customer.id)} />
+                      <input
+                        type="checkbox"
+                        title="🗑️このデータを削除しますか？"
+                        onChange={(e) => handleCheck(e, customer.id)}
+                      />
                     </div>
                   )
                 )}
