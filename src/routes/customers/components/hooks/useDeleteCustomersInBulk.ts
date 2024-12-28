@@ -1,14 +1,14 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
 import { useState } from 'react';
-import axiosInstance from '../../../../util/axios-instance';
+import axiosInstance from '@/util/axios-instance';
 
 // eslint-disable-next-line import/prefer-default-export
-export const useDeleteAnyCustomers = () => {
+export const useDeleteCustomersInBulk = () => {
   const [deleteFlaggedNumbers, setDeleteFlaggedNumbers] = useState<number[]>([]);
 
   const queryClient = useQueryClient();
-  const { mutateAsync: deleteAnyCustomers } = useMutation({
+  const { mutateAsync: deleteCustomersInBulk } = useMutation({
     // customersIds には deleteFlaggedNumbers のコピーを指定
     mutationFn: async (customersIds: number[]) => {
       if (customersIds.length === 0) {
@@ -25,5 +25,5 @@ export const useDeleteAnyCustomers = () => {
     onSuccess: () => queryClient.removeQueries({ queryKey: ['/customers/checkingOverlap'] }),
   });
 
-  return { deleteFlaggedNumbers, setDeleteFlaggedNumbers, deleteAnyCustomers };
+  return { deleteFlaggedNumbers, setDeleteFlaggedNumbers, deleteCustomersInBulk };
 };

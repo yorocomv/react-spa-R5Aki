@@ -5,7 +5,7 @@ import { vstack } from '../../../styled-system/patterns/vstack';
 import CustomerSummary from './components/CustomerSummary';
 import { CustomersTbRow } from './customers.types';
 import { css } from '../../../styled-system/css';
-import { useDeleteAnyCustomers } from './components/hooks/useDeleteAnyCustomers';
+import { useDeleteCustomersInBulk } from './components/hooks/useDeleteCustomersInBulk';
 import FloatingDeleteButton from './components/FloatingDeleteButton';
 
 interface PossiblyOverlapCustomersState {
@@ -15,7 +15,7 @@ interface PossiblyOverlapCustomersState {
 
 export default function PossiblyOverlapCustomers(): JSX.Element {
   const { id, customers } = useLocation().state as PossiblyOverlapCustomersState;
-  const { deleteFlaggedNumbers, setDeleteFlaggedNumbers } = useDeleteAnyCustomers();
+  const { deleteFlaggedNumbers, setDeleteFlaggedNumbers } = useDeleteCustomersInBulk();
   const sortedCustomers = useMemo(
     () =>
       [...customers].sort((a, b) => {
@@ -36,6 +36,15 @@ export default function PossiblyOverlapCustomers(): JSX.Element {
       newDeleteFlaggedNumbers.push(customerId);
     }
     setDeleteFlaggedNumbers(newDeleteFlaggedNumbers);
+  };
+
+  const createLabel = (): string => {
+    if (deleteFlaggedNumbers.length > 0) {
+      return `${String(deleteFlaggedNumbers.length).replace(/[0-9]/g, (n) =>
+        String.fromCharCode(n.charCodeAt(0) + 0xfee0),
+      )}件まとめて削除`;
+    }
+    return 'まとめて削除';
   };
 
   return (
@@ -168,7 +177,11 @@ export default function PossiblyOverlapCustomers(): JSX.Element {
         </div>
       </section>
       {deleteFlaggedNumbers.length > 0 ? (
-        <FloatingDeleteButton customer={sortedCustomers[0]} label="削除" deleteFlaggedNumbers={deleteFlaggedNumbers} />
+        <FloatingDeleteButton
+          customer={sortedCustomers[0]}
+          label={createLabel()}
+          deleteFlaggedNumbers={deleteFlaggedNumbers}
+        />
       ) : null}
     </>
   );

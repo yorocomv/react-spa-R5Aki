@@ -4,7 +4,7 @@ import { FaRegTrashCan } from 'react-icons/fa6';
 import Button from './elements/Button';
 import { css } from '../../../../styled-system/css';
 import { useDeleteCustomer } from './hooks/useDeleteCustomer';
-import { useDeleteAnyCustomers } from './hooks/useDeleteAnyCustomers';
+import { useDeleteCustomersInBulk } from './hooks/useDeleteCustomersInBulk';
 import { useDeleteNote } from '../../notes/components/hooks/useDeleteNote';
 import { CustomersTbRow } from '../customers.types';
 
@@ -32,7 +32,7 @@ export default function FloatingDeleteButton({
   const currentRank = searchParams.get('rank') ?? 0;
 
   const { deleteCustomer } = useDeleteCustomer(parseInt(customerId ?? '0', 10));
-  const { deleteAnyCustomers } = useDeleteAnyCustomers();
+  const { deleteCustomersInBulk } = useDeleteCustomersInBulk();
   const { deleteNote } = useDeleteNote(parseInt(customerId ?? '0', 10));
 
   const handleClickDelete = async () => {
@@ -43,7 +43,7 @@ export default function FloatingDeleteButton({
           console.log(response);
           navigate(`/customers/${customer.id}/decide`, { state: customer });
         } else if (/\/checking-overlap/.test(pathname) && deleteFlaggedNumbers.length > 0) {
-          const response = await deleteAnyCustomers(deleteFlaggedNumbers);
+          const response = await deleteCustomersInBulk(deleteFlaggedNumbers);
           console.log(response);
           navigate(`/customers/${customer.id}/decide`, { state: customer });
         } else if (/\/edit/.test(pathname) && deleteFlaggedNumbers.length === 0) {
