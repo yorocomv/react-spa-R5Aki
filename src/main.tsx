@@ -8,29 +8,46 @@ import App from './App';
 import './index.css';
 
 const queryClient = new QueryClient();
+const root = ReactDOM.createRoot(document.getElementById('root')!);
+const isMsw = env.DEV && env.MODE === 'msw4dev';
 
-async function enableMocking() {
-  if (env.DEV && env.MODE === 'msw4dev') {
+async function enableMocking(): Promise<ServiceWorkerRegistration | undefined> {
+  if (isMsw) {
     const worker = await import('./mocks/browser');
-    await worker.default.start({
+    return worker.default.start({
+      onUnhandledRequest: 'bypass',
       serviceWorker: {
         // 追加: vite v5 マイグレーション
-        url: `${env.BASE_URL}/mockServiceWorker.js`,
+        url: '/spa/mockServiceWorker.js',
       },
     });
   }
+  return undefined;
 }
 
-enableMocking().catch((err: string) => {
-  console.error(`💥💥💥 [MSW?] Mocking disabled. ${err} 💀💀💀`);
-  return Promise.reject(new Error(err));
-});
-
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <App />
-      <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-left" />
-    </QueryClientProvider>
-  </React.StrictMode>,
-);
+if (isMsw) {
+  (async () => {
+    await enableMocking().catch((err: string) => {
+      throw new Error(`💥💥💥 [MSW?] Mocking disabled. ${err} 💀💀💀`);
+    });
+    root.render(
+      <React.StrictMode>
+        <QueryClientProvider client={queryClient}>
+          <App />
+          <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-left" />
+        </QueryClientProvider>
+      </React.StrictMode>,
+    );
+  })().catch((err: string) => {
+    throw Error(err);
+  });
+} else {
+  root.render(
+    <React.StrictMode>
+      <QueryClientProvider client={queryClient}>
+        <App />
+        <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-left" />
+      </QueryClientProvider>
+    </React.StrictMode>,
+  );
+}
