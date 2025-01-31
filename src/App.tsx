@@ -5,11 +5,15 @@ import AxiosErrorHandleProvider from './components/providers/AxiosErrorHandlePro
 import Home from './Home';
 
 const CustomerRoutes = lazy(() => import('./routes/customers/customer-routes'));
+const ShippingInstructionPrintoutsRoutes = lazy(
+  () => import('./routes/shipping-instruction-printouts/shipping-instruction-printouts-routes'),
+);
 
 const router = createBrowserRouter(
   [
     { path: '/', element: <Home /> },
     { path: 'customers/*', element: <CustomerRoutes /> },
+    { path: 'shipping-instruction-printouts/*', element: <ShippingInstructionPrintoutsRoutes /> },
   ],
   {
     basename: '/spa',
