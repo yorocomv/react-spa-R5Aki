@@ -15,7 +15,7 @@ export default function SearchCustomer() {
           pos: 'sticky',
           top: 0,
           zIndex: '1',
-          backdropFilter: 'blur(8px)',
+          backdropFilter: 'blur(6px)',
           px: 2,
           py: 2.5,
           boxShadow: '0 0.125rem 0.25rem rgba(0,0,0,.02),0 1px 0 rgba(0,0,0,.06)',

@@ -20,11 +20,19 @@ export default function FoundCustomers() {
           <span
             className={css({
               display: 'inline-block',
-              lineHeight: 1.1,
-              px: '0.125rem',
+              lineHeight: 1.3,
+              px: '0.4rem',
+              borderRadius: 'md',
+              fontFamily: 'Times New Roman',
+              fontSize: '1.125rem',
               fontWeight: 'bold',
-              color: 'orange.900',
+              color: 'orange.500',
               bgColor: 'orange.200',
+              bgGradient: 'to-r',
+              gradientFrom: 'orange.200',
+              gradientTo: 'orange.100',
+              opacity: '0.6',
+              boxShadow: 'lg',
             })}
           >{`${customers.length} hit(s) / ${latestCommunicationTime} sec`}</span>
         </div>
