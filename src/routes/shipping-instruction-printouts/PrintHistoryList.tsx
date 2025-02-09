@@ -1,8 +1,11 @@
 import DatePickerInput from '@/components/ui/DatePickerInput';
 import PopoverCalendar from '@/components/ui/PopoverCalendar';
+import { today } from '@internationalized/date';
 import { css } from 'styled-system/css';
 
 export default function PrintHistoryList() {
+  const todayDate = today('Asia/Tokyo');
+
   return (
     <main className={css({ fontSize: 'sm' })}>
       <header
@@ -23,8 +26,8 @@ export default function PrintHistoryList() {
             gridTemplateColumns: '1fr auto 1fr',
           })}
         >
-          <DatePickerInput>
-            <PopoverCalendar />
+          <DatePickerInput todayDate={todayDate}>
+            <PopoverCalendar todayDate={todayDate} />
           </DatePickerInput>
         </nav>
       </header>

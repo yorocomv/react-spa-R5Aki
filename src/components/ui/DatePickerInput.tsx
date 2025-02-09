@@ -1,10 +1,19 @@
+import React from 'react';
 import { Button, DateInput, DatePicker, DateSegment, Group } from 'react-aria-components';
+import { CalendarDate } from '@internationalized/date';
 import { css } from 'styled-system/css';
 
-export default function DatePickerInput({ children }: { children: React.ReactNode }): JSX.Element {
+export default function DatePickerInput({
+  children,
+  todayDate,
+}: {
+  children: React.ReactNode;
+  todayDate: CalendarDate;
+}): JSX.Element {
   return (
     <DatePicker
       aria-label="date picker"
+      defaultValue={todayDate}
       className={css({
         display: 'flex',
         alignItems: 'center',

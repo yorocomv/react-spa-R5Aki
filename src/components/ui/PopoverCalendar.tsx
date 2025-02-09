@@ -10,14 +10,41 @@ import {
   Heading,
   Popover,
 } from 'react-aria-components';
-import { getLocalTimeZone, today } from '@internationalized/date';
+import { CalendarDate } from '@internationalized/date';
 import { css } from 'styled-system/css';
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6';
 
-export default function PopoverCalendar(): JSX.Element {
+export default function PopoverCalendar({ todayDate }: { todayDate: CalendarDate }): JSX.Element {
+  const cellStyles = css.raw({
+    w: '2rem',
+    h: '2rem',
+    outlineOffset: '2px',
+    outline: '2px solid #0000',
+    fontFamily: 'Calibri,sans-serif',
+    cursor: 'default',
+    borderRadius: 'full',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    _hover: { color: 'stone.600', bgColor: 'violet.200' },
+    // 😓!important 使用
+    _pressed: { bgColor: 'violet.300 !important' },
+    _selected: { bgColor: 'violet.700', color: '#fff' },
+    '&:focus-visible:where([data-rac])[data-focus-visible]': {
+      boxShadow: '0 0 0 2px #fff, 0 0 0 5px #7c3aedb3, 0 0 #0000 ,0 0 #0000',
+    },
+  });
+  const calendarCellStyles = css.raw({
+    '&[data-outside-month]': { color: 'stone.300' },
+    '&[data-outside-month]:hover': { color: 'transparent', bgColor: 'transparent' },
+  });
+  const todayStyles = css.raw({ color: 'stone.900', bgColor: 'stone.300' });
+  const pageNavStyles = css.raw({ color: 'stone.600' });
+
   return (
-    <Popover className={css({ overflow: 'auto', borderRadius: 'lg', bgColor: 'stone.100' })}>
-      <Dialog className={css({ p: '0.75rem', color: 'stone.600' })}>
-        <Calendar defaultValue={today(getLocalTimeZone())} defaultFocusedValue={today(getLocalTimeZone())}>
+    <Popover className={css({ overflow: 'auto', borderRadius: 'lg', bgColor: 'stone.100', boxShadow: 'lg' })}>
+      <Dialog className={css({ p: '1rem', color: 'stone.600' })}>
+        <Calendar firstDayOfWeek="sun">
           <header
             className={css({
               display: 'flex',
@@ -26,43 +53,43 @@ export default function PopoverCalendar(): JSX.Element {
               gap: '0.325rem',
               pb: '0.5rem',
               px: '0.125rem',
-              fontFamily: 'serif',
+              fontFamily: 'Georgia,"BIZ UDMincho Medium",serif',
             })}
           >
-            <Heading className={css({ flex: '1', fontWeight: 'bold', fontSize: '2xl', ml: '0.25rem' })} />
-            <Button slot="previous">◀</Button>
-            <Button slot="next">▶</Button>
+            <Heading className={css({ flex: '1', fontWeight: 'bold', fontSize: '2xl', my: '1rem', ml: '0.375rem' })} />
+            <Button slot="previous" className={css(cellStyles, pageNavStyles)}>
+              <FaChevronLeft />
+            </Button>
+            <Button slot="next" className={css(cellStyles, pageNavStyles)}>
+              <FaChevronRight />
+            </Button>
           </header>
           <CalendarGrid className={css({ borderSpacing: '0.325rem', borderCollapse: 'separate' })}>
-            <CalendarGridHeader>
+            <CalendarGridHeader
+              className={css({
+                '& tr > th:first-child': { color: 'red.600' },
+                '& tr > th:last-child': { color: 'blue.600' },
+              })}
+            >
               {(day) => (
                 <CalendarHeaderCell className={css({ fontSize: 'xs', color: 'stone.500', fontWeight: 'bold' })}>
                   {day}
                 </CalendarHeaderCell>
               )}
             </CalendarGridHeader>
-            <CalendarGridBody>
-              {(date) => (
-                <CalendarCell
-                  date={date}
-                  className={css({
-                    w: '1.525rem',
-                    h: '1.525rem',
-                    outlineOffset: '2px',
-                    outline: '2px solid #0000',
-                    cursor: 'default',
-                    borderRadius: 'full',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    '&[data-outside-month]': { color: 'stone.300' },
-                    _hover: { bgColor: 'violet.100' },
-                    _pressed: { bgColor: 'violet.200' },
-                    _selected: { bgColor: 'violet.700', color: '#fff' },
-                    _focusVisible: { boxShadow: '0 0 0 2px #fff, 0 0 0 5px #7c3aedb3, 0 0 #0000 ,0 0 #0000' },
-                  })}
-                />
-              )}
+            <CalendarGridBody
+              className={css({
+                '& tr > td:first-child': { color: 'red.500' },
+                '& tr > td:last-child': { color: 'blue.500' },
+              })}
+            >
+              {(date) =>
+                date.year === todayDate.year && date.month === todayDate.month && date.day === todayDate.day ? (
+                  <CalendarCell date={date} className={css(cellStyles, calendarCellStyles, todayStyles)} />
+                ) : (
+                  <CalendarCell date={date} className={css(cellStyles, calendarCellStyles)} />
+                )
+              }
             </CalendarGridBody>
           </CalendarGrid>
         </Calendar>
