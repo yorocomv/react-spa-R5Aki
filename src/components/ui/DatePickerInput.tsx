@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, DateInput, DatePicker, DateSegment, Group } from 'react-aria-components';
 import { CalendarDate } from '@internationalized/date';
 import { css } from 'styled-system/css';
-import { FaCalendar } from 'react-icons/fa6';
+import { RxCalendar } from 'react-icons/rx';
 
 export default function DatePickerInput({
   children,
@@ -18,19 +18,19 @@ export default function DatePickerInput({
       className={css({
         display: 'flex',
         flexDir: 'column',
-        gap: '0.5rem',
-        w: '10rem',
+        w: '11rem',
       })}
     >
       <Group
         className={css({
           display: 'flex',
           alignItems: 'center',
-          color: 'slate.700',
-          bgColor: 'slate.50/90',
+          fontFamily: 'Calibri,"Meiryo UI",sans-serif',
+          color: 'slate.700/90',
+          bgColor: 'slate.50/80',
           borderRadius: 'md',
           boxShadow: 'sm',
-          pl: '0.65rem',
+          pl: '0.625rem',
           '&:where([data-rac])[data-focus-within]': { color: 'slate.950', bgColor: 'slate.50' },
         })}
       >
@@ -39,7 +39,7 @@ export default function DatePickerInput({
             <DateSegment
               segment={segment}
               className={css({
-                fontSize: 'md',
+                fontSize: 'lg',
                 lineHeight: '1.5rem',
                 px: '0.125rem',
                 my: '0.125rem',
@@ -56,11 +56,23 @@ export default function DatePickerInput({
             display: 'flex',
             alignItems: 'center',
             outline: 'none',
-            px: '0.65rem',
-            color: 'slate.600',
+            px: '0.625rem',
+            py: '0.54rem',
+            borderRightRadius: 'md',
+            color: 'slate.700/90',
+            bgColor: 'transparent',
+            borderWidth: '0 0 0 1px',
+            borderStyle: 'solid',
+            borderColor: 'slate.200',
+            _hover: { color: 'slate.950' },
+            _pressed: {
+              color: 'slate.950',
+              bgColor: 'purple.100',
+              borderColor: 'purple.200',
+            },
           })}
         >
-          <FaCalendar size="1.125rem" />
+          <RxCalendar size="1.3rem" />
         </Button>
       </Group>
       {children}
