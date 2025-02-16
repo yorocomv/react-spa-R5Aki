@@ -1,6 +1,6 @@
 import { Outlet, ScrollRestoration } from 'react-router-dom';
+import SearchForm from '@/routes/customers/components/SearchForm';
 import { css } from '../../../styled-system/css';
-import SearchInput from './components/SearchInput';
 import LinkNewRegistration from './components/LinkNewRegistration';
 import { useSearchCustomer } from './components/hooks/useSearchCustomer';
 
@@ -29,7 +29,7 @@ export default function SearchCustomer() {
           })}
         >
           <div className={css({ gridColumn: '2/3' })}>
-            <SearchInput
+            <SearchForm
               searchString={searchString}
               setSearchString={setSearchString}
               searchTrigger={searchTrigger}
