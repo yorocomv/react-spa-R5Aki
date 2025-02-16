@@ -6,10 +6,10 @@ import { RxCalendar } from 'react-icons/rx';
 
 export default function DatePickerInput({
   children,
-  todayDate,
+  todayDate = undefined,
 }: {
   children: React.ReactNode;
-  todayDate: CalendarDate;
+  todayDate?: CalendarDate;
 }): JSX.Element {
   return (
     <DatePicker
