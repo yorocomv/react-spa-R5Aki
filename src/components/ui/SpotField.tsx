@@ -1,13 +1,20 @@
 import { useCallback } from 'react';
 import { css } from 'styled-system/css';
+import { SystemStyleObject } from 'styled-system/types';
 
 interface SpotFieldProps {
   inputText: string;
   setInputText: React.Dispatch<React.SetStateAction<string>>;
   placeholder?: string;
+  mergeWrapperStyles?: SystemStyleObject;
 }
 
-export default function SpotField({ inputText, setInputText, placeholder = '' }: SpotFieldProps): JSX.Element {
+export default function SpotField({
+  inputText,
+  setInputText,
+  placeholder = '',
+  mergeWrapperStyles = undefined,
+}: SpotFieldProps): JSX.Element {
   // https://qiita.com/70ki8suda/items/831727af51c572e10ba8#callback-refs
   // https://ja.react.dev/reference/react-dom/components/common#ref-callback
   // ref callback function でインプットに「フォーカス」+ 再レンダー間で関数定義をキャッシュ
@@ -23,7 +30,7 @@ export default function SpotField({ inputText, setInputText, placeholder = '' }:
   };
 
   return (
-    <div className={css({ pos: 'relative' })}>
+    <div className={css({ pos: 'relative' }, mergeWrapperStyles)}>
       {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
       <label
         htmlFor="input-spot-field"
@@ -51,6 +58,7 @@ export default function SpotField({ inputText, setInputText, placeholder = '' }:
         <svg
           viewBox="0 0 17 17"
           className={css({
+            pos: 'absolute',
             w: '1.25rem',
             h: '1.25rem',
           })}
@@ -70,7 +78,7 @@ export default function SpotField({ inputText, setInputText, placeholder = '' }:
           onChange={handleChange}
           className={css({
             w: '100%',
-            minW: '20.75rem',
+            ml: '1.25rem',
             py: 1,
             pr: 3,
             pl: '0.625rem',
@@ -79,8 +87,6 @@ export default function SpotField({ inputText, setInputText, placeholder = '' }:
             _focus: {
               outline: 'none',
             },
-            // Firefox と Edge の描画の違いを吸収するためメディアクエリを使用😅💦
-            '@media (min-width: 35em)': { minW: '28rem' },
             _placeholder: {
               fontSize: '0.825rem',
             },

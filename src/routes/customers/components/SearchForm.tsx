@@ -28,7 +28,12 @@ export default function SearchInput({
 
   return (
     <form onSubmit={handleSubmit} className={css({ display: 'flex', alignItems: 'center' })}>
-      <SpotField inputText={searchString} setInputText={setSearchString} placeholder={placeholder} />
+      <SpotField
+        inputText={searchString}
+        setInputText={setSearchString}
+        placeholder={placeholder}
+        mergeWrapperStyles={css.raw({ minW: '30rem' })}
+      />
       <Button type="submit" className={css({ minW: '3.5rem', ml: '0.25rem' })}>
         検索
       </Button>

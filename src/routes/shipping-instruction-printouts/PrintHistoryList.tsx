@@ -4,8 +4,12 @@ import { today } from '@internationalized/date';
 import { css } from 'styled-system/css';
 import Select from '@/components/ui/elements/Select';
 import { LuArrowLeftRight } from 'react-icons/lu';
+import SpotField from '@/components/ui/SpotField';
+import { useState } from 'react';
 
 export default function PrintHistoryList() {
+  const [filterString, setFilterString] = useState('');
+
   const todayDate = today('Asia/Tokyo');
 
   return (
@@ -45,7 +49,17 @@ export default function PrintHistoryList() {
             <PopoverCalendar todayDate={todayDate} />
           </DatePickerInput>
         </nav>
-        <section>ダミー</section>
+        <section
+          className={css({
+            display: 'flex',
+            justifyContent: 'flex-end',
+            alignItems: 'center',
+          })}
+        >
+          <div className={css({ w: '50%' })}>
+            <SpotField inputText={filterString} setInputText={setFilterString} placeholder="絞り込み" />
+          </div>
+        </section>
       </header>
       <div
         className={css({
