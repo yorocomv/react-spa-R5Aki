@@ -36,7 +36,7 @@ export default function PrintHistoryList() {
             gap: '0.5rem',
           })}
         >
-          <Select className={css({ h: '2.225rem', w: 'fit-content' })}>
+          <Select className={css({ h: '2.175rem', w: 'fit-content' })}>
             <option value="1">印刷日時</option>
             <option value="2">着日</option>
             <option value="3">出荷予定日</option>
