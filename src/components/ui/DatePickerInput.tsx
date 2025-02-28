@@ -6,15 +6,20 @@ import { RxCalendar } from 'react-icons/rx';
 
 export default function DatePickerInput({
   children,
-  todayDate = undefined,
+  todayDate = null,
+  value,
+  setValue,
 }: {
   children: React.ReactNode;
-  todayDate?: CalendarDate;
+  todayDate?: CalendarDate | null;
+  value: CalendarDate | null;
+  setValue: React.Dispatch<React.SetStateAction<CalendarDate | null>>;
 }): JSX.Element {
   return (
     <DatePicker
       aria-label="date picker"
-      defaultValue={todayDate}
+      value={value ?? todayDate}
+      onChange={setValue}
       className={css({
         display: 'flex',
         flexDir: 'column',
