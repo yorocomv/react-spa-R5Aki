@@ -6,11 +6,22 @@ import Select from '@/components/ui/elements/Select';
 import { LuArrowLeftRight } from 'react-icons/lu';
 import SpotField from '@/components/ui/SpotField';
 import { useState } from 'react';
+import { FindShippingInstructionsQueryCategory } from './shippingInstructionPrintouts.types';
+import { useFetchPrintHistory } from './components/hooks/useFetchPrintHistory';
 
 export default function PrintHistoryList() {
+  const { selectCategory, setSelectCategory, dateA, setDateA, dateB, setDateB, printHistories } =
+    useFetchPrintHistory();
+  const historyCategories: { label: string; category: FindShippingInstructionsQueryCategory }[] = [
+    { label: '印刷日時', category: 'printed_at' },
+    { label: '着日', category: 'delivery_date' },
+    { label: '出荷予定日', category: 'shipping_date' },
+  ];
   const [filterString, setFilterString] = useState('');
 
   const todayDate = today('Asia/Tokyo');
+
+  const smallScreen = '@media(width < 888px)';
 
   return (
     <div className={css({ fontSize: 'sm' })}>
@@ -36,16 +47,22 @@ export default function PrintHistoryList() {
             gap: '0.5rem',
           })}
         >
-          <Select className={css({ h: '2.175rem', w: 'fit-content' })}>
-            <option value="1">印刷日時</option>
-            <option value="2">着日</option>
-            <option value="3">出荷予定日</option>
+          <Select
+            value={selectCategory}
+            onChange={(e) => setSelectCategory(e.target.value as FindShippingInstructionsQueryCategory)}
+            className={css({ h: '2.175rem', w: 'fit-content' })}
+          >
+            {historyCategories.map(({ label, category }) => (
+              <option key={category} value={category}>
+                {label}
+              </option>
+            ))}
           </Select>
-          <DatePickerInput todayDate={todayDate}>
+          <DatePickerInput value={dateA} setValue={setDateA} todayDate={todayDate}>
             <PopoverCalendar todayDate={todayDate} />
           </DatePickerInput>
           <LuArrowLeftRight size="1.3rem" />
-          <DatePickerInput>
+          <DatePickerInput value={dateB} setValue={setDateB}>
             <PopoverCalendar todayDate={todayDate} />
           </DatePickerInput>
         </nav>
@@ -92,6 +109,7 @@ export default function PrintHistoryList() {
               bgColor: 'stone.100',
               borderRadius: 'lg',
               borderCollapse: 'collapse',
+              whiteSpace: 'nowrap',
               overflow: 'hidden',
               '& tr': { boxShadow: 'inset 0 -1px #d6d3d1' },
               '& tbody tr:last-child': { boxShadow: 'none' },
@@ -100,90 +118,108 @@ export default function PrintHistoryList() {
             <thead className={css({ bgColor: 'stone.200', borderRadius: 'lg' })}>
               <tr>
                 <th>着日</th>
-                <th>時間指定</th>
+                <th className={css({ [smallScreen]: { display: 'none' } })}>時間指定</th>
                 <th>印刷日時</th>
-                <th>印刷頁</th>
+                <th className={css({ [smallScreen]: { display: 'none' } })}>印刷頁</th>
                 <th>得意先名</th>
-                <th>住所</th>
-                <th>帳合</th>
-                <th>ｵｰﾀﾞｰNo</th>
-                <th>出荷予定日</th>
+                <th className={css({ [smallScreen]: { display: 'none' } })}>住所</th>
+                <th className={css({ [smallScreen]: { display: 'none' } })}>帳合</th>
+                <th className={css({ [smallScreen]: { display: 'none' } })}>ｵｰﾀﾞｰNo</th>
+                <th>
+                  出荷<span className={css({ fontSize: '0.75rem' })}>(予)</span>
+                </th>
                 <th>運送会社</th>
                 <th>口数</th>
                 <th>商品</th>
               </tr>
             </thead>
             <tbody className={css({ '& >tr': { bgColor: { _hover: 'amber.50' } } })}>
-              <tr>
-                <td>2025-02-04</td>
-                <td>AM 必着</td>
-                <td>2025-02-03 11:11:11.0000</td>
-                <td>1/2</td>
-                <td>令和株式会社</td>
-                <td>東京都千代田区</td>
-                <td>帝国商事</td>
-                <td>0123-456-789</td>
-                <td>2025-02-04</td>
-                <td>ヤマト</td>
-                <td>3</td>
-                <td>水: 2ケース\nパックご飯: 1ケース</td>
-              </tr>
-              <tr className={css({ bgColor: 'slate.200' })}>
-                <td>2025-02-04</td>
-                <td>AM 必着</td>
-                <td>2025-02-03 11:11:11.0000</td>
-                <td>1/2</td>
-                <td>令和株式会社</td>
-                <td>東京都千代田区</td>
-                <td>帝国商事</td>
-                <td>0123-456-789</td>
-                <td>2025-02-04</td>
-                <td>ヤマト</td>
-                <td>3</td>
-                <td>水: 2ケース\nパックご飯: 1ケース</td>
-              </tr>
-              <tr>
-                <td>2025-02-04</td>
-                <td>AM 必着</td>
-                <td>2025-02-03 11:11:11.0000</td>
-                <td>1/2</td>
-                <td>令和株式会社</td>
-                <td>東京都千代田区</td>
-                <td>帝国商事</td>
-                <td>0123-456-789</td>
-                <td>2025-02-04</td>
-                <td>ヤマト</td>
-                <td>3</td>
-                <td>水: 2ケース\nパックご飯: 1ケース</td>
-              </tr>
-              <tr className={css({ bgColor: 'slate.200' })}>
-                <td>2025-02-04</td>
-                <td>AM 必着</td>
-                <td>2025-02-03 11:11:11.0000</td>
-                <td>1/2</td>
-                <td>令和株式会社</td>
-                <td>東京都千代田区</td>
-                <td>帝国商事</td>
-                <td>0123-456-789</td>
-                <td>2025-02-04</td>
-                <td>ヤマト</td>
-                <td>3</td>
-                <td>水: 2ケース\nパックご飯: 1ケース</td>
-              </tr>
-              <tr>
-                <td>2025-02-04</td>
-                <td>AM 必着</td>
-                <td>2025-02-03 11:11:11.0000</td>
-                <td>1/2</td>
-                <td>令和株式会社</td>
-                <td>東京都千代田区</td>
-                <td>帝国商事</td>
-                <td>0123-456-789</td>
-                <td>2025-02-04</td>
-                <td>ヤマト</td>
-                <td>3</td>
-                <td>水: 2ケース\nパックご飯: 1ケース</td>
-              </tr>
+              {printHistories.length ? (
+                printHistories.map((po) => (
+                  <tr key={po.printed_at} className={css({ _even: { bgColor: 'slate.200' } })}>
+                    <td
+                      className={css({
+                        [smallScreen]: {
+                          maxW: '4.3rem',
+                          direction: 'rtl',
+                          overflow: 'hidden',
+                        },
+                      })}
+                    >
+                      {po.delivery_date}
+                    </td>
+                    <td className={css({ [smallScreen]: { display: 'none' } })}>{po.delivery_time_str}</td>
+                    <td
+                      className={css({
+                        maxW: '8rem',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                      })}
+                    >
+                      {po.printed_at}
+                    </td>
+                    <td className={css({ [smallScreen]: { display: 'none' } })}>{po.page_num_str}</td>
+                    <td
+                      className={css({
+                        maxW: '16rem',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                      })}
+                    >
+                      {po.customer_name}
+                    </td>
+                    <td
+                      className={css({
+                        maxW: '12rem',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        [smallScreen]: { display: 'none' },
+                      })}
+                    >
+                      {po.customer_address}
+                    </td>
+                    <td className={css({ [smallScreen]: { display: 'none' } })}>{po.wholesaler}</td>
+                    <td className={css({ [smallScreen]: { display: 'none' } })}>{po.order_number}</td>
+                    <td
+                      className={css({
+                        [smallScreen]: {
+                          maxW: '4.3rem',
+                          direction: 'rtl',
+                          overflow: 'hidden',
+                        },
+                      })}
+                    >
+                      {po.shipping_date}
+                    </td>
+                    <td>{po.carrier}</td>
+                    <td>{po.package_count}</td>
+                    <td
+                      className={css({
+                        maxW: '16rem',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                      })}
+                    >
+                      {po.items_of_order}
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td>7日間以内</td>
+                  <td> - </td>
+                  <td>7日間以内</td>
+                  <td> - </td>
+                  <td>該当なし</td>
+                  <td> - </td>
+                  <td> - </td>
+                  <td> - </td>
+                  <td>7日間以内</td>
+                  <td> - </td>
+                  <td> - </td>
+                  <td> - </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </main>
