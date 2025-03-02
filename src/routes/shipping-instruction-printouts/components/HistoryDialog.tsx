@@ -2,6 +2,8 @@ import React from 'react';
 import { Button, Dialog, Heading, Modal } from 'react-aria-components';
 import { css } from 'styled-system/css';
 import { FaX } from 'react-icons/fa6';
+import CommonFloatingDeleteButton from '@/components/ui/CommonFloatingDeleteButton';
+import { useDeletePrintHistory } from './hooks/useDeletePrintHistory';
 import { ShippingInstructionPrintHistoryTbRow } from '../shippingInstructionPrintouts.types';
 import '@/components/ui/react-aria-modal-overlay.css';
 
@@ -12,6 +14,16 @@ interface HistoryDialogProps {
 }
 
 export default function HistoryDialog({ oneHistory: p, isOpen, closeModal }: HistoryDialogProps): JSX.Element {
+  const { deletePrintHistory } = useDeletePrintHistory({ delivery_date: p.delivery_date, printed_at: p.printed_at });
+  const handleClickDelete = async () => {
+    try {
+      const response = await deletePrintHistory();
+      closeModal(-1);
+      console.log(response);
+    } catch (err: unknown) {
+      console.error('💥💥💥 ', err, ' 💀💀💀');
+    }
+  };
   return (
     <Modal isDismissable isOpen={isOpen} onOpenChange={() => closeModal(-1)}>
       <Dialog
@@ -116,6 +128,7 @@ export default function HistoryDialog({ oneHistory: p, isOpen, closeModal }: His
             </tr>
           </tbody>
         </table>
+        <CommonFloatingDeleteButton label="削除" position="absolute" handleClickDelete={handleClickDelete} />
       </Dialog>
     </Modal>
   );
