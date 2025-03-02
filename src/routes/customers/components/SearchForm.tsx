@@ -4,7 +4,7 @@ import SpotField from '@/components/ui/SpotField';
 import Button from '@/routes/customers/components/elements/Button';
 import { css } from '../../../../styled-system/css';
 
-interface SearchInputProps {
+interface SearchFormProps {
   searchString: string;
   setSearchString: React.Dispatch<React.SetStateAction<string>>;
   searchTrigger: boolean;
@@ -12,13 +12,13 @@ interface SearchInputProps {
   placeholder?: string;
 }
 
-export default function SearchInput({
+export default function SearchForm({
   searchString,
   setSearchString,
   searchTrigger,
   setSearchTrigger,
   placeholder = '',
-}: SearchInputProps): JSX.Element {
+}: SearchFormProps): JSX.Element {
   const navigate = useNavigate();
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
