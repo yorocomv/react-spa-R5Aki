@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button, Dialog, Heading, Modal } from 'react-aria-components';
 import { FaX } from 'react-icons/fa6';
 import EditButton from './elements/Button';
-import './react-aria-modal-overlay.css';
+import '@/components/ui/react-aria-modal-overlay.css';
 import { css } from '../../../../styled-system/css';
 import { CustomersTbRow } from '../customers.types';
 
