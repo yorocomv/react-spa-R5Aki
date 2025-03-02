@@ -8,20 +8,25 @@ import SpotField from '@/components/ui/SpotField';
 import { useState } from 'react';
 import { FindShippingInstructionsQueryCategory } from './shippingInstructionPrintouts.types';
 import { useFetchPrintHistory } from './components/hooks/useFetchPrintHistory';
+import HistoryDialog from './components/HistoryDialog';
+import PrintHistoryTableTr from './components/PrintHistoryTableTr';
+import { useFilterPrintHistory } from './components/hooks/useFilterPrintHistory';
 
 export default function PrintHistoryList() {
   const { selectCategory, setSelectCategory, dateA, setDateA, dateB, setDateB, printHistories } =
     useFetchPrintHistory();
+  const { filterString, setFilterString, filteredPrintHistories } = useFilterPrintHistory(printHistories);
   const historyCategories: { label: string; category: FindShippingInstructionsQueryCategory }[] = [
     { label: '印刷日時', category: 'printed_at' },
     { label: '着日', category: 'delivery_date' },
     { label: '出荷予定日', category: 'shipping_date' },
   ];
-  const [filterString, setFilterString] = useState('');
+  const [selectedHistory, setSelectedHistory] = useState(-1);
 
   const todayDate = today('Asia/Tokyo');
 
-  const smallScreen = '@media(width < 888px)';
+  // Panda CSS で使用する変数
+  const smallScreen = '@media(width < 960px)';
 
   return (
     <div className={css({ fontSize: 'sm' })}>
@@ -83,14 +88,17 @@ export default function PrintHistoryList() {
           w: 'fit-content',
           maxW: '99vw',
           mx: 'auto',
+          my: '0.5rem',
+          p: 0,
           overflowX: 'scroll',
           scrollbar: 'hidden',
+          borderRadius: 'lg',
         })}
       >
         <main
           className={css({
             w: 'fit-content',
-            m: '0.5rem',
+            m: 0,
             border: '1px solid',
             borderRadius: 'lg',
             borderColor: 'stone.300',
@@ -125,84 +133,22 @@ export default function PrintHistoryList() {
                 <th className={css({ [smallScreen]: { display: 'none' } })}>住所</th>
                 <th className={css({ [smallScreen]: { display: 'none' } })}>帳合</th>
                 <th className={css({ [smallScreen]: { display: 'none' } })}>ｵｰﾀﾞｰNo</th>
-                <th>
-                  出荷<span className={css({ fontSize: '0.75rem' })}>(予)</span>
-                </th>
+                <th>発日</th>
                 <th>運送会社</th>
                 <th>口数</th>
                 <th>商品</th>
               </tr>
             </thead>
             <tbody className={css({ '& >tr': { bgColor: { _hover: 'amber.50' } } })}>
-              {printHistories.length ? (
-                printHistories.map((po) => (
-                  <tr key={po.printed_at} className={css({ _even: { bgColor: 'slate.200' } })}>
-                    <td
-                      className={css({
-                        [smallScreen]: {
-                          maxW: '4.3rem',
-                          direction: 'rtl',
-                          overflow: 'hidden',
-                        },
-                      })}
-                    >
-                      {po.delivery_date}
-                    </td>
-                    <td className={css({ [smallScreen]: { display: 'none' } })}>{po.delivery_time_str}</td>
-                    <td
-                      className={css({
-                        maxW: '8rem',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                      })}
-                    >
-                      {po.printed_at}
-                    </td>
-                    <td className={css({ [smallScreen]: { display: 'none' } })}>{po.page_num_str}</td>
-                    <td
-                      className={css({
-                        maxW: '16rem',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                      })}
-                    >
-                      {po.customer_name}
-                    </td>
-                    <td
-                      className={css({
-                        maxW: '12rem',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                        [smallScreen]: { display: 'none' },
-                      })}
-                    >
-                      {po.customer_address}
-                    </td>
-                    <td className={css({ [smallScreen]: { display: 'none' } })}>{po.wholesaler}</td>
-                    <td className={css({ [smallScreen]: { display: 'none' } })}>{po.order_number}</td>
-                    <td
-                      className={css({
-                        [smallScreen]: {
-                          maxW: '4.3rem',
-                          direction: 'rtl',
-                          overflow: 'hidden',
-                        },
-                      })}
-                    >
-                      {po.shipping_date}
-                    </td>
-                    <td>{po.carrier}</td>
-                    <td>{po.package_count}</td>
-                    <td
-                      className={css({
-                        maxW: '16rem',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                      })}
-                    >
-                      {po.items_of_order}
-                    </td>
-                  </tr>
+              {filteredPrintHistories?.length ? (
+                filteredPrintHistories.map((po, i) => (
+                  <PrintHistoryTableTr
+                    key={po.printed_at}
+                    oneHistory={po}
+                    toggleModal={setSelectedHistory}
+                    currentIndex={i}
+                    parentMediaQuerySmall={smallScreen}
+                  />
                 ))
               ) : (
                 <tr>
@@ -224,6 +170,16 @@ export default function PrintHistoryList() {
           </table>
         </main>
       </div>
+      {filteredPrintHistories?.length
+        ? filteredPrintHistories.map((po, i) => (
+            <HistoryDialog
+              key={po.printed_at}
+              oneHistory={po}
+              isOpen={selectedHistory === i}
+              closeModal={setSelectedHistory}
+            />
+          ))
+        : null}
     </div>
   );
 }

@@ -20,6 +20,9 @@ dependencies:
   html-react-parser:
     specifier: ^5.1.1
     version: 5.1.1(react@18.2.0)
+  jaconv:
+    specifier: github:TokunaKimochi/jaconv
+    version: github.com/TokunaKimochi/jaconv/be018cdd2393ecccccdac28d028c892ada3722e0
   react:
     specifier: ^18.2.0
     version: 18.2.0
@@ -7239,4 +7242,10 @@ packages:
 
   /zod@3.22.4:
     resolution: {integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==}
+    dev: false
+
+  github.com/TokunaKimochi/jaconv/be018cdd2393ecccccdac28d028c892ada3722e0:
+    resolution: {tarball: https://codeload.github.com/TokunaKimochi/jaconv/tar.gz/be018cdd2393ecccccdac28d028c892ada3722e0}
+    name: jaconv
+    version: 1.0.4
     dev: false

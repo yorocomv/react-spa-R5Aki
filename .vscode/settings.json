@@ -4,5 +4,5 @@
     "source.fixAll": "explicit"
   },
   "editor.formatOnSave": true,
-  "cSpell.words": ["ejpc", "dismissable", "hoge", "fuga", "piyo", "preinstall", "tanstack", "vstack"]
+  "cSpell.words": ["ejpc", "dismissable", "hoge", "fuga", "jaconv", "piyo", "preinstall", "tanstack", "vstack"]
 }
