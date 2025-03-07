@@ -35,11 +35,21 @@ export default function PopoverCalendar({ todayDate }: { todayDate: CalendarDate
     },
   });
   const calendarCellStyles = css.raw({
-    '&[data-outside-month]': { color: 'stone.300' },
-    '&[data-outside-month]:hover': { color: 'transparent', bgColor: 'transparent' },
+    '&[data-disabled]': { color: 'stone.400', bgColor: 'stone.200', borderRadius: 'unset' },
+    '&[data-disabled]:hover': { color: 'stone.200', bgColor: 'stone.200' },
+    '&[data-invalid], &[data-invalid]:hover': { color: 'rose.50', bgColor: 'rose.600' },
+    '&[data-outside-month]': { color: 'stone.300 !important', bgColor: 'inherit !important' },
+    '&[data-outside-month]:hover': {
+      color: 'transparent !important',
+      bgColor: 'transparent !important',
+    },
   });
   const todayStyles = css.raw({ color: 'stone.900', bgColor: 'stone.300' });
-  const pageNavStyles = css.raw({ color: 'stone.600' });
+  const pageNavStyles = css.raw({
+    color: 'stone.600',
+    '&[data-disabled]': { color: 'stone.400' },
+    '&[data-disabled]:hover': { color: 'transparent', bgColor: 'transparent' },
+  });
 
   return (
     <Popover className={css({ overflow: 'auto', borderRadius: 'lg', bgColor: 'stone.100', boxShadow: 'lg' })}>
