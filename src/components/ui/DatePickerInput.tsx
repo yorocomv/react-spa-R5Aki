@@ -1,5 +1,5 @@
-import React from 'react';
-import { Button, DateInput, DatePicker, DateSegment, Group } from 'react-aria-components';
+import React, { useRef } from 'react';
+import { Button, DateInput, DatePicker, DateSegment, DateValue, Group } from 'react-aria-components';
 import { CalendarDate } from '@internationalized/date';
 import { css } from 'styled-system/css';
 import { RxCalendar } from 'react-icons/rx';
@@ -8,18 +8,33 @@ export default function DatePickerInput({
   children,
   todayDate = null,
   value,
+  minValue = null,
+  maxValue = null,
   setValue,
 }: {
   children: React.ReactNode;
   todayDate?: CalendarDate | null;
   value: CalendarDate | null;
+  minValue?: DateValue | null | undefined;
+  maxValue?: DateValue | null | undefined;
   setValue: React.Dispatch<React.SetStateAction<CalendarDate | null>>;
 }): JSX.Element {
+  // 初回のみ実行
+  const didMount = useRef(false);
+  if (!didMount.current) {
+    if (!value && todayDate) {
+      setValue(todayDate);
+    }
+    didMount.current = true;
+  }
+
   return (
     <DatePicker
       aria-label="date picker"
-      value={value ?? todayDate}
+      value={value}
       onChange={setValue}
+      minValue={minValue}
+      maxValue={maxValue}
       className={css({
         display: 'flex',
         flexDir: 'column',
@@ -39,7 +54,22 @@ export default function DatePickerInput({
           '&:where([data-rac])[data-focus-within]': { color: 'slate.950', bgColor: 'slate.50' },
         })}
       >
-        <DateInput className={css({ display: 'flex', flex: '1', py: '0.315rem' })}>
+        <DateInput
+          className={css({
+            display: 'flex',
+            flex: '1',
+            py: '0.315rem',
+            '&[data-invalid]': {
+              color: 'rose.600',
+              _after: {
+                content: '"🚫"',
+                flex: '1',
+                textAlign: 'end',
+                my: '0.125rem',
+              },
+            },
+          })}
+        >
           {(segment) => (
             <DateSegment
               segment={segment}

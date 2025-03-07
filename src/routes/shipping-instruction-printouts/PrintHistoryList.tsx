@@ -63,11 +63,29 @@ export default function PrintHistoryList() {
               </option>
             ))}
           </Select>
-          <DatePickerInput value={dateA} setValue={setDateA} todayDate={todayDate}>
+          <DatePickerInput
+            value={dateA}
+            setValue={setDateA}
+            todayDate={todayDate}
+            minValue={dateB ? dateB.subtract({ days: 7 }) : null}
+            maxValue={dateB ? dateB.add({ days: 7 }) : null}
+          >
             <PopoverCalendar todayDate={todayDate} />
           </DatePickerInput>
-          <LuArrowLeftRight size="1.3rem" />
-          <DatePickerInput value={dateB} setValue={setDateB}>
+          <LuArrowLeftRight
+            size="1.3rem"
+            onClick={() => {
+              setSelectCategory('printed_at');
+              setDateA(todayDate);
+              setDateB(null);
+            }}
+          />
+          <DatePickerInput
+            value={dateB}
+            setValue={setDateB}
+            minValue={dateA ? dateA.subtract({ days: 7 }) : null}
+            maxValue={dateA ? dateA.add({ days: 7 }) : null}
+          >
             <PopoverCalendar todayDate={todayDate} />
           </DatePickerInput>
         </nav>
