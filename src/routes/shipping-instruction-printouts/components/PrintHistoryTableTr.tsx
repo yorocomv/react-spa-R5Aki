@@ -60,7 +60,7 @@ export default function PrintHistoryTableTr({
           textOverflow: 'ellipsis',
         })}
       >
-        {po.customer_name}
+        <data value={po.non_fk_customer_id}>{po.customer_name}</data>
       </td>
       <td
         className={css({
