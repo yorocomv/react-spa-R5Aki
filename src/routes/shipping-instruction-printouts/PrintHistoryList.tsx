@@ -6,6 +6,7 @@ import Select from '@/components/ui/elements/Select';
 import { LuArrowLeftRight } from 'react-icons/lu';
 import SpotField from '@/components/ui/SpotField';
 import { useState } from 'react';
+import TooltipWrapper from '@/components/ui/TooltipWrapper';
 import { FindShippingInstructionsQueryCategory } from './shippingInstructionPrintouts.types';
 import { useFetchPrintHistory } from './components/hooks/useFetchPrintHistory';
 import HistoryDialog from './components/HistoryDialog';
@@ -55,7 +56,7 @@ export default function PrintHistoryList() {
           <Select
             value={selectCategory}
             onChange={(e) => setSelectCategory(e.target.value as FindShippingInstructionsQueryCategory)}
-            className={css({ h: '2.175rem', w: 'fit-content' })}
+            className={css({ maxH: '2.175rem', w: 'fit-content' })}
           >
             {historyCategories.map(({ label, category }) => (
               <option key={category} value={category}>
@@ -72,14 +73,16 @@ export default function PrintHistoryList() {
           >
             <PopoverCalendar todayDate={todayDate} />
           </DatePickerInput>
-          <LuArrowLeftRight
-            size="1.3rem"
-            onClick={() => {
-              setSelectCategory('printed_at');
-              setDateA(todayDate);
-              setDateB(null);
-            }}
-          />
+          <TooltipWrapper text="リセット" className={css({ shadow: '4xl' })}>
+            <LuArrowLeftRight
+              size="1.3rem"
+              onClick={() => {
+                setSelectCategory('printed_at');
+                setDateA(todayDate);
+                setDateB(null);
+              }}
+            />
+          </TooltipWrapper>
           <DatePickerInput
             value={dateB}
             setValue={setDateB}

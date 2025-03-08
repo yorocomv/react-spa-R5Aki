@@ -15,6 +15,7 @@ const Button = styled('button', {
       _disabled: 'stone.200',
     },
     fontWeight: 'bold',
+    textShadow: 'rgba(255, 255, 255, 0.3) 1px 1px',
     py: 1,
     px: 3,
     borderWidth: '1px',
@@ -34,6 +35,7 @@ const Button = styled('button', {
           _hover: { base: 'orange.300', _disabled: 'stone.200' },
           _active: 'orange.600',
         },
+        textShadow: 'rgba(255, 255, 255, 0.3) 1px 1px',
         borderColor: { base: 'orange.300', _disabled: 'stone.300' },
       },
       edit: {
@@ -46,6 +48,7 @@ const Button = styled('button', {
           _hover: { base: 'violet.600', _disabled: 'stone.200' },
           _active: 'violet.300',
         },
+        textShadow: 'rgba(0, 0, 0, 0.2) 1px 1px',
         borderColor: { base: 'violet.600', _disabled: 'stone.300' },
       },
       unsafe: {
@@ -58,6 +61,7 @@ const Button = styled('button', {
           _hover: { base: 'rose.600', _disabled: 'stone.200' },
           _active: 'rose.300',
         },
+        textShadow: 'rgba(0, 0, 0, 0.2) 1px 1px',
         borderColor: { base: 'rose.600', _disabled: 'stone.300' },
       },
     },

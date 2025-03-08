@@ -27,6 +27,7 @@ export default function DropdownMenuTrigger({
       _disabled: 'stone.200',
     },
     fontWeight: 'bold',
+    textShadow: 'rgba(255, 255, 255, 0.3) 1px 1px',
     py: 0.5,
     px: 1.5,
     gap: 1,

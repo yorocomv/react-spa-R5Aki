@@ -50,6 +50,9 @@ export default function DatePickerInput({
           borderRadius: 'md',
           boxShadow: 'sm',
           pl: '0.625rem',
+          _hover: {
+            outline: 'solid 0.05rem #94a3b8',
+          },
           '&:where([data-rac])[data-focus-within]': { color: 'slate.950', bgColor: 'slate.50' },
         })}
       >
