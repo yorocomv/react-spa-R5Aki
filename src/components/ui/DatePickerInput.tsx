@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect } from 'react';
 import { Button, DateInput, DatePicker, DateSegment, DateValue, Group } from 'react-aria-components';
 import { CalendarDate } from '@internationalized/date';
 import { css } from 'styled-system/css';
@@ -20,13 +20,12 @@ export default function DatePickerInput({
   setValue: React.Dispatch<React.SetStateAction<CalendarDate | null>>;
 }): JSX.Element {
   // 初回のみ実行
-  const didMount = useRef(false);
-  if (!didMount.current) {
+  useEffect(() => {
     if (!value && todayDate) {
       setValue(todayDate);
     }
-    didMount.current = true;
-  }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <DatePicker
