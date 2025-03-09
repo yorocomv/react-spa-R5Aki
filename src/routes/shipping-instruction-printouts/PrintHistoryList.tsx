@@ -28,6 +28,7 @@ export default function PrintHistoryList() {
 
   // Panda CSS で使用する変数
   const smallScreen = '@media(width < 960px)';
+  const bigScreen = '@media(width >= 960px)';
 
   return (
     <div className={css({ fontSize: 'sm' })}>
@@ -99,7 +100,7 @@ export default function PrintHistoryList() {
             alignItems: 'center',
           })}
         >
-          <div className={css({ w: '50%' })}>
+          <div className={css({ w: '65%', minW: '18rem', maxW: '30rem' })}>
             <SpotField inputText={filterString} setInputText={setFilterString} placeholder="絞り込み" />
           </div>
         </section>
@@ -154,7 +155,7 @@ export default function PrintHistoryList() {
                 <th className={css({ [smallScreen]: { display: 'none' } })}>住所</th>
                 <th className={css({ [smallScreen]: { display: 'none' } })}>帳合</th>
                 <th className={css({ [smallScreen]: { display: 'none' } })}>ｵｰﾀﾞｰNo</th>
-                <th>発日</th>
+                <th className={css({ [bigScreen]: { _after: { content: '"（予定）"' } } })}>発日</th>
                 <th>運送会社</th>
                 <th>口数</th>
                 <th>商品</th>

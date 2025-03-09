@@ -5,7 +5,7 @@ import { css } from 'styled-system/css';
 
 interface CommonFloatingDeleteButtonProps {
   label: string;
-  position?: 'fixed' | 'absolute';
+  position?: 'fixed' | 'absolute' | 'sticky';
   handleClickDelete: () => Promise<void>;
 }
 
@@ -30,6 +30,8 @@ export default function CommonFloatingDeleteButton({
   return (
     <div
       className={css({
+        w: 'fit-content',
+        ml: 'auto',
         pos: position,
         bottom: '0.725rem',
         right: '0.725rem',

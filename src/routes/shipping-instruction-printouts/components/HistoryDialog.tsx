@@ -1,8 +1,8 @@
 import React from 'react';
 import { Button, Dialog, Heading, Modal } from 'react-aria-components';
 import { css } from 'styled-system/css';
-import { FaX } from 'react-icons/fa6';
 import CommonFloatingDeleteButton from '@/components/ui/CommonFloatingDeleteButton';
+import { IoCloseOutline } from 'react-icons/io5';
 import { useDeletePrintHistory } from './hooks/useDeletePrintHistory';
 import { ShippingInstructionPrintHistoryTbRow } from '../shippingInstructionPrintouts.types';
 import '@/components/ui/react-aria-modal-overlay.css';
@@ -33,10 +33,10 @@ export default function HistoryDialog({ oneHistory: p, isOpen, closeModal }: His
           maxH: '95lvh',
           overflow: 'scroll',
           p: '0.125rem 1rem 1rem',
-          bgColor: 'amber.50',
-          color: 'amber.950',
+          bgColor: 'slate.50',
+          color: 'slate.950',
           fontWeight: 'bold',
-          borderColor: 'amber.100',
+          borderColor: 'slate.100',
           borderWidth: '1px',
           borderRadius: 'md',
           outline: 'none',
@@ -55,7 +55,12 @@ export default function HistoryDialog({ oneHistory: p, isOpen, closeModal }: His
         >
           <Heading
             slot="title"
-            className={css({ gridColumn: '2/3', color: 'amber.600', fontFamily: 'Times New Roman', fontSize: 'lg' })}
+            className={css({
+              gridColumn: '2/3',
+              color: 'slate.400',
+              fontFamily: '"Yu Mincho", YuMincho, serif',
+              fontSize: '1.125rem',
+            })}
           >
             詳細情報（編集不可）
           </Heading>
@@ -67,15 +72,53 @@ export default function HistoryDialog({ oneHistory: p, isOpen, closeModal }: His
               p: '0.175rem',
               borderRadius: '35%',
               _hover: {
-                bgColor: 'amber.200',
+                bgColor: 'slate.200',
               },
             })}
           >
-            <FaX />
+            <IoCloseOutline size="1.625rem" />
           </Button>
         </header>
-        <table>
-          <tbody>
+        <table
+          className={css({
+            w: 'fit-content',
+            maxW: '100%',
+            fontFamily: 'Meiryo, sans-serif',
+            p: '0.375rem',
+            mb: '2.375rem',
+            borderCollapse: 'separate',
+            borderSpacing: '0 0.625rem',
+            border: 'solid 1px',
+            borderColor: 'teal.100',
+            bgColor: 'teal.50/75',
+            borderRadius: 'lg',
+          })}
+        >
+          <tbody
+            className={css({
+              '& :is(th, td)': { p: '0.75rem 1rem' },
+              '&>tr>th': {
+                pos: 'relative',
+                minW: '9rem',
+                verticalAlign: 'middle',
+                textAlign: 'left',
+                fontWeight: 'normal',
+                bgColor: 'slate.200',
+                _after: {
+                  pos: 'absolute',
+                  content: '""',
+                  w: 0,
+                  h: 0,
+                  left: '100%',
+                  top: '50%',
+                  border: 'solid transparent',
+                  borderLeftColor: 'slate.200',
+                  borderWidth: '0.625rem',
+                  mt: '-0.625rem',
+                },
+              },
+            })}
+          >
             <tr>
               <th>着日</th>
               <td>{p.delivery_date}</td>
@@ -128,7 +171,7 @@ export default function HistoryDialog({ oneHistory: p, isOpen, closeModal }: His
             </tr>
           </tbody>
         </table>
-        <CommonFloatingDeleteButton label="削除" position="absolute" handleClickDelete={handleClickDelete} />
+        <CommonFloatingDeleteButton label="削除" position="sticky" handleClickDelete={handleClickDelete} />
       </Dialog>
     </Modal>
   );
