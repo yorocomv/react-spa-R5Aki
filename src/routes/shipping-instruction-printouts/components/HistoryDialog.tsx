@@ -87,9 +87,10 @@ export default function HistoryDialog({ oneHistory: p, isOpen, closeModal }: His
             p: '0.375rem',
             mb: '2.375rem',
             borderCollapse: 'separate',
-            borderSpacing: '0 0.625rem',
+            borderSpacing: '0.375rem',
             border: 'solid 1px',
             borderColor: 'teal.100',
+            color: 'teal.950',
             bgColor: 'teal.50/75',
             borderRadius: 'lg',
           })}
@@ -99,11 +100,13 @@ export default function HistoryDialog({ oneHistory: p, isOpen, closeModal }: His
               '& :is(th, td)': { p: '0.75rem 1rem' },
               '&>tr>th': {
                 pos: 'relative',
-                minW: '9rem',
+                minW: '8.5rem',
                 verticalAlign: 'middle',
                 textAlign: 'left',
                 fontWeight: 'normal',
+                color: 'slate.950',
                 bgColor: 'slate.200',
+                borderRadius: 'lg',
                 _after: {
                   pos: 'absolute',
                   content: '""',

@@ -12,6 +12,8 @@ import { useFetchPrintHistory } from './components/hooks/useFetchPrintHistory';
 import HistoryDialog from './components/HistoryDialog';
 import PrintHistoryTableTr from './components/PrintHistoryTableTr';
 import { useFilterPrintHistory } from './components/hooks/useFilterPrintHistory';
+import SupIcon from './components/elements/SupFilterIcon';
+import ThReverseButton from './components/ThReverseButton';
 
 export default function PrintHistoryList() {
   const { selectCategory, setSelectCategory, dateA, setDateA, dateB, setDateB, printHistories } =
@@ -22,12 +24,14 @@ export default function PrintHistoryList() {
     { label: '着日', category: 'delivery_date' },
     { label: '出荷予定日', category: 'shipping_date' },
   ];
+  const [isReverse, setIsReverse] = useState(false);
   const [selectedHistory, setSelectedHistory] = useState(-1);
 
   const todayDate = today('Asia/Tokyo');
 
   // Panda CSS で使用する変数
   const smallScreen = '@media(width < 960px)';
+  const hdScreen = '@media(width < 1280px)';
   const bigScreen = '@media(width >= 960px)';
 
   return (
@@ -74,7 +78,11 @@ export default function PrintHistoryList() {
           >
             <PopoverCalendar todayDate={todayDate} />
           </DatePickerInput>
-          <TooltipWrapper text="リセット" className={css({ shadow: '4xl' })}>
+          <TooltipWrapper
+            text="リセット"
+            fillColor="orange.400"
+            className={css({ color: 'orange.950', bgColor: 'orange.400', shadow: '2xl' })}
+          >
             <LuArrowLeftRight
               size="1.3rem"
               onClick={() => {
@@ -82,6 +90,7 @@ export default function PrintHistoryList() {
                 setDateA(todayDate);
                 setDateB(null);
               }}
+              className={css({ _hover: { cursor: 'pointer' } })}
             />
           </TooltipWrapper>
           <DatePickerInput
@@ -136,6 +145,7 @@ export default function PrintHistoryList() {
             className={css({
               w: '100%',
               textAlign: 'left',
+              color: 'stone.950',
               bgColor: 'stone.100',
               borderRadius: 'lg',
               borderCollapse: 'collapse',
@@ -145,43 +155,103 @@ export default function PrintHistoryList() {
               '& tbody tr:last-child': { boxShadow: 'none' },
             })}
           >
-            <thead className={css({ bgColor: 'stone.200', borderRadius: 'lg' })}>
+            <thead
+              className={css({
+                bgColor: 'stone.200',
+                borderRadius: 'lg',
+              })}
+            >
               <tr>
-                <th>着日</th>
+                <th>
+                  {selectCategory === 'delivery_date' ? (
+                    <ThReverseButton setValue={setIsReverse}>着日</ThReverseButton>
+                  ) : (
+                    <>着日</>
+                  )}
+                </th>
                 <th className={css({ [smallScreen]: { display: 'none' } })}>時間指定</th>
-                <th>印刷日時</th>
+                <th>
+                  {selectCategory === 'printed_at' ? (
+                    <ThReverseButton setValue={setIsReverse}>印刷日時</ThReverseButton>
+                  ) : (
+                    <>印刷日時</>
+                  )}
+                </th>
                 <th className={css({ [smallScreen]: { display: 'none' } })}>印刷頁</th>
-                <th>得意先名</th>
-                <th className={css({ [smallScreen]: { display: 'none' } })}>住所</th>
-                <th className={css({ [smallScreen]: { display: 'none' } })}>帳合</th>
-                <th className={css({ [smallScreen]: { display: 'none' } })}>ｵｰﾀﾞｰNo</th>
-                <th className={css({ [bigScreen]: { _after: { content: '"（予定）"' } } })}>発日</th>
-                <th>運送会社</th>
+                <th>
+                  得意先名
+                  <SupIcon />
+                </th>
+                <th className={css({ [hdScreen]: { display: 'none' } })}>
+                  住所
+                  <SupIcon />
+                </th>
+                <th className={css({ [smallScreen]: { display: 'none' } })}>
+                  帳合
+                  <SupIcon />
+                </th>
+                <th className={css({ [hdScreen]: { display: 'none' } })}>
+                  ｵｰﾀﾞｰNo
+                  <SupIcon />
+                </th>
+                <th>
+                  {selectCategory === 'shipping_date' ? (
+                    <ThReverseButton setValue={setIsReverse}>
+                      <span className={css({ [bigScreen]: { _after: { content: '"（予定）"' } } })}>発日</span>
+                    </ThReverseButton>
+                  ) : (
+                    <span className={css({ [bigScreen]: { _after: { content: '"（予定）"' } } })}>発日</span>
+                  )}
+                </th>
+                <th>
+                  運送会社
+                  <SupIcon />
+                </th>
                 <th>口数</th>
-                <th>商品</th>
+                <th>
+                  商品
+                  <SupIcon />
+                </th>
               </tr>
             </thead>
-            <tbody className={css({ '& >tr': { bgColor: { _hover: 'amber.50' } } })}>
+            <tbody className={css({ '& >tr': { _hover: { color: 'teal.950', bgColor: 'teal.50/75' } } })}>
+              {/* eslint-disable-next-line no-nested-ternary */}
               {filteredPrintHistories?.length ? (
-                filteredPrintHistories.map((po, i) => (
-                  <PrintHistoryTableTr
-                    key={po.printed_at}
-                    oneHistory={po}
-                    toggleModal={setSelectedHistory}
-                    currentIndex={i}
-                    parentMediaQuerySmall={smallScreen}
-                  />
-                ))
+                isReverse ? (
+                  [...filteredPrintHistories]
+                    .reverse()
+                    .map((po, i) => (
+                      <PrintHistoryTableTr
+                        key={po.printed_at}
+                        oneHistory={po}
+                        toggleModal={setSelectedHistory}
+                        currentIndex={i}
+                        parentMediaQuerySmall={smallScreen}
+                        parentMediaQueryHd={hdScreen}
+                      />
+                    ))
+                ) : (
+                  filteredPrintHistories.map((po, i) => (
+                    <PrintHistoryTableTr
+                      key={po.printed_at}
+                      oneHistory={po}
+                      toggleModal={setSelectedHistory}
+                      currentIndex={i}
+                      parentMediaQuerySmall={smallScreen}
+                      parentMediaQueryHd={hdScreen}
+                    />
+                  ))
+                )
               ) : (
                 <tr>
                   <td>7日間以内</td>
-                  <td> - </td>
+                  <td className={css({ [smallScreen]: { display: 'none' } })}> - </td>
                   <td>7日間以内</td>
-                  <td> - </td>
+                  <td className={css({ [smallScreen]: { display: 'none' } })}> - </td>
                   <td>該当なし</td>
-                  <td> - </td>
-                  <td> - </td>
-                  <td> - </td>
+                  <td className={css({ [hdScreen]: { display: 'none' } })}> - </td>
+                  <td className={css({ [smallScreen]: { display: 'none' } })}> - </td>
+                  <td className={css({ [hdScreen]: { display: 'none' } })}> - </td>
                   <td>7日間以内</td>
                   <td> - </td>
                   <td> - </td>
@@ -192,15 +262,27 @@ export default function PrintHistoryList() {
           </table>
         </main>
       </div>
+      {/* eslint-disable-next-line no-nested-ternary */}
       {filteredPrintHistories?.length
-        ? filteredPrintHistories.map((po, i) => (
-            <HistoryDialog
-              key={po.printed_at}
-              oneHistory={po}
-              isOpen={selectedHistory === i}
-              closeModal={setSelectedHistory}
-            />
-          ))
+        ? isReverse
+          ? [...filteredPrintHistories]
+              .reverse()
+              .map((po, i) => (
+                <HistoryDialog
+                  key={po.printed_at}
+                  oneHistory={po}
+                  isOpen={selectedHistory === i}
+                  closeModal={setSelectedHistory}
+                />
+              ))
+          : filteredPrintHistories.map((po, i) => (
+              <HistoryDialog
+                key={po.printed_at}
+                oneHistory={po}
+                isOpen={selectedHistory === i}
+                closeModal={setSelectedHistory}
+              />
+            ))
         : null}
     </div>
   );

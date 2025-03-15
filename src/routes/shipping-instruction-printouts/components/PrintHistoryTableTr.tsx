@@ -7,6 +7,7 @@ interface PrintHistoryTableTrProps {
   toggleModal: React.Dispatch<React.SetStateAction<number>>;
   currentIndex: number;
   parentMediaQuerySmall: string;
+  parentMediaQueryHd: string;
 }
 
 export default function PrintHistoryTableTr({
@@ -14,13 +15,15 @@ export default function PrintHistoryTableTr({
   toggleModal,
   currentIndex,
   parentMediaQuerySmall,
+  parentMediaQueryHd,
 }: PrintHistoryTableTrProps): JSX.Element {
   // Panda CSS で使用する変数
   const smallScreen = '@media(width < 960px)';
+  const hdScreen = '@media(width < 1280px)';
 
-  if (parentMediaQuerySmall !== smallScreen) {
+  if (parentMediaQuerySmall !== smallScreen || parentMediaQueryHd !== hdScreen) {
     throw new Error(
-      `［値の完全一致が必要］： parentMediaQuerySmall: "${parentMediaQuerySmall}", smallScreen: "${smallScreen}"`,
+      `［値の完全一致が必要］： parentMediaQuerySmall: "${parentMediaQuerySmall}", smallScreen: "${smallScreen}", parentMediaQueryHd: "${parentMediaQueryHd}", hdScreen: "${hdScreen}"`,
     );
   }
 
@@ -29,7 +32,7 @@ export default function PrintHistoryTableTr({
       onClick={() => toggleModal(currentIndex)}
       onKeyDown={() => toggleModal(currentIndex)}
       role="button"
-      className={css({ _even: { bgColor: 'slate.200' }, cursor: 'pointer' })}
+      className={css({ _even: { color: 'slate.950', bgColor: 'slate.200' }, cursor: 'pointer' })}
     >
       <td
         className={css({
@@ -58,6 +61,7 @@ export default function PrintHistoryTableTr({
           maxW: '16rem',
           overflow: 'hidden',
           textOverflow: 'ellipsis',
+          [hdScreen]: { maxW: '11rem' },
         })}
       >
         <data value={po.non_fk_customer_id}>{po.customer_name}</data>
@@ -67,13 +71,22 @@ export default function PrintHistoryTableTr({
           maxW: '12rem',
           overflow: 'hidden',
           textOverflow: 'ellipsis',
-          [smallScreen]: { display: 'none' },
+          [hdScreen]: { display: 'none' },
         })}
       >
         {po.customer_address}
       </td>
       <td className={css({ [smallScreen]: { display: 'none' } })}>{po.wholesaler}</td>
-      <td className={css({ [smallScreen]: { display: 'none' } })}>{po.order_number}</td>
+      <td
+        className={css({
+          maxW: '16rem',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          [hdScreen]: { display: 'none' },
+        })}
+      >
+        {po.order_number}
+      </td>
       <td
         className={css({
           [smallScreen]: {
@@ -92,6 +105,7 @@ export default function PrintHistoryTableTr({
           maxW: '16rem',
           overflow: 'hidden',
           textOverflow: 'ellipsis',
+          [hdScreen]: { maxW: '11rem' },
         })}
       >
         {po.items_of_order}

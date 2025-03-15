@@ -1,7 +1,5 @@
 .react-aria-Tooltip {
   border-radius: 0.25rem;
-  background: #fb923c;
-  color: #431407;
   font-weight: bold;
   text-shadow: rgba(255, 255, 255, 0.2) 1px 1px;
   forced-color-adjust: none;
@@ -51,6 +49,5 @@
 
   & .react-aria-OverlayArrow svg {
     display: block;
-    fill: #fb923c;
   }
 }
