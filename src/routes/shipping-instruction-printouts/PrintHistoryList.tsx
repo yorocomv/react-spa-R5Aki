@@ -114,124 +114,114 @@ export default function PrintHistoryList() {
           </div>
         </section>
       </header>
-      <div
+      <main
         className={css({
+          pos: 'fixed',
+          top: '4rem',
+          left: 0,
+          right: 0,
+          h: 'fit-content',
+          maxH: 'calc(100dvh - 4.5rem)',
           w: 'fit-content',
           maxW: '99vw',
           mx: 'auto',
-          my: '0.5rem',
           p: 0,
           overflowX: 'scroll',
           scrollbar: 'hidden',
+          shadow: 'xl',
+          border: '1px solid',
           borderRadius: 'lg',
+          borderColor: 'stone.300',
+          '& tr': {
+            h: '2.75rem',
+          },
+          '& th, & td': {
+            p: '0.75rem',
+          },
         })}
       >
-        <main
+        <table
           className={css({
-            w: 'fit-content',
-            m: 0,
-            border: '1px solid',
+            w: '100%',
+            textAlign: 'left',
+            color: 'stone.950',
+            bgColor: 'stone.100',
             borderRadius: 'lg',
-            borderColor: 'stone.300',
-            '& tr': {
-              h: '2.75rem',
-            },
-            '& th, & td': {
-              p: '0.75rem',
-            },
+            borderCollapse: 'collapse',
+            whiteSpace: 'nowrap',
+            overflowX: 'hidden',
+            '& tr': { boxShadow: 'inset 0 -1px #d6d3d1' },
+            '& tbody tr:last-child': { boxShadow: 'none' },
           })}
         >
-          <table
+          <thead
             className={css({
-              w: '100%',
-              textAlign: 'left',
-              color: 'stone.950',
-              bgColor: 'stone.100',
+              pos: 'sticky',
+              top: 0,
+              bgColor: 'stone.200',
               borderRadius: 'lg',
-              borderCollapse: 'collapse',
-              whiteSpace: 'nowrap',
-              overflow: 'hidden',
-              '& tr': { boxShadow: 'inset 0 -1px #d6d3d1' },
-              '& tbody tr:last-child': { boxShadow: 'none' },
             })}
           >
-            <thead
-              className={css({
-                bgColor: 'stone.200',
-                borderRadius: 'lg',
-              })}
-            >
-              <tr>
-                <th>
-                  {selectCategory === 'delivery_date' ? (
-                    <ThReverseButton setValue={setIsReverse}>着日</ThReverseButton>
-                  ) : (
-                    <>着日</>
-                  )}
-                </th>
-                <th className={css({ [smallScreen]: { display: 'none' } })}>時間指定</th>
-                <th>
-                  {selectCategory === 'printed_at' ? (
-                    <ThReverseButton setValue={setIsReverse}>印刷日時</ThReverseButton>
-                  ) : (
-                    <>印刷日時</>
-                  )}
-                </th>
-                <th className={css({ [smallScreen]: { display: 'none' } })}>印刷頁</th>
-                <th>
-                  得意先名
-                  <SupIcon />
-                </th>
-                <th className={css({ [hdScreen]: { display: 'none' } })}>
-                  住所
-                  <SupIcon />
-                </th>
-                <th className={css({ [smallScreen]: { display: 'none' } })}>
-                  帳合
-                  <SupIcon />
-                </th>
-                <th className={css({ [hdScreen]: { display: 'none' } })}>
-                  ｵｰﾀﾞｰNo
-                  <SupIcon />
-                </th>
-                <th>
-                  {selectCategory === 'shipping_date' ? (
-                    <ThReverseButton setValue={setIsReverse}>
-                      <span className={css({ [bigScreen]: { _after: { content: '"（予定）"' } } })}>発日</span>
-                    </ThReverseButton>
-                  ) : (
-                    <span className={css({ [bigScreen]: { _after: { content: '"（予定）"' } } })}>発日</span>
-                  )}
-                </th>
-                <th>
-                  運送会社
-                  <SupIcon />
-                </th>
-                <th>口数</th>
-                <th>
-                  商品
-                  <SupIcon />
-                </th>
-              </tr>
-            </thead>
-            <tbody className={css({ '& >tr': { _hover: { color: 'teal.950', bgColor: 'teal.50/75' } } })}>
-              {/* eslint-disable-next-line no-nested-ternary */}
-              {filteredPrintHistories?.length ? (
-                isReverse ? (
-                  [...filteredPrintHistories]
-                    .reverse()
-                    .map((po, i) => (
-                      <PrintHistoryTableTr
-                        key={po.printed_at}
-                        oneHistory={po}
-                        toggleModal={setSelectedHistory}
-                        currentIndex={i}
-                        parentMediaQuerySmall={smallScreen}
-                        parentMediaQueryHd={hdScreen}
-                      />
-                    ))
+            <tr>
+              <th>
+                {selectCategory === 'delivery_date' ? (
+                  <ThReverseButton setValue={setIsReverse}>着日</ThReverseButton>
                 ) : (
-                  filteredPrintHistories.map((po, i) => (
+                  <>着日</>
+                )}
+              </th>
+              <th className={css({ [smallScreen]: { display: 'none' } })}>時間指定</th>
+              <th>
+                {selectCategory === 'printed_at' ? (
+                  <ThReverseButton setValue={setIsReverse}>印刷日時</ThReverseButton>
+                ) : (
+                  <>印刷日時</>
+                )}
+              </th>
+              <th className={css({ [smallScreen]: { display: 'none' } })}>印刷頁</th>
+              <th>
+                得意先名
+                <SupIcon />
+              </th>
+              <th className={css({ [hdScreen]: { display: 'none' } })}>
+                住所
+                <SupIcon />
+              </th>
+              <th className={css({ [smallScreen]: { display: 'none' } })}>
+                帳合
+                <SupIcon />
+              </th>
+              <th className={css({ [hdScreen]: { display: 'none' } })}>
+                ｵｰﾀﾞｰNo
+                <SupIcon />
+              </th>
+              <th>
+                {selectCategory === 'shipping_date' ? (
+                  <ThReverseButton setValue={setIsReverse}>
+                    <span className={css({ [bigScreen]: { _after: { content: '"（予定）"' } } })}>発日</span>
+                  </ThReverseButton>
+                ) : (
+                  <span className={css({ [bigScreen]: { _after: { content: '"（予定）"' } } })}>発日</span>
+                )}
+              </th>
+              <th>
+                運送会社
+                <SupIcon />
+              </th>
+              <th>口数</th>
+              <th>
+                商品
+                <SupIcon />
+              </th>
+            </tr>
+          </thead>
+          <tbody className={css({ '& >tr': { _hover: { color: 'teal.950', bgColor: 'teal.50/75' } } })}>
+            {/* eslint-disable-next-line no-nested-ternary */}
+            {filteredPrintHistories?.length ? (
+              isReverse ? (
+                [...filteredPrintHistories]
+                  .reverse()
+                  .map((po, i) => (
                     <PrintHistoryTableTr
                       key={po.printed_at}
                       oneHistory={po}
@@ -241,27 +231,37 @@ export default function PrintHistoryList() {
                       parentMediaQueryHd={hdScreen}
                     />
                   ))
-                )
               ) : (
-                <tr>
-                  <td>7日間以内</td>
-                  <td className={css({ [smallScreen]: { display: 'none' } })}> - </td>
-                  <td>7日間以内</td>
-                  <td className={css({ [smallScreen]: { display: 'none' } })}> - </td>
-                  <td>該当なし</td>
-                  <td className={css({ [hdScreen]: { display: 'none' } })}> - </td>
-                  <td className={css({ [smallScreen]: { display: 'none' } })}> - </td>
-                  <td className={css({ [hdScreen]: { display: 'none' } })}> - </td>
-                  <td>7日間以内</td>
-                  <td> - </td>
-                  <td> - </td>
-                  <td> - </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </main>
-      </div>
+                filteredPrintHistories.map((po, i) => (
+                  <PrintHistoryTableTr
+                    key={po.printed_at}
+                    oneHistory={po}
+                    toggleModal={setSelectedHistory}
+                    currentIndex={i}
+                    parentMediaQuerySmall={smallScreen}
+                    parentMediaQueryHd={hdScreen}
+                  />
+                ))
+              )
+            ) : (
+              <tr>
+                <td>7日間以内</td>
+                <td className={css({ [smallScreen]: { display: 'none' } })}> - </td>
+                <td>7日間以内</td>
+                <td className={css({ [smallScreen]: { display: 'none' } })}> - </td>
+                <td>該当なし</td>
+                <td className={css({ [hdScreen]: { display: 'none' } })}> - </td>
+                <td className={css({ [smallScreen]: { display: 'none' } })}> - </td>
+                <td className={css({ [hdScreen]: { display: 'none' } })}> - </td>
+                <td>7日間以内</td>
+                <td> - </td>
+                <td> - </td>
+                <td> - </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </main>
       {/* eslint-disable-next-line no-nested-ternary */}
       {filteredPrintHistories?.length
         ? isReverse

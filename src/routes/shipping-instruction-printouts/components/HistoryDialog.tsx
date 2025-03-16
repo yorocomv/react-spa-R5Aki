@@ -24,6 +24,19 @@ export default function HistoryDialog({ oneHistory: p, isOpen, closeModal }: His
       console.error('💥💥💥 ', err, ' 💀💀💀');
     }
   };
+  const deliveryJsDate = new Date(p.delivery_date);
+  const deliveryWeekString = new Intl.DateTimeFormat('ja-JP', {
+    weekday: 'short',
+    timeZone: 'Asia/Tokyo',
+  }).format(deliveryJsDate);
+  const formattedDeliveryDate = deliveryJsDate.toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo', dateStyle: 'short' });
+  const shippingJsDate = new Date(p.shipping_date);
+  const shippingWeekString = new Intl.DateTimeFormat('ja-JP', {
+    weekday: 'short',
+    timeZone: 'Asia/Tokyo',
+  }).format(shippingJsDate);
+  const formattedShippingDate = shippingJsDate.toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo', dateStyle: 'short' });
+
   return (
     <Modal isDismissable isOpen={isOpen} onOpenChange={() => closeModal(-1)}>
       <Dialog
@@ -58,7 +71,6 @@ export default function HistoryDialog({ oneHistory: p, isOpen, closeModal }: His
             className={css({
               gridColumn: '2/3',
               color: 'slate.400',
-              fontFamily: '"Yu Mincho", YuMincho, serif',
               fontSize: '1.125rem',
             })}
           >
@@ -123,15 +135,35 @@ export default function HistoryDialog({ oneHistory: p, isOpen, closeModal }: His
             })}
           >
             <tr>
-              <th>着日</th>
-              <td>{p.delivery_date}</td>
+              <th
+                className={css({
+                  display: 'grid',
+                  gridTemplateColumns: 'auto auto',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                })}
+              >
+                <span>着日</span>
+                <span>⛳️</span>
+              </th>
+              <td>{`${formattedDeliveryDate}（${deliveryWeekString}）`}</td>
             </tr>
             <tr>
               <th>時間指定</th>
               <td>{p.delivery_time_str}</td>
             </tr>
             <tr>
-              <th>印刷日時</th>
+              <th
+                className={css({
+                  display: 'grid',
+                  gridTemplateColumns: 'auto auto',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                })}
+              >
+                <span>印刷日時</span>
+                <span>🖨️</span>
+              </th>
               <td>{p.printed_at}</td>
             </tr>
             <tr>
@@ -139,7 +171,17 @@ export default function HistoryDialog({ oneHistory: p, isOpen, closeModal }: His
               <td>{p.page_num_str}</td>
             </tr>
             <tr>
-              <th>得意先名</th>
+              <th
+                className={css({
+                  display: 'grid',
+                  gridTemplateColumns: 'auto auto',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                })}
+              >
+                <span>得意先名</span>
+                <span>🎓️</span>
+              </th>
               <td>{p.customer_name}</td>
             </tr>
             <tr>
@@ -147,7 +189,17 @@ export default function HistoryDialog({ oneHistory: p, isOpen, closeModal }: His
               <td>{p.customer_address}</td>
             </tr>
             <tr>
-              <th>帳合</th>
+              <th
+                className={css({
+                  display: 'grid',
+                  gridTemplateColumns: 'auto auto',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                })}
+              >
+                <span>帳合</span>
+                <span>💸</span>
+              </th>
               <td>{p.wholesaler}</td>
             </tr>
             <tr>
@@ -155,15 +207,35 @@ export default function HistoryDialog({ oneHistory: p, isOpen, closeModal }: His
               <td>{p.order_number}</td>
             </tr>
             <tr>
-              <th>出荷予定日</th>
-              <td>{p.shipping_date}</td>
+              <th
+                className={css({
+                  display: 'grid',
+                  gridTemplateColumns: 'auto auto',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                })}
+              >
+                <span>出荷予定日</span>
+                <span>🧤</span>
+              </th>
+              <td>{`${formattedShippingDate}（${shippingWeekString}）`}</td>
             </tr>
             <tr>
               <th>運送会社</th>
               <td>{p.carrier}</td>
             </tr>
             <tr>
-              <th>口数</th>
+              <th
+                className={css({
+                  display: 'grid',
+                  gridTemplateColumns: 'auto auto',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                })}
+              >
+                <span>口数</span>
+                <span>📦️</span>
+              </th>
               <td>{p.package_count}</td>
             </tr>
             <tr>
