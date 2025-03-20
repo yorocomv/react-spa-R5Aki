@@ -19,6 +19,7 @@ async function enableMocking(): Promise<ServiceWorkerRegistration | undefined> {
       serviceWorker: {
         // 追加: vite v5 マイグレーション
         url: '/spa/mockServiceWorker.js',
+        options: { scope: '/spa/' },
       },
     });
   }
