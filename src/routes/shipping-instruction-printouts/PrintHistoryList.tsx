@@ -89,6 +89,7 @@ export default function PrintHistoryList() {
                 setSelectCategory('printed_at');
                 setDateA(todayDate);
                 setDateB(null);
+                setIsReverse(false);
               }}
               className={css({ _hover: { cursor: 'pointer' } })}
             />
