@@ -166,7 +166,9 @@ export default function HistoryDialog({ oneHistory: p, isOpen, closeModal }: His
             </tr>
             <tr>
               <th>オーダーNo.</th>
-              <td>{p.order_number}</td>
+              <td>
+                <pre className={css({ overflowWrap: 'break-word' })}>{p.order_number}</pre>
+              </td>
             </tr>
             <tr>
               <th>出荷予定日</th>
