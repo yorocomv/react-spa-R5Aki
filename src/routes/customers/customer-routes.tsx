@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router';
 import SearchCustomer from './SearchCustomer';
 import ExamineCustomer from './ExamineCustomer';
 import FoundCustomers from './components/FoundCustomers';

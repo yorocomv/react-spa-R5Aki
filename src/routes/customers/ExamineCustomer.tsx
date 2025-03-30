@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router';
 import { AxiosResponse } from 'axios';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { CustomersTbRow } from './customers.types';
@@ -33,9 +33,17 @@ export default function ExamineCustomer() {
   useEffect(() => {
     // 遷移先からこのページにブラウザバックできなくなるが仕様とする❢
     if (customers.length >= 2) {
-      navigate('./checking-overlap', { state: { id: customer.id, customers } });
+      // https://github.com/remix-run/react-router/issues/12348
+      Promise.resolve(navigate('./checking-overlap', { state: { id: customer.id, customers } })).catch(
+        (err: string) => {
+          throw new Error(err);
+        },
+      );
     } else {
-      navigate('./decide', { state: customer });
+      // https://github.com/remix-run/react-router/issues/12348
+      Promise.resolve(navigate('./decide', { state: customer })).catch((err: string) => {
+        throw new Error(err);
+      });
     }
   }, [customer, customers, navigate]);
 

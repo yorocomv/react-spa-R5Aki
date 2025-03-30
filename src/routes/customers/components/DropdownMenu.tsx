@@ -1,5 +1,5 @@
 import { Menu, MenuItem, MenuTrigger, Popover } from 'react-aria-components';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { css } from '../../../../styled-system/css';
 import DropdownMenuTrigger from './elements/DropdownMenuTrigger';
 import { CustomersTbRow } from '../customers.types';
@@ -39,7 +39,14 @@ export default function DropdownMenu({ label, mergeStyles = undefined, menuItems
           {menuItems.map((item) => (
             <MenuItem
               key={item.label}
-              onAction={() => navigate(item.toRelativePath, { relative: 'path', state: { ...item.state } })}
+              onAction={() => {
+                // https://github.com/remix-run/react-router/issues/12348
+                Promise.resolve(navigate(item.toRelativePath, { relative: 'path', state: { ...item.state } })).catch(
+                  (err: string) => {
+                    throw new Error(err);
+                  },
+                );
+              }}
               className={css({
                 cursor: 'default',
                 fontSize: 'sm',

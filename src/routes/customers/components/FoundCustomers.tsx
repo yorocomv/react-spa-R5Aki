@@ -1,4 +1,4 @@
-import { Link, useOutletContext } from 'react-router-dom';
+import { Link, useOutletContext } from 'react-router';
 import { css } from 'styled-system/css';
 import { vstack } from '../../../../styled-system/patterns/vstack';
 import CustomerSummary from './CustomerSummary';

@@ -40,7 +40,7 @@ if (isMsw) {
       </React.StrictMode>,
     );
   })().catch((err: string) => {
-    throw Error(err);
+    throw new Error(err);
   });
 } else {
   root.render(

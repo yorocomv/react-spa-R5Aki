@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { Button, Dialog, Heading, Modal } from 'react-aria-components';
 import { FaX } from 'react-icons/fa6';
 import EditButton from './elements/Button';
@@ -85,12 +85,17 @@ export default function NoteInDialog({
             {body}
           </pre>
           <EditButton
-            onClick={() =>
-              navigate(`/customers/${customer.id}/take-a-note?rank=${currentRank}`, {
-                relative: 'path',
-                state: { ...customer },
-              })
-            }
+            onClick={() => {
+              // https://github.com/remix-run/react-router/issues/12348
+              Promise.resolve(
+                navigate(`/customers/${customer.id}/take-a-note?rank=${currentRank}`, {
+                  relative: 'path',
+                  state: { ...customer },
+                }),
+              ).catch((err: string) => {
+                throw new Error(err);
+              });
+            }}
             variant="edit"
             className={css({
               display: 'block',

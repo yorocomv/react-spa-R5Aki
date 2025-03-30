@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import SpotField from '@/components/ui/SpotField';
 import Button from '@/routes/customers/components/elements/Button';
 import { css } from '../../../../styled-system/css';
@@ -22,7 +22,10 @@ export default function SearchForm({
   const navigate = useNavigate();
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    navigate('/customers');
+    // https://github.com/remix-run/react-router/issues/12348
+    Promise.resolve(navigate('/customers')).catch((err: string) => {
+      throw new Error(err);
+    });
     setSearchTrigger(!searchTrigger);
   };
 

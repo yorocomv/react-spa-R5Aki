@@ -1,5 +1,5 @@
 import { VscGoToSearch } from 'react-icons/vsc';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { css } from '../../../../styled-system/css';
 
 interface FloatingLinkIconProps {

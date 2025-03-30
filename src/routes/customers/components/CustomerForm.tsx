@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Select from '@/components/ui/elements/Select';
@@ -74,7 +74,10 @@ export default function CustomerForm() {
       } else {
         response = await registerCustomer({ mode: 'create', values });
       }
-      navigate(`/customers/${response.id}/decide`, { state: response });
+      // https://github.com/remix-run/react-router/issues/12348
+      Promise.resolve(navigate(`/customers/${response.id}/decide`, { state: response })).catch((err: string) => {
+        throw new Error(err);
+      });
     } catch (err: unknown) {
       console.error('💥💥💥 ', err, ' 💀💀💀');
     }

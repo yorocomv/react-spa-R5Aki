@@ -1,4 +1,4 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router';
 import React, { useMemo } from 'react';
 import { TbArrowBigLeftLinesFilled } from 'react-icons/tb';
 import { vstack } from '../../../styled-system/patterns/vstack';

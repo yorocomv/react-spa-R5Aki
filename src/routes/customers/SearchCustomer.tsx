@@ -1,4 +1,4 @@
-import { Outlet, ScrollRestoration } from 'react-router-dom';
+import { Outlet, ScrollRestoration } from 'react-router';
 import SearchForm from '@/routes/customers/components/SearchForm';
 import { css } from '../../../styled-system/css';
 import LinkNewRegistration from './components/LinkNewRegistration';

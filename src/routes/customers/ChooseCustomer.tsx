@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router';
 import parse from 'html-react-parser';
 import { css } from '../../../styled-system/css';
 import InvoiceNameSwitcher from './components/InvoiceNameSwitcher';

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router';
 import { FaRegTrashCan } from 'react-icons/fa6';
 import Button from './elements/Button';
 import { css } from '../../../../styled-system/css';
@@ -41,15 +41,24 @@ export default function FloatingDeleteButton({
         if (/\/take-a-note/.test(pathname) && currentRank) {
           const response = await deleteNote(parseInt(currentRank, 10));
           console.log(response);
-          navigate(`/customers/${customer.id}/decide`, { state: customer });
+          // https://github.com/remix-run/react-router/issues/12348
+          Promise.resolve(navigate(`/customers/${customer.id}/decide`, { state: customer })).catch((err: string) => {
+            throw new Error(err);
+          });
         } else if (/\/checking-overlap/.test(pathname) && deleteFlaggedNumbers.length > 0) {
           const response = await deleteCustomersInBulk(deleteFlaggedNumbers);
           console.log(response);
-          navigate(`/customers/${customer.id}/decide`, { state: customer });
+          // https://github.com/remix-run/react-router/issues/12348
+          Promise.resolve(navigate(`/customers/${customer.id}/decide`, { state: customer })).catch((err: string) => {
+            throw new Error(err);
+          });
         } else if (/\/edit/.test(pathname) && deleteFlaggedNumbers.length === 0) {
           const response = await deleteCustomer();
           console.log(response);
-          navigate('/customers');
+          // https://github.com/remix-run/react-router/issues/12348
+          Promise.resolve(navigate('/customers')).catch((err: string) => {
+            throw new Error(err);
+          });
         } else {
           throw new Error('想定外の削除イベントが発生しました🔥');
         }

@@ -1,4 +1,4 @@
-import { Link, useLocation, useParams } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router';
 import { CustomersTbRow } from './customers.types';
 import { css } from '../../../styled-system/css';
 import FormContainer from './components/elements/FormContainer';

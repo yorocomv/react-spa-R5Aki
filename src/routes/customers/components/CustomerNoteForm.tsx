@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Select from '@/components/ui/elements/Select';
@@ -69,7 +69,12 @@ export default function CustomerNoteForm({
       } else {
         response = await registerNote({ customerId: customer.id, mode: 'add', values });
       }
-      navigate(`/customers/${response.customer.id}/decide`, { state: response.customer });
+      // https://github.com/remix-run/react-router/issues/12348
+      Promise.resolve(navigate(`/customers/${response.customer.id}/decide`, { state: response.customer })).catch(
+        (err: string) => {
+          throw new Error(err);
+        },
+      );
     } catch (err: unknown) {
       console.error('💥💥💥 ', err, ' 💀💀💀');
     }
