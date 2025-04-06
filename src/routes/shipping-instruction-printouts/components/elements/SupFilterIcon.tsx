@@ -1,4 +1,5 @@
 import { FaFilter } from 'react-icons/fa';
+
 import { css } from 'styled-system/css';
 
 export default function SupFilterIcon(): JSX.Element {

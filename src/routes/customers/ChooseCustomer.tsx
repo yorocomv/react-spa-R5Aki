@@ -1,37 +1,37 @@
+import parse from 'html-react-parser';
 import { useEffect } from 'react';
 import { useLocation, useParams } from 'react-router';
-import parse from 'html-react-parser';
+
+import type { CustomersTbRow, RequiredChooseCustomer } from './customers.types';
+
 import { css } from '../../../styled-system/css';
-import InvoiceNameSwitcher from './components/InvoiceNameSwitcher';
 import CustomerNotesList from './components/CustomerNotesList';
-import { CustomersTbRow, RequiredChooseCustomer } from './customers.types';
-import './customers.css';
 import DropdownMenu from './components/DropdownMenu';
+import './customers.css';
 import { useCreateCustomerTsv } from './components/hooks/useCreateCustomerTsv';
+import InvoiceNameSwitcher from './components/InvoiceNameSwitcher';
 
 export default function ChooseCustomer(): JSX.Element {
   const customer = useLocation().state as CustomersTbRow;
   const { id: customerId } = useParams();
   const { createCustomerTsv } = useCreateCustomerTsv();
 
-  if (customerId && customerId !== customer.id.toString()) throw new Error('不正なルートでのアクセスを検知しました❢');
+  if (customerId && customerId !== customer.id.toString())
+    throw new Error('不正なルートでのアクセスを検知しました❢');
 
   const {
     tel,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
     zip_code,
     address1,
     address2,
     address3,
     name1,
     name2,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
     nja_city,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
     invoice_type_id,
   }: RequiredChooseCustomer = customer;
   let zipCodeHyphen = zip_code;
-  if (/^[0-9]{7}$/.test(zipCodeHyphen)) {
+  if (/^\d{7}$/.test(zipCodeHyphen)) {
     zipCodeHyphen = `${zipCodeHyphen.slice(0, 3)}-${zipCodeHyphen.slice(3)}`;
   }
   let address1WithCityEmphasis = '';
@@ -42,8 +42,8 @@ export default function ChooseCustomer(): JSX.Element {
 
   useEffect(() => {
     createCustomerTsv(customer)
-      .then((result) => console.log(result))
-      .catch((err) => console.error(err));
+      .then(result => console.log(result))
+      .catch(err => console.error(err));
   }, [createCustomerTsv, customer]);
 
   return (
@@ -123,7 +123,9 @@ export default function ChooseCustomer(): JSX.Element {
                 className={css({
                   mr: '0.8rem',
                 })}
-              >{`〒${zipCodeHyphen}`}</div>
+              >
+                {`〒${zipCodeHyphen}`}
+              </div>
               <div>
                 <div>{address1WithCityEmphasis !== '' ? parse(address1WithCityEmphasis) : address1}</div>
                 <div>{address2}</div>
@@ -131,7 +133,8 @@ export default function ChooseCustomer(): JSX.Element {
               </div>
             </div>
             <div>
-              Tel:<strong>{tel}</strong>
+              Tel:
+              <strong>{tel}</strong>
             </div>
           </div>
         </div>
@@ -147,8 +150,7 @@ export default function ChooseCustomer(): JSX.Element {
       <CustomerNotesList customer={customer} />
       <ul id="css-anima-bg-circles">
         {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-          [...Array(10)].map((_, i) => (
+          [...Array.from({ length: 10 })].map((_, i) => (
             // eslint-disable-next-line react/no-array-index-key
             <li key={`css-anima-bg-circles-${i}`} />
           ))

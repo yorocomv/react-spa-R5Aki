@@ -1,5 +1,6 @@
-import { z } from 'zod';
-import { customerFormSchema, customersTbRowSchema } from './customers.schemas';
+import type { z } from 'zod';
+
+import type { customerFormSchema, customersTbRowSchema } from './customers.schemas';
 
 // 使わなくなったが型マージの見本としてコメントで残している
 // type Merge<T> = {

@@ -1,8 +1,11 @@
+import type { CalendarDate } from '@internationalized/date';
+import type { DateValue } from 'react-aria-components';
+
 import React, { useEffect } from 'react';
-import { Button, DateInput, DatePicker, DateSegment, DateValue, Group } from 'react-aria-components';
-import { CalendarDate } from '@internationalized/date';
-import { css } from 'styled-system/css';
+import { Button, DateInput, DatePicker, DateSegment, Group } from 'react-aria-components';
 import { RxCalendar } from 'react-icons/rx';
+
+import { css } from 'styled-system/css';
 
 export default function DatePickerInput({
   children,
@@ -72,7 +75,7 @@ export default function DatePickerInput({
             },
           })}
         >
-          {(segment) => (
+          {segment => (
             <DateSegment
               segment={segment}
               className={css({

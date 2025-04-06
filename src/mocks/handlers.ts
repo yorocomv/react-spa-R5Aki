@@ -1,12 +1,13 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { HttpResponse, http } from 'msw';
+import { http, HttpResponse } from 'msw';
+
 import env from '@/env';
-import customers from './dummy-data/customers.json';
+
+import zipCode from './dummy-data/address-data-by-zip-code.json';
 import customer from './dummy-data/customer.json';
 import customerTsv from './dummy-data/customers_-_output.json';
+import customers from './dummy-data/customers.json';
 import invoiceTypes from './dummy-data/invoice-types.json';
 import notes from './dummy-data/notes.json';
-import zipCode from './dummy-data/address-data-by-zip-code.json';
 
 const baseURL = `http://${env.VITE_BEP_HOST}:${env.VITE_BEP_PORT}/api`;
 

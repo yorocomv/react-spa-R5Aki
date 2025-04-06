@@ -1,6 +1,8 @@
-import { css } from 'styled-system/css';
 import React from 'react';
-import { ShippingInstructionPrintHistoryTbRow } from '../shippingInstructionPrintouts.types';
+
+import { css } from 'styled-system/css';
+
+import type { ShippingInstructionPrintHistoryTbRow } from '../shippingInstructionPrintouts.types';
 
 interface PrintHistoryTableTrProps {
   oneHistory: ShippingInstructionPrintHistoryTbRow;

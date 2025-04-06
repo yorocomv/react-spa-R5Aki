@@ -1,7 +1,9 @@
 import React from 'react';
 import { Button } from 'react-aria-components';
+
+import type { SystemStyleObject } from '../../../../../styled-system/types';
+
 import { css } from '../../../../../styled-system/css';
-import { SystemStyleObject } from '../../../../../styled-system/types';
 
 export default function DropdownMenuTrigger({
   children,

@@ -1,6 +1,8 @@
+import type { AxiosError, AxiosResponse } from 'axios';
+
 import { useEffect } from 'react';
-import { AxiosError, AxiosResponse } from 'axios';
 import { useErrorBoundary } from 'react-error-boundary';
+
 import axiosInst from '../../util/axios-instance';
 
 export default function AxiosErrorHandleProvider({ children }: { children: JSX.Element }) {

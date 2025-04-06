@@ -1,5 +1,6 @@
-import { z } from 'zod';
-import zipCodeSchema from './addressDataByZipCode.schemas';
+import type { z } from 'zod';
+
+import type zipCodeSchema from './addressDataByZipCode.schemas';
 
 export type ZipCode = z.infer<typeof zipCodeSchema>;
 

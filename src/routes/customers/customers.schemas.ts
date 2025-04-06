@@ -14,9 +14,12 @@ export const customersTbSchema = z
       .refine(
         (val: string) => {
           const phoneNumber = val.replace(/\D/g, '');
-          if (/104/.test(phoneNumber)) return true;
-          if (phoneNumber.length === 10) return true;
-          if (phoneNumber.length === 11) return true;
+          if (phoneNumber.includes('104'))
+            return true;
+          if (phoneNumber.length === 10)
+            return true;
+          if (phoneNumber.length === 11)
+            return true;
           return false;
         },
         { message: '電話番号として不適当です' },
@@ -30,7 +33,8 @@ export const customersTbSchema = z
       .refine(
         (val: string) => {
           const zipCode = val.replace(/\D/g, '');
-          if (zipCode.length === 7) return true;
+          if (zipCode.length === 7)
+            return true;
           return false;
         },
         { message: '郵便番号として不適当です' },

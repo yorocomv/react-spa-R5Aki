@@ -1,10 +1,11 @@
+import type { AxiosResponse } from 'axios';
+
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { AxiosResponse } from 'axios';
 import { useState } from 'react';
+
 import axiosInstance from '@/util/axios-instance';
 
-// eslint-disable-next-line import/prefer-default-export
-export const useDeleteCustomersInBulk = () => {
+export function useDeleteCustomersInBulk() {
   const [deleteFlaggedNumbers, setDeleteFlaggedNumbers] = useState<number[]>([]);
 
   const queryClient = useQueryClient();
@@ -26,4 +27,4 @@ export const useDeleteCustomersInBulk = () => {
   });
 
   return { deleteFlaggedNumbers, setDeleteFlaggedNumbers, deleteCustomersInBulk };
-};
+}

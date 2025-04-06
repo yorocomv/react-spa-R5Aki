@@ -1,18 +1,23 @@
-import React, { useEffect } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import type { SubmitHandler } from 'react-hook-form';
+
 import { zodResolver } from '@hookform/resolvers/zod';
+import React, { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { useLocation, useNavigate, useParams } from 'react-router';
+
 import Select from '@/components/ui/elements/Select';
+
+import type { CustomerForm as CustomerFormTypes, CustomersTbRow } from '../customers.types';
+
 import { css } from '../../../../styled-system/css';
-import Input from './elements/Input';
-import Button from './elements/Button';
-import { useFetchInvoiceTypes } from './hooks/useFetchInvoiceTypes';
-import { customerFormSchema } from '../customers.schemas';
-import { CustomerForm as CustomerFormTypes, CustomersTbRow } from '../customers.types';
-import FormErrorMessage from './elementSwitchers/FormErrorMessage';
-import { useRegisterCustomer } from './hooks/useRegisterCustomer';
-import FloatingDeleteButton from './FloatingDeleteButton';
 import { useFetchAddressData } from '../../address-data-by-zip-code/components/hooks/useFetchAddressData';
+import { customerFormSchema } from '../customers.schemas';
+import Button from './elements/Button';
+import Input from './elements/Input';
+import FormErrorMessage from './elementSwitchers/FormErrorMessage';
+import FloatingDeleteButton from './FloatingDeleteButton';
+import { useFetchInvoiceTypes } from './hooks/useFetchInvoiceTypes';
+import { useRegisterCustomer } from './hooks/useRegisterCustomer';
 
 export default function CustomerForm() {
   const location = useLocation();
@@ -22,8 +27,10 @@ export default function CustomerForm() {
   const navigate = useNavigate();
 
   // 新規登録のパスをベタ書き。id に 0 は無い
-  if (!customer.id && url !== '/customers/register') throw new Error('不正なルートでのアクセスを検知しました❢');
-  if (customerId && customerId !== customer.id.toString()) throw new Error('不正なルートでのアクセスを検知しました❢');
+  if (!customer.id && url !== '/customers/register')
+    throw new Error('不正なルートでのアクセスを検知しました❢');
+  if (customerId && customerId !== customer.id.toString())
+    throw new Error('不正なルートでのアクセスを検知しました❢');
 
   const defaultValues: CustomerFormTypes = {
     tel: customer.tel || '',
@@ -71,14 +78,16 @@ export default function CustomerForm() {
       let response: CustomersTbRow;
       if (customer.id) {
         response = await registerCustomer({ mode: customer.id, values });
-      } else {
+      }
+      else {
         response = await registerCustomer({ mode: 'create', values });
       }
       // https://github.com/remix-run/react-router/issues/12348
       Promise.resolve(navigate(`/customers/${response.id}/decide`, { state: response })).catch((err: string) => {
         throw new Error(err);
       });
-    } catch (err: unknown) {
+    }
+    catch (err: unknown) {
       console.error('💥💥💥 ', err, ' 💀💀💀');
     }
   };
@@ -106,14 +115,15 @@ export default function CustomerForm() {
       const { prefectures, city, other } = ejpcReturnData.address;
       const town = other.replace(/[(（][^(（]+$/, '');
       const address1 = getValues('address1');
-      // eslint-disable-next-line no-irregular-whitespace
-      if (/^[ 　]*$/.test(address1)) {
+
+      if (/^[ \u3000]*$/.test(address1)) {
         setValue('address1', prefectures + city + town);
       }
       setHasResultOfQuery(false);
       setZipCodeStr('');
       setFocus('address1');
-    } else if (hasResultOfQuery && ejpcReturnData.error !== null) {
+    }
+    else if (hasResultOfQuery && ejpcReturnData.error !== null) {
       const { noFirstThreeDigits, notFound } = ejpcReturnData.error;
       if (noFirstThreeDigits ?? notFound) {
         setError('zip_code', {
@@ -148,14 +158,14 @@ export default function CustomerForm() {
           },
         })}
       >
-        <label>
+        <label htmlFor="tel">
           電話番号
           <Input
-            // eslint-disable-next-line react/jsx-props-no-spreading
             {...register('tel')}
-            onKeyDown={(e) => checkKeyDown(e, 'zip_code')}
+            onKeyDown={e => checkKeyDown(e, 'zip_code')}
             id="tel"
             type="tel"
+            // eslint-disable-next-line jsx-a11y/no-autofocus
             autoFocus
             placeholder="電話番号"
             className={css({
@@ -177,9 +187,8 @@ export default function CustomerForm() {
             🔎
           </a>
           <Input
-            // eslint-disable-next-line react/jsx-props-no-spreading
             {...register('zip_code', { onChange: handleChange })}
-            onKeyDown={(e) => checkKeyDown(e, 'address1')}
+            onKeyDown={e => checkKeyDown(e, 'address1')}
             id="zip_code"
             type="tel"
             placeholder="郵便番号"
@@ -191,9 +200,8 @@ export default function CustomerForm() {
         <FormErrorMessage message={errors.zip_code?.message} />
         <label htmlFor="address1">住所</label>
         <Input
-          // eslint-disable-next-line react/jsx-props-no-spreading
           {...register('address1')}
-          onKeyDown={(e) => checkKeyDown(e, 'address2')}
+          onKeyDown={e => checkKeyDown(e, 'address2')}
           id="address1"
           type="text"
           placeholder="住所1"
@@ -203,9 +211,8 @@ export default function CustomerForm() {
         />
         <FormErrorMessage message={errors.address1?.message} />
         <Input
-          // eslint-disable-next-line react/jsx-props-no-spreading
           {...register('address2')}
-          onKeyDown={(e) => checkKeyDown(e, 'address3')}
+          onKeyDown={e => checkKeyDown(e, 'address3')}
           id="address2"
           type="text"
           placeholder="住所2"
@@ -216,9 +223,8 @@ export default function CustomerForm() {
         />
         <FormErrorMessage message={errors.address2?.message} />
         <Input
-          // eslint-disable-next-line react/jsx-props-no-spreading
           {...register('address3')}
-          onKeyDown={(e) => checkKeyDown(e, 'name1')}
+          onKeyDown={e => checkKeyDown(e, 'name1')}
           id="address3"
           type="text"
           placeholder="住所3"
@@ -238,9 +244,8 @@ export default function CustomerForm() {
           名称
         </label>
         <Input
-          // eslint-disable-next-line react/jsx-props-no-spreading
           {...register('name1')}
-          onKeyDown={(e) => checkKeyDown(e, 'name2')}
+          onKeyDown={e => checkKeyDown(e, 'name2')}
           id="name1"
           type="text"
           placeholder="名称1"
@@ -250,9 +255,8 @@ export default function CustomerForm() {
         />
         <FormErrorMessage message={errors.name1?.message} />
         <Input
-          // eslint-disable-next-line react/jsx-props-no-spreading
           {...register('name2')}
-          onKeyDown={(e) => checkKeyDown(e, 'alias')}
+          onKeyDown={e => checkKeyDown(e, 'alias')}
           id="name2"
           type="text"
           placeholder="名称2"
@@ -262,12 +266,11 @@ export default function CustomerForm() {
           })}
         />
         <FormErrorMessage message={errors.name2?.message} />
-        <label>
+        <label htmlFor="alias">
           検索用の別名
           <Input
-            // eslint-disable-next-line react/jsx-props-no-spreading
             {...register('alias')}
-            onKeyDown={(e) => checkKeyDown(e, 'tel')}
+            onKeyDown={e => checkKeyDown(e, 'tel')}
             id="alias"
             type="text"
             placeholder="検索用の別名"
@@ -279,7 +282,6 @@ export default function CustomerForm() {
         <FormErrorMessage message={errors.alias?.message} />
         <label>
           伝票の種類
-          {/* eslint-disable-next-line react/jsx-props-no-spreading */}
           <Select {...register('invoice_type_id')}>
             {invoiceTypes.map(({ id, name }) => (
               <option key={id} value={id}>

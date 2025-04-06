@@ -1,10 +1,14 @@
 import React from 'react';
 import { Button, Dialog, Heading, Modal } from 'react-aria-components';
-import { css } from 'styled-system/css';
-import CommonFloatingDeleteButton from '@/components/ui/CommonFloatingDeleteButton';
 import { IoCloseOutline } from 'react-icons/io5';
+
+import CommonFloatingDeleteButton from '@/components/ui/CommonFloatingDeleteButton';
+import { css } from 'styled-system/css';
+
+import type { ShippingInstructionPrintHistoryTbRow } from '../shippingInstructionPrintouts.types';
+
 import { useDeletePrintHistory } from './hooks/useDeletePrintHistory';
-import { ShippingInstructionPrintHistoryTbRow } from '../shippingInstructionPrintouts.types';
+
 import '@/components/ui/react-aria-modal-overlay.css';
 
 interface HistoryDialogProps {
@@ -20,7 +24,8 @@ export default function HistoryDialog({ oneHistory: p, isOpen, closeModal }: His
       const response = await deletePrintHistory();
       closeModal(-1);
       console.log(response);
-    } catch (err: unknown) {
+    }
+    catch (err: unknown) {
       console.error('💥💥💥 ', err, ' 💀💀💀');
     }
   };

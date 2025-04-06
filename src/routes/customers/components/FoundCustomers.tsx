@@ -1,8 +1,11 @@
 import { Link, useOutletContext } from 'react-router';
+
 import { css } from 'styled-system/css';
+
+import type { CustomersTbRow } from '../customers.types';
+
 import { vstack } from '../../../../styled-system/patterns/vstack';
 import CustomerSummary from './CustomerSummary';
-import { CustomersTbRow } from '../customers.types';
 
 export default function FoundCustomers() {
   const { latestCommunicationTime, customers }: { latestCommunicationTime: string; customers: CustomersTbRow[] } =
@@ -34,10 +37,12 @@ export default function FoundCustomers() {
               opacity: '0.6',
               boxShadow: 'lg',
             })}
-          >{`${customers.length} hit(s) / ${latestCommunicationTime} sec`}</span>
+          >
+            {`${customers.length} hit(s) / ${latestCommunicationTime} sec`}
+          </span>
         </div>
         {customers.length
-          ? customers.map((customer) => (
+          ? customers.map(customer => (
               <Link key={customer.id} to={`./${customer.id}`} state={customer}>
                 <CustomerSummary
                   tel={customer.tel}
@@ -52,12 +57,12 @@ export default function FoundCustomers() {
               </Link>
             ))
           : latestCommunicationTime !== '0' && (
-              <div>
-                <span className={css({ bg: 'linear-gradient(transparent 40%, rgba(255, 105, 180, 0.6) 40%)' })}>
-                  🔍️検索ワードを変えて再度お試しください🙇‍♂️
-                </span>
-              </div>
-            )}
+            <div>
+              <span className={css({ bg: 'linear-gradient(transparent 40%, rgba(255, 105, 180, 0.6) 40%)' })}>
+                🔍️検索ワードを変えて再度お試しください🙇‍♂️
+              </span>
+            </div>
+          )}
       </div>
     </section>
   );

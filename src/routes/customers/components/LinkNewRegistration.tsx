@@ -1,4 +1,5 @@
 import { Link } from 'react-router';
+
 import { css } from '../../../../styled-system/css';
 
 interface LinkNewRegistrationProps {

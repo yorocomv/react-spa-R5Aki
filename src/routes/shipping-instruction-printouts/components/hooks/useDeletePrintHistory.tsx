@@ -1,9 +1,10 @@
-import axiosInstance from '@/util/axios-instance';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { AxiosResponse } from 'axios';
+import type { AxiosResponse } from 'axios';
 
-// eslint-disable-next-line import/prefer-default-export
-export const useDeletePrintHistory = ({ delivery_date, printed_at }: { delivery_date: string; printed_at: string }) => {
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+
+import axiosInstance from '@/util/axios-instance';
+
+export function useDeletePrintHistory({ delivery_date, printed_at }: { delivery_date: string; printed_at: string }) {
   const queryClient = useQueryClient();
   const { mutateAsync: deletePrintHistory } = useMutation({
     mutationFn: async () => {
@@ -23,4 +24,4 @@ export const useDeletePrintHistory = ({ delivery_date, printed_at }: { delivery_
   });
 
   return { deletePrintHistory };
-};
+}

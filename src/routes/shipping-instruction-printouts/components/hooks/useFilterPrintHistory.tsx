@@ -1,9 +1,9 @@
-import { useCallback, useMemo, useState } from 'react';
 import jaconv from 'jaconv';
-import { ShippingInstructionPrintHistoryTbRow } from '../../shippingInstructionPrintouts.types';
+import { useCallback, useMemo, useState } from 'react';
 
-// eslint-disable-next-line import/prefer-default-export
-export const useFilterPrintHistory = (printHistory: ShippingInstructionPrintHistoryTbRow[]) => {
+import type { ShippingInstructionPrintHistoryTbRow } from '../../shippingInstructionPrintouts.types';
+
+export function useFilterPrintHistory(printHistory: ShippingInstructionPrintHistoryTbRow[]) {
   const [filterString, setFilterString] = useState('');
 
   function recursiveFilter(
@@ -36,9 +36,9 @@ export const useFilterPrintHistory = (printHistory: ShippingInstructionPrintHist
       return objArr;
     }
     if (filterStrings.length < 2) {
-      return objArr.filter((o) => filterFunc(o, filterStrings[0]));
+      return objArr.filter(o => filterFunc(o, filterStrings[0]));
     }
-    const filteredArray = objArr.filter((o) => filterFunc(o, filterStrings[0]));
+    const filteredArray = objArr.filter(o => filterFunc(o, filterStrings[0]));
     const results = recursiveFilter(filteredArray, filterStrings.slice(1));
     return results;
   }
@@ -46,11 +46,11 @@ export const useFilterPrintHistory = (printHistory: ShippingInstructionPrintHist
   const cacheFn = useCallback(recursiveFilter, [recursiveFilter]);
 
   // 全角スペースを含む空白文字列でスプリット
-  const filterStringArray = filterString.trim().split(/[\s\u3000]+/);
+  const filterStringArray = filterString.trim().split(/\s+/);
   const filteredPrintHistories = useMemo(
     () => (/^\s*$/.test(filterString) ? printHistory : cacheFn(printHistory, filterStringArray)),
     [cacheFn, filterString, filterStringArray, printHistory],
   );
 
   return { filterString, setFilterString, filteredPrintHistories };
-};
+}

@@ -1,10 +1,13 @@
+import type { FallbackProps } from 'react-error-boundary';
+
 import { AxiosError } from 'axios';
-import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
+import { ErrorBoundary } from 'react-error-boundary';
+
 import { css } from '../../../styled-system/css';
 
-const fallback = ({ error }: FallbackProps) => {
+function fallback({ error }: FallbackProps) {
   if (error instanceof AxiosError) {
-    console.error(`👻 ${error.status ? error.status : '???'} :`, error.stack?.split(/\r\n|\n/));
+    console.error(`👻 ${error.status ?? '???'} :`, error.stack?.split(/\r\n|\n/));
 
     return (
       <section
@@ -26,7 +29,9 @@ const fallback = ({ error }: FallbackProps) => {
             textShadow: '0 -1px #fefce8, -1px -0.125rem #fef9c3, 0.625rem 0.625rem 0.75rem rgba(0,0,0,0.9)',
           })}
         >
-          {error.code} Axios Error
+          {error.code}
+          {' '}
+          Axios Error
         </h2>
         <article
           className={css({
@@ -42,7 +47,7 @@ const fallback = ({ error }: FallbackProps) => {
     );
   }
   return <p>{error}</p>;
-};
+}
 
 export default function ErrorBoundaryProvider({ children }: { children: React.ReactNode }) {
   return <ErrorBoundary FallbackComponent={fallback}>{children}</ErrorBoundary>;

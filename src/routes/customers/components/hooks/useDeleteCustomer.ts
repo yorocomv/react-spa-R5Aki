@@ -1,5 +1,7 @@
+import type { AxiosResponse } from 'axios';
+
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { AxiosResponse } from 'axios';
+
 import axiosInstance from '../../../../util/axios-instance';
 
 /**
@@ -13,8 +15,8 @@ import axiosInstance from '../../../../util/axios-instance';
  *
  *** 呼び出し元で引数 customerId に 0 を渡すと、deleteCustomer はエラーを返す
  */
-// eslint-disable-next-line import/prefer-default-export
-export const useDeleteCustomer = (customerId: number) => {
+
+export function useDeleteCustomer(customerId: number) {
   const queryClient = useQueryClient();
   const { mutateAsync: deleteCustomer } = useMutation({
     mutationFn: async () => {
@@ -33,4 +35,4 @@ export const useDeleteCustomer = (customerId: number) => {
   });
 
   return { deleteCustomer };
-};
+}

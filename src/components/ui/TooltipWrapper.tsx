@@ -1,4 +1,7 @@
-import { Focusable, OverlayArrow, Tooltip, TooltipProps, TooltipTrigger } from 'react-aria-components';
+import type { TooltipProps } from 'react-aria-components';
+
+import { Focusable, OverlayArrow, Tooltip, TooltipTrigger } from 'react-aria-components';
+
 import './react-aria-tooltip.css';
 
 interface TooltipWrapperProps {

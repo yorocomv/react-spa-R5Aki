@@ -1,11 +1,13 @@
+import type { AxiosResponse } from 'axios';
+
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useState } from 'react';
-import { AxiosResponse } from 'axios';
-import axiosInst from '@/util/axios-instance';
-import { CustomersTbRow } from '../../customers.types';
 
-// eslint-disable-next-line import/prefer-default-export
-export const useSearchCustomer = () => {
+import axiosInst from '@/util/axios-instance';
+
+import type { CustomersTbRow } from '../../customers.types';
+
+export function useSearchCustomer() {
   const [searchString, setSearchString] = useState('');
   const [searchTrigger, setSearchTrigger] = useState(false);
   const [latestCommunicationTime, setLatestCommunicationTime] = useState('0');
@@ -13,7 +15,8 @@ export const useSearchCustomer = () => {
   const fetchSelectedCustomersQueryFn = async () => {
     // useSuspenseQuery には enabled オプションが無いので
     // コンポーネントのマウント時に queryFn が走ってしまう 👇一行はその対策
-    if (searchString.length === 0) return [];
+    if (searchString.length === 0)
+      return [];
     // おまけ機能（データ取得時間計測⏱）の前処理🐢
     const preRunTime = performance.now();
     const result: void | AxiosResponse<CustomersTbRow[]> = await axiosInst
@@ -34,18 +37,21 @@ export const useSearchCustomer = () => {
     if (runTime < 1000) {
       runTimeString = `0.${runTimeString.padStart(3, '0')}`;
       // 一秒以上かつ精度はミリ秒まで
-    } else if (index === -1) {
-      runTimeString = runTimeString.replace(/([0-9]{3})$/, '.$1');
+    }
+    else if (index === -1) {
+      runTimeString = runTimeString.replace(/(\d{3})$/, '.$1');
       // 一秒以上かつ小数点付きミリ秒
-    } else {
+    }
+    else {
       const patternStr = `^([0-9]{${index - 3}})`;
       runTimeString = runTimeString.replace(new RegExp(patternStr), '$1.');
     }
     // 切り捨て
-    const matches = runTimeString.match(/([0-9]+.[0-9]{3})[0-9]+/);
+    const matches = /(\d+.\d{3})\d+/.exec(runTimeString);
     setLatestCommunicationTime(matches ? matches[1] : runTimeString);
 
-    if (!result) return [];
+    if (!result)
+      return [];
 
     return result.data;
   };
@@ -55,4 +61,4 @@ export const useSearchCustomer = () => {
   });
 
   return { searchString, setSearchString, searchTrigger, setSearchTrigger, latestCommunicationTime, customers };
-};
+}

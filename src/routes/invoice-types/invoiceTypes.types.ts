@@ -1,5 +1,6 @@
-import { z } from 'zod';
-import { invoiceTypesIdAndNameSchemas } from './invoiceTypes.schemas';
+import type { z } from 'zod';
+
+import type { invoiceTypesIdAndNameSchemas } from './invoiceTypes.schemas';
 
 type InvoiceTypesIdAndName = z.infer<typeof invoiceTypesIdAndNameSchemas>;
 

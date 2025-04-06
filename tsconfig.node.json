@@ -1,11 +1,11 @@
 {
   "compilerOptions": {
     "composite": true,
-    "skipLibCheck": true,
     "module": "ESNext",
     "moduleResolution": "bundler",
+    "strictNullChecks": true,
     "allowSyntheticDefaultImports": true,
-    "strictNullChecks": true
+    "skipLibCheck": true
   },
-  "include": ["vite.config.ts"]
+  "include": ["panda.config.ts", "vite.config.ts"]
 }

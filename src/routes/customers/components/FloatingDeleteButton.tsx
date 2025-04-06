@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
-import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router';
 import { FaRegTrashCan } from 'react-icons/fa6';
-import Button from './elements/Button';
+import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router';
+
+import type { CustomersTbRow } from '../customers.types';
+
 import { css } from '../../../../styled-system/css';
+import { useDeleteNote } from '../../notes/components/hooks/useDeleteNote';
+import Button from './elements/Button';
 import { useDeleteCustomer } from './hooks/useDeleteCustomer';
 import { useDeleteCustomersInBulk } from './hooks/useDeleteCustomersInBulk';
-import { useDeleteNote } from '../../notes/components/hooks/useDeleteNote';
-import { CustomersTbRow } from '../customers.types';
 
 interface FloatingDeleteButtonProps {
   customer: CustomersTbRow;
@@ -14,16 +16,19 @@ interface FloatingDeleteButtonProps {
   deleteFlaggedNumbers?: number[];
 }
 
+const emptyArray: number[] = [];
+
 export default function FloatingDeleteButton({
   customer,
   label,
-  deleteFlaggedNumbers = [],
+  deleteFlaggedNumbers = emptyArray,
 }: FloatingDeleteButtonProps) {
   // `/:id/edit` と `/:id/take-a-note` と `/:id/checking-overlap` の３パターン
   const { pathname } = useLocation();
   const { id: customerId } = useParams();
 
-  if (customerId && customerId !== customer.id.toString()) throw new Error('不正なルートでのアクセスを検知しました❢');
+  if (customerId && customerId !== customer.id.toString())
+    throw new Error('不正なルートでのアクセスを検知しました❢');
 
   const [isInvalid, setIsInvalid] = useState(true);
   const handleCheck = () => setIsInvalid(!isInvalid);
@@ -31,39 +36,43 @@ export default function FloatingDeleteButton({
   const [searchParams] = useSearchParams();
   const currentRank = searchParams.get('rank') ?? 0;
 
-  const { deleteCustomer } = useDeleteCustomer(parseInt(customerId ?? '0', 10));
+  const { deleteCustomer } = useDeleteCustomer(Number.parseInt(customerId ?? '0', 10));
   const { deleteCustomersInBulk } = useDeleteCustomersInBulk();
-  const { deleteNote } = useDeleteNote(parseInt(customerId ?? '0', 10));
+  const { deleteNote } = useDeleteNote(Number.parseInt(customerId ?? '0', 10));
 
   const handleClickDelete = async () => {
     try {
       if (customerId) {
-        if (/\/take-a-note/.test(pathname) && currentRank) {
-          const response = await deleteNote(parseInt(currentRank, 10));
+        if (pathname.includes('/take-a-note') && currentRank) {
+          const response = await deleteNote(Number.parseInt(currentRank, 10));
           console.log(response);
           // https://github.com/remix-run/react-router/issues/12348
           Promise.resolve(navigate(`/customers/${customer.id}/decide`, { state: customer })).catch((err: string) => {
             throw new Error(err);
           });
-        } else if (/\/checking-overlap/.test(pathname) && deleteFlaggedNumbers.length > 0) {
+        }
+        else if (pathname.includes('/checking-overlap') && deleteFlaggedNumbers.length > 0) {
           const response = await deleteCustomersInBulk(deleteFlaggedNumbers);
           console.log(response);
           // https://github.com/remix-run/react-router/issues/12348
           Promise.resolve(navigate(`/customers/${customer.id}/decide`, { state: customer })).catch((err: string) => {
             throw new Error(err);
           });
-        } else if (/\/edit/.test(pathname) && deleteFlaggedNumbers.length === 0) {
+        }
+        else if (pathname.includes('/edit') && deleteFlaggedNumbers.length === 0) {
           const response = await deleteCustomer();
           console.log(response);
           // https://github.com/remix-run/react-router/issues/12348
           Promise.resolve(navigate('/customers')).catch((err: string) => {
             throw new Error(err);
           });
-        } else {
+        }
+        else {
           throw new Error('想定外の削除イベントが発生しました🔥');
         }
       }
-    } catch (err: unknown) {
+    }
+    catch (err: unknown) {
       console.error('💥💥💥 ', err, ' 💀💀💀');
     }
   };
@@ -84,7 +93,7 @@ export default function FloatingDeleteButton({
       if (checkBox) {
         checkBox.checked = false;
       }
-      setIsInvalid(true);
+      return () => setIsInvalid(true);
     }
   }, [currentRank]);
 

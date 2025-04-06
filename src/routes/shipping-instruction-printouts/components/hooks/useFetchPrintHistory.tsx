@@ -1,15 +1,17 @@
-import { useState } from 'react';
 import type { CalendarDate } from '@internationalized/date';
 import type { AxiosResponse } from 'axios';
-import axiosInst from '@/util/axios-instance';
+
 import { useSuspenseQuery } from '@tanstack/react-query';
-import {
+import { useState } from 'react';
+
+import axiosInst from '@/util/axios-instance';
+
+import type {
   FindShippingInstructionsQueryCategory,
   ShippingInstructionPrintHistoryTbRow,
 } from '../../shippingInstructionPrintouts.types';
 
-// eslint-disable-next-line import/prefer-default-export
-export const useFetchPrintHistory = () => {
+export function useFetchPrintHistory() {
   const [selectCategory, setSelectCategory] = useState<FindShippingInstructionsQueryCategory>('printed_at');
   const [dateA, setDateA] = useState<CalendarDate | null>(null);
   const [dateB, setDateB] = useState<CalendarDate | null>(null);
@@ -37,7 +39,8 @@ export const useFetchPrintHistory = () => {
         return Promise.reject(new Error(err));
       });
 
-    if (!result) return [];
+    if (!result)
+      return [];
 
     return result.data;
   };
@@ -47,4 +50,4 @@ export const useFetchPrintHistory = () => {
   });
 
   return { selectCategory, setSelectCategory, dateA, setDateA, dateB, setDateB, printHistories };
-};
+}

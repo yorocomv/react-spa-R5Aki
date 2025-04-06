@@ -1,6 +1,8 @@
 import { useCallback } from 'react';
+
+import type { SystemStyleObject } from 'styled-system/types';
+
 import { css } from 'styled-system/css';
-import { SystemStyleObject } from 'styled-system/types';
 
 interface SpotFieldProps {
   inputText: string;
@@ -19,7 +21,8 @@ export default function SpotField({
   // https://ja.react.dev/reference/react-dom/components/common#ref-callback
   // ref callback function でインプットに「フォーカス」+ 再レンダー間で関数定義をキャッシュ
   const inputRef = useCallback((node: HTMLInputElement | null) => {
-    if (node !== null) node.focus();
+    if (node !== null)
+      node.focus();
   }, []);
   // 親コンポーネントから渡された State を制御する関数群
   // 内部で渡された set 関数を使用

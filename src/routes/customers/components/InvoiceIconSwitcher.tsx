@@ -1,5 +1,6 @@
 import { FaPenNib } from 'react-icons/fa6';
 import { TbDatabaseSmile } from 'react-icons/tb';
+
 import { css } from '../../../../styled-system/css';
 
 interface InvoiceIconSwitcherProps {

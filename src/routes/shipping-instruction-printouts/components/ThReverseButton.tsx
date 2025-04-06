@@ -1,5 +1,6 @@
-import TooltipWrapper from '@/components/ui/TooltipWrapper';
 import { FaSort } from 'react-icons/fa';
+
+import TooltipWrapper from '@/components/ui/TooltipWrapper';
 import { css } from 'styled-system/css';
 
 export default function ThReverseButton({
@@ -16,7 +17,7 @@ export default function ThReverseButton({
       className={css({ color: 'teal.950', bgColor: 'teal.400', shadow: '2xl' })}
     >
       <span
-        onClick={() => setValue((prev) => !prev)}
+        onClick={() => setValue(prev => !prev)}
         aria-hidden="true"
         className={css({
           display: 'flex',

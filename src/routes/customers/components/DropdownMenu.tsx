@@ -1,9 +1,11 @@
 import { Menu, MenuItem, MenuTrigger, Popover } from 'react-aria-components';
 import { useNavigate } from 'react-router';
+
+import type { SystemStyleObject } from '../../../../styled-system/types';
+import type { CustomersTbRow } from '../customers.types';
+
 import { css } from '../../../../styled-system/css';
 import DropdownMenuTrigger from './elements/DropdownMenuTrigger';
-import { CustomersTbRow } from '../customers.types';
-import { SystemStyleObject } from '../../../../styled-system/types';
 
 interface DropdownMenuProps {
   label: string;
@@ -36,7 +38,7 @@ export default function DropdownMenu({ label, mergeStyles = undefined, menuItems
             boxShadow: 'md',
           })}
         >
-          {menuItems.map((item) => (
+          {menuItems.map(item => (
             <MenuItem
               key={item.label}
               onAction={() => {

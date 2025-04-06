@@ -1,12 +1,14 @@
+import type { AxiosResponse } from 'axios';
+
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { AxiosResponse } from 'axios';
 import { useState } from 'react';
+
+import type { EJPCReturnDataType, ErrorDataType, ZipCode } from '../../addressDataByZipCode.type';
+
 import axiosInst from '../../../../util/axios-instance';
-import { EJPCReturnDataType, ErrorDataType, ZipCode } from '../../addressDataByZipCode.type';
 import zipCodeSchema from '../../addressDataByZipCode.schemas';
 
-// eslint-disable-next-line import/prefer-default-export
-export const useFetchAddressData = () => {
+export function useFetchAddressData() {
   const [zipCodeStr, setZipCodeStr] = useState<ZipCode>('');
   const [hasResultOfQuery, setHasResultOfQuery] = useState(false);
   // 無効な key は react-query にまとめてキャッシュさせる
@@ -20,7 +22,8 @@ export const useFetchAddressData = () => {
         address: null,
         error: { inValid: true },
       };
-      if (additionalKey === '#f') return dummyEjpcReturnData;
+      if (additionalKey === '#f')
+        return dummyEjpcReturnData;
       const zodResult = zipCodeSchema.safeParse(zipCodeStr);
       if (!zodResult.success) {
         return dummyEjpcReturnData;
@@ -39,4 +42,4 @@ export const useFetchAddressData = () => {
   });
 
   return { ejpcReturnData, setZipCodeStr, hasResultOfQuery, setHasResultOfQuery };
-};
+}

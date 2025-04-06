@@ -1,9 +1,10 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+
 import env from '@/env';
+
 import App from './App';
 import './index.css';
 
@@ -42,7 +43,8 @@ if (isMsw) {
   })().catch((err: string) => {
     throw new Error(err);
   });
-} else {
+}
+else {
   root.render(
     <React.StrictMode>
       <QueryClientProvider client={queryClient}>

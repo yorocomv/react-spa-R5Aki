@@ -1,7 +1,9 @@
 import React from 'react';
 import { useNavigate } from 'react-router';
+
 import SpotField from '@/components/ui/SpotField';
 import Button from '@/routes/customers/components/elements/Button';
+
 import { css } from '../../../../styled-system/css';
 
 interface SearchFormProps {

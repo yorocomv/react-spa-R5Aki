@@ -1,8 +1,10 @@
 import { FaPhone } from 'react-icons/fa6';
+
+import type { RequiredCustomerSummary } from '../customers.types';
+
 import { css } from '../../../../styled-system/css';
-import { RequiredCustomerSummary } from '../customers.types';
-import InvoiceIconSwitcher from './InvoiceIconSwitcher';
 import NoteIconSwitcher from './elementSwitchers/NoteIconSwitcher';
+import InvoiceIconSwitcher from './InvoiceIconSwitcher';
 
 export default function CustomerSummary({
   tel,
@@ -23,30 +25,30 @@ export default function CustomerSummary({
       className={`
         customer-summary
         ${css({
-          maxW: '36rem',
-          minW: '27.75rem',
-          mx: 1,
-          my: 6,
-          px: 2,
-          py: 1,
-          borderRadius: 'md',
-          bgColor: '#E1D7C9',
-          borderWidth: '1px',
-          borderColor: 'rgba(255, 255, 255, 0.36)',
-          boxShadow: 'md',
-          _hover: { bgColor: '#E7DED3' },
-          '&:hover ._react-icons_go-comment, &:hover ._react-icons_go-comment + span': {
-            color: 'blue.600',
-          },
-          '&:hover ._react-icons_db-smile': {
-            ml: '-0.125rem',
-            fontSize: '2xl',
-            color: 'red.600',
-          },
-          '&:hover ._react-icons_pen-nib': {
-            color: 'orange.600',
-          },
-        })}`}
+      maxW: '36rem',
+      minW: '27.75rem',
+      mx: 1,
+      my: 6,
+      px: 2,
+      py: 1,
+      borderRadius: 'md',
+      bgColor: '#E1D7C9',
+      borderWidth: '1px',
+      borderColor: 'rgba(255, 255, 255, 0.36)',
+      boxShadow: 'md',
+      _hover: { bgColor: '#E7DED3' },
+      '&:hover ._react-icons_go-comment, &:hover ._react-icons_go-comment + span': {
+        color: 'blue.600',
+      },
+      '&:hover ._react-icons_db-smile': {
+        ml: '-0.125rem',
+        fontSize: '2xl',
+        color: 'red.600',
+      },
+      '&:hover ._react-icons_pen-nib': {
+        color: 'orange.600',
+      },
+    })}`}
     >
       <div
         className={css({

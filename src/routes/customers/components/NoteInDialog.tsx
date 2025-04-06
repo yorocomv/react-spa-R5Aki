@@ -1,11 +1,14 @@
 import React from 'react';
-import { useNavigate } from 'react-router';
 import { Button, Dialog, Heading, Modal } from 'react-aria-components';
 import { FaX } from 'react-icons/fa6';
-import EditButton from './elements/Button';
+import { useNavigate } from 'react-router';
+
+import type { CustomersTbRow } from '../customers.types';
+
 import '@/components/ui/react-aria-modal-overlay.css';
+
 import { css } from '../../../../styled-system/css';
-import { CustomersTbRow } from '../customers.types';
+import EditButton from './elements/Button';
 
 interface NoteInDialogProps {
   currentPage: number;
@@ -60,7 +63,9 @@ export default function NoteInDialog({
             <Heading
               slot="title"
               className={css({ gridColumn: '2/3', color: 'amber.600', fontFamily: 'Times New Roman', fontSize: 'lg' })}
-            >{`✍ Note【${currentPage} / ${totalPages}】`}</Heading>
+            >
+              {`✍ Note【${currentPage} / ${totalPages}】`}
+            </Heading>
             <Button
               onPress={() => closeModal(-1)}
               className={css({

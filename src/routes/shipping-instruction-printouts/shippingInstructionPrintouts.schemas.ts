@@ -5,7 +5,7 @@ import { z } from 'zod';
 export const shippingInstructionPrintHistoryInputSchema = z.object({
   delivery_date: z.coerce
     .date()
-    .transform((val) => val.toLocaleString('sv-SE', { timeZone: 'Asia/Tokyo', dateStyle: 'short' })),
+    .transform(val => val.toLocaleString('sv-SE', { timeZone: 'Asia/Tokyo', dateStyle: 'short' })),
   delivery_time_str: z.string().max(32),
   // タイムスタンプ with Timezone
   printed_at: z.string().datetime({ offset: true }).optional(),
@@ -20,7 +20,7 @@ export const shippingInstructionPrintHistoryInputSchema = z.object({
       // ただし、DB側はDATE型で固定なのでデフォルトになるように
       // shipping_date 自体を削る処理をする
       z.string().length(0),
-      z.coerce.date().transform((val) => val.toLocaleString('sv-SE', { timeZone: 'Asia/Tokyo', dateStyle: 'short' })),
+      z.coerce.date().transform(val => val.toLocaleString('sv-SE', { timeZone: 'Asia/Tokyo', dateStyle: 'short' })),
     ])
     .optional(),
   carrier: z.string().max(32),
@@ -31,7 +31,7 @@ export const shippingInstructionPrintHistoryInputSchema = z.object({
 export const shippingInstructionPrintHistoryTbRowSchema = shippingInstructionPrintHistoryInputSchema.required().extend({
   shipping_date: z.coerce
     .date()
-    .transform((val) => val.toLocaleString('sv-SE', { timeZone: 'Asia/Tokyo', dateStyle: 'short' })),
+    .transform(val => val.toLocaleString('sv-SE', { timeZone: 'Asia/Tokyo', dateStyle: 'short' })),
   package_count: z.coerce.number().int().nonnegative().nullable(),
 });
 
@@ -47,7 +47,7 @@ export const shippingInstructionPrintHistoryIDSchema = z
   .object({
     delivery_date: z.coerce
       .date()
-      .transform((val) => val.toLocaleString('sv-SE', { timeZone: 'Asia/Tokyo', dateStyle: 'short' })),
+      .transform(val => val.toLocaleString('sv-SE', { timeZone: 'Asia/Tokyo', dateStyle: 'short' })),
     printed_at: z
       .string()
       .min(22)

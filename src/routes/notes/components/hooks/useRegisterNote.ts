@@ -1,8 +1,11 @@
+import type { AxiosResponse } from 'axios';
+
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { AxiosResponse } from 'axios';
+
+import type { CustomersTbRow } from '../../../customers/customers.types';
+import type { NoteForm, NotesTbRow } from '../../notes.types';
+
 import axiosInstance from '../../../../util/axios-instance';
-import { CustomersTbRow } from '../../../customers/customers.types';
-import { NoteForm, NotesTbRow } from '../../notes.types';
 
 interface UseRegisterNoteProps {
   customerId: number;
@@ -14,11 +17,11 @@ interface UseRegisterNoteResponse {
   note: NotesTbRow;
 }
 
-const registerNoteMutationFn = async ({
+async function registerNoteMutationFn({
   customerId,
   mode,
   values,
-}: UseRegisterNoteProps): Promise<UseRegisterNoteResponse> => {
+}: UseRegisterNoteProps): Promise<UseRegisterNoteResponse> {
   let response: AxiosResponse<UseRegisterNoteResponse>;
   if (mode === 'add') {
     response = await axiosInstance
@@ -27,7 +30,8 @@ const registerNoteMutationFn = async ({
         console.error(`💥💥💥 /notes/${customerId} からのエラーをキャッチ❢ ${err} 💀💀💀`);
         return Promise.reject(new Error(err));
       });
-  } else {
+  }
+  else {
     response = await axiosInstance
       .put(`/notes/${customerId}/rank/${mode}`, { customer_id: customerId, ...values })
       .catch((err: string) => {
@@ -36,10 +40,9 @@ const registerNoteMutationFn = async ({
       });
   }
   return response.data;
-};
+}
 
-// eslint-disable-next-line import/prefer-default-export
-export const useRegisterNote = (customerId: number) => {
+export function useRegisterNote(customerId: number) {
   const queryClient = useQueryClient();
   const { mutateAsync: registerNote } = useMutation({
     mutationFn: registerNoteMutationFn,
@@ -47,4 +50,4 @@ export const useRegisterNote = (customerId: number) => {
   });
 
   return { registerNote };
-};
+}

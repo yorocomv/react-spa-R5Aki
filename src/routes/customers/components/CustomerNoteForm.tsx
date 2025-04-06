@@ -1,17 +1,22 @@
-import React, { useEffect, useRef } from 'react';
-import { useNavigate, useSearchParams } from 'react-router';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import type { SubmitHandler } from 'react-hook-form';
+
 import { zodResolver } from '@hookform/resolvers/zod';
+import React, { useEffect, useRef } from 'react';
+import { useForm } from 'react-hook-form';
+import { useNavigate, useSearchParams } from 'react-router';
+
 import Select from '@/components/ui/elements/Select';
+
+import type { NoteForm, NotesTbRow } from '../../notes/notes.types';
+import type { CustomersTbRow } from '../customers.types';
+
 import { css } from '../../../../styled-system/css';
-import TextArea from './elements/TextArea';
-import { NoteForm, NotesTbRow } from '../../notes/notes.types';
+import { useRegisterNote } from '../../notes/components/hooks/useRegisterNote';
 import { noteFormSchema } from '../../notes/notes.schemas';
 import Button from './elements/Button';
+import TextArea from './elements/TextArea';
 import FormErrorMessage from './elementSwitchers/FormErrorMessage';
 import FloatingDeleteButton from './FloatingDeleteButton';
-import { CustomersTbRow } from '../customers.types';
-import { useRegisterNote } from '../../notes/components/hooks/useRegisterNote';
 
 export default function CustomerNoteForm({
   customer,
@@ -30,7 +35,7 @@ export default function CustomerNoteForm({
   const currentRank = searchParams.get('rank') ?? 0;
   let optionsLength = notesLength + 1;
   if (currentRank !== 0) {
-    const iNum = notes.findIndex((note) => note.rank === parseInt(currentRank, 10));
+    const iNum = notes.findIndex(note => note.rank === Number.parseInt(currentRank, 10));
     if (iNum !== -1) {
       defaultValues.rank = iNum + 1;
       defaultValues.body = notes[iNum].body;
@@ -55,7 +60,8 @@ export default function CustomerNoteForm({
   useEffect(() => {
     if (isFirstRender.current) {
       isFirstRender.current = false;
-    } else {
+    }
+    else {
       setValue('rank', defaultValues.rank);
       setValue('body', defaultValues.body);
     }
@@ -65,8 +71,9 @@ export default function CustomerNoteForm({
     try {
       let response: { customer: CustomersTbRow; note: NotesTbRow };
       if (currentRank) {
-        response = await registerNote({ customerId: customer.id, mode: parseInt(currentRank, 10), values });
-      } else {
+        response = await registerNote({ customerId: customer.id, mode: Number.parseInt(currentRank, 10), values });
+      }
+      else {
         response = await registerNote({ customerId: customer.id, mode: 'add', values });
       }
       // https://github.com/remix-run/react-router/issues/12348
@@ -75,7 +82,8 @@ export default function CustomerNoteForm({
           throw new Error(err);
         },
       );
-    } catch (err: unknown) {
+    }
+    catch (err: unknown) {
       console.error('💥💥💥 ', err, ' 💀💀💀');
     }
   };
@@ -108,32 +116,33 @@ export default function CustomerNoteForm({
       >
         <label>
           表示順
-          {/* eslint-disable-next-line react/jsx-props-no-spreading */}
           <Select {...register('rank')}>
-            {notes.length === 0 ? (
-              <option value="1">1</option>
-            ) : (
-              (() => {
-                const options = [];
-                for (let i = 1; i <= optionsLength; i += 1) {
-                  options.push(
-                    <option value={i} key={i}>
-                      {i}
-                    </option>,
-                  );
-                }
-                return options;
-              })()
-            )}
+            {notes.length === 0
+              ? (
+                  <option value="1">1</option>
+                )
+              : (
+                  (() => {
+                    const options = [];
+                    for (let i = 1; i <= optionsLength; i += 1) {
+                      options.push(
+                        <option value={i} key={i}>
+                          {i}
+                        </option>,
+                      );
+                    }
+                    return options;
+                  })()
+                )}
           </Select>
         </label>
         <FormErrorMessage message={errors.rank?.message} />
         <label htmlFor="body">
           留意事項
           <TextArea
-            // eslint-disable-next-line react/jsx-props-no-spreading
             {...register('body')}
             id="body"
+            // eslint-disable-next-line jsx-a11y/no-autofocus
             autoFocus
             className={css({
               w: '34.5rem',

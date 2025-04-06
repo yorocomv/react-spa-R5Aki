@@ -1,17 +1,20 @@
 import { Link, useLocation, useParams } from 'react-router';
-import { CustomersTbRow } from './customers.types';
+
+import type { CustomersTbRow } from './customers.types';
+
 import { css } from '../../../styled-system/css';
-import FormContainer from './components/elements/FormContainer';
 import CustomerNoteForm from './components/CustomerNoteForm';
-import ListOfSummaryNotesAboutCustomer from './components/ListOfSummaryNotesAboutCustomer';
-import { useFetchNotes } from './components/hooks/useFetchNotes';
+import FormContainer from './components/elements/FormContainer';
 import FloatingLinkIcon from './components/FloatingLinkIcon';
+import { useFetchNotes } from './components/hooks/useFetchNotes';
+import ListOfSummaryNotesAboutCustomer from './components/ListOfSummaryNotesAboutCustomer';
 
 export default function TakeANoteAboutCustomer(): JSX.Element {
   const customer = useLocation().state as CustomersTbRow;
   const { id: customerId } = useParams();
 
-  if (customerId && customerId !== customer.id.toString()) throw new Error('不正なルートでのアクセスを検知しました❢');
+  if (customerId && customerId !== customer.id.toString())
+    throw new Error('不正なルートでのアクセスを検知しました❢');
 
   const { notes } = useFetchNotes(customer.id);
 

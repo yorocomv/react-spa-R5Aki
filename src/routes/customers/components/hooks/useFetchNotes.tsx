@@ -1,10 +1,12 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
-import { AxiosResponse } from 'axios';
-import axiosInst from '../../../../util/axios-instance';
-import { NotesTbRow } from '../../../notes/notes.types';
+import type { AxiosResponse } from 'axios';
 
-// eslint-disable-next-line import/prefer-default-export
-export const useFetchNotes = (customerId: number) => {
+import { useSuspenseQuery } from '@tanstack/react-query';
+
+import type { NotesTbRow } from '../../../notes/notes.types';
+
+import axiosInst from '../../../../util/axios-instance';
+
+export function useFetchNotes(customerId: number) {
   const { data: notes } = useSuspenseQuery({
     queryKey: ['/notes', customerId],
     queryFn: async () => {
@@ -18,4 +20,4 @@ export const useFetchNotes = (customerId: number) => {
   });
 
   return { notes };
-};
+}

@@ -1,10 +1,11 @@
 import { Route, Routes } from 'react-router';
-import SearchCustomer from './SearchCustomer';
-import ExamineCustomer from './ExamineCustomer';
-import FoundCustomers from './components/FoundCustomers';
-import RegisterCustomer from './RegisterCustomer';
-import PossiblyOverlapCustomers from './PossiblyOverlapCustomers';
+
 import ChooseCustomer from './ChooseCustomer';
+import FoundCustomers from './components/FoundCustomers';
+import ExamineCustomer from './ExamineCustomer';
+import PossiblyOverlapCustomers from './PossiblyOverlapCustomers';
+import RegisterCustomer from './RegisterCustomer';
+import SearchCustomer from './SearchCustomer';
 import TakeANoteAboutCustomer from './TakeANoteAboutCustomer';
 
 export default function CustomerRoutes() {

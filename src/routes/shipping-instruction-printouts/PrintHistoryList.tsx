@@ -1,18 +1,21 @@
-import DatePickerInput from '@/components/ui/DatePickerInput';
-import PopoverCalendar from '@/components/ui/PopoverCalendar';
 import { today } from '@internationalized/date';
-import { css } from 'styled-system/css';
-import Select from '@/components/ui/elements/Select';
-import { LuArrowLeftRight } from 'react-icons/lu';
-import SpotField from '@/components/ui/SpotField';
 import { useState } from 'react';
+import { LuArrowLeftRight } from 'react-icons/lu';
+
+import DatePickerInput from '@/components/ui/DatePickerInput';
+import Select from '@/components/ui/elements/Select';
+import PopoverCalendar from '@/components/ui/PopoverCalendar';
+import SpotField from '@/components/ui/SpotField';
 import TooltipWrapper from '@/components/ui/TooltipWrapper';
-import { FindShippingInstructionsQueryCategory } from './shippingInstructionPrintouts.types';
-import { useFetchPrintHistory } from './components/hooks/useFetchPrintHistory';
-import HistoryDialog from './components/HistoryDialog';
-import PrintHistoryTableTr from './components/PrintHistoryTableTr';
-import { useFilterPrintHistory } from './components/hooks/useFilterPrintHistory';
+import { css } from 'styled-system/css';
+
+import type { FindShippingInstructionsQueryCategory } from './shippingInstructionPrintouts.types';
+
 import SupIcon from './components/elements/SupFilterIcon';
+import HistoryDialog from './components/HistoryDialog';
+import { useFetchPrintHistory } from './components/hooks/useFetchPrintHistory';
+import { useFilterPrintHistory } from './components/hooks/useFilterPrintHistory';
+import PrintHistoryTableTr from './components/PrintHistoryTableTr';
 import ThReverseButton from './components/ThReverseButton';
 
 export default function PrintHistoryList() {
@@ -60,7 +63,7 @@ export default function PrintHistoryList() {
         >
           <Select
             value={selectCategory}
-            onChange={(e) => setSelectCategory(e.target.value as FindShippingInstructionsQueryCategory)}
+            onChange={e => setSelectCategory(e.target.value as FindShippingInstructionsQueryCategory)}
             className={css({ maxH: '2.175rem', w: 'fit-content' })}
           >
             {historyCategories.map(({ label, category }) => (
@@ -165,19 +168,23 @@ export default function PrintHistoryList() {
           >
             <tr>
               <th>
-                {selectCategory === 'delivery_date' ? (
-                  <ThReverseButton setValue={setIsReverse}>着日</ThReverseButton>
-                ) : (
-                  <>着日</>
-                )}
+                {selectCategory === 'delivery_date'
+                  ? (
+                      <ThReverseButton setValue={setIsReverse}>着日</ThReverseButton>
+                    )
+                  : (
+                      <>着日</>
+                    )}
               </th>
               <th className={css({ [smallScreen]: { display: 'none' } })}>時間指定</th>
               <th>
-                {selectCategory === 'printed_at' ? (
-                  <ThReverseButton setValue={setIsReverse}>印刷日時</ThReverseButton>
-                ) : (
-                  <>印刷日時</>
-                )}
+                {selectCategory === 'printed_at'
+                  ? (
+                      <ThReverseButton setValue={setIsReverse}>印刷日時</ThReverseButton>
+                    )
+                  : (
+                      <>印刷日時</>
+                    )}
               </th>
               <th className={css({ [smallScreen]: { display: 'none' } })}>印刷頁</th>
               <th>
@@ -197,13 +204,15 @@ export default function PrintHistoryList() {
                 <SupIcon />
               </th>
               <th>
-                {selectCategory === 'shipping_date' ? (
-                  <ThReverseButton setValue={setIsReverse}>
-                    <span className={css({ [bigScreen]: { _after: { content: '"（予定）"' } } })}>発日</span>
-                  </ThReverseButton>
-                ) : (
-                  <span className={css({ [bigScreen]: { _after: { content: '"（予定）"' } } })}>発日</span>
-                )}
+                {selectCategory === 'shipping_date'
+                  ? (
+                      <ThReverseButton setValue={setIsReverse}>
+                        <span className={css({ [bigScreen]: { _after: { content: '"（予定）"' } } })}>発日</span>
+                      </ThReverseButton>
+                    )
+                  : (
+                      <span className={css({ [bigScreen]: { _after: { content: '"（予定）"' } } })}>発日</span>
+                    )}
               </th>
               <th>
                 運送会社
@@ -217,53 +226,57 @@ export default function PrintHistoryList() {
             </tr>
           </thead>
           <tbody className={css({ '& >tr': { _hover: { color: 'teal.950', bgColor: 'teal.50/75' } } })}>
-            {/* eslint-disable-next-line no-nested-ternary */}
-            {filteredPrintHistories?.length ? (
-              isReverse ? (
-                [...filteredPrintHistories]
-                  .reverse()
-                  .map((po, i) => (
-                    <PrintHistoryTableTr
-                      key={po.printed_at}
-                      oneHistory={po}
-                      toggleModal={setSelectedHistory}
-                      currentIndex={i}
-                      parentMediaQuerySmall={smallScreen}
-                      parentMediaQueryHd={hdScreen}
-                    />
-                  ))
-              ) : (
-                filteredPrintHistories.map((po, i) => (
-                  <PrintHistoryTableTr
-                    key={po.printed_at}
-                    oneHistory={po}
-                    toggleModal={setSelectedHistory}
-                    currentIndex={i}
-                    parentMediaQuerySmall={smallScreen}
-                    parentMediaQueryHd={hdScreen}
-                  />
-                ))
-              )
-            ) : (
-              <tr>
-                <td>7日間以内</td>
-                <td className={css({ [smallScreen]: { display: 'none' } })}> - </td>
-                <td>7日間以内</td>
-                <td className={css({ [smallScreen]: { display: 'none' } })}> - </td>
-                <td>該当なし</td>
-                <td className={css({ [hdScreen]: { display: 'none' } })}> - </td>
-                <td className={css({ [smallScreen]: { display: 'none' } })}> - </td>
-                <td className={css({ [hdScreen]: { display: 'none' } })}> - </td>
-                <td>7日間以内</td>
-                <td> - </td>
-                <td> - </td>
-                <td> - </td>
-              </tr>
-            )}
+            { }
+            {filteredPrintHistories?.length
+              ? (
+                  isReverse
+                    ? (
+                        [...filteredPrintHistories]
+                          .reverse()
+                          .map((po, i) => (
+                            <PrintHistoryTableTr
+                              key={po.printed_at}
+                              oneHistory={po}
+                              toggleModal={setSelectedHistory}
+                              currentIndex={i}
+                              parentMediaQuerySmall={smallScreen}
+                              parentMediaQueryHd={hdScreen}
+                            />
+                          ))
+                      )
+                    : (
+                        filteredPrintHistories.map((po, i) => (
+                          <PrintHistoryTableTr
+                            key={po.printed_at}
+                            oneHistory={po}
+                            toggleModal={setSelectedHistory}
+                            currentIndex={i}
+                            parentMediaQuerySmall={smallScreen}
+                            parentMediaQueryHd={hdScreen}
+                          />
+                        ))
+                      )
+                )
+              : (
+                  <tr>
+                    <td>7日間以内</td>
+                    <td className={css({ [smallScreen]: { display: 'none' } })}> - </td>
+                    <td>7日間以内</td>
+                    <td className={css({ [smallScreen]: { display: 'none' } })}> - </td>
+                    <td>該当なし</td>
+                    <td className={css({ [hdScreen]: { display: 'none' } })}> - </td>
+                    <td className={css({ [smallScreen]: { display: 'none' } })}> - </td>
+                    <td className={css({ [hdScreen]: { display: 'none' } })}> - </td>
+                    <td>7日間以内</td>
+                    <td> - </td>
+                    <td> - </td>
+                    <td> - </td>
+                  </tr>
+                )}
           </tbody>
         </table>
       </main>
-      {/* eslint-disable-next-line no-nested-ternary */}
+      { }
       {filteredPrintHistories?.length
         ? isReverse
           ? [...filteredPrintHistories]

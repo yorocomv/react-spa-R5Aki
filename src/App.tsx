@@ -1,8 +1,9 @@
-import { Suspense, lazy } from 'react';
+import { lazy, Suspense } from 'react';
 import { createBrowserRouter } from 'react-router';
 import { RouterProvider } from 'react-router/dom';
-import ErrorBoundaryProvider from './components/providers/ErrorBoundaryProvider';
+
 import AxiosErrorHandleProvider from './components/providers/AxiosErrorHandleProvider';
+import ErrorBoundaryProvider from './components/providers/ErrorBoundaryProvider';
 import Home from './Home';
 
 const CustomerRoutes = lazy(() => import('./routes/customers/customer-routes'));

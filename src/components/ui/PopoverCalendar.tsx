@@ -1,3 +1,5 @@
+import type { CalendarDate } from '@internationalized/date';
+
 import {
   Button,
   Calendar,
@@ -10,9 +12,9 @@ import {
   Heading,
   Popover,
 } from 'react-aria-components';
-import { CalendarDate } from '@internationalized/date';
-import { css } from 'styled-system/css';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6';
+
+import { css } from 'styled-system/css';
 
 export default function PopoverCalendar({ todayDate }: { todayDate: CalendarDate }): JSX.Element {
   const cellStyles = css.raw({
@@ -81,7 +83,7 @@ export default function PopoverCalendar({ todayDate }: { todayDate: CalendarDate
                 '& tr > th:last-child': { color: 'blue.600' },
               })}
             >
-              {(day) => (
+              {day => (
                 <CalendarHeaderCell className={css({ fontSize: 'xs', color: 'stone.500', fontWeight: 'bold' })}>
                   {day}
                 </CalendarHeaderCell>
@@ -93,13 +95,14 @@ export default function PopoverCalendar({ todayDate }: { todayDate: CalendarDate
                 '& tr > td:last-child': { color: 'blue.500' },
               })}
             >
-              {(date) =>
-                date.year === todayDate.year && date.month === todayDate.month && date.day === todayDate.day ? (
-                  <CalendarCell date={date} className={css(cellStyles, calendarCellStyles, todayStyles)} />
-                ) : (
-                  <CalendarCell date={date} className={css(cellStyles, calendarCellStyles)} />
-                )
-              }
+              {date =>
+                date.year === todayDate.year && date.month === todayDate.month && date.day === todayDate.day
+                  ? (
+                      <CalendarCell date={date} className={css(cellStyles, calendarCellStyles, todayStyles)} />
+                    )
+                  : (
+                      <CalendarCell date={date} className={css(cellStyles, calendarCellStyles)} />
+                    )}
             </CalendarGridBody>
           </CalendarGrid>
         </Calendar>

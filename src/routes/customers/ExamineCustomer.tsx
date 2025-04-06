@@ -1,15 +1,19 @@
+import type { AxiosResponse } from 'axios';
+
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router';
-import { AxiosResponse } from 'axios';
-import { useSuspenseQuery } from '@tanstack/react-query';
-import { CustomersTbRow } from './customers.types';
+
+import type { CustomersTbRow } from './customers.types';
+
 import axiosInst from '../../util/axios-instance';
 
 export default function ExamineCustomer() {
   const navigate = useNavigate();
   const customer = useLocation().state as CustomersTbRow;
 
-  if (!customer) throw new Error('不正なルートでのアクセスを検知しました❢');
+  if (!customer)
+    throw new Error('不正なルートでのアクセスを検知しました❢');
 
   const fetchPossiblyOverlapCustomersQueryFn = async () => {
     const result: void | AxiosResponse<CustomersTbRow[]> = await axiosInst
@@ -21,7 +25,8 @@ export default function ExamineCustomer() {
         return Promise.reject(new Error(err));
       });
 
-    if (!result) throw new Error('不正なルートでのアクセスを検知しました❢');
+    if (!result)
+      throw new Error('不正なルートでのアクセスを検知しました❢');
 
     return result.data;
   };
@@ -39,7 +44,8 @@ export default function ExamineCustomer() {
           throw new Error(err);
         },
       );
-    } else {
+    }
+    else {
       // https://github.com/remix-run/react-router/issues/12348
       Promise.resolve(navigate('./decide', { state: customer })).catch((err: string) => {
         throw new Error(err);

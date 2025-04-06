@@ -1,15 +1,17 @@
+import type { AxiosResponse } from 'axios';
+
 import { useMutation } from '@tanstack/react-query';
-import { AxiosResponse } from 'axios';
+
+import type { CustomersTbRow } from '../../customers.types';
+
 import axiosInstance from '../../../../util/axios-instance';
-import { CustomersTbRow } from '../../customers.types';
 
 interface UseCreateCustomerTsv {
   isSuccess: boolean;
   message: string;
 }
 
-// eslint-disable-next-line import/prefer-default-export
-export const useCreateCustomerTsv = () => {
+export function useCreateCustomerTsv() {
   const { mutateAsync: createCustomerTsv } = useMutation({
     mutationFn: async (sourceOfBody: CustomersTbRow) => {
       const response: AxiosResponse<UseCreateCustomerTsv> = await axiosInstance
@@ -23,4 +25,4 @@ export const useCreateCustomerTsv = () => {
   });
 
   return { createCustomerTsv };
-};
+}
