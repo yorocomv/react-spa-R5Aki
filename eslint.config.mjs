@@ -116,7 +116,7 @@ export default antfu({
     'style/quotes': ['error', 'single', { avoidEscape: true }],
     'style/quote-props': ['error', 'as-needed'],
     'unicorn/filename-case': ['error', {
-      cases: { camelCase: true, pascalCase: true },
+      case: 'camelCase',
       ignore: ['README.md'],
     }],
   },
