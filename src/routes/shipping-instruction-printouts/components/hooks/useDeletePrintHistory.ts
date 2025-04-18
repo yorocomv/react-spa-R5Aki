@@ -2,7 +2,7 @@ import type { AxiosResponse } from 'axios';
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import axiosInstance from '@/util/axios-instance';
+import axiosInstance from '@/util/axiosInstance';
 
 export function useDeletePrintHistory({ delivery_date, printed_at }: { delivery_date: string; printed_at: string }) {
   const queryClient = useQueryClient();

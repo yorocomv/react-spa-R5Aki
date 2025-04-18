@@ -1,11 +1,10 @@
 import { Link, useOutletContext } from 'react-router';
 
+import CustomerSummary from '@/routes/customers/components/CustomerSummary';
 import { css } from 'styled-system/css';
+import { vstack } from 'styled-system/patterns/vstack';
 
 import type { CustomersTbRow } from '../customers.types';
-
-import { vstack } from '../../../../styled-system/patterns/vstack';
-import CustomerSummary from './CustomerSummary';
 
 export default function FoundCustomers() {
   const { latestCommunicationTime, customers }: { latestCommunicationTime: string; customers: CustomersTbRow[] } =

@@ -4,7 +4,7 @@ import type { AxiosResponse } from 'axios';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 
-import axiosInst from '@/util/axios-instance';
+import axiosInst from '@/util/axiosInstance';
 
 import type {
   FindShippingInstructionsQueryCategory,

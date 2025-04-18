@@ -2,7 +2,7 @@ import { FaFilter } from 'react-icons/fa';
 
 import { css } from 'styled-system/css';
 
-export default function SupFilterIcon(): JSX.Element {
+export default function SupFilterIcon(): React.JSX.Element {
   return (
     <FaFilter
       size="0.625rem"

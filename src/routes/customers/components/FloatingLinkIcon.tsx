@@ -8,7 +8,7 @@ interface FloatingLinkIconProps {
   size: string;
 }
 
-export default function FloatingLinkIcon({ relativePath, size }: FloatingLinkIconProps): JSX.Element {
+export default function FloatingLinkIcon({ relativePath, size }: FloatingLinkIconProps): React.JSX.Element {
   return (
     <Link to={relativePath} relative="path" title="🔎検索画面に戻る">
       <VscGoToSearch

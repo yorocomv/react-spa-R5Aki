@@ -11,7 +11,7 @@ export default function DropdownMenuTrigger({
 }: {
   children: React.ReactNode;
   mergeStyles?: SystemStyleObject;
-}): JSX.Element {
+}): React.JSX.Element {
   const buttonStyles = css.raw({
     display: 'inline-flex',
     alignItems: 'center',

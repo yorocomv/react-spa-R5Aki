@@ -21,7 +21,7 @@ export default function DatePickerInput({
   minValue?: DateValue | null | undefined;
   maxValue?: DateValue | null | undefined;
   setValue: React.Dispatch<React.SetStateAction<CalendarDate | null>>;
-}): JSX.Element {
+}): React.JSX.Element {
   // 初回のみ実行
   useEffect(() => {
     if (!value && todayDate) {

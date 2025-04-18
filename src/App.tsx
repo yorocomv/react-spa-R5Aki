@@ -6,9 +6,9 @@ import AxiosErrorHandleProvider from './components/providers/AxiosErrorHandlePro
 import ErrorBoundaryProvider from './components/providers/ErrorBoundaryProvider';
 import Home from './Home';
 
-const CustomerRoutes = lazy(() => import('./routes/customers/customer-routes'));
+const CustomerRoutes = lazy(() => import('./routes/customers/CustomerRoutes'));
 const ShippingInstructionPrintoutsRoutes = lazy(
-  () => import('./routes/shipping-instruction-printouts/shipping-instruction-printouts-routes'),
+  () => import('./routes/shipping-instruction-printouts/ShippingInstructionPrintoutsRoutes'),
 );
 
 const router = createBrowserRouter(

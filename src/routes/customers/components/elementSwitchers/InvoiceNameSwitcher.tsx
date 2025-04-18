@@ -1,10 +1,10 @@
-import { css } from '../../../../styled-system/css';
+import { css } from 'styled-system/css';
 
 interface InvoiceNameSwitcherProps {
   invoiceType: number;
 }
 
-export default function InvoiceNameSwitcher({ invoiceType }: InvoiceNameSwitcherProps): JSX.Element {
+export default function InvoiceNameSwitcher({ invoiceType }: InvoiceNameSwitcherProps): React.JSX.Element {
   switch (invoiceType) {
     case 1:
       return (

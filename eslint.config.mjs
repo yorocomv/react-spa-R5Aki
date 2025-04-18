@@ -117,7 +117,7 @@ export default antfu({
     'style/quote-props': ['error', 'as-needed'],
     'unicorn/filename-case': ['error', {
       case: 'camelCase',
-      ignore: ['README.md'],
+      ignore: ['README.md', 'vite-env.d.ts'],
     }],
   },
 }, {

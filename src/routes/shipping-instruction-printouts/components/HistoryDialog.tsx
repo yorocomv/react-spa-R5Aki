@@ -1,15 +1,16 @@
 import React from 'react';
 import { Button, Dialog, Heading, Modal } from 'react-aria-components';
 import { IoCloseOutline } from 'react-icons/io5';
+import { Link } from 'react-router';
 
 import CommonFloatingDeleteButton from '@/components/ui/CommonFloatingDeleteButton';
 import { css } from 'styled-system/css';
 
 import type { ShippingInstructionPrintHistoryTbRow } from '../shippingInstructionPrintouts.types';
 
-import { useDeletePrintHistory } from './hooks/useDeletePrintHistory';
+import '@/components/ui/reactAriaModalOverlay.css';
 
-import '@/components/ui/react-aria-modal-overlay.css';
+import { useDeletePrintHistory } from './hooks/useDeletePrintHistory';
 
 interface HistoryDialogProps {
   oneHistory: ShippingInstructionPrintHistoryTbRow;
@@ -17,7 +18,7 @@ interface HistoryDialogProps {
   closeModal: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export default function HistoryDialog({ oneHistory: p, isOpen, closeModal }: HistoryDialogProps): JSX.Element {
+export default function HistoryDialog({ oneHistory: p, isOpen, closeModal }: HistoryDialogProps): React.JSX.Element {
   const { deletePrintHistory } = useDeletePrintHistory({ delivery_date: p.delivery_date, printed_at: p.printed_at });
   const handleClickDelete = async () => {
     try {
@@ -79,7 +80,9 @@ export default function HistoryDialog({ oneHistory: p, isOpen, closeModal }: His
               fontSize: '1.125rem',
             })}
           >
-            詳細情報（編集不可）
+            詳細情報（
+            <Link to="./correct" relative="path" state={p}>訂正✒️</Link>
+            ）
           </Heading>
           <Button
             onPress={() => closeModal(-1)}

@@ -2,7 +2,7 @@ import type { AxiosResponse } from 'axios';
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import axiosInstance from '../../../../util/axios-instance';
+import axiosInstance from '@/util/axiosInstance';
 
 /**
  * The useDeleteCustomer function is a custom hook in TypeScript that handles deleting a customer by

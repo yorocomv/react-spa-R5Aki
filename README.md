@@ -1,4 +1,4 @@
-# [Vite][ 01 ] v6 + [React][ 02 ] v18 + [React Router][ 03 ] v7
+# [Vite][ 01 ] v6 + [React][ 02 ] v19 + [React Router][ 03 ] v7
 
 ## `git clone && pnpm install` の後に実行する事 👇️
 

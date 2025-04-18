@@ -1,15 +1,16 @@
 import { Link, useLocation, useParams } from 'react-router';
 
-import type { CustomersTbRow } from './customers.types';
+import FormContainer from '@/components/ui/elements/FormContainer';
+import CustomerNoteForm from '@/routes/customers/components/CustomerNoteForm';
+import FloatingLinkIcon from '@/routes/customers/components/FloatingLinkIcon';
+import { useFetchNotes } from '@/routes/customers/components/hooks/useFetchNotes';
+import ListOfSummaryNotesAboutCustomer from '@/routes/customers/components/ListOfSummaryNotesAboutCustomer';
 
-import { css } from '../../../styled-system/css';
-import CustomerNoteForm from './components/CustomerNoteForm';
-import FormContainer from './components/elements/FormContainer';
-import FloatingLinkIcon from './components/FloatingLinkIcon';
-import { useFetchNotes } from './components/hooks/useFetchNotes';
-import ListOfSummaryNotesAboutCustomer from './components/ListOfSummaryNotesAboutCustomer';
+import type { CustomersTbRow } from '../customers.types';
 
-export default function TakeANoteAboutCustomer(): JSX.Element {
+import { css } from '../../../../styled-system/css';
+
+export default function TakeANoteAboutCustomer(): React.JSX.Element {
   const customer = useLocation().state as CustomersTbRow;
   const { id: customerId } = useParams();
 

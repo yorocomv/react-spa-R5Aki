@@ -3,9 +3,9 @@ import type { AxiosError, AxiosResponse } from 'axios';
 import { useEffect } from 'react';
 import { useErrorBoundary } from 'react-error-boundary';
 
-import axiosInst from '../../util/axios-instance';
+import axiosInst from '@/util/axiosInstance';
 
-export default function AxiosErrorHandleProvider({ children }: { children: JSX.Element }) {
+export default function AxiosErrorHandleProvider({ children }: { children: React.JSX.Element }) {
   // showBoundary を使わないと ErrorBoundary コンポーネントにエラーが伝わらない
   const { showBoundary } = useErrorBoundary();
   useEffect(() => {

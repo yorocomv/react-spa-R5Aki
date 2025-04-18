@@ -15,7 +15,7 @@ export default function CustomerSummary({
   name2,
   notes,
   invoice_type_id,
-}: RequiredCustomerSummary): JSX.Element {
+}: RequiredCustomerSummary): React.JSX.Element {
   const nameII = name2.replace(/\s{2,}/g, '　');
   const addressII = address2.replace(/\s{2,}/g, '　');
   const addressIII = address3.replace(/\s{2,}/g, '　');

@@ -1,8 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router';
 
+import Button from '@/components/ui/elements/Button';
 import SpotField from '@/components/ui/SpotField';
-import Button from '@/routes/customers/components/elements/Button';
 
 import { css } from '../../../../styled-system/css';
 
@@ -20,7 +20,7 @@ export default function SearchForm({
   searchTrigger,
   setSearchTrigger,
   placeholder = '',
-}: SearchFormProps): JSX.Element {
+}: SearchFormProps): React.JSX.Element {
   const navigate = useNavigate();
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

@@ -7,7 +7,7 @@ import { css } from '../../../../styled-system/css';
 import { useFetchNotes } from './hooks/useFetchNotes';
 import NoteInDialog from './NoteInDialog';
 
-export default function CustomerNotesList({ customer }: { customer: CustomersTbRow }): JSX.Element {
+export default function CustomerNotesList({ customer }: { customer: CustomersTbRow }): React.JSX.Element {
   const { notes } = useFetchNotes(customer.id);
   const [selectedNote, setSelectedNote] = useState(-1);
 
