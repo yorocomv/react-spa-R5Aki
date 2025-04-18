@@ -2,16 +2,18 @@ import parse from 'html-react-parser';
 import { useEffect } from 'react';
 import { useLocation, useParams } from 'react-router';
 
-import type { CustomersTbRow, RequiredChooseCustomer } from './customers.types';
+import CustomerNotesList from '@/routes/customers/components/CustomerNotesList';
+import DropdownMenu from '@/routes/customers/components/DropdownMenu';
+import InvoiceNameSwitcher from '@/routes/customers/components/elementSwitchers/InvoiceNameSwitcher';
+import { useCreateCustomerTsv } from '@/routes/customers/components/hooks/useCreateCustomerTsv';
 
-import { css } from '../../../styled-system/css';
-import CustomerNotesList from './components/CustomerNotesList';
-import DropdownMenu from './components/DropdownMenu';
-import './customers.css';
-import { useCreateCustomerTsv } from './components/hooks/useCreateCustomerTsv';
-import InvoiceNameSwitcher from './components/InvoiceNameSwitcher';
+import '@/routes/customers/customers.css';
 
-export default function ChooseCustomer(): JSX.Element {
+import { css } from 'styled-system/css';
+
+import type { CustomersTbRow, RequiredChooseCustomer } from '../customers.types';
+
+export default function ChooseCustomer(): React.JSX.Element {
   const customer = useLocation().state as CustomersTbRow;
   const { id: customerId } = useParams();
   const { createCustomerTsv } = useCreateCustomerTsv();

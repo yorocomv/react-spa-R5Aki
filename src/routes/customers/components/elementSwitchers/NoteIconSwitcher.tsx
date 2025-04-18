@@ -2,7 +2,7 @@ import { GoComment, GoCommentDiscussion } from 'react-icons/go';
 
 import { css } from '../../../../../styled-system/css';
 
-export default function NoteIconSwitcher({ notes }: { notes: number }): JSX.Element | null {
+export default function NoteIconSwitcher({ notes }: { notes: number }): React.JSX.Element | null {
   switch (notes) {
     case 0:
       return null;

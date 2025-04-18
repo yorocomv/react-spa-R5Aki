@@ -2,10 +2,10 @@ import type { AxiosResponse } from 'axios';
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+import axiosInstance from '@/util/axiosInstance';
+
 import type { CustomersTbRow } from '../../../customers/customers.types';
 import type { NoteForm, NotesTbRow } from '../../notes.types';
-
-import axiosInstance from '../../../../util/axios-instance';
 
 interface UseRegisterNoteProps {
   customerId: number;

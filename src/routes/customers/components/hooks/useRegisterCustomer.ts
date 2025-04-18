@@ -2,9 +2,9 @@ import type { AxiosResponse } from 'axios';
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import type { CustomerForm, CustomersTbRow } from '../../customers.types';
+import axiosInstance from '@/util/axiosInstance';
 
-import axiosInstance from '../../../../util/axios-instance';
+import type { CustomerForm, CustomersTbRow } from '../../customers.types';
 
 interface UseRegisterCustomerProps {
   mode: 'create' | number;

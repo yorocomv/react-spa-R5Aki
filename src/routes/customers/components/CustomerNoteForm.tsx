@@ -5,16 +5,16 @@ import React, { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useSearchParams } from 'react-router';
 
+import Button from '@/components/ui/elements/Button';
 import Select from '@/components/ui/elements/Select';
+import TextArea from '@/components/ui/elements/TextArea';
+import { css } from 'styled-system/css';
 
 import type { NoteForm, NotesTbRow } from '../../notes/notes.types';
 import type { CustomersTbRow } from '../customers.types';
 
-import { css } from '../../../../styled-system/css';
 import { useRegisterNote } from '../../notes/components/hooks/useRegisterNote';
 import { noteFormSchema } from '../../notes/notes.schemas';
-import Button from './elements/Button';
-import TextArea from './elements/TextArea';
 import FormErrorMessage from './elementSwitchers/FormErrorMessage';
 import FloatingDeleteButton from './FloatingDeleteButton';
 
@@ -24,7 +24,7 @@ export default function CustomerNoteForm({
 }: {
   customer: CustomersTbRow;
   notes: NotesTbRow[];
-}): JSX.Element {
+}): React.JSX.Element {
   const notesLength = notes.length;
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();

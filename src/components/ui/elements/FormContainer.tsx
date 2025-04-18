@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { css } from '../../../../../styled-system/css';
+import { css } from 'styled-system/css';
 
 export default function FormContainer({ children }: { children: React.ReactNode }) {
   return (

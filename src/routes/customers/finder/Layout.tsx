@@ -1,10 +1,9 @@
 import { Outlet, ScrollRestoration } from 'react-router';
 
+import { useSearchCustomer } from '@/routes/customers/components/hooks/useSearchCustomer';
+import LinkNewRegistration from '@/routes/customers/components/LinkNewRegistration';
 import SearchForm from '@/routes/customers/components/SearchForm';
-
-import { css } from '../../../styled-system/css';
-import { useSearchCustomer } from './components/hooks/useSearchCustomer';
-import LinkNewRegistration from './components/LinkNewRegistration';
+import { css } from 'styled-system/css';
 
 export default function SearchCustomer() {
   const { searchString, setSearchString, searchTrigger, setSearchTrigger, latestCommunicationTime, customers } =

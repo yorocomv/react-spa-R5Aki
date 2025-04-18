@@ -1,7 +1,7 @@
-import { css } from '../../../styled-system/css';
-import CustomerForm from './components/CustomerForm';
-import FormContainer from './components/elements/FormContainer';
-import FloatingLinkIcon from './components/FloatingLinkIcon';
+import FormContainer from '@/components/ui/elements/FormContainer';
+import CustomerForm from '@/routes/customers/components/CustomerForm';
+import FloatingLinkIcon from '@/routes/customers/components/FloatingLinkIcon';
+import { css } from 'styled-system/css';
 
 export default function RegisterCustomer() {
   return (

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { FaRegTrashCan } from 'react-icons/fa6';
 
-import Button from '@/routes/customers/components/elements/Button';
+import Button from '@/components/ui/elements/Button';
 import { css } from 'styled-system/css';
 
 interface CommonFloatingDeleteButtonProps {

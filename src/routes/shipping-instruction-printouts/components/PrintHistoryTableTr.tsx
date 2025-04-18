@@ -18,7 +18,7 @@ export default function PrintHistoryTableTr({
   currentIndex,
   parentMediaQuerySmall,
   parentMediaQueryHd,
-}: PrintHistoryTableTrProps): JSX.Element {
+}: PrintHistoryTableTrProps): React.JSX.Element {
   // Panda CSS で使用する変数
   const smallScreen = '@media(width < 960px)';
   const hdScreen = '@media(width < 1280px)';

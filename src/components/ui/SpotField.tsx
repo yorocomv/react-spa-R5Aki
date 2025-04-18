@@ -16,7 +16,7 @@ export default function SpotField({
   setInputText,
   placeholder = '',
   mergeWrapperStyles = undefined,
-}: SpotFieldProps): JSX.Element {
+}: SpotFieldProps): React.JSX.Element {
   // https://qiita.com/70ki8suda/items/831727af51c572e10ba8#callback-refs
   // https://ja.react.dev/reference/react-dom/components/common#ref-callback
   // ref callback function でインプットに「フォーカス」+ 再レンダー間で関数定義をキャッシュ

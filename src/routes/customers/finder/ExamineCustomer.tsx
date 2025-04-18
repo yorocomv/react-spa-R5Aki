@@ -4,9 +4,9 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 
-import type { CustomersTbRow } from './customers.types';
+import axiosInst from '@/util/axiosInstance';
 
-import axiosInst from '../../util/axios-instance';
+import type { CustomersTbRow } from '../customers.types';
 
 export default function ExamineCustomer() {
   const navigate = useNavigate();

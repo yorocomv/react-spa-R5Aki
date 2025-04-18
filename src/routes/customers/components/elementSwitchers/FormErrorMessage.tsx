@@ -6,7 +6,7 @@ interface FormErrorMessageProps {
   message: string | undefined;
 }
 
-export default function FormErrorMessage({ message }: FormErrorMessageProps): JSX.Element | null {
+export default function FormErrorMessage({ message }: FormErrorMessageProps): React.JSX.Element | null {
   if (message) {
     return (
       <p

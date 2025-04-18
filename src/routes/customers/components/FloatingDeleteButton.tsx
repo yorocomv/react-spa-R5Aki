@@ -2,11 +2,12 @@ import { useEffect, useState } from 'react';
 import { FaRegTrashCan } from 'react-icons/fa6';
 import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router';
 
+import Button from '@/components/ui/elements/Button';
+
 import type { CustomersTbRow } from '../customers.types';
 
 import { css } from '../../../../styled-system/css';
 import { useDeleteNote } from '../../notes/components/hooks/useDeleteNote';
-import Button from './elements/Button';
 import { useDeleteCustomer } from './hooks/useDeleteCustomer';
 import { useDeleteCustomersInBulk } from './hooks/useDeleteCustomersInBulk';
 

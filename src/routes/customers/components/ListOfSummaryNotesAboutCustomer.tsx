@@ -15,7 +15,7 @@ export default function ListOfSummaryNotesAboutCustomer({
   notes: NotesTbRow[];
   customer: CustomersTbRow;
   mergeStyles?: SystemStyleObject;
-}): JSX.Element {
+}): React.JSX.Element {
   const [searchParams, setSearchParams] = useSearchParams();
   const currentRank = searchParams.get('rank') ?? '0';
   const olStyles = css.raw({

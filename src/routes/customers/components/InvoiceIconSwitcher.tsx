@@ -7,7 +7,7 @@ interface InvoiceIconSwitcherProps {
   invoiceType: number;
 }
 
-export default function InvoiceIconSwitcher({ invoiceType }: InvoiceIconSwitcherProps): JSX.Element | null {
+export default function InvoiceIconSwitcher({ invoiceType }: InvoiceIconSwitcherProps): React.JSX.Element | null {
   switch (invoiceType) {
     case 3:
       return (

@@ -5,15 +5,15 @@ import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useLocation, useNavigate, useParams } from 'react-router';
 
+import Button from '@/components/ui/elements/Button';
+import Input from '@/components/ui/elements/Input';
 import Select from '@/components/ui/elements/Select';
+import { css } from 'styled-system/css';
 
 import type { CustomerForm as CustomerFormTypes, CustomersTbRow } from '../customers.types';
 
-import { css } from '../../../../styled-system/css';
 import { useFetchAddressData } from '../../address-data-by-zip-code/components/hooks/useFetchAddressData';
 import { customerFormSchema } from '../customers.schemas';
-import Button from './elements/Button';
-import Input from './elements/Input';
 import FormErrorMessage from './elementSwitchers/FormErrorMessage';
 import FloatingDeleteButton from './FloatingDeleteButton';
 import { useFetchInvoiceTypes } from './hooks/useFetchInvoiceTypes';

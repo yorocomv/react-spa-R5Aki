@@ -9,7 +9,7 @@ export default function ThReverseButton({
 }: {
   children: React.ReactNode;
   setValue: React.Dispatch<React.SetStateAction<boolean>>;
-}): JSX.Element {
+}): React.JSX.Element {
   return (
     <TooltipWrapper
       fillColor="teal.400"

@@ -16,7 +16,7 @@ import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6';
 
 import { css } from 'styled-system/css';
 
-export default function PopoverCalendar({ todayDate }: { todayDate: CalendarDate }): JSX.Element {
+export default function PopoverCalendar({ todayDate }: { todayDate: CalendarDate }): React.JSX.Element {
   const cellStyles = css.raw({
     w: '2rem',
     h: '2rem',

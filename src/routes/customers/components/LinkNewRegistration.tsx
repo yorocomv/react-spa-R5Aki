@@ -12,7 +12,7 @@ export default function LinkNewRegistration({
   relativePath,
   height,
   bgMode = 'light',
-}: LinkNewRegistrationProps): JSX.Element {
+}: LinkNewRegistrationProps): React.JSX.Element {
   const isLightMode = bgMode === 'light';
   return (
     <Link title="👤新規登録" to={relativePath} relative="path">

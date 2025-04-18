@@ -1,9 +1,10 @@
-import { styled } from '../../../../../styled-system/jsx';
+import { styled } from 'styled-system/jsx';
 
-const TextArea = styled('textarea', {
+const Input = styled('input', {
   base: {
     display: 'block',
     fontWeight: 'bold',
+    h: '2.5rem',
     px: '1rem',
     color: '#0a1612',
     bgColor: '#f5eeee',
@@ -25,4 +26,4 @@ const TextArea = styled('textarea', {
   },
 });
 
-export default TextArea;
+export default Input;

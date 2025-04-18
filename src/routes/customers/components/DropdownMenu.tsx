@@ -17,7 +17,7 @@ interface DropdownMenuProps {
   }[];
 }
 
-export default function DropdownMenu({ label, mergeStyles = undefined, menuItems }: DropdownMenuProps): JSX.Element {
+export default function DropdownMenu({ label, mergeStyles = undefined, menuItems }: DropdownMenuProps): React.JSX.Element {
   const navigate = useNavigate();
 
   return (

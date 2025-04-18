@@ -3,9 +3,10 @@ import type { AxiosResponse } from 'axios';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 
+import axiosInst from '@/util/axiosInstance';
+
 import type { EJPCReturnDataType, ErrorDataType, ZipCode } from '../../addressDataByZipCode.type';
 
-import axiosInst from '../../../../util/axios-instance';
 import zipCodeSchema from '../../addressDataByZipCode.schemas';
 
 export function useFetchAddressData() {

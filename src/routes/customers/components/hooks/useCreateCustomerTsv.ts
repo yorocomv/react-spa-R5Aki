@@ -2,9 +2,9 @@ import type { AxiosResponse } from 'axios';
 
 import { useMutation } from '@tanstack/react-query';
 
-import type { CustomersTbRow } from '../../customers.types';
+import axiosInstance from '@/util/axiosInstance';
 
-import axiosInstance from '../../../../util/axios-instance';
+import type { CustomersTbRow } from '../../customers.types';
 
 interface UseCreateCustomerTsv {
   isSuccess: boolean;

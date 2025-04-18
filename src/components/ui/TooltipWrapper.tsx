@@ -1,14 +1,13 @@
 import type { TooltipProps } from 'react-aria-components';
 
 import { Focusable, OverlayArrow, Tooltip, TooltipTrigger } from 'react-aria-components';
-
-import './react-aria-tooltip.css';
+import '@/components/ui/reactAriaTooltip.css';
 
 interface TooltipWrapperProps {
   text: string;
   delay?: number | undefined;
   placement?: TooltipProps['placement'] | undefined;
-  children: JSX.Element;
+  children: React.JSX.Element;
   className?: string | undefined;
   fillColor: 'teal.400' | 'orange.400';
 }

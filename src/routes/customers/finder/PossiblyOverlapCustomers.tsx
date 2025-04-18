@@ -2,20 +2,21 @@ import React, { useMemo } from 'react';
 import { TbArrowBigLeftLinesFilled } from 'react-icons/tb';
 import { Link, useLocation } from 'react-router';
 
-import type { CustomersTbRow } from './customers.types';
+import CustomerSummary from '@/routes/customers/components/CustomerSummary';
+import FloatingDeleteButton from '@/routes/customers/components/FloatingDeleteButton';
+import { useDeleteCustomersInBulk } from '@/routes/customers/components/hooks/useDeleteCustomersInBulk';
 
-import { css } from '../../../styled-system/css';
-import { vstack } from '../../../styled-system/patterns/vstack';
-import CustomerSummary from './components/CustomerSummary';
-import FloatingDeleteButton from './components/FloatingDeleteButton';
-import { useDeleteCustomersInBulk } from './components/hooks/useDeleteCustomersInBulk';
+import type { CustomersTbRow } from '../customers.types';
+
+import { css } from '../../../../styled-system/css';
+import { vstack } from '../../../../styled-system/patterns/vstack';
 
 interface PossiblyOverlapCustomersState {
   id: number;
   customers: CustomersTbRow[];
 }
 
-export default function PossiblyOverlapCustomers(): JSX.Element {
+export default function PossiblyOverlapCustomers(): React.JSX.Element {
   const { id, customers } = useLocation().state as PossiblyOverlapCustomersState;
   const { deleteFlaggedNumbers, setDeleteFlaggedNumbers } = useDeleteCustomersInBulk();
   const sortedCustomers = useMemo(

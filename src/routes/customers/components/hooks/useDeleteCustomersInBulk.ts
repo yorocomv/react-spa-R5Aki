@@ -3,7 +3,7 @@ import type { AxiosResponse } from 'axios';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 
-import axiosInstance from '@/util/axios-instance';
+import axiosInstance from '@/util/axiosInstance';
 
 export function useDeleteCustomersInBulk() {
   const [deleteFlaggedNumbers, setDeleteFlaggedNumbers] = useState<number[]>([]);

@@ -2,9 +2,9 @@ import type { AxiosResponse } from 'axios';
 
 import { useSuspenseQuery } from '@tanstack/react-query';
 
-import type { NotesTbRow } from '../../../notes/notes.types';
+import axiosInst from '@/util/axiosInstance';
 
-import axiosInst from '../../../../util/axios-instance';
+import type { NotesTbRow } from '../../../notes/notes.types';
 
 export function useFetchNotes(customerId: number) {
   const { data: notes } = useSuspenseQuery({

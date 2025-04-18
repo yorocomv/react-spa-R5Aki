@@ -3,12 +3,13 @@ import { Button, Dialog, Heading, Modal } from 'react-aria-components';
 import { FaX } from 'react-icons/fa6';
 import { useNavigate } from 'react-router';
 
+import EditButton from '@/components/ui/elements/Button';
+
+import '@/components/ui/reactAriaModalOverlay.css';
+
 import type { CustomersTbRow } from '../customers.types';
 
-import '@/components/ui/react-aria-modal-overlay.css';
-
 import { css } from '../../../../styled-system/css';
-import EditButton from './elements/Button';
 
 interface NoteInDialogProps {
   currentPage: number;
@@ -28,7 +29,7 @@ export default function NoteInDialog({
   closeModal,
   currentRank,
   customer,
-}: NoteInDialogProps): JSX.Element {
+}: NoteInDialogProps): React.JSX.Element {
   const navigate = useNavigate();
 
   return (

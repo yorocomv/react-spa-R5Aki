@@ -2,9 +2,9 @@ import type { AxiosResponse } from 'axios';
 
 import { useSuspenseQuery } from '@tanstack/react-query';
 
-import type InvoiceTypesIdAndName from '../../../invoice-types/invoiceTypes.types';
+import axiosInst from '@/util/axiosInstance';
 
-import axiosInst from '../../../../util/axios-instance';
+import type InvoiceTypesIdAndName from '../../../invoice-types/invoiceTypes.types';
 
 async function fetchInvoiceTypesQueryFn() {
   const result: AxiosResponse<InvoiceTypesIdAndName[]> = await axiosInst.get('/invoice-types').catch((err: string) => {
