@@ -35,6 +35,12 @@ export const shippingInstructionPrintHistoryTbRowSchema = shippingInstructionPri
   package_count: z.coerce.number().int().nonnegative().nullable(),
 });
 
+export const shippingInstructionCorrectionSchema = shippingInstructionPrintHistoryInputSchema.required().extend({
+  printed_at: z.string(),
+  delivery_date: z.string().trim().regex(/^20\d{2}[-/][01]?\d[-/][0-3]?\d/),
+  shipping_date: z.string().trim().regex(/^20\d{2}[-/][01]?\d[-/][0-3]?\d/),
+});
+
 export const findShippingInstructionsQuerySchema = z
   .object({
     category: z.enum(['delivery_date', 'printed_at', 'shipping_date']),
