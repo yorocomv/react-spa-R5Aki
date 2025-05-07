@@ -15,7 +15,7 @@ export default function PrintHistoryCorrection() {
           fontWeight: 'bold',
         })}
       >
-        印刷履歴の修正
+        印刷履歴の✒️修正
       </h2>
       <FormContainer>
         <ShippingInstructionForm />

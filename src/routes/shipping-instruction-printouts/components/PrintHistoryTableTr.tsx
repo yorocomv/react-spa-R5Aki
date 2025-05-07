@@ -2,10 +2,10 @@ import React from 'react';
 
 import { css } from 'styled-system/css';
 
-import type { ShippingInstructionPrintHistoryTbRow } from '../shippingInstructionPrintouts.types';
+import type { ShippingInstructionHistoryTbRow } from '../shippingInstructionPrintouts.types';
 
 interface PrintHistoryTableTrProps {
-  oneHistory: ShippingInstructionPrintHistoryTbRow;
+  oneHistory: ShippingInstructionHistoryTbRow;
   toggleModal: React.Dispatch<React.SetStateAction<number>>;
   currentIndex: number;
   parentMediaQuerySmall: string;

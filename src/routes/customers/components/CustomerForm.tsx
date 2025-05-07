@@ -8,13 +8,15 @@ import { useLocation, useNavigate, useParams } from 'react-router';
 import Button from '@/components/ui/elements/Button';
 import Input from '@/components/ui/elements/Input';
 import Select from '@/components/ui/elements/Select';
+import FormErrorMessage from '@/components/ui/elementSwitchers/FormErrorMessage';
+import checkKeyDown from '@/libs/checkKeyDown';
+import onPromise from '@/libs/onPromise';
 import { css } from 'styled-system/css';
 
 import type { CustomerForm as CustomerFormTypes, CustomersTbRow } from '../customers.types';
 
 import { useFetchAddressData } from '../../address-data-by-zip-code/components/hooks/useFetchAddressData';
 import { customerFormSchema } from '../customers.schemas';
-import FormErrorMessage from './elementSwitchers/FormErrorMessage';
 import FloatingDeleteButton from './FloatingDeleteButton';
 import { useFetchInvoiceTypes } from './hooks/useFetchInvoiceTypes';
 import { useRegisterCustomer } from './hooks/useRegisterCustomer';
@@ -63,16 +65,6 @@ export default function CustomerForm() {
     resolver: zodResolver(customerFormSchema),
   });
 
-  // https://github.com/react-hook-form/react-hook-form/discussions/2549
-  const checkKeyDown = (e: React.KeyboardEvent<HTMLInputElement | HTMLButtonElement>, nextId?: string) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      if (nextId) {
-        document.getElementById(nextId)?.focus();
-      }
-    }
-  };
-
   const onSubmit: SubmitHandler<CustomerFormTypes> = async (values): Promise<void> => {
     try {
       let response: CustomersTbRow;
@@ -91,16 +83,7 @@ export default function CustomerForm() {
       console.error('💥💥💥 ', err, ' 💀💀💀');
     }
   };
-  // https://github.com/orgs/react-hook-form/discussions/8020#discussioncomment-2584580
-  function onPromise<T>(promise: (event: React.SyntheticEvent) => Promise<T>) {
-    return (event: React.SyntheticEvent) => {
-      if (promise) {
-        promise(event).catch((error) => {
-          console.error('Unexpected error', error);
-        });
-      }
-    };
-  }
+
   // 郵便番号入力欄のみを監視
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setZipCodeStr(e.currentTarget.value);

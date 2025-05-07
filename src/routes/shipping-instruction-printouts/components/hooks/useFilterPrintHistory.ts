@@ -1,16 +1,16 @@
 import jaconv from 'jaconv';
 import { useCallback, useMemo, useState } from 'react';
 
-import type { ShippingInstructionPrintHistoryTbRow } from '../../shippingInstructionPrintouts.types';
+import type { ShippingInstructionHistoryTbRow } from '../../shippingInstructionPrintouts.types';
 
-export function useFilterPrintHistory(printHistory: ShippingInstructionPrintHistoryTbRow[]) {
+export function useFilterPrintHistory(printHistory: ShippingInstructionHistoryTbRow[]) {
   const [filterString, setFilterString] = useState('');
 
   function recursiveFilter(
-    objArr: ShippingInstructionPrintHistoryTbRow[],
+    objArr: ShippingInstructionHistoryTbRow[],
     filterStrings: string[],
-  ): ShippingInstructionPrintHistoryTbRow[] {
-    const filterFunc = (obj: ShippingInstructionPrintHistoryTbRow, filter: string): boolean => {
+  ): ShippingInstructionHistoryTbRow[] {
+    const filterFunc = (obj: ShippingInstructionHistoryTbRow, filter: string): boolean => {
       let target =
         obj.carrier + obj.customer_address + obj.customer_name + obj.items_of_order + obj.order_number + obj.wholesaler;
       // https://blog.foresta.me/posts/replace-hyphen-for-js

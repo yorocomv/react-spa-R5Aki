@@ -6,14 +6,14 @@ import { Link } from 'react-router';
 import CommonFloatingDeleteButton from '@/components/ui/CommonFloatingDeleteButton';
 import { css } from 'styled-system/css';
 
-import type { ShippingInstructionPrintHistoryTbRow } from '../shippingInstructionPrintouts.types';
+import type { ShippingInstructionHistoryTbRow } from '../shippingInstructionPrintouts.types';
 
 import '@/components/ui/reactAriaModalOverlay.css';
 
 import { useDeletePrintHistory } from './hooks/useDeletePrintHistory';
 
 interface HistoryDialogProps {
-  oneHistory: ShippingInstructionPrintHistoryTbRow;
+  oneHistory: ShippingInstructionHistoryTbRow;
   isOpen: boolean;
   closeModal: React.Dispatch<React.SetStateAction<number>>;
 }
@@ -162,7 +162,9 @@ export default function HistoryDialog({ oneHistory: p, isOpen, closeModal }: His
             </tr>
             <tr>
               <th>得意先名</th>
-              <td>{p.customer_name}</td>
+              <td>
+                <pre className={css({ overflowWrap: 'break-word' })}>{p.customer_name}</pre>
+              </td>
             </tr>
             <tr>
               <th>住所</th>
