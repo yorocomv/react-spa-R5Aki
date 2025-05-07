@@ -8,7 +8,7 @@ import axiosInst from '@/util/axiosInstance';
 
 import type {
   FindShippingInstructionsQueryCategory,
-  ShippingInstructionPrintHistoryTbRow,
+  ShippingInstructionHistoryTbRow,
 } from '../../shippingInstructionPrintouts.types';
 
 export function useFetchPrintHistory() {
@@ -24,7 +24,7 @@ export function useFetchPrintHistory() {
         return [];
       }
     }
-    const result: void | AxiosResponse<ShippingInstructionPrintHistoryTbRow[]> = await axiosInst
+    const result: void | AxiosResponse<ShippingInstructionHistoryTbRow[]> = await axiosInst
       .get(
         `/shipping-instruction-printouts?category=${selectCategory}${dateA ? `&dateA=${dateA.toString()}` : ''}${
           dateB ? `&dateB=${dateB.toString()}` : ''

@@ -8,6 +8,7 @@ import { useNavigate, useSearchParams } from 'react-router';
 import Button from '@/components/ui/elements/Button';
 import Select from '@/components/ui/elements/Select';
 import TextArea from '@/components/ui/elements/TextArea';
+import FormErrorMessage from '@/components/ui/elementSwitchers/FormErrorMessage';
 import { css } from 'styled-system/css';
 
 import type { NoteForm, NotesTbRow } from '../../notes/notes.types';
@@ -15,7 +16,6 @@ import type { CustomersTbRow } from '../customers.types';
 
 import { useRegisterNote } from '../../notes/components/hooks/useRegisterNote';
 import { noteFormSchema } from '../../notes/notes.schemas';
-import FormErrorMessage from './elementSwitchers/FormErrorMessage';
 import FloatingDeleteButton from './FloatingDeleteButton';
 
 export default function CustomerNoteForm({

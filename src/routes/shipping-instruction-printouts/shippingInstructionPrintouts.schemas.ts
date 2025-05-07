@@ -2,7 +2,7 @@
 
 import { z } from 'zod';
 
-export const shippingInstructionPrintHistoryInputSchema = z.object({
+export const shippingInstructionPrintInputSchema = z.object({
   delivery_date: z.coerce
     .date()
     .transform(val => val.toLocaleString('sv-SE', { timeZone: 'Asia/Tokyo', dateStyle: 'short' })),
@@ -28,18 +28,26 @@ export const shippingInstructionPrintHistoryInputSchema = z.object({
   items_of_order: z.string(),
 });
 // .extend ここでは上書き
-export const shippingInstructionPrintHistoryTbRowSchema = shippingInstructionPrintHistoryInputSchema.required().extend({
-  shipping_date: z.coerce
-    .date()
-    .transform(val => val.toLocaleString('sv-SE', { timeZone: 'Asia/Tokyo', dateStyle: 'short' })),
-  package_count: z.coerce.number().int().nonnegative().nullable(),
-});
+export const shippingInstructionHistoryTbRowSchema = shippingInstructionPrintInputSchema
+  .required()
+  .extend({
+    shipping_date: z.coerce
+      .date()
+      .transform(val => val.toLocaleString('sv-SE', { timeZone: 'Asia/Tokyo', dateStyle: 'short' })),
+    package_count: z.coerce.number().int().nonnegative().nullable(),
+  });
 
-export const shippingInstructionCorrectionSchema = shippingInstructionPrintHistoryInputSchema.required().extend({
-  printed_at: z.string(),
-  delivery_date: z.string().trim().regex(/^20\d{2}[-/][01]?\d[-/][0-3]?\d/),
-  shipping_date: z.string().trim().regex(/^20\d{2}[-/][01]?\d[-/][0-3]?\d/),
-});
+export const shippingInstructionCorrectionSchema = shippingInstructionPrintInputSchema
+  .required()
+  .extend({
+    printed_at: z.string(),
+    delivery_date: z.string().trim().regex(/^20\d{2}[-/][01]?\d[-/][0-3]?\d/),
+    shipping_date: z.string().trim().regex(/^20\d{2}[-/][01]?\d[-/][0-3]?\d/),
+  })
+  .omit({
+    printed_at: true,
+    non_fk_customer_id: true,
+  });
 
 export const findShippingInstructionsQuerySchema = z
   .object({
@@ -49,7 +57,7 @@ export const findShippingInstructionsQuerySchema = z
   })
   .brand<'FindShippingInstructionsQuery'>();
 
-export const shippingInstructionPrintHistoryIDSchema = z
+export const shippingInstructionPrintIDSchema = z
   .object({
     delivery_date: z.coerce
       .date()
@@ -59,4 +67,4 @@ export const shippingInstructionPrintHistoryIDSchema = z
       .min(22)
       .regex(/[0-9:.+ -]+/),
   })
-  .brand<'ShippingInstructionPrintHistoryID'>();
+  .brand<'ShippingInstructionPrintID'>();
