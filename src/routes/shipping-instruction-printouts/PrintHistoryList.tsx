@@ -27,7 +27,7 @@ export default function PrintHistoryList() {
     { label: '着日', category: 'delivery_date' },
     { label: '出荷予定日', category: 'shipping_date' },
   ];
-  const [isReverse, setIsReverse] = useState(false);
+  const [isReverse, setIsReverse] = useState(true);
   const [selectedHistory, setSelectedHistory] = useState(-1);
 
   const todayDate = today('Asia/Tokyo');
@@ -92,7 +92,7 @@ export default function PrintHistoryList() {
                 setSelectCategory('printed_at');
                 setDateA(todayDate);
                 setDateB(null);
-                setIsReverse(false);
+                setIsReverse(true);
               }}
               className={css({ _hover: { cursor: 'pointer' } })}
             />
@@ -111,8 +111,37 @@ export default function PrintHistoryList() {
             display: 'flex',
             justifyContent: 'flex-end',
             alignItems: 'center',
+            gap: '0.5rem',
           })}
         >
+          <p className={css({
+            '@media(width >= 1280px)': {
+              pos: 'absolute',
+              mx: 'auto',
+              left: 0,
+              right: 0,
+            },
+            whiteSpace: 'nowrap',
+            w: 'fit-content',
+            fontSize: 'md',
+            fontWeight: 'bold',
+            textShadow: 'rgba(255, 255, 255, 0.3) 1px 1px',
+            px: '0.25rem',
+            bg: 'linear-gradient(transparent 50%, rgba(255, 255, 105, 0.6) 35%)',
+          })}
+          >
+            <em className={css({ fontStyle: 'normal' })}>
+              {filteredPrintHistories.length}
+            </em>
+            <span className={css({ [smallScreen]: { display: 'none' } })}>
+              {' '}
+              hit(s)
+              {' '}
+            </span>
+            <em className={css({ fontStyle: 'normal' })}>
+              {isReverse ? '降順' : '昇順'}
+            </em>
+          </p>
           <div className={css({ w: '65%', minW: '18rem', maxW: '30rem' })}>
             <SpotField inputText={filterString} setInputText={setFilterString} placeholder="絞り込み" />
           </div>
