@@ -51,7 +51,6 @@ export default function HistoryDialog({ oneHistory: p, isOpen, closeModal }: His
           w: 'clamp(17.5rem, 104%, 96vw)',
           maxH: '95lvh',
           overflow: 'scroll',
-          p: '0.125rem 1rem 1rem',
           bgColor: 'slate.50',
           color: 'slate.950',
           fontWeight: 'bold',
@@ -69,6 +68,7 @@ export default function HistoryDialog({ oneHistory: p, isOpen, closeModal }: His
             display: 'grid',
             alignItems: 'center',
             gridTemplateColumns: '1fr auto 1fr',
+            pt: '0.125rem',
             mb: '1rem',
           })}
         >
@@ -99,107 +99,114 @@ export default function HistoryDialog({ oneHistory: p, isOpen, closeModal }: His
             <IoCloseOutline size="1.625rem" />
           </Button>
         </header>
-        <table
-          className={css({
-            w: 'fit-content',
-            minW: '30rem',
-            maxW: '100%',
-            p: '0.375rem',
-            mb: '2.375rem',
-            borderCollapse: 'separate',
-            borderSpacing: '0.375rem',
-            border: 'solid 1px',
-            borderColor: 'teal.100',
-            color: 'teal.950',
-            bgColor: 'teal.50/75',
-            borderRadius: 'lg',
-          })}
+        <div className={css({
+          px: '1rem',
+          pb: '1rem',
+          mb: '2.375rem',
+        })}
         >
-          <tbody
+          <table
             className={css({
-              '& :is(th, td)': { p: '0.75rem 1rem' },
-              '&>tr>th': {
-                pos: 'relative',
-                w: '8.5rem',
-                verticalAlign: 'middle',
-                textAlign: 'left',
-                fontSize: 'sm',
-                fontWeight: 'normal',
-                color: 'slate.950',
-                bgColor: 'slate.200',
-                _after: {
-                  pos: 'absolute',
-                  content: '""',
-                  w: 0,
-                  h: 0,
-                  left: '100%',
-                  top: '50%',
-                  border: 'solid transparent',
-                  borderLeftColor: 'slate.200',
-                  borderWidth: '0.625rem',
-                  mt: '-0.625rem',
-                },
-              },
-              '&>tr:first-child>th': { borderTopLeftRadius: 'lg' },
-              '&>tr:last-child>th': { borderBottomLeftRadius: 'lg' },
+              w: 'fit-content',
+              minW: '30rem',
+              maxW: '100%',
+              mx: 'auto',
+              p: '0.375rem',
+              borderCollapse: 'separate',
+              borderSpacing: '0.375rem',
+              border: 'solid 1px',
+              borderColor: 'teal.100',
+              color: 'teal.950',
+              bgColor: 'teal.50/75',
+              borderRadius: 'lg',
             })}
           >
-            <tr>
-              <th>着日</th>
-              <td>{`${formattedDeliveryDate}（${deliveryWeekString}）`}</td>
-            </tr>
-            <tr>
-              <th>時間指定</th>
-              <td>{p.delivery_time_str}</td>
-            </tr>
-            <tr>
-              <th>印刷日時</th>
-              <td>{p.printed_at}</td>
-            </tr>
-            <tr>
-              <th>印刷頁</th>
-              <td>{p.page_num_str}</td>
-            </tr>
-            <tr>
-              <th>得意先名</th>
-              <td>
-                <pre className={css({ overflowWrap: 'break-word' })}>{p.customer_name}</pre>
-              </td>
-            </tr>
-            <tr>
-              <th>住所</th>
-              <td>{p.customer_address}</td>
-            </tr>
-            <tr>
-              <th>帳合</th>
-              <td>{p.wholesaler}</td>
-            </tr>
-            <tr>
-              <th>オーダーNo.</th>
-              <td>
-                <pre className={css({ overflowWrap: 'break-word' })}>{p.order_number}</pre>
-              </td>
-            </tr>
-            <tr>
-              <th>出荷予定日</th>
-              <td>{`${formattedShippingDate}（${shippingWeekString}）`}</td>
-            </tr>
-            <tr>
-              <th>運送会社</th>
-              <td>{p.carrier}</td>
-            </tr>
-            <tr>
-              <th>口数</th>
-              <td>{p.package_count}</td>
-            </tr>
-            <tr>
-              <th>商品</th>
-              <td>
-                <pre className={css({ overflowWrap: 'break-word' })}>{p.items_of_order}</pre>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+            <tbody
+              className={css({
+                '& :is(th, td)': { p: '0.75rem 1rem' },
+                '&>tr>th': {
+                  pos: 'relative',
+                  w: '8.5rem',
+                  verticalAlign: 'middle',
+                  textAlign: 'left',
+                  fontSize: 'sm',
+                  fontWeight: 'normal',
+                  color: 'slate.950',
+                  bgColor: 'slate.200',
+                  _after: {
+                    pos: 'absolute',
+                    content: '""',
+                    w: 0,
+                    h: 0,
+                    left: '100%',
+                    top: '50%',
+                    border: 'solid transparent',
+                    borderLeftColor: 'slate.200',
+                    borderWidth: '0.625rem',
+                    mt: '-0.625rem',
+                  },
+                },
+                '&>tr:first-child>th': { borderTopLeftRadius: 'lg' },
+                '&>tr:last-child>th': { borderBottomLeftRadius: 'lg' },
+              })}
+            >
+              <tr>
+                <th>着日</th>
+                <td>{`${formattedDeliveryDate}（${deliveryWeekString}）`}</td>
+              </tr>
+              <tr>
+                <th>時間指定</th>
+                <td>{p.delivery_time_str}</td>
+              </tr>
+              <tr>
+                <th>印刷日時</th>
+                <td>{p.printed_at}</td>
+              </tr>
+              <tr>
+                <th>印刷頁</th>
+                <td>{p.page_num_str}</td>
+              </tr>
+              <tr>
+                <th>得意先名</th>
+                <td>
+                  <pre className={css({ overflowWrap: 'break-word' })}>{p.customer_name}</pre>
+                </td>
+              </tr>
+              <tr>
+                <th>住所</th>
+                <td>{p.customer_address}</td>
+              </tr>
+              <tr>
+                <th>帳合</th>
+                <td>{p.wholesaler}</td>
+              </tr>
+              <tr>
+                <th>オーダーNo.</th>
+                <td>
+                  <pre className={css({ overflowWrap: 'break-word' })}>{p.order_number}</pre>
+                </td>
+              </tr>
+              <tr>
+                <th>出荷予定日</th>
+                <td>{`${formattedShippingDate}（${shippingWeekString}）`}</td>
+              </tr>
+              <tr>
+                <th>運送会社</th>
+                <td>{p.carrier}</td>
+              </tr>
+              <tr>
+                <th>口数</th>
+                <td>{p.package_count}</td>
+              </tr>
+              <tr>
+                <th>商品</th>
+                <td>
+                  <pre className={css({ overflowWrap: 'break-word' })}>{p.items_of_order}</pre>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
         <CommonFloatingDeleteButton label="削除" position="sticky" handleClickDelete={handleClickDelete} />
       </Dialog>
     </Modal>
