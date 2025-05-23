@@ -10,10 +10,12 @@ const CustomerRoutes = lazy(() => import('./routes/customers/CustomerRoutes'));
 const ShippingInstructionPrintoutsRoutes = lazy(
   () => import('./routes/shipping-instruction-printouts/ShippingInstructionPrintoutsRoutes'),
 );
+const ProductsRoutes = lazy(() => import('./routes/products/ProductsRoutes'));
 
 const router = createBrowserRouter(
   [
     { path: '/', element: <Home /> },
+    { path: 'products/*', element: <ProductsRoutes /> },
     { path: 'customers/*', element: <CustomerRoutes /> },
     { path: 'shipping-instruction-printouts/*', element: <ShippingInstructionPrintoutsRoutes /> },
   ],
