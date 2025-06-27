@@ -1,4 +1,6 @@
 // https://github.com/TokunaKimochi/rest-json-db-R5HARU/blob/main/src/routes/products/products.schemas.ts
+// transform() を削除
+// z.boolean() => z.coerce.boolean()
 
 import { z } from 'zod';
 
@@ -16,7 +18,7 @@ const basicProductsSchema = z.object({
   packaging_type_id: z.coerce.number().int().positive(),
   expiration_value: z.coerce.number().int().positive(),
   expiration_unit: z.enum(['D', 'M', 'Y']),
-  predecessor_id: z.coerce.number().int().positive().optional(),
+  predecessor_id: z.preprocess(v => (v === '' ? undefined : v), z.coerce.number().int().positive().optional()),
 });
 
 const productsSchema = z.object({
@@ -25,21 +27,25 @@ const productsSchema = z.object({
   product_name: z.string().trim().min(1).max(32),
   short_name: z.string().trim().max(32),
   internal_code: z.string().trim().max(10).optional(),
-  is_set_product: z.boolean(),
-  depth_mm: z.coerce.number().int().positive().optional(),
-  width_mm: z.coerce.number().int().positive().optional(),
-  diameter_mm: z.coerce.number().int().positive().optional(),
-  height_mm: z.coerce.number().int().positive().optional(),
-  weight_g: z.coerce.number().int().positive().optional(),
-  available_date: z.coerce
-    .date()
-    .transform(val => val.toLocaleString('sv-SE', { timeZone: 'Asia/Tokyo', dateStyle: 'short' }))
-    .optional(),
-  discontinued_date: z.coerce
-    .date()
-    .transform(val => val.toLocaleString('sv-SE', { timeZone: 'Asia/Tokyo', dateStyle: 'short' }))
-    .optional(),
-  note: z.string().trim().optional(),
+  is_set_product: z.coerce.boolean(),
+  depth_mm: z.preprocess(v => (v === '' ? undefined : v), z.coerce.number().int().positive().optional()),
+  width_mm: z.preprocess(v => (v === '' ? undefined : v), z.coerce.number().int().positive().optional()),
+  diameter_mm: z.preprocess(v => (v === '' ? undefined : v), z.coerce.number().int().positive().optional()),
+  height_mm: z.preprocess(v => (v === '' ? undefined : v), z.coerce.number().int().positive().optional()),
+  weight_g: z.preprocess(v => (v === '' ? undefined : v), z.coerce.number().int().positive().optional()),
+  available_date: z.preprocess(
+    v => (v === '' ? undefined : v),
+    z.coerce
+      .date()
+      .optional(),
+  ),
+  discontinued_date: z.preprocess(
+    v => (v === '' ? undefined : v),
+    z.coerce
+      .date()
+      .optional(),
+  ),
+  note: z.string().optional(),
 });
 
 const productComponentsSchema = z.object({
@@ -71,18 +77,22 @@ const productCombinationsSchema = z.object({
 
 const productSkusSchema = z.object({
   skus_name: z.string().trim().min(1).max(32),
+  product_id: z.coerce.number().int().positive(),
   case_quantity: z.coerce.number().int().positive().optional(),
   inner_carton_quantity: z.coerce.number().int().positive().optional(),
   itf_case_code: z.string().trim().length(14).regex(/\d/).optional(),
   itf_inner_carton_code: z.string().trim().length(14).regex(/\d/).optional(),
-  case_height_mm: z.coerce.number().int().positive().optional(),
-  case_width_mm: z.coerce.number().int().positive().optional(),
-  case_depth_mm: z.coerce.number().int().positive().optional(),
-  case_weight_g: z.coerce.number().int().positive().optional(),
-  inner_carton_height_mm: z.coerce.number().int().positive().optional(),
-  inner_carton_width_mm: z.coerce.number().int().positive().optional(),
-  inner_carton_depth_mm: z.coerce.number().int().positive().optional(),
-  inner_carton_weight_g: z.coerce.number().int().positive().optional(),
+  case_height_mm: z.preprocess(v => (v === '' ? undefined : v), z.coerce.number().int().positive().optional()),
+  case_width_mm: z.preprocess(v => (v === '' ? undefined : v), z.coerce.number().int().positive().optional()),
+  case_depth_mm: z.preprocess(v => (v === '' ? undefined : v), z.coerce.number().int().positive().optional()),
+  case_weight_g: z.preprocess(v => (v === '' ? undefined : v), z.coerce.number().int().positive().optional()),
+  inner_carton_height_mm: z.preprocess(
+    v => (v === '' ? undefined : v),
+    z.coerce.number().int().positive().optional(),
+  ),
+  inner_carton_width_mm: z.preprocess(v => (v === '' ? undefined : v), z.coerce.number().int().positive().optional()),
+  inner_carton_depth_mm: z.preprocess(v => (v === '' ? undefined : v), z.coerce.number().int().positive().optional()),
+  inner_carton_weight_g: z.preprocess(v => (v === '' ? undefined : v), z.coerce.number().int().positive().optional()),
   priority: z.enum(['A', 'B', 'C']),
 });
 
@@ -161,7 +171,8 @@ export const postReqNewProductSchema = basicProductsSchema.extend({
   ...productsSchema.extend({ is_set_product: z.literal(false) }).omit({ basic_id: true, product_name: true }).shape,
   ...productComponentsSchema.shape,
   // skus_name は productsSchema.short_name をコピー
-  ...productSkusSchema.omit({ skus_name: true }).shape,
+  // product_id はコピー
+  ...productSkusSchema.omit({ skus_name: true, product_id: true }).shape,
 });
 
 // 完全新規登録（セット商品）
@@ -172,7 +183,8 @@ export const postReqNewSetProductSchema = basicProductsSchema.extend({
   ...productsSchema.extend({ is_set_product: z.literal(true) }).omit({ basic_id: true, product_name: true }).shape,
   ...productCombinationsSchema.shape,
   // skus_name は productsSchema.short_name をコピー
-  ...productSkusSchema.omit({ skus_name: true }).shape,
+  // product_id はコピー
+  ...productSkusSchema.omit({ skus_name: true, product_id: true }).shape,
 });
 
 // （通常商品の）内容量変更などの既存商品のバリエーション（JAN は同じ）
@@ -182,7 +194,8 @@ export const postReqProductVariantSchema = productsSchema.extend({
   is_set_product: z.literal(false),
   ...productComponentsSchema.shape,
   // skus_name は productsSchema.short_name をコピー
-  ...productSkusSchema.omit({ skus_name: true }).shape,
+  // product_id はコピー
+  ...productSkusSchema.omit({ skus_name: true, product_id: true }).shape,
 });
 
 // （セット商品の）内容量変更などの既存商品のバリエーション（JAN は同じ）
@@ -192,11 +205,9 @@ export const postReqSetProductVariantSchema = productsSchema.extend({
   is_set_product: z.literal(true),
   ...productCombinationsSchema.shape,
   // skus_name は productsSchema.short_name をコピー
-  ...productSkusSchema.omit({ skus_name: true }).shape,
+  // product_id はコピー
+  ...productSkusSchema.omit({ skus_name: true, product_id: true }).shape,
 });
 
 // ケースの入り数違い
-export const postReqNewProductSkuSchema = productSkusSchema.extend({
-  product_id: z.coerce.number().int().positive(),
-  name: z.string().trim().min(1).max(32),
-});
+export const postReqNewProductSkuSchema = productSkusSchema;

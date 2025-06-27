@@ -5,13 +5,13 @@ import { css } from 'styled-system/css';
 export default function ProductSkusFormContents() {
   return (
     <>
-      <label htmlFor="product_id">
-        ＰＲＯＤＵＣＴ－ＩＤ
-        <Input id="product_id" placeholder="ＰＲＯＤＵＣＴ－ＩＤ" />
-      </label>
       <label htmlFor="skus_name">
         ＳＫＵ名
         <Input id="skus_name" placeholder="ＳＫＵ名" />
+      </label>
+      <label htmlFor="product_id">
+        ＰＲＯＤＵＣＴ－ＩＤ
+        <Input id="product_id" placeholder="ＰＲＯＤＵＣＴ－ＩＤ" />
       </label>
       <label htmlFor="case_quantity">
         ケース入数

@@ -1,7 +1,7 @@
 import type { SubmitHandler } from 'react-hook-form';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { FormProvider, useForm } from 'react-hook-form';
+import { FormProvider, useFieldArray, useForm } from 'react-hook-form';
 
 import Button from '@/components/ui/elements/Button';
 import FormContainer from '@/components/ui/elements/FormContainer';
@@ -17,20 +17,34 @@ import ProductFormContents from './components/ProductFormContents';
 import ProductSkusFormContents from './components/ProductSkusFormContents';
 import { postReqNewProductSchema } from './products.schemas';
 
+const componentDefaultValues: PostReqNewProduct['components'][0] = {
+  title: '',
+  symbol: '',
+  amount: 0,
+  unit_type_id: 1,
+  pieces: 1,
+  inner_packaging_type_id: 1,
+};
+
 export default function RegisterProduct() {
-  const methods = useForm<PostReqNewProduct>({
+  const methods = useForm({
     mode: 'all',
     resolver: zodResolver(postReqNewProductSchema),
+    defaultValues: {
+      components: [componentDefaultValues],
+    },
   });
 
-  const { handleSubmit } = methods;
+  const { control, handleSubmit } = methods;
+  const { fields, append, remove } = useFieldArray({
+    name: 'components',
+    control,
+    rules: { minLength: 1 },
+  });
 
   const onSubmit: SubmitHandler<PostReqNewProduct> = (values) => {
     console.log(values);
   };
-  /* interface ProductFormContentsProps {
-  drawContents: { basic_id?: boolean };
-} */
 
   return (
     <>
@@ -53,7 +67,19 @@ export default function RegisterProduct() {
             <ProductFormContents drawContents={{ basic_id: true }} />
             <hr />
             <hr />
-            <ProductComponentsFormContents />
+            {fields.map((field, index) => {
+              const isTail = index === fields.length - 1;
+              return (
+                <ProductComponentsFormContents
+                  key={field.id}
+                  index={index}
+                  remove={remove}
+                  append={append}
+                  defaultComponent={{ title: '', symbol: '', amount: 0, unit_type_id: 1, pieces: 1, inner_packaging_type_id: 1 }}
+                  isTail={isTail}
+                />
+              );
+            })}
             <hr />
             <hr />
             <ProductCombinationsFormContents />

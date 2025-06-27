@@ -5,7 +5,7 @@ export default function ProductCombinationsFormContents() {
   return (
     <>
       <label htmlFor="product_id">
-        ＰＲＯＤＵＣＴ－ＩＤ
+        ＰＲＯＤＵＣＴ－ＩＤ（自分自身）
         <Input id="product_id" placeholder="ＰＲＯＤＵＣＴ－ＩＤ" />
       </label>
       <label htmlFor="item_product_id">
