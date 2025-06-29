@@ -19,7 +19,7 @@ export default function FormErrorMessage({ message }: FormErrorMessageProps): Re
           className={css({
             display: 'inline-block',
             mr: '0.25rem',
-            color: 'amber.400',
+            color: 'yellow.400',
             filter: 'drop-shadow(-1px 1px 0 #d97706)',
           })}
         />

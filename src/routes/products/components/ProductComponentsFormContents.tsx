@@ -1,8 +1,10 @@
 import { useFormContext } from 'react-hook-form';
+import { TbPencilPlus, TbTrash } from 'react-icons/tb';
 
 import Input from '@/components/ui/elements/Input';
 import Select from '@/components/ui/elements/Select';
 import FormErrorMessage from '@/components/ui/elementSwitchers/FormErrorMessage';
+import TooltipWrapper from '@/components/ui/TooltipWrapper';
 import { css } from 'styled-system/css';
 
 import type { PostReqNewProduct } from '../products.types';
@@ -32,6 +34,8 @@ export default function ProductComponentsFormContents({
     <div className={css({
       m: '1rem',
       p: '1rem',
+      borderWidth: '1px',
+      borderColor: '#fefefe',
       borderRadius: 'lg',
       shadow: 'inset-2xl',
     })}
@@ -102,20 +106,46 @@ export default function ProductComponentsFormContents({
         </Select>
         <FormErrorMessage message={errors.components?.[index]?.inner_packaging_type_id?.message} />
       </label>
-      {isTail && index !== 0
-        ? (
-            <button type="button" onClick={() => remove(index)}>
-              削除
-            </button>
-          )
-        : null}
-      {isTail
-        ? (
-            <button type="button" onClick={() => append(defaultComponent)}>
-              追加
-            </button>
-          )
-        : null}
+      <div className={css({
+        '&:has(svg)': {
+          mt: '1rem',
+          display: 'flex',
+          gap: '0.5rem',
+          alignItems: 'center',
+        },
+      })}
+      >
+        {isTail && index !== 0
+          ? (
+              <TooltipWrapper
+                text="削除"
+                fillColor="rose.500"
+                className={css({ color: 'rose.50', bgColor: 'rose.500', shadow: '2xl' })}
+              >
+                <TbTrash
+                  size="1.3rem"
+                  onClick={() => remove(index)}
+                  className={css({ _hover: { cursor: 'pointer' } })}
+                />
+              </TooltipWrapper>
+            )
+          : null}
+        {isTail
+          ? (
+              <TooltipWrapper
+                text="追加"
+                fillColor="teal.400"
+                className={css({ color: 'teal.950', bgColor: 'teal.400', shadow: '2xl' })}
+              >
+                <TbPencilPlus
+                  size="1.3rem"
+                  onClick={() => append(defaultComponent)}
+                  className={css({ _hover: { cursor: 'pointer' } })}
+                />
+              </TooltipWrapper>
+            )
+          : null}
+      </div>
     </div>
   );
 }

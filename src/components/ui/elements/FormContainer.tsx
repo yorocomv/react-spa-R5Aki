@@ -16,7 +16,7 @@ export default function FormContainer({ children }: { children: React.ReactNode 
         borderColor: 'slate.200',
         borderRadius: 'sm',
         boxShadow: 'sm',
-        '& fieldset > legend + div:has(+ [class*="error"]) > input, & fieldset > legend + div:has(+ [class*="error"]) > input:focus, & label + div:has(+ [class*="error"]) > input, & label + div:has(+ [class*="error"]) > input:focus, & label:has(+ [class*="error"]) > input, & label:has(+ [class*="error"]) > input:focus, input:has(+ [class*="error"]), input:focus:has(+ [class*="error"])':
+        '& fieldset > legend + div:has(+ [class*="error"]) > input, & fieldset > legend + div:has(+ [class*="error"]) > input:focus, & label + div:has(+ [class*="error"]) > input, & label + div:has(+ [class*="error"]) > input:focus, & label + div:has(+ [class*="error"]) > select, & label:has(+ [class*="error"]) > input, & label:has(+ [class*="error"]) > input:focus, input:has(+ [class*="error"]), input:focus:has(+ [class*="error"])':
           {
             borderWidth: 0,
             bgColor: 'pink.100',

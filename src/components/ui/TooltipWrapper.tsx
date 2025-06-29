@@ -9,7 +9,7 @@ interface TooltipWrapperProps {
   placement?: TooltipProps['placement'] | undefined;
   children: React.JSX.Element;
   className?: string | undefined;
-  fillColor: 'teal.400' | 'orange.400';
+  fillColor: 'teal.400' | 'orange.400' | 'rose.500';
 }
 
 export default function TooltipWrapper({
@@ -23,6 +23,7 @@ export default function TooltipWrapper({
   const color = {
     'teal.400': '#2dd4bf',
     'orange.400': '#fb923c',
+    'rose.500': '#f43f5e',
   };
 
   return (
