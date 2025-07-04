@@ -7,7 +7,7 @@ export default function ProductsRoutes() {
   return (
     <Routes>
       <Route path="/" element={<ProductList />} />
-      <Route path="/register" element={<RegisterProduct />} />
+      <Route path="/new" element={<RegisterProduct />} />
     </Routes>
   );
 }
