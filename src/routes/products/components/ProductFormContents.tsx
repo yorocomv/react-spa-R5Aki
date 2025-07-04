@@ -10,13 +10,16 @@ import type { PostReqProductVariant } from '../products.types';
 
 interface ProductFormContentsProps {
   drawContents?: { basic_id?: boolean };
+  isSet: 0 | 1;
+  setIsSet: React.Dispatch<React.SetStateAction<0 | 1>>;
 }
 
-export default function ProductFormContents({ drawContents }: ProductFormContentsProps) {
+export default function ProductFormContents({ drawContents, isSet, setIsSet }: ProductFormContentsProps) {
   const {
     register,
     formState: { errors },
   } = useFormContext<PostReqProductVariant>();
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => setIsSet(e.target.value as unknown as 0 | 1);
 
   return (
     <>
@@ -38,10 +41,10 @@ export default function ProductFormContents({ drawContents }: ProductFormContent
       <label htmlFor="supplier_id">
         発注先
         <Select {...register('supplier_id')} id="supplier_id">
-          <option key="dummy01" value="dummy01">🐛発注先Ａ</option>
-          <option key="dummy02" value="dummy02">🐝発注先Ｂ</option>
-          <option key="dummy03" value="dummy03">🐞発注先Ｃ</option>
-          <option key="dummy04" value="dummy04">🦗発注先Ｄ</option>
+          <option key="dummy01" value="1">🐛発注先Ａ</option>
+          <option key="dummy02" value="2">🐝発注先Ｂ</option>
+          <option key="dummy03" value="3">🐞発注先Ｃ</option>
+          <option key="dummy04" value="4">🦗発注先Ｄ</option>
         </Select>
       </label>
       <label htmlFor="product_name">
@@ -62,10 +65,16 @@ export default function ProductFormContents({ drawContents }: ProductFormContent
       </label>
       <label htmlFor="is_set_product">
         セット商品（ｎ／Ｙ）
-        <Select {...register('is_set_product')} id="is_set_product">
+        <Select
+          value={isSet}
+          {...register('is_set_product')}
+          onChange={handleChange}
+          id="is_set_product"
+        >
           <option key="false" value={0}>ＮＯ</option>
           <option key="true" value={1}>ＹＥＳ</option>
         </Select>
+        <FormErrorMessage message={errors.is_set_product?.message} />
       </label>
       <fieldset>
         <legend>商品サイズ mm（縦・横・高さ）</legend>

@@ -1,26 +1,105 @@
+import { useFormContext } from 'react-hook-form';
+import { TbPencilPlus, TbTrash } from 'react-icons/tb';
+
 import Input from '@/components/ui/elements/Input';
+import FormErrorMessage from '@/components/ui/elementSwitchers/FormErrorMessage';
+import TooltipWrapper from '@/components/ui/TooltipWrapper';
 import { css } from 'styled-system/css';
 
-export default function ProductCombinationsFormContents() {
+import type { PostReqNewSetProduct } from '../products.types';
+
+interface Props {
+  index: number;
+  remove: (index: number) => void;
+  append: (data: PostReqNewSetProduct['combinations'][0]) => void;
+  defaultCombination: PostReqNewSetProduct['combinations'][0];
+  isTail: boolean;
+}
+
+export default function ProductCombinationsFormContents({
+  index,
+  remove,
+  append,
+  defaultCombination,
+  isTail,
+}: Props) {
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext<PostReqNewSetProduct>();
+
   return (
-    <>
-      <label htmlFor="product_id">
-        ＰＲＯＤＵＣＴ－ＩＤ（自分自身）
-        <Input id="product_id" placeholder="ＰＲＯＤＵＣＴ－ＩＤ" />
+    <div className={css({
+      m: '1rem',
+      p: '1rem',
+      borderWidth: '1px',
+      borderColor: '#fefefe',
+      borderRadius: 'lg',
+      shadow: 'inset-2xl',
+    })}
+    >
+      <label htmlFor={`combinations.${index}.item_product_id`}>
+        セット内訳（構成） ＰＲＯＤＵＣＴ－ＩＤ
+        <Input
+          {...register(`combinations.${index}.item_product_id` as const)}
+          id={`combinations.${index}.item_product_id`}
+          type="number"
+          placeholder="セット内訳 ＰＲＯＤＵＣＴ－ＩＤ"
+          className={css({ w: '10.25rem' })}
+        />
+        <FormErrorMessage message={errors.combinations?.[index]?.item_product_id?.message} />
       </label>
-      <label htmlFor="item_product_id">
-        セット内訳 ＰＲＯＤＵＣＴ－ＩＤ
-        <Input id="item_product_id" placeholder="セット内訳 ＰＲＯＤＵＣＴ－ＩＤ" />
-      </label>
-      <label htmlFor="combinations_quantity">
+      <label htmlFor={`combinations.${index}.quantity`}>
         セット内訳入数
         <Input
-          id="combinations_quantity"
+          {...register(`combinations.${index}.quantity` as const)}
+          id={`combinations.${index}.quantity`}
           type="number"
           placeholder="セット内訳入数"
           className={css({ w: '10.25rem' })}
         />
+        <FormErrorMessage message={errors.combinations?.[index]?.quantity?.message} />
       </label>
-    </>
+      <div className={css({
+        '&:has(svg)': {
+          mt: '1rem',
+          display: 'flex',
+          gap: '0.5rem',
+          alignItems: 'center',
+        },
+      })}
+      >
+        {isTail && index !== 0
+          ? (
+              <TooltipWrapper
+                text="削除"
+                fillColor="rose.500"
+                className={css({ color: 'rose.50', bgColor: 'rose.500', shadow: '2xl' })}
+              >
+                <TbTrash
+                  size="1.3rem"
+                  onClick={() => remove(index)}
+                  className={css({ _hover: { cursor: 'pointer' } })}
+                />
+              </TooltipWrapper>
+            )
+          : null}
+        {isTail
+          ? (
+              <TooltipWrapper
+                text="追加"
+                fillColor="teal.400"
+                className={css({ color: 'teal.950', bgColor: 'teal.400', shadow: '2xl' })}
+              >
+                <TbPencilPlus
+                  size="1.3rem"
+                  onClick={() => append(defaultCombination)}
+                  className={css({ _hover: { cursor: 'pointer' } })}
+                />
+              </TooltipWrapper>
+            )
+          : null}
+      </div>
+    </div>
   );
 }

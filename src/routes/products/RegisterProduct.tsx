@@ -1,6 +1,7 @@
 import type { SubmitHandler } from 'react-hook-form';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useState } from 'react';
 import { FormProvider, useFieldArray, useForm } from 'react-hook-form';
 
 import Button from '@/components/ui/elements/Button';
@@ -8,41 +9,53 @@ import FormContainer from '@/components/ui/elements/FormContainer';
 import onPromise from '@/libs/onPromise';
 import { css } from 'styled-system/css';
 
-import type { PostReqNewProduct } from './products.types';
+import type { /* PostReqNewProduct, */ PostReqNewSetProduct } from './products.types';
 
 import BasicProductFormContents from './components/BasicProductFormContents';
 import ProductCombinationsFormContents from './components/ProductCombinationsFormContents';
-import ProductComponentsFormContents from './components/ProductComponentsFormContents';
+// import ProductComponentsFormContents from './components/ProductComponentsFormContents';
 import ProductFormContents from './components/ProductFormContents';
 import ProductSkusFormContents from './components/ProductSkusFormContents';
-import { postReqNewProductSchema } from './products.schemas';
+import { /* postReqNewProductSchema, */ postReqNewSetProductSchema } from './products.schemas';
 
-const componentDefaultValues: PostReqNewProduct['components'][0] = {
-  title: '',
-  symbol: '',
-  amount: 0,
-  unit_type_id: 1,
-  pieces: 1,
-  inner_packaging_type_id: 1,
+// const componentDefaultValues: PostReqNewProduct['components'][0] = {
+//   title: '',
+//   symbol: '',
+//   amount: 0,
+//   unit_type_id: 1,
+//   pieces: 1,
+//   inner_packaging_type_id: 1,
+// };
+const combinationDefaultValues: PostReqNewSetProduct['combinations'][0] = {
+  item_product_id: 0,
+  quantity: 1,
 };
 
 export default function RegisterProduct() {
+  const [isSet, setIsSet] = useState<0 | 1>(0);
+  // const methods = useForm({
+  //   mode: 'all',
+  //   resolver: zodResolver(postReqNewProductSchema),
+  //   defaultValues: {
+  //     components: [componentDefaultValues],
+  //   },
+  // });
   const methods = useForm({
     mode: 'all',
-    resolver: zodResolver(postReqNewProductSchema),
+    resolver: zodResolver(postReqNewSetProductSchema),
     defaultValues: {
-      components: [componentDefaultValues],
+      combinations: [combinationDefaultValues],
     },
   });
 
   const { control, handleSubmit } = methods;
   const { fields, append, remove } = useFieldArray({
-    name: 'components',
+    name: 'combinations', // 'components',
     control,
     rules: { minLength: 1 },
   });
 
-  const onSubmit: SubmitHandler<PostReqNewProduct> = (values) => {
+  const onSubmit: SubmitHandler<PostReqNewSetProduct>/* <PostReqNewProduct> */ = (values) => {
     console.log(values);
   };
 
@@ -64,10 +77,10 @@ export default function RegisterProduct() {
             <BasicProductFormContents />
             <hr />
             <hr />
-            <ProductFormContents drawContents={{ basic_id: true }} />
+            <ProductFormContents isSet={isSet} setIsSet={setIsSet} drawContents={{ basic_id: true }} />
             <hr />
             <hr />
-            {fields.map((field, index) => {
+            {/* {fields.map((field, index) => {
               const isTail = index === fields.length - 1;
               return (
                 <ProductComponentsFormContents
@@ -79,10 +92,22 @@ export default function RegisterProduct() {
                   isTail={isTail}
                 />
               );
+            })} */}
+            <hr />
+            <hr />
+            {fields.map((field, index) => {
+              const isTail = index === fields.length - 1;
+              return (
+                <ProductCombinationsFormContents
+                  key={field.id}
+                  index={index}
+                  remove={remove}
+                  append={append}
+                  defaultCombination={{ item_product_id: 0, quantity: 1 }}
+                  isTail={isTail}
+                />
+              );
             })}
-            <hr />
-            <hr />
-            <ProductCombinationsFormContents />
             <hr />
             <hr />
             <ProductSkusFormContents />

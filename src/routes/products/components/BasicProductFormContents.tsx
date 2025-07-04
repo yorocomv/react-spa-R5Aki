@@ -33,28 +33,28 @@ export default function BasicProductFormContents() {
       <label htmlFor="sourcing_type_id">
         製造販売タイプ
         <Select {...register('sourcing_type_id')} id="sourcing_type_id">
-          <option key="dummy01" value="dummy01">🐛自社製造自社製品</option>
-          <option key="dummy02" value="dummy02">🐝ＯＥＭ委託商品</option>
-          <option key="dummy03" value="dummy03">🐞ＯＥＭ受託製品</option>
-          <option key="dummy04" value="dummy04">🦗仕入れ商品</option>
+          <option key="dummy01" value="1">🐛自社製造自社製品</option>
+          <option key="dummy02" value="2">🐝ＯＥＭ委託商品</option>
+          <option key="dummy03" value="3">🐞ＯＥＭ受託製品</option>
+          <option key="dummy04" value="4">🦗仕入れ商品</option>
         </Select>
       </label>
       <label htmlFor="category_id">
         商品カテゴリー
         <Select {...register('category_id')} id="category_id">
-          <option key="dummy01" value="dummy01">🐛カテゴリーＡ</option>
-          <option key="dummy02" value="dummy02">🐝カテゴリーＢ</option>
-          <option key="dummy03" value="dummy03">🐞カテゴリーＣ</option>
-          <option key="dummy04" value="dummy04">🦗カテゴリーＤ</option>
+          <option key="dummy01" value="1">🐛カテゴリーＡ</option>
+          <option key="dummy02" value="2">🐝カテゴリーＢ</option>
+          <option key="dummy03" value="3">🐞カテゴリーＣ</option>
+          <option key="dummy04" value="4">🦗カテゴリーＤ</option>
         </Select>
       </label>
       <label htmlFor="packaging_type_id">
         商品パッケージタイプ
         <Select {...register('packaging_type_id')} id="packaging_type_id">
-          <option key="dummy01" value="dummy01">🐛パッケージＡ</option>
-          <option key="dummy02" value="dummy02">🐝パッケージＢ</option>
-          <option key="dummy03" value="dummy03">🐞パッケージＣ</option>
-          <option key="dummy04" value="dummy04">🦗パッケージＤ</option>
+          <option key="dummy01" value="1">🐛パッケージＡ</option>
+          <option key="dummy02" value="2">🐝パッケージＢ</option>
+          <option key="dummy03" value="3">🐞パッケージＣ</option>
+          <option key="dummy04" value="4">🦗パッケージＤ</option>
         </Select>
       </label>
       <div aria-labelledby="expiration">
@@ -75,9 +75,9 @@ export default function BasicProductFormContents() {
             className={css({ w: '10.25rem' })}
           />
           <Select {...register('expiration_unit')} id="expiration_unit">
-            <option key="dummy01" value="dummy01">🐛年</option>
-            <option key="dummy02" value="dummy02">🐝月</option>
-            <option key="dummy03" value="dummy03">🐞日</option>
+            <option key="dummy01" value="Y">🐛年</option>
+            <option key="dummy02" value="M">🐝月</option>
+            <option key="dummy03" value="D">🐞日</option>
           </Select>
         </div>
         <FormErrorMessage message={errors.expiration_value?.message} />

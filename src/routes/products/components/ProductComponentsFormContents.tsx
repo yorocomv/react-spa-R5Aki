@@ -28,7 +28,6 @@ export default function ProductComponentsFormContents({
     register,
     formState: { errors },
   } = useFormContext<PostReqNewProduct>();
-  console.log(errors);
 
   return (
     <div className={css({
