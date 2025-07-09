@@ -7,7 +7,14 @@ import { css } from 'styled-system/css';
 
 import type { PostReqNewProductSku } from '../products.types';
 
-export default function ProductSkusFormContents() {
+interface Props {
+  drawContents?: {
+    skus_name?: boolean;
+    product_id?: boolean;
+  };
+}
+
+export default function ProductSkusFormContents({ drawContents }: Props) {
   const {
     register,
     formState: { errors },
@@ -15,16 +22,24 @@ export default function ProductSkusFormContents() {
 
   return (
     <>
-      <label htmlFor="skus_name">
-        ＳＫＵ名
-        <Input {...register('skus_name')} id="skus_name" placeholder="ＳＫＵ名" />
-        <FormErrorMessage message={errors.skus_name?.message} />
-      </label>
-      <label htmlFor="product_id">
-        ＰＲＯＤＵＣＴ－ＩＤ
-        <Input {...register('product_id')} id="product_id" placeholder="ＰＲＯＤＵＣＴ－ＩＤ" />
-        <FormErrorMessage message={errors.product_id?.message} />
-      </label>
+      {drawContents?.skus_name
+        ? (
+            <label htmlFor="skus_name">
+              ＳＫＵ名
+              <Input {...register('skus_name')} id="skus_name" placeholder="ＳＫＵ名" />
+              <FormErrorMessage message={errors.skus_name?.message} />
+            </label>
+          )
+        : null}
+      {drawContents?.product_id
+        ? (
+            <label htmlFor="product_id">
+              ＰＲＯＤＵＣＴ－ＩＤ
+              <Input {...register('product_id')} id="product_id" placeholder="ＰＲＯＤＵＣＴ－ＩＤ" />
+              <FormErrorMessage message={errors.product_id?.message} />
+            </label>
+          )
+        : null}
       <label htmlFor="case_quantity">
         ケース入数
         <Input
@@ -160,9 +175,9 @@ export default function ProductSkusFormContents() {
       <label {...register('priority')} htmlFor="priority">
         在庫チェック重要レベル
         <Select id="priority">
-          <option key="A" value="A">🐛Ａ</option>
-          <option key="B" value="B">🐝Ｂ</option>
-          <option key="C" value="C">🐞Ｃ</option>
+          <option key="A" value="A">Ａ</option>
+          <option key="B" value="B">Ｂ</option>
+          <option key="C" value="C">Ｃ</option>
         </Select>
       </label>
     </>

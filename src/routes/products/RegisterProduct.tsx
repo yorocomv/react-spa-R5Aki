@@ -12,9 +12,9 @@ import { css } from 'styled-system/css';
 import type { PostReqNewProduct, PostReqNewSetProduct } from './products.types';
 
 import BasicProductFormContents from './components/BasicProductFormContents';
+import { useFetchProductsOptions } from './components/hooks/useFetchProductsOptions';
 import ProductCombinationsFormContents from './components/ProductCombinationsFormContents';
 import ProductComponentsFormContents from './components/ProductComponentsFormContents';
-// import ProductComponentsFormContents from './components/ProductComponentsFormContents';
 import ProductFormContents from './components/ProductFormContents';
 import ProductSkusFormContents from './components/ProductSkusFormContents';
 import { postReqNewProductSchema, postReqNewSetProductSchema } from './products.schemas';
@@ -34,6 +34,9 @@ const combinationDefaultValues: PostReqNewSetProduct['combinations'][0] = {
 
 export default function RegisterProduct() {
   const [isSet, setIsSet] = useState<0 | 1>(0);
+  const [packagingTypeText, setPackagingTypeText] = useState<string>('未分類');
+  const { productsOptions } = useFetchProductsOptions();
+
   const methods = useForm({
     mode: 'all',
     resolver: zodResolver(postReqNewProductSchema),
@@ -84,10 +87,17 @@ export default function RegisterProduct() {
           ? (
               <FormProvider {...setItemMethods}>
                 <form onSubmit={onPromise(setItemMethods.handleSubmit(onSubmitSetItem))}>
-                  <BasicProductFormContents />
+                  <BasicProductFormContents
+                    setPackagingTypeText={setPackagingTypeText}
+                    selectOptions={{
+                      product_sourcing_types: productsOptions.product_sourcing_types,
+                      product_categories: productsOptions.product_categories,
+                      product_packaging_types: productsOptions.product_packaging_types,
+                    }}
+                  />
                   <hr />
                   <hr />
-                  <ProductFormContents isSet={isSet} setIsSet={setIsSet} drawContents={{ basic_id: true }} />
+                  <ProductFormContents isSet={isSet} setIsSet={setIsSet} packagingTypeText={packagingTypeText} drawContents={{ basic_id: false, product_name: false }} selectOptions={{ suppliers: productsOptions.suppliers }} />
                   <hr />
                   <hr />
                   {setItemArrMethods.fields.map((field, index) => {
@@ -105,18 +115,27 @@ export default function RegisterProduct() {
                   })}
                   <hr />
                   <hr />
-                  <ProductSkusFormContents />
-                  <Button type="submit">登録</Button>
+                  <ProductSkusFormContents drawContents={{ skus_name: false, product_id: false }} />
+                  <div className={css({ mt: 4 })}>
+                    <Button type="submit">登録</Button>
+                  </div>
                 </form>
               </FormProvider>
             )
           : (
               <FormProvider {...methods}>
                 <form onSubmit={onPromise(methods.handleSubmit(onSubmit))}>
-                  <BasicProductFormContents />
+                  <BasicProductFormContents
+                    setPackagingTypeText={setPackagingTypeText}
+                    selectOptions={{
+                      product_sourcing_types: productsOptions.product_sourcing_types,
+                      product_categories: productsOptions.product_categories,
+                      product_packaging_types: productsOptions.product_packaging_types,
+                    }}
+                  />
                   <hr />
                   <hr />
-                  <ProductFormContents isSet={isSet} setIsSet={setIsSet} drawContents={{ basic_id: true }} />
+                  <ProductFormContents isSet={isSet} setIsSet={setIsSet} packagingTypeText={packagingTypeText} drawContents={{ basic_id: false, product_name: false }} selectOptions={{ suppliers: productsOptions.suppliers }} />
                   <hr />
                   <hr />
                   {
@@ -130,14 +149,20 @@ export default function RegisterProduct() {
                           append={arrMethods.append}
                           defaultComponent={{ title: '', symbol: '', amount: 0, unit_type_id: 1, pieces: 1, inner_packaging_type_id: 1 }}
                           isTail={isTail}
+                          selectOptions={{
+                            unit_types: productsOptions.unit_types,
+                            product_inner_packaging_types: productsOptions.product_inner_packaging_types,
+                          }}
                         />
                       );
                     })
                   }
                   <hr />
                   <hr />
-                  <ProductSkusFormContents />
-                  <Button type="submit">登録</Button>
+                  <ProductSkusFormContents drawContents={{ skus_name: false, product_id: false }} />
+                  <div className={css({ mt: 4 })}>
+                    <Button type="submit">登録</Button>
+                  </div>
                 </form>
               </FormProvider>
             )}

@@ -7,6 +7,7 @@ import FormErrorMessage from '@/components/ui/elementSwitchers/FormErrorMessage'
 import TooltipWrapper from '@/components/ui/TooltipWrapper';
 import { css } from 'styled-system/css';
 
+import type { ProductOptionsIdAndName } from '../options/options.types';
 import type { PostReqNewProduct } from '../products.types';
 
 interface Props {
@@ -15,6 +16,10 @@ interface Props {
   append: (data: PostReqNewProduct['components'][0]) => void;
   defaultComponent: PostReqNewProduct['components'][0];
   isTail: boolean;
+  selectOptions: {
+    unit_types: ProductOptionsIdAndName[];
+    product_inner_packaging_types: ProductOptionsIdAndName[];
+  };
 }
 
 export default function ProductComponentsFormContents({
@@ -23,6 +28,7 @@ export default function ProductComponentsFormContents({
   append,
   defaultComponent,
   isTail,
+  selectOptions,
 }: Props) {
   const {
     register,
@@ -78,7 +84,11 @@ export default function ProductComponentsFormContents({
             {...register(`components.${index}.unit_type_id` as const)}
             id={`components.${index}.unit_type_id`}
           >
-            <option key="dummy01" value="1">🐛ｇ</option>
+            {selectOptions.unit_types.map(({ id, name }) => (
+              <option key={id} value={id}>
+                {name}
+              </option>
+            ))}
           </Select>
           ✕
           <Input
@@ -98,10 +108,11 @@ export default function ProductComponentsFormContents({
           {...register(`components.${index}.inner_packaging_type_id` as const)}
           id={`components.${index}.inner_packaging_type_id`}
         >
-          <option key="dummy01" value="1">🐛タイプＡ</option>
-          <option key="dummy02" value="2">🐝タイプＢ</option>
-          <option key="dummy03" value="3">🐞タイプＣ</option>
-          <option key="dummy04" value="4">🦗タイプＤ</option>
+          {selectOptions.product_inner_packaging_types.map(({ id, name }) => (
+            <option key={id} value={id}>
+              {name}
+            </option>
+          ))}
         </Select>
         <FormErrorMessage message={errors.components?.[index]?.inner_packaging_type_id?.message} />
       </label>

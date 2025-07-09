@@ -6,15 +6,23 @@ import TextArea from '@/components/ui/elements/TextArea';
 import FormErrorMessage from '@/components/ui/elementSwitchers/FormErrorMessage';
 import { css } from 'styled-system/css';
 
+import type { ProductOptionsIdAndName } from '../options/options.types';
 import type { PostReqProductVariant } from '../products.types';
 
-interface ProductFormContentsProps {
-  drawContents?: { basic_id?: boolean };
+interface Props {
+  drawContents?: {
+    basic_id?: boolean;
+    product_name?: boolean;
+  };
+  selectOptions: {
+    suppliers: ProductOptionsIdAndName[];
+  };
   isSet: 0 | 1;
   setIsSet: React.Dispatch<React.SetStateAction<0 | 1>>;
+  packagingTypeText: string;
 }
 
-export default function ProductFormContents({ drawContents, isSet, setIsSet }: ProductFormContentsProps) {
+export default function ProductFormContents({ drawContents, selectOptions, isSet, setIsSet, packagingTypeText }: Props) {
   const {
     register,
     formState: { errors },
@@ -41,18 +49,23 @@ export default function ProductFormContents({ drawContents, isSet, setIsSet }: P
       <label htmlFor="supplier_id">
         発注先
         <Select {...register('supplier_id')} id="supplier_id">
-          <option key="dummy01" value="1">🐛発注先Ａ</option>
-          <option key="dummy02" value="2">🐝発注先Ｂ</option>
-          <option key="dummy03" value="3">🐞発注先Ｃ</option>
-          <option key="dummy04" value="4">🦗発注先Ｄ</option>
+          {selectOptions.suppliers.map(({ id, name }) => (
+            <option key={id} value={id}>
+              {name}
+            </option>
+          ))}
         </Select>
       </label>
-      <label htmlFor="product_name">
-        {/* バリエーションがない場合は basic_products.name のコピー */}
-        商品名称
-        <Input {...register('product_name')} id="product_name" placeholder="商品名称" />
-        <FormErrorMessage message={errors.product_name?.message} />
-      </label>
+      {drawContents?.product_name
+        ? (
+            <label htmlFor="product_name">
+              {/* バリエーションがない場合は basic_products.name のコピー */}
+              商品名称
+              <Input {...register('product_name')} id="product_name" placeholder="商品名称" />
+              <FormErrorMessage message={errors.product_name?.message} />
+            </label>
+          )
+        : null}
       <label htmlFor="short_name">
         商品略称名
         <Input {...register('short_name')} id="short_name" placeholder="商品略称名" />
@@ -76,66 +89,71 @@ export default function ProductFormContents({ drawContents, isSet, setIsSet }: P
         </Select>
         <FormErrorMessage message={errors.is_set_product?.message} />
       </label>
-      <fieldset>
-        <legend>商品サイズ mm（縦・横・高さ）</legend>
-        <div className={css({
-          display: 'flex',
-          gap: '0.5rem',
-          alignItems: 'center',
-        })}
-        >
-          <Input
-            {...register('depth_mm')}
-            id="depth_mm"
-            type="number"
-            placeholder="縦 mm"
-            className={css({ w: '10.25rem' })}
-          />
-          <Input
-            {...register('width_mm')}
-            id="width_mm"
-            type="number"
-            placeholder="横 mm"
-            className={css({ w: '10.25rem' })}
-          />
-          <Input
-            {...register('height_mm')}
-            id="height_mm"
-            type="number"
-            placeholder="高さ mm"
-            className={css({ w: '10.25rem' })}
-          />
-        </div>
-        <FormErrorMessage message={errors.depth_mm?.message} />
-        <FormErrorMessage message={errors.width_mm?.message} />
-        <FormErrorMessage message={errors.height_mm?.message} />
-      </fieldset>
-      <fieldset>
-        <legend>商品サイズ mm（直径・高さ）</legend>
-        <div className={css({
-          display: 'flex',
-          gap: '0.5rem',
-          alignItems: 'center',
-        })}
-        >
-          <Input
-            {...register('diameter_mm')}
-            id="diameter_mm"
-            type="number"
-            placeholder="φ mm"
-            className={css({ w: '10.25rem' })}
-          />
-          <Input
-            {...register('height_mm')}
-            id="height_mm"
-            type="number"
-            placeholder="高さ mm"
-            className={css({ w: '10.25rem' })}
-          />
-        </div>
-        <FormErrorMessage message={errors.diameter_mm?.message} />
-        <FormErrorMessage message={errors.height_mm?.message} />
-      </fieldset>
+      {(packagingTypeText.includes('缶') && !Number(isSet))
+        ? (
+            <fieldset>
+              <legend>商品サイズ mm（直径・高さ）</legend>
+              <div className={css({
+                display: 'flex',
+                gap: '0.5rem',
+                alignItems: 'center',
+              })}
+              >
+                <Input
+                  {...register('diameter_mm')}
+                  id="diameter_mm"
+                  type="number"
+                  placeholder="φ mm"
+                  className={css({ w: '10.25rem' })}
+                />
+                <Input
+                  {...register('height_mm')}
+                  id="height_mm"
+                  type="number"
+                  placeholder="高さ mm"
+                  className={css({ w: '10.25rem' })}
+                />
+              </div>
+              <FormErrorMessage message={errors.diameter_mm?.message} />
+              <FormErrorMessage message={errors.height_mm?.message} />
+            </fieldset>
+          )
+        : (
+            <fieldset>
+              <legend>商品サイズ mm（縦・横・高さ）</legend>
+              <div className={css({
+                display: 'flex',
+                gap: '0.5rem',
+                alignItems: 'center',
+              })}
+              >
+                <Input
+                  {...register('depth_mm')}
+                  id="depth_mm"
+                  type="number"
+                  placeholder="縦 mm"
+                  className={css({ w: '10.25rem' })}
+                />
+                <Input
+                  {...register('width_mm')}
+                  id="width_mm"
+                  type="number"
+                  placeholder="横 mm"
+                  className={css({ w: '10.25rem' })}
+                />
+                <Input
+                  {...register('height_mm')}
+                  id="height_mm"
+                  type="number"
+                  placeholder="高さ mm"
+                  className={css({ w: '10.25rem' })}
+                />
+              </div>
+              <FormErrorMessage message={errors.depth_mm?.message} />
+              <FormErrorMessage message={errors.width_mm?.message} />
+              <FormErrorMessage message={errors.height_mm?.message} />
+            </fieldset>
+          )}
       <label htmlFor="weight_g">
         商品重量 g
         <Input
