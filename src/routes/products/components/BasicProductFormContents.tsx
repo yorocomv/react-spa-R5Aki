@@ -5,13 +5,24 @@ import Select from '@/components/ui/elements/Select';
 import FormErrorMessage from '@/components/ui/elementSwitchers/FormErrorMessage';
 import { css } from 'styled-system/css';
 
+import type { ProductOptionsIdAndName } from '../options/options.types';
 import type { PostReqNewProduct } from '../products.types';
 
-export default function BasicProductFormContents() {
+interface Props {
+  selectOptions: {
+    product_sourcing_types: ProductOptionsIdAndName[];
+    product_categories: ProductOptionsIdAndName[];
+    product_packaging_types: ProductOptionsIdAndName[];
+  };
+  setPackagingTypeText: React.Dispatch<React.SetStateAction<string>>;
+}
+
+export default function BasicProductFormContents({ selectOptions, setPackagingTypeText }: Props) {
   const {
     register,
     formState: { errors },
   } = useFormContext<PostReqNewProduct>();
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => setPackagingTypeText(e.target.selectedOptions[0].text);
 
   return (
     <>
@@ -33,28 +44,35 @@ export default function BasicProductFormContents() {
       <label htmlFor="sourcing_type_id">
         製造販売タイプ
         <Select {...register('sourcing_type_id')} id="sourcing_type_id">
-          <option key="dummy01" value="1">🐛自社製造自社製品</option>
-          <option key="dummy02" value="2">🐝ＯＥＭ委託商品</option>
-          <option key="dummy03" value="3">🐞ＯＥＭ受託製品</option>
-          <option key="dummy04" value="4">🦗仕入れ商品</option>
+          {selectOptions.product_sourcing_types.map(({ id, name }) => (
+            <option key={id} value={id}>
+              {name}
+            </option>
+          ))}
         </Select>
       </label>
       <label htmlFor="category_id">
         商品カテゴリー
         <Select {...register('category_id')} id="category_id">
-          <option key="dummy01" value="1">🐛カテゴリーＡ</option>
-          <option key="dummy02" value="2">🐝カテゴリーＢ</option>
-          <option key="dummy03" value="3">🐞カテゴリーＣ</option>
-          <option key="dummy04" value="4">🦗カテゴリーＤ</option>
+          {selectOptions.product_categories.map(({ id, name }) => (
+            <option key={id} value={id}>
+              {name}
+            </option>
+          ))}
         </Select>
       </label>
       <label htmlFor="packaging_type_id">
         商品パッケージタイプ
-        <Select {...register('packaging_type_id')} id="packaging_type_id">
-          <option key="dummy01" value="1">🐛パッケージＡ</option>
-          <option key="dummy02" value="2">🐝パッケージＢ</option>
-          <option key="dummy03" value="3">🐞パッケージＣ</option>
-          <option key="dummy04" value="4">🦗パッケージＤ</option>
+        <Select
+          {...register('packaging_type_id')}
+          onChange={handleChange}
+          id="packaging_type_id"
+        >
+          {selectOptions.product_packaging_types.map(({ id, name }) => (
+            <option key={id} value={id}>
+              {name}
+            </option>
+          ))}
         </Select>
       </label>
       <div aria-labelledby="expiration">
@@ -75,9 +93,9 @@ export default function BasicProductFormContents() {
             className={css({ w: '10.25rem' })}
           />
           <Select {...register('expiration_unit')} id="expiration_unit">
-            <option key="dummy01" value="Y">🐛年</option>
-            <option key="dummy02" value="M">🐝月</option>
-            <option key="dummy03" value="D">🐞日</option>
+            <option key="Y" value="Y">年</option>
+            <option key="M" value="M">月</option>
+            <option key="D" value="D">日</option>
           </Select>
         </div>
         <FormErrorMessage message={errors.expiration_value?.message} />

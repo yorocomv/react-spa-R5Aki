@@ -77,8 +77,8 @@ const productCombinationsSchema = z.object({
 const productSkusSchema = z.object({
   skus_name: z.string().trim().min(1).max(32),
   product_id: z.coerce.number().int().positive(),
-  case_quantity: z.coerce.number().int().positive().optional(),
-  inner_carton_quantity: z.coerce.number().int().positive().optional(),
+  case_quantity: z.preprocess(v => (v === '' ? undefined : v), z.coerce.number().int().positive().optional()),
+  inner_carton_quantity: z.preprocess(v => (v === '' ? undefined : v), z.coerce.number().int().positive().optional()),
   itf_case_code: z.preprocess(v => (v === '' ? undefined : v), z.string().trim().length(14).regex(/\d/).optional()),
   itf_inner_carton_code: z.preprocess(v => (v === '' ? undefined : v), z.string().trim().length(14).regex(/\d/).optional()),
   case_height_mm: z.preprocess(v => (v === '' ? undefined : v), z.coerce.number().int().positive().optional()),
