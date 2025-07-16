@@ -201,7 +201,7 @@ export const postReqProductVariantSchema = productsSchema.extend({
 export const postReqSetProductVariantSchema = productsSchema.extend({
   // ulid_str はサーバ側で計算
   // is_set_product を上書き extend()
-  is_set_product: z.literal(true),
+  is_set_product: z.preprocess(v => !!Number(v), z.literal(true)),
   ...productCombinationsSchema.shape,
   // skus_name は productsSchema.short_name をコピー
   // product_id はコピー
