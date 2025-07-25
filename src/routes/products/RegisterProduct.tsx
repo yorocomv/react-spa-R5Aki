@@ -13,6 +13,7 @@ import type { PostReqNewProduct, PostReqNewSetProduct } from './products.types';
 
 import BasicProductFormContents from './components/BasicProductFormContents';
 import { useFetchProductsOptions } from './components/hooks/useFetchProductsOptions';
+import { useRegisterProducts } from './components/hooks/useRegisterProducts';
 import ProductCombinationsFormContents from './components/ProductCombinationsFormContents';
 import ProductComponentsFormContents from './components/ProductComponentsFormContents';
 import ProductFormContents from './components/ProductFormContents';
@@ -62,12 +63,13 @@ export default function RegisterProduct() {
     control: setItemMethods.control,
     rules: { minLength: 1 },
   });
+  const { registerProducts } = useRegisterProducts();
 
-  const onSubmit: SubmitHandler<PostReqNewProduct> = (values) => {
-    console.log(values);
+  const onSubmit: SubmitHandler<PostReqNewProduct> = async (values) => {
+    await registerProducts({ url: '', values });
   };
-  const onSubmitSetItem: SubmitHandler<PostReqNewSetProduct> = (values) => {
-    console.log(values);
+  const onSubmitSetItem: SubmitHandler<PostReqNewSetProduct> = async (values) => {
+    await registerProducts({ url: '/set-item', values });
   };
 
   return (
@@ -95,11 +97,9 @@ export default function RegisterProduct() {
                       product_packaging_types: productsOptions.product_packaging_types,
                     }}
                   />
-                  <hr />
-                  <hr />
+
                   <ProductFormContents isSet={isSet} setIsSet={setIsSet} packagingTypeText={packagingTypeText} drawContents={{ basic_id: false, product_name: false }} selectOptions={{ suppliers: productsOptions.suppliers }} />
-                  <hr />
-                  <hr />
+
                   {setItemArrMethods.fields.map((field, index) => {
                     const isTail = index === setItemArrMethods.fields.length - 1;
                     return (
@@ -113,8 +113,7 @@ export default function RegisterProduct() {
                       />
                     );
                   })}
-                  <hr />
-                  <hr />
+
                   <ProductSkusFormContents drawContents={{ skus_name: false, product_id: false }} />
                   <div className={css({ mt: 4 })}>
                     <Button type="submit">登録</Button>
@@ -133,11 +132,9 @@ export default function RegisterProduct() {
                       product_packaging_types: productsOptions.product_packaging_types,
                     }}
                   />
-                  <hr />
-                  <hr />
+
                   <ProductFormContents isSet={isSet} setIsSet={setIsSet} packagingTypeText={packagingTypeText} drawContents={{ basic_id: false, product_name: false }} selectOptions={{ suppliers: productsOptions.suppliers }} />
-                  <hr />
-                  <hr />
+
                   {
                     arrMethods.fields.map((field, index) => {
                       const isTail = index === arrMethods.fields.length - 1;
@@ -157,8 +154,7 @@ export default function RegisterProduct() {
                       );
                     })
                   }
-                  <hr />
-                  <hr />
+
                   <ProductSkusFormContents drawContents={{ skus_name: false, product_id: false }} />
                   <div className={css({ mt: 4 })}>
                     <Button type="submit">登録</Button>
