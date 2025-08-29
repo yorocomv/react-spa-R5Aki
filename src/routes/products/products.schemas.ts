@@ -210,3 +210,10 @@ export const postReqSetProductVariantSchema = productsSchema.extend({
 
 // ケースの入り数違い
 export const postReqNewProductSkuSchema = productSkusSchema;
+
+export const newProductSummarySchema = z.object({
+  basic_id: z.number().int().positive(),
+  product_id: z.number().int().positive(),
+  sku_id: z.number().int().positive(),
+  product_name: z.string().trim().min(1).max(32),
+});

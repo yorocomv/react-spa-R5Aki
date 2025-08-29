@@ -3,6 +3,7 @@
 import type { z } from 'zod';
 
 import type {
+  newProductSummarySchema,
   postReqNewProductSchema,
   postReqNewProductSkuSchema,
   postReqNewSetProductSchema,
@@ -15,3 +16,4 @@ export type PostReqNewSetProduct = z.infer<typeof postReqNewSetProductSchema>;
 export type PostReqProductVariant = z.infer<typeof postReqProductVariantSchema>;
 export type PostReqSetProductVariant = z.infer<typeof postReqSetProductVariantSchema>;
 export type PostReqNewProductSku = z.infer<typeof postReqNewProductSkuSchema>;
+export type NewProductSummary = z.infer<typeof newProductSummarySchema>;
