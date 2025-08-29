@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import axiosInstance from '@/util/axiosInstance';
 
-import type { PostReqNewProduct, PostReqNewSetProduct } from '../../products.types';
+import type { NewProductSummary, PostReqNewProduct, PostReqNewSetProduct } from '../../products.types';
 
 type UseRegisterProductsProps =
   | {
@@ -17,11 +17,10 @@ type UseRegisterProductsProps =
   };
 
 async function registerProductsMutationFn({ url, values }: UseRegisterProductsProps) {
-  const response: AxiosResponse = await axiosInstance.post(`/products${url}`, values).catch((err: string) => {
+  const response: AxiosResponse<NewProductSummary> = await axiosInstance.post(`/products${url}`, values).catch((err: string) => {
     console.error(`💥💥💥 /products${url} からのエラーをキャッチ❢ ${err} 💀💀💀`);
     return Promise.reject(new Error(err));
   });
-  // TODO バックエンドでレスポンスを整備したら型を明示する
   return response.data;
 }
 
