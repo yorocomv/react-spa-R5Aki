@@ -66,7 +66,8 @@ export default function RegisterProduct() {
   const { registerProducts } = useRegisterProducts();
 
   const onSubmit: SubmitHandler<PostReqNewProduct> = async (values) => {
-    await registerProducts({ url: '', values });
+    const response = await registerProducts({ url: '', values });
+    console.log(response);
   };
   const onSubmitSetItem: SubmitHandler<PostReqNewSetProduct> = async (values) => {
     await registerProducts({ url: '/set-item', values });
