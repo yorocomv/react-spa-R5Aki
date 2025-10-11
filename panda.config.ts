@@ -27,40 +27,69 @@ export default defineConfig({
   theme: {
     extend: {
       tokens: {
-        // https://primeflex.org/elevation#classes
         shadows: {
+          '2xs': {
+            value: `
+              0.5px 1px 1px hsl(0 0% 0% / 0.25)
+            `,
+          },
           xs: {
-            value: '0px 3px 5px rgba(0, 0, 0, 0.02), 0px 0px 2px rgba(0, 0, 0, 0.05), 0px 1px 4px rgba(0, 0, 0, 0.08)',
+            value: `
+              1px 2px 2px hsl(0 0% 0% / 0.25)
+            `,
           },
           sm: {
-            value: '0px 4px 10px rgba(0, 0, 0, 0.03), 0px 0px 2px rgba(0, 0, 0, 0.06), 0px 2px 6px rgba(0, 0, 0, 0.12)',
+            value: `
+              1px 2px 2px hsl(0 0% 0% / 0.2),
+              2px 4px 4px hsl(0 0% 0% / 0.2)
+            `,
           },
           md: {
-            value:
-              '0px 1px 8px rgba(0, 0, 0, 0.08), 0px 3px 4px rgba(0, 0, 0, 0.1), 0px 1px 4px -1px rgba(0, 0, 0, 0.1)',
+            value: `
+              1px 2px 2px hsl(0 0% 0% / 0.18),
+              2px 4px 4px hsl(0 0% 0% / 0.18),
+              3px 6px 6px hsl(0 0% 0% / 0.18)
+            `,
           },
           lg: {
-            value:
-              '0px 1px 10px rgba(0, 0, 0, 0.12), 0px 4px 5px rgba(0, 0, 0, 0.14), 0px 2px 4px -1px rgba(0, 0, 0, 0.2)',
+            value: `
+              1px 2px 2px hsl(0 0% 0% / 0.16),
+              2px 4px 4px hsl(0 0% 0% / 0.16),
+              4px 8px 8px hsl(0 0% 0% / 0.16),
+              8px 16px 16px hsl(0 0% 0% / 0.16)
+            `,
           },
           xl: {
-            value:
-              '0px 1px 7px rgba(0, 0, 0, 0.1), 0px 4px 5px -2px rgba(0, 0, 0, 0.12), 0px 10px 15px -5px rgba(0, 0, 0, 0.2)',
+            value: `
+              2px 4px 4px hsl(0 0% 0% / 0.14),
+              4px 8px 8px hsl(0 0% 0% / 0.14),
+              8px 16px 16px hsl(0 0% 0% / 0.14),
+              16px 32px 32px hsl(0 0% 0% / 0.14)
+            `,
           },
           '2xl': {
-            value:
-              '0px 3px 5px rgba(0, 0, 0, 0.06), 0px 7px 9px rgba(0, 0, 0, 0.12), 0px 20px 25px -8px rgba(0, 0, 0, 0.18)',
+            value: `
+              2px 4px 4px hsl(0 0% 0% / 0.12),
+              4px 8px 8px hsl(0 0% 0% / 0.12),
+              8px 16px 16px hsl(0 0% 0% / 0.12),
+              16px 32px 32px hsl(0 0% 0% / 0.12),
+              32px 64px 64px hsl(0 0% 0% / 0.12)
+            `,
           },
-          '3xl': {
-            value:
-              '0px 7px 30px rgba(0, 0, 0, 0.08), 0px 22px 30px 2px rgba(0, 0, 0, 0.15), 0px 8px 10px rgba(0, 0, 0, 0.15)',
+          'inset-2xs': {
+            value: `
+              inset 0 1px 2px hsl(0 0% 0% / 0.15)
+            `,
           },
-          '4xl': {
-            value:
-              '0px 9px 46px 8px rgba(0, 0, 0, 0.12), 0px 24px 38px 3px rgba(0, 0, 0, 0.14), 0px 11px 15px rgba(0, 0, 0, 0.2)',
+          'inset-xs': {
+            value: `
+              inset 0 2px 4px hsl(0 0% 0% / 0.15)
+            `,
           },
-          'inset-2xl': {
-            value: 'inset -5px -5px 10px 0px rgba(255, 255, 255, 0.5), inset 5px 5px 10px 0px rgba(0, 0, 0, 0.3)',
+          'inset-sm': {
+            value: `
+              inset 0 4px 8px hsl(0 0% 0% / 0.15)
+            `,
           },
         },
       },
