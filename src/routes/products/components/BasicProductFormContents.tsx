@@ -28,7 +28,12 @@ export default function BasicProductFormContents({ selectOptions, setPackagingTy
     <>
       <label htmlFor="basic_name">
         商品カタログ掲載名
-        <Input {...register('basic_name')} id="basic_name" placeholder="商品カタログ掲載名" />
+        <Input
+          {...register('basic_name')}
+          id="basic_name"
+          placeholder="商品カタログ掲載名"
+          className={css({ w: '25rem' })}
+        />
         <FormErrorMessage message={errors.basic_name?.message} />
       </label>
       <label htmlFor="jan_code">
