@@ -35,60 +35,82 @@ export default defineConfig({
           },
           xs: {
             value: `
-              1px 2px 2px hsl(0 0% 0% / 0.25)
+              0.5px 2px 2px hsl(0 0% 0% / 0.25)
             `,
           },
           sm: {
             value: `
-              1px 2px 2px hsl(0 0% 0% / 0.2),
-              2px 4px 4px hsl(0 0% 0% / 0.2)
+              0.5px 2px 2px hsl(0 0% 0% / 0.2),
+              1px 4px 4px hsl(0 0% 0% / 0.2)
             `,
           },
           md: {
             value: `
-              1px 2px 2px hsl(0 0% 0% / 0.18),
-              2px 4px 4px hsl(0 0% 0% / 0.18),
-              3px 6px 6px hsl(0 0% 0% / 0.18)
+              0.5px 2px 2px hsl(0 0% 0% / 0.18),
+              1px 4px 4px hsl(0 0% 0% / 0.18),
+              1.5px 6px 6px hsl(0 0% 0% / 0.18)
             `,
           },
           lg: {
             value: `
-              1px 2px 2px hsl(0 0% 0% / 0.16),
-              2px 4px 4px hsl(0 0% 0% / 0.16),
-              4px 8px 8px hsl(0 0% 0% / 0.16),
-              8px 16px 16px hsl(0 0% 0% / 0.16)
+              0.5px 2px 2px hsl(0 0% 0% / 0.16),
+              1px 4px 4px hsl(0 0% 0% / 0.16),
+              2px 8px 8px hsl(0 0% 0% / 0.16),
+              4px 16px 16px hsl(0 0% 0% / 0.16)
             `,
           },
           xl: {
             value: `
-              2px 4px 4px hsl(0 0% 0% / 0.14),
-              4px 8px 8px hsl(0 0% 0% / 0.14),
-              8px 16px 16px hsl(0 0% 0% / 0.14),
-              16px 32px 32px hsl(0 0% 0% / 0.14)
+              1px 4px 4px hsl(0 0% 0% / 0.14),
+              2px 8px 8px hsl(0 0% 0% / 0.14),
+              4px 16px 16px hsl(0 0% 0% / 0.14),
+              8px 32px 32px hsl(0 0% 0% / 0.14)
             `,
           },
           '2xl': {
             value: `
-              2px 4px 4px hsl(0 0% 0% / 0.12),
-              4px 8px 8px hsl(0 0% 0% / 0.12),
-              8px 16px 16px hsl(0 0% 0% / 0.12),
-              16px 32px 32px hsl(0 0% 0% / 0.12),
-              32px 64px 64px hsl(0 0% 0% / 0.12)
+              1px 4px 4px hsl(0 0% 0% / 0.12),
+              2px 8px 8px hsl(0 0% 0% / 0.12),
+              4px 16px 16px hsl(0 0% 0% / 0.12),
+              8px 32px 32px hsl(0 0% 0% / 0.12),
+              16px 64px 64px hsl(0 0% 0% / 0.12)
             `,
           },
+
+          // --- Inset shadows ---
           'inset-2xs': {
             value: `
-              inset 0 1px 2px hsl(0 0% 0% / 0.15)
+              inset 0.5px 1px 2px hsl(0 0% 0% / 0.15)
             `,
           },
           'inset-xs': {
             value: `
-              inset 0 2px 4px hsl(0 0% 0% / 0.15)
+              inset 0.5px 2px 4px hsl(0 0% 0% / 0.15)
             `,
           },
           'inset-sm': {
             value: `
-              inset 0 4px 8px hsl(0 0% 0% / 0.15)
+              inset 1px 4px 8px hsl(0 0% 0% / 0.15)
+            `,
+          },
+          'inset-md': {
+            value: `
+              inset 2px 6px 12px hsl(0 0% 0% / 0.14)
+            `,
+          },
+          'inset-lg': {
+            value: `
+              inset 4px 12px 24px hsl(0 0% 0% / 0.13)
+            `,
+          },
+          'inset-xl': {
+            value: `
+              inset 8px 24px 48px hsl(0 0% 0% / 0.12)
+            `,
+          },
+          'inset-2xl': {
+            value: `
+              inset 16px 32px 64px hsl(0 0% 0% / 0.1)
             `,
           },
         },

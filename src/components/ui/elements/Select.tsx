@@ -11,7 +11,7 @@ const Select = styled('select', {
     borderWidth: '1px',
     borderColor: '#fefefe',
     borderRadius: 'sm',
-    boxShadow: 'sm',
+    boxShadow: '2xs',
     _hover: {
       borderColor: 'slate.400',
     },

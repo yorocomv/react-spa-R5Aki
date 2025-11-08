@@ -10,7 +10,7 @@ const TextArea = styled('textarea', {
     borderWidth: '1px',
     borderColor: '#fefefe',
     borderRadius: 'sm',
-    boxShadow: 'sm',
+    boxShadow: '2xs',
     _placeholder: {
       fontSize: '0.8rem',
       fontWeight: 'normal',
