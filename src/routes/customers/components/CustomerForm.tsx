@@ -213,7 +213,7 @@ export default function CustomerForm() {
           placeholder="住所3"
           className={css({
             w: '34.5rem',
-            mt: '0.125rem',
+            mt: '0.15rem',
           })}
         />
         <FormErrorMessage message={errors.address3?.message} />
@@ -245,7 +245,7 @@ export default function CustomerForm() {
           placeholder="名称2"
           className={css({
             w: '32.5rem',
-            mt: '0.125rem',
+            mt: '0.15rem',
           })}
         />
         <FormErrorMessage message={errors.name2?.message} />
