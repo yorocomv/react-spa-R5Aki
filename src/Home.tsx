@@ -30,6 +30,18 @@ function Home() {
           🖨️出荷指示書印刷履歴
         </div>
       </Link>
+      <Link to="./products/new" relative="path">
+        <div
+          className={css({
+            bg: '#edebe8',
+            p: '2',
+            m: 1,
+            rounded: 'sm',
+          })}
+        >
+          🍬製品登録
+        </div>
+      </Link>
     </Center>
   );
 }
