@@ -35,7 +35,7 @@ export default function ProductCombinationsFormContents({
       borderWidth: '1px',
       borderColor: '#fefefe',
       borderRadius: 'lg',
-      shadow: 'inset-sm',
+      shadow: 'inset-md',
     })}
     >
       <label htmlFor={`combinations.${index}.item_product_id`}>

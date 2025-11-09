@@ -28,6 +28,7 @@ export default defineConfig({
     extend: {
       tokens: {
         shadows: {
+          // --- 外側影 ---
           '2xs': {
             value: `
               0.5px 1px 1px hsl(0 0% 0% / 0.25)
@@ -77,40 +78,51 @@ export default defineConfig({
             `,
           },
 
-          // --- Inset shadows ---
+          // --- 内側影（多層化仕様） ---
           'inset-2xs': {
             value: `
-              inset 0.5px 1px 2px hsl(0 0% 0% / 0.15)
+              inset 0.5px 1px 1px hsl(0 0% 0% / 0.2)
             `,
           },
           'inset-xs': {
             value: `
-              inset 0.5px 2px 4px hsl(0 0% 0% / 0.15)
+              inset 0.5px 2px 2px hsl(0 0% 0% / 0.18),
+              inset 1px 3px 3px hsl(0 0% 0% / 0.12)
             `,
           },
           'inset-sm': {
             value: `
-              inset 1px 4px 8px hsl(0 0% 0% / 0.15)
+              inset 0.5px 2px 2px hsl(0 0% 0% / 0.18),
+              inset 1px 4px 4px hsl(0 0% 0% / 0.12),
+              inset 2px 6px 6px hsl(0 0% 0% / 0.08)
             `,
           },
           'inset-md': {
             value: `
-              inset 2px 6px 12px hsl(0 0% 0% / 0.14)
+              inset 0.5px 2px 2px hsl(0 0% 0% / 0.16),
+              inset 1px 4px 4px hsl(0 0% 0% / 0.12),
+              inset 2px 8px 8px hsl(0 0% 0% / 0.08)
             `,
           },
           'inset-lg': {
             value: `
-              inset 4px 12px 24px hsl(0 0% 0% / 0.13)
+              inset 1px 4px 4px hsl(0 0% 0% / 0.14),
+              inset 2px 8px 8px hsl(0 0% 0% / 0.1),
+              inset 4px 16px 16px hsl(0 0% 0% / 0.06)
             `,
           },
           'inset-xl': {
             value: `
-              inset 8px 24px 48px hsl(0 0% 0% / 0.12)
+              inset 2px 8px 8px hsl(0 0% 0% / 0.12),
+              inset 4px 16px 16px hsl(0 0% 0% / 0.08),
+              inset 8px 32px 32px hsl(0 0% 0% / 0.05)
             `,
           },
           'inset-2xl': {
             value: `
-              inset 16px 32px 64px hsl(0 0% 0% / 0.1)
+              inset 4px 16px 16px hsl(0 0% 0% / 0.1),
+              inset 8px 32px 32px hsl(0 0% 0% / 0.06),
+              inset 16px 64px 64px hsl(0 0% 0% / 0.04)
             `,
           },
         },

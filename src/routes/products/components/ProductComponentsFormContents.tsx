@@ -42,7 +42,7 @@ export default function ProductComponentsFormContents({
       borderWidth: '1px',
       borderColor: '#fefefe',
       borderRadius: 'lg',
-      shadow: 'inset-sm',
+      shadow: 'inset-md',
     })}
     >
       <label htmlFor={`components.${index}.title`}>
