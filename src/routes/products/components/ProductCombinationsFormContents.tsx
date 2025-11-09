@@ -1,6 +1,7 @@
 import { useFormContext } from 'react-hook-form';
 import { TbPencilPlus, TbTrash } from 'react-icons/tb';
 
+import ComboField from '@/components/ui/ComboField';
 import Input from '@/components/ui/elements/Input';
 import FormErrorMessage from '@/components/ui/elementSwitchers/FormErrorMessage';
 import TooltipWrapper from '@/components/ui/TooltipWrapper';
@@ -40,13 +41,14 @@ export default function ProductCombinationsFormContents({
     >
       <label htmlFor={`combinations.${index}.item_product_id`}>
         セット内訳（構成） ＰＲＯＤＵＣＴ－ＩＤ
-        <Input
+        <ComboField />
+        {/* <Input
           {...register(`combinations.${index}.item_product_id` as const)}
           id={`combinations.${index}.item_product_id`}
           type="number"
           placeholder="セット内訳 ＰＲＯＤＵＣＴ－ＩＤ"
           className={css({ w: '10.25rem' })}
-        />
+        /> */}
         <FormErrorMessage message={errors.combinations?.[index]?.item_product_id?.message} />
       </label>
       <label htmlFor={`combinations.${index}.quantity`}>
