@@ -1,5 +1,5 @@
-import { Button, ComboBox, Input, ListBox, ListBoxItem, Popover } from 'react-aria-components';
-import { TbSquareChevronDownFilled } from 'react-icons/tb';
+import { Button, ComboBox, Group, Input, ListBox, ListBoxItem, Popover } from 'react-aria-components';
+import { MdKeyboardArrowDown } from 'react-icons/md';
 
 import { css } from 'styled-system/css';
 
@@ -14,13 +14,23 @@ export default function ComboField() {
   ];
 
   return (
-    <ComboBox>
-      <div className={css({
+    <ComboBox className={css({
+      display: 'flex',
+      flexDir: 'column',
+      gap: '1rem',
+      w: '18rem',
+      bgColor: 'red',
+      // alignItems: 'center',
+    })}
+    >
+      <Group className={css({
         display: 'flex',
         alignItems: 'center',
       })}
       >
         <Input className={css({
+          flex: '1',
+          w: 'full',
           fontWeight: 'bold',
           h: '2.5rem',
           px: '1rem',
@@ -44,16 +54,31 @@ export default function ComboField() {
         })}
         />
         <Button className={css({
-          ml: '-1.714rem',
-          color: 'teal.700',
+          // ml: '-2.714rem',
+          outline: 'none',
+          px: '0.5rem',
+          py: '0.53rem',
+          borderRightRadius: 'md',
+          color: 'slate.700/90',
+          bgColor: 'transparent',
+          borderWidth: '0 0 0 1px',
+          borderStyle: 'solid',
+          borderColor: 'slate.200',
+          _hover: { color: 'slate.950' },
           _pressed: {
-            color: 'teal.500',
+            color: 'slate.950',
+            bgColor: 'purple.100',
+            borderColor: 'purple.200',
           },
+          // color: 'teal.700',
+          // _pressed: {
+          //   color: 'teal.500',
+          // },
         })}
         >
-          <TbSquareChevronDownFilled size={24} />
+          <MdKeyboardArrowDown size={24} />
         </Button>
-      </div>
+      </Group>
       <Popover className={css({
         minW: '14rem',
         color: '#0a1612',
