@@ -40,8 +40,8 @@ export default function ProductCombinationsFormContents({
     })}
     >
       <label htmlFor={`combinations.${index}.item_product_id`}>
-        セット内訳（構成） ＰＲＯＤＵＣＴ－ＩＤ
-        <ComboField />
+        セット内訳（構成） ＰＲＯＤＵＣＴ
+        <ComboField placeholder="セット内訳 ＰＲＯＤＵＣＴ" />
         {/* <Input
           {...register(`combinations.${index}.item_product_id` as const)}
           id={`combinations.${index}.item_product_id`}
