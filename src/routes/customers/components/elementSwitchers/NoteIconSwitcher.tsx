@@ -17,7 +17,7 @@ export default function NoteIconSwitcher({ notes }: { notes: number }): React.JS
               mr: 0,
             })}`}
           />
-          <span className={css({ color: 'blue.400', ml: '-0.125rem', mr: '0.125rem' })}>{`×${notes}`}</span>
+          <span className={css({ color: 'blue.400', ml: '-0.125rem', mr: '0.125rem' })}>{notes}</span>
         </>
       );
     default:
@@ -31,7 +31,7 @@ export default function NoteIconSwitcher({ notes }: { notes: number }): React.JS
               mr: 0,
             })}`}
           />
-          <span className={css({ color: 'blue.400', ml: '-0.125rem', mr: '0.125rem' })}>{`×${notes}`}</span>
+          <span className={css({ color: 'blue.400', ml: '-0.125rem', mr: '0.125rem' })}>{notes}</span>
         </>
       );
   }
