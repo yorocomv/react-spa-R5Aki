@@ -14,6 +14,7 @@ const globalCss = defineGlobalStyles({
 });
 
 // shadows by Gemini 3 Pro
+// https://www.joshwcomeau.com/css/designing-shadows
 const SHADOW_HUE = '0 0% 0%';
 
 /**
