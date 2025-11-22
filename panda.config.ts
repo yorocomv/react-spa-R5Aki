@@ -13,6 +13,25 @@ const globalCss = defineGlobalStyles({
   },
 });
 
+// shadows by Gemini 3 Pro
+const SHADOW_HUE = '0 0% 0%';
+
+/**
+ * 11時の光源（X軸ズレ）を維持しつつ、
+ * 多層レイヤーによる滑らかな減衰を生成するヘルパー
+ */
+function createShadow(layers: [number, number, number, number][], isInset = false) {
+  return {
+    value: layers
+      .map(([x, y, blur, alpha]) => {
+        const color = `hsl(${SHADOW_HUE} / ${alpha})`;
+        const type = isInset ? 'inset ' : '';
+        return `${type}${x}px ${y}px ${blur}px ${color}`;
+      })
+      .join(', '),
+  };
+}
+
 export default defineConfig({
   // Whether to use css reset
   preflight: true,
@@ -28,103 +47,103 @@ export default defineConfig({
     extend: {
       tokens: {
         shadows: {
-          // --- 外側影 ---
-          '2xs': {
-            value: `
-              0.5px 1px 1px hsl(0 0% 0% / 0.25)
-            `,
-          },
-          xs: {
-            value: `
-              0.5px 2px 2px hsl(0 0% 0% / 0.25)
-            `,
-          },
-          sm: {
-            value: `
-              0.5px 2px 2px hsl(0 0% 0% / 0.2),
-              1px 4px 4px hsl(0 0% 0% / 0.2)
-            `,
-          },
-          md: {
-            value: `
-              0.5px 2px 2px hsl(0 0% 0% / 0.18),
-              1px 4px 4px hsl(0 0% 0% / 0.18),
-              1.5px 6px 6px hsl(0 0% 0% / 0.18)
-            `,
-          },
-          lg: {
-            value: `
-              0.5px 2px 2px hsl(0 0% 0% / 0.16),
-              1px 4px 4px hsl(0 0% 0% / 0.16),
-              2px 8px 8px hsl(0 0% 0% / 0.16),
-              4px 16px 16px hsl(0 0% 0% / 0.16)
-            `,
-          },
-          xl: {
-            value: `
-              1px 4px 4px hsl(0 0% 0% / 0.14),
-              2px 8px 8px hsl(0 0% 0% / 0.14),
-              4px 16px 16px hsl(0 0% 0% / 0.14),
-              8px 32px 32px hsl(0 0% 0% / 0.14)
-            `,
-          },
-          '2xl': {
-            value: `
-              1px 4px 4px hsl(0 0% 0% / 0.12),
-              2px 8px 8px hsl(0 0% 0% / 0.12),
-              4px 16px 16px hsl(0 0% 0% / 0.12),
-              8px 32px 32px hsl(0 0% 0% / 0.12),
-              16px 64px 64px hsl(0 0% 0% / 0.12)
-            `,
-          },
+          // --- 外側影 (Drop Shadows) ---
+          // ポイント: 全てのサイズで [0.5, 1, 1] の最小レイヤーを含めることで
+          // どんなに大きく浮いても「地面との接点」を感じさせます。
 
-          // --- 内側影（多層化仕様） ---
-          'inset-2xs': {
-            value: `
-              inset 0.5px 1px 1px hsl(0 0% 0% / 0.2)
-            `,
-          },
-          'inset-xs': {
-            value: `
-              inset 0.5px 2px 2px hsl(0 0% 0% / 0.18),
-              inset 1px 3px 3px hsl(0 0% 0% / 0.12)
-            `,
-          },
-          'inset-sm': {
-            value: `
-              inset 0.5px 2px 2px hsl(0 0% 0% / 0.18),
-              inset 1px 4px 4px hsl(0 0% 0% / 0.12),
-              inset 2px 6px 6px hsl(0 0% 0% / 0.08)
-            `,
-          },
-          'inset-md': {
-            value: `
-              inset 0.5px 2px 2px hsl(0 0% 0% / 0.16),
-              inset 1px 4px 4px hsl(0 0% 0% / 0.12),
-              inset 2px 8px 8px hsl(0 0% 0% / 0.08)
-            `,
-          },
-          'inset-lg': {
-            value: `
-              inset 1px 4px 4px hsl(0 0% 0% / 0.14),
-              inset 2px 8px 8px hsl(0 0% 0% / 0.1),
-              inset 4px 16px 16px hsl(0 0% 0% / 0.06)
-            `,
-          },
-          'inset-xl': {
-            value: `
-              inset 2px 8px 8px hsl(0 0% 0% / 0.12),
-              inset 4px 16px 16px hsl(0 0% 0% / 0.08),
-              inset 8px 32px 32px hsl(0 0% 0% / 0.05)
-            `,
-          },
-          'inset-2xl': {
-            value: `
-              inset 4px 16px 16px hsl(0 0% 0% / 0.1),
-              inset 8px 32px 32px hsl(0 0% 0% / 0.06),
-              inset 16px 64px 64px hsl(0 0% 0% / 0.04)
-            `,
-          },
+          '2xs': createShadow([
+            // 控えめな存在感
+            [0.5, 1, 1, 0.15],
+          ]),
+
+          xs: createShadow([
+            // ここから多層化開始
+            [0.5, 1, 1, 0.08],
+            [0.5, 2, 2, 0.08],
+          ]),
+
+          sm: createShadow([
+            [0.5, 1, 1, 0.06], // 接地レイヤー
+            [1, 2, 2, 0.06],
+            [2, 4, 4, 0.06], // 拡散レイヤー
+          ]),
+
+          md: createShadow([
+            [0.5, 1, 1, 0.06],
+            [1, 2, 2, 0.05],
+            [2, 4, 4, 0.05],
+            [4, 8, 8, 0.05],
+          ]),
+
+          lg: createShadow([
+            [0.5, 1, 1, 0.05],
+            [1, 2, 2, 0.04],
+            [2, 4, 4, 0.04],
+            [4, 8, 8, 0.04],
+            [8, 16, 16, 0.04],
+          ]),
+
+          xl: createShadow([
+            // 接地感を出すため 0.5px から積み上げ
+            [0.5, 1, 1, 0.05], // 強い接地
+            [1, 2, 2, 0.03],
+            [2, 4, 4, 0.03],
+            [4, 8, 8, 0.03],
+            [8, 16, 16, 0.03],
+            [12, 32, 32, 0.03], // 少し広げた拡散
+          ]),
+
+          '2xl': createShadow([
+            [0.5, 1, 1, 0.05],
+            [1, 2, 2, 0.02],
+            [2, 4, 4, 0.02],
+            [4, 8, 8, 0.02],
+            [8, 16, 16, 0.02],
+            [16, 32, 32, 0.02],
+            [24, 64, 64, 0.02], // 非常に大きく、しかし薄く広がる影
+          ]),
+
+          // --- 内側影 (Inset Shadows) ---
+          // 窪み表現のため、接地感（鋭い影）は外側影ほど重要ではありませんが、
+          // 滑らかさを出すためにレイヤー数は確保しています。
+          'inset-2xs': createShadow([
+            [0.5, 1, 1, 0.2],
+          ], true),
+
+          'inset-xs': createShadow([
+            [0.5, 1, 1, 0.08],
+            [0.5, 2, 2, 0.08],
+          ], true),
+
+          'inset-sm': createShadow([
+            [0.5, 2, 2, 0.1],
+            [1, 4, 4, 0.08],
+            [2, 6, 6, 0.05],
+          ], true),
+
+          'inset-md': createShadow([
+            [0.5, 2, 2, 0.08],
+            [1, 4, 4, 0.06],
+            [2, 8, 8, 0.06],
+          ], true),
+
+          'inset-lg': createShadow([
+            [1, 4, 4, 0.06],
+            [2, 8, 8, 0.06],
+            [4, 16, 16, 0.05],
+          ], true),
+
+          'inset-xl': createShadow([
+            [2, 8, 8, 0.06],
+            [4, 16, 16, 0.05],
+            [8, 32, 32, 0.04],
+          ], true),
+
+          'inset-2xl': createShadow([
+            [4, 16, 16, 0.05],
+            [8, 32, 32, 0.04],
+            [16, 64, 64, 0.03],
+          ], true),
         },
       },
     },
