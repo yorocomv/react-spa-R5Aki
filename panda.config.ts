@@ -5,7 +5,7 @@ const globalCss = defineGlobalStyles({
     minHeight: '100lvh',
     backgroundColor: '#dcd0c0',
     backgroundImage:
-      "linear-gradient(180deg, rgba(255, 255, 255, 0) 0lvh, rgba(35, 0, 0, 0) 75lvh, rgba(35, 0, 0, .4) 200lvh, rgba(35, 0, 0, .6) 300lvh), url('/bg.svg')",
+      "linear-gradient(175deg, rgba(255, 255, 255, 0) 0lvh, rgba(35, 0, 0, 0) 75lvh, rgba(35, 0, 0, .35) 200lvh, rgba(35, 0, 0, .55) 300lvh), url('/bg.svg')",
     color: '#0e0e0e',
     fontFamily: '"Segoe UI Emoji", "BIZ UDPGothic", sans-serif',
     fontSize: 'clamp(12px, 1.74vw, 16px)',
