@@ -18,20 +18,22 @@ export default function BubbleTailHeading({
     justifyContent: 'center',
     alignItems: 'center',
     textAlign: 'center',
-    textShadow: 'rgba(0, 0, 0, 0.2) 1px 1px',
+    fontFamily: '"UD Digi Kyokasho NK-B", sans-serif',
+    textShadow: 'rgba(255, 255, 255, 0.3) 1px 1px',
 
     '&::before, &::after': {
       content: "''",
-      w: '0.3125rem',
-      h: '2.55rem',
-      bgColor: lineColor,
+      display: 'inline-block',
+      w: '0.1665em',
+      h: '1.4em',
+      bgColor: lineColor === 'violet.700' ? '#6d28d9' : lineColor === 'rose.400' ? '#fb7185' : '#34d399',
     },
     '&::before': {
-      mr: '2.125rem',
+      mr: '1.1em',
       transform: 'rotate(-35deg)',
     },
     '&::after': {
-      ml: '2.125rem',
+      ml: '1.1em',
       transform: 'rotate(35deg)',
     },
   });
