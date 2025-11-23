@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { FormProvider, useFieldArray, useForm } from 'react-hook-form';
 
+import BubbleTailHeading from '@/components/ui/elements/BubbleTailHeading';
 import Button from '@/components/ui/elements/Button';
 import FormContainer from '@/components/ui/elements/FormContainer';
 import onPromise from '@/libs/onPromise';
@@ -75,17 +76,17 @@ export default function RegisterProduct() {
 
   return (
     <>
-      <h2 className={css({
-        mx: 'auto',
-        p: 2,
-        textAlign: 'center',
-        fontSize: '3xl',
-        fontWeight: 'bold',
-      })}
+      <BubbleTailHeading
+        level={2}
+        mergedStyles={css.raw({
+          p: 2,
+          fontSize: '3xl',
+          fontWeight: 'bold',
+        })}
       >
-        商品新規登録
-      </h2>
-      <FormContainer>
+        商品情報の登録
+      </BubbleTailHeading>
+      <FormContainer mergedStyles={css.raw({ px: '5rem', borderRadius: '2xl' })}>
         {Number(isSet)
           ? (
               <FormProvider {...setItemMethods}>
