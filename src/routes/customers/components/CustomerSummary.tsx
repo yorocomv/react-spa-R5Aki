@@ -36,7 +36,7 @@ export default function CustomerSummary({
       borderWidth: '1px',
       borderColor: 'rgba(255, 255, 255, 0.36)',
       boxShadow: 'md',
-      _hover: { bgColor: '#E7DED3' },
+      _hover: { bgColor: '#E7DED3', boxShadow: 'lg' },
       '&:hover ._react-icons_go-comment, &:hover ._react-icons_go-comment + span': {
         color: 'blue.600',
       },
