@@ -211,6 +211,18 @@ export const postReqSetProductVariantSchema = productsSchema.extend({
 // ケースの入り数違い
 export const postReqNewProductSkuSchema = productSkusSchema;
 
+// フォームのデフォルト値
+export const newProductCommonDefaultValuesSchema = z.object({
+  ...basicProductsSchema.pick({
+    sourcing_type_id: true,
+    category_id: true,
+    packaging_type_id: true,
+    expiration_unit: true,
+  }).shape,
+  ...productsSchema.pick({ supplier_id: true }).shape,
+  ...productSkusSchema.pick({ priority: true }).shape,
+});
+
 export const newProductSummarySchema = z.object({
   basic_id: z.number().int().positive(),
   product_id: z.number().int().positive(),

@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import axiosInstance from '@/util/axiosInstance';
 
-import type { NewProductSummary, PostReqNewProduct, PostReqNewSetProduct } from '../../products.types';
+import type { PostReqNewProduct, PostReqNewSetProduct, PostResNewProduct } from '../../products.types';
 
 type UseRegisterProductsProps =
   | {
@@ -17,7 +17,7 @@ type UseRegisterProductsProps =
   };
 
 async function registerProductsMutationFn({ url, values }: UseRegisterProductsProps) {
-  const response: AxiosResponse<NewProductSummary> = await axiosInstance.post(`/products${url}`, values).catch((err: string) => {
+  const response: AxiosResponse<PostResNewProduct> = await axiosInstance.post(`/products${url}`, values).catch((err: string) => {
     console.error(`💥💥💥 /products${url} からのエラーをキャッチ❢ ${err} 💀💀💀`);
     return Promise.reject(new Error(err));
   });
@@ -28,7 +28,7 @@ export function useRegisterProducts() {
   const queryClient = useQueryClient();
   const { mutateAsync: registerProducts } = useMutation({
     mutationFn: registerProductsMutationFn,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['🐛!!!🐛 TODO FIXME 🐛!!!🐛'] }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['post:/products'] }),
   });
 
   return { registerProducts };

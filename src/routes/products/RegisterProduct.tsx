@@ -10,7 +10,7 @@ import FormContainer from '@/components/ui/elements/FormContainer';
 import onPromise from '@/libs/onPromise';
 import { css } from 'styled-system/css';
 
-import type { PostReqNewProduct, PostReqNewSetProduct } from './products.types';
+import type { NewProductCommonDefaultValues, PostReqNewProduct, PostReqNewSetProduct } from './products.types';
 
 import BasicProductFormContents from './components/BasicProductFormContents';
 import { useFetchProductsOptions } from './components/hooks/useFetchProductsOptions';
@@ -33,6 +33,14 @@ const combinationDefaultValues: PostReqNewSetProduct['combinations'][0] = {
   item_product_id: 0,
   quantity: 1,
 };
+const commonDefaultValues: NewProductCommonDefaultValues = {
+  sourcing_type_id: 1,
+  category_id: 1,
+  packaging_type_id: 1,
+  expiration_unit: 'Y',
+  supplier_id: 1,
+  priority: 'A',
+};
 
 export default function RegisterProduct() {
   const [isSet, setIsSet] = useState<0 | 1>(0);
@@ -43,6 +51,8 @@ export default function RegisterProduct() {
     mode: 'all',
     resolver: zodResolver(postReqNewProductSchema),
     defaultValues: {
+      ...commonDefaultValues,
+      is_set_product: 0,
       components: [componentDefaultValues],
     },
   });
@@ -50,6 +60,8 @@ export default function RegisterProduct() {
     mode: 'all',
     resolver: zodResolver(postReqNewSetProductSchema),
     defaultValues: {
+      ...commonDefaultValues,
+      is_set_product: 1,
       combinations: [combinationDefaultValues],
     },
   });
@@ -69,9 +81,16 @@ export default function RegisterProduct() {
   const onSubmit: SubmitHandler<PostReqNewProduct> = async (values) => {
     try {
       const response = await registerProducts({ url: '', values });
-      console.log(response);
-      methods.reset();
-      methods.setFocus('basic_name');
+      if (response.isRegistered === true) {
+        console.log(response);
+        methods.reset();
+        methods.setFocus('basic_name');
+      }
+      else {
+        console.error(response);
+        // eslint-disable-next-line no-alert
+        alert(`💥エラー⁉️\n${response.uniqueConstraintError.key}: ${response.uniqueConstraintError.value}\nは登録済みです`);
+      }
     }
     catch (err) {
       console.error('💥💥💥 ', err, ' 💀💀💀');
