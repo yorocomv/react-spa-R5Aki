@@ -48,6 +48,10 @@ export default defineConfig({
     extend: {
       tokens: {
         shadows: {
+          // ページのヘッダー専用
+          sticky: {
+            value: '0 .25rem 1rem rgba(0,0,0,.1),0 1px 0 rgba(0,0,0,.01)',
+          },
           // --- 外側影 (Drop Shadows) ---
           // ポイント: 全てのサイズで [0.5, 1, 1] の最小レイヤーを含めることで
           // どんなに大きく浮いても「地面との接点」を感じさせます。
