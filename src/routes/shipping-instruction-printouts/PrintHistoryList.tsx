@@ -50,7 +50,7 @@ export default function PrintHistoryList() {
           backdropFilter: 'blur(6px)',
           px: 2,
           py: 2.5,
-          boxShadow: '2xl',
+          boxShadow: 'sticky',
         })}
       >
         <nav
