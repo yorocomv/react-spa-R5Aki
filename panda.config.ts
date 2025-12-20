@@ -16,10 +16,24 @@ const globalCss = defineGlobalStyles({
 // shadows by Gemini 3 Pro
 // https://www.joshwcomeau.com/css/designing-shadows
 const SHADOW_HUE = '0 0% 0%';
+const ROOT_FONT_SIZE = 16; // 基準となるフォントサイズ
+
+/**
+ * 数値を rem 文字列に変換するヘルパー
+ */
+function toRem(value: number) {
+  if (value === 0)
+    return '0';
+  // 最大小数点以下5桁まで出力 (例: 0.5px -> 0.03125rem)
+  return `${Number.parseFloat((value / ROOT_FONT_SIZE).toFixed(5))}rem`;
+}
 
 /**
  * 11時の光源（X軸ズレ）を維持しつつ、
  * 多層レイヤーによる滑らかな減衰を生成するヘルパー
+ * 入力は px 相当の数値で行い、出力時に rem に変換します
+ * @param layers [x, y, blur, alpha][] (数値は px 単位の感覚で指定)
+ * @param isInset
  */
 function createShadow(layers: [number, number, number, number][], isInset = false) {
   return {
@@ -27,7 +41,9 @@ function createShadow(layers: [number, number, number, number][], isInset = fals
       .map(([x, y, blur, alpha]) => {
         const color = `hsl(${SHADOW_HUE} / ${alpha})`;
         const type = isInset ? 'inset ' : '';
-        return `${type}${x}px ${y}px ${blur}px ${color}`;
+
+        // ここですべて rem に変換されます
+        return `${type}${toRem(x)} ${toRem(y)} ${toRem(blur)} ${color}`;
       })
       .join(', '),
   };
