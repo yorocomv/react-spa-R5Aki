@@ -17,8 +17,8 @@ interface Props {
   selectOptions: {
     suppliers: ProductOptionsIdAndName[];
   };
-  isSet: 0 | 1;
-  setIsSet: React.Dispatch<React.SetStateAction<0 | 1>>;
+  isSet: '0' | '1';
+  setIsSet: React.Dispatch<React.SetStateAction<'0' | '1'>>;
   packagingTypeText: string;
 }
 
@@ -27,7 +27,7 @@ export default function ProductFormContents({ drawContents, selectOptions, isSet
     register,
     formState: { errors },
   } = useFormContext<PostReqProductVariant>();
-  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => setIsSet(e.target.value as unknown as 0 | 1);
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => setIsSet(e.target.value as unknown as '0' | '1');
 
   return (
     <>
@@ -84,8 +84,8 @@ export default function ProductFormContents({ drawContents, selectOptions, isSet
           onChange={handleChange}
           id="is_set_product"
         >
-          <option key="false" value={0}>ＮＯ</option>
-          <option key="true" value={1}>ＹＥＳ</option>
+          <option key="false" value="0">ＮＯ</option>
+          <option key="true" value="1">ＹＥＳ</option>
         </Select>
         <FormErrorMessage message={errors.is_set_product?.message} />
       </label>

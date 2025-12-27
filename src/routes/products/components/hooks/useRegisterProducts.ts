@@ -4,17 +4,12 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import axiosInstance from '@/util/axiosInstance';
 
-import type { PostReqNewProduct, PostReqNewSetProduct, PostResNewProduct } from '../../products.types';
+import type { PostReqNewUnifiedProduct, PostResNewProduct } from '../../products.types';
 
-type UseRegisterProductsProps =
-  | {
-    url: '';
-    values: PostReqNewProduct;
-  }
-  | {
-    url: '/set-item';
-    values: PostReqNewSetProduct;
-  };
+interface UseRegisterProductsProps {
+  url: '' | '/set-item';
+  values: PostReqNewUnifiedProduct;
+}
 
 async function registerProductsMutationFn({ url, values }: UseRegisterProductsProps) {
   const response: AxiosResponse<PostResNewProduct> = await axiosInstance.post(`/products${url}`, values).catch((err: string) => {
