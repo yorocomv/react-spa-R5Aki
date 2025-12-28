@@ -40,13 +40,13 @@ export default function ProductCombinationsFormContents({
     })}
     >
       <label htmlFor={`combinations.${index}.item_product_id`}>
-        セット内訳（構成） ＰＲＯＤＵＣＴ
-        <ComboField placeholder="セット内訳 ＰＲＯＤＵＣＴ" />
+        {(i => `セット内訳（構成物${i.toString().replace(/\d/g, s => String.fromCharCode(s.charCodeAt(0) + 0xFEE0))}） PRODUCT-ID`)(index + 1)}
+        <ComboField placeholder="セット内訳 PRODUCT-ID" />
         {/* <Input
           {...register(`combinations.${index}.item_product_id` as const)}
           id={`combinations.${index}.item_product_id`}
           type="number"
-          placeholder="セット内訳 ＰＲＯＤＵＣＴ－ＩＤ"
+          placeholder="セット内訳 PRODUCT-ID"
           className={css({ w: '10.25rem' })}
         /> */}
         <FormErrorMessage message={errors.combinations?.[index]?.item_product_id?.message} />

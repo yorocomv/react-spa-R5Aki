@@ -46,7 +46,9 @@ export default function ProductComponentsFormContents({
     })}
     >
       <label htmlFor={`components.${index}.title`}>
-        内容物名
+        内容物
+        {(i => `（${i.toString().replace(/\d/g, s => String.fromCharCode(s.charCodeAt(0) + 0xFEE0))}）`)(index + 1)}
+        名
         <Input
           {...register(`components.${index}.title` as const)}
           id={`components.${index}.title`}
