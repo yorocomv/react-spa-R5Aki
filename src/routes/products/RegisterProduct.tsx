@@ -66,8 +66,7 @@ export default function RegisterProduct() {
 
   const methods = useForm<PostReqNewUnifiedProduct>({
     mode: 'all',
-    // eslint-disable-next-line ts/no-explicit-any
-    resolver: zodResolver<PostReqNewUnifiedProduct, any, PostReqNewUnifiedProduct>(postReqNewUnifiedProductSchema as ZodType<PostReqNewUnifiedProduct>),
+    resolver: zodResolver(postReqNewUnifiedProductSchema as ZodType<PostReqNewUnifiedProduct>),
     defaultValues: determineDefaultValue('0'),
   });
 
