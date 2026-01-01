@@ -1,3 +1,5 @@
+import type { Key } from 'react-aria-components';
+
 import { Button, ComboBox, Group, Input, ListBox, ListBoxItem, Popover } from 'react-aria-components';
 import { MdKeyboardArrowDown } from 'react-icons/md';
 
@@ -5,39 +7,39 @@ import { css } from 'styled-system/css';
 
 interface ComboFieldProps {
   placeholder?: string;
+  itemsList: {
+    id: number;
+    itemStr: string;
+  }[];
+  // RHFのControllerから渡される値とハンドラを受け取る
+  value?: number | string | null;
+  onChange?: (value: number | string) => void;
+  ariaLabel?: string;
 }
 
 export default function ComboField({
   placeholder = '',
+  itemsList,
+  value,
+  onChange,
+  ariaLabel,
 }: ComboFieldProps) {
-  const arr = [
-    'Aardvark',
-    'Cat',
-    'Dog',
-    'Kangaroo',
-    'Panda',
-    'Snak',
-    'Aardvark',
-    'Cat',
-    'Dog',
-    'Kangaroo',
-    'Panda',
-    'Snak',
-    'Aardvark',
-    'Cat',
-    'Dog',
-    'Kangaroo',
-    'Panda',
-    'Snak',
-  ];
-
   return (
-    <ComboBox className={css({
-      display: 'flex',
-      flexDir: 'column',
-      gap: '1rem',
-      w: '24rem',
-    })}
+    <ComboBox
+      selectedKey={value}
+      onSelectionChange={(key: Key | null) => {
+        // RHF に変更を通知する
+        if (onChange && key !== null) {
+          onChange(key);
+        }
+      }}
+      aria-label={ariaLabel}
+      className={css({
+        display: 'flex',
+        flexDir: 'column',
+        gap: '1rem',
+        w: '24rem',
+      })}
     >
       <Group className={css({
         display: 'flex',
@@ -113,44 +115,46 @@ export default function ComboField({
         },
       })}
       >
-        <ListBox className={css({
-          display: 'block',
-          fontWeight: 'bold',
-          lineHeight: '2.5rem',
-          border: 'none',
-          outline: 'none',
+        <ListBox
+          items={itemsList}
+          className={css({
+            display: 'block',
+            fontWeight: 'bold',
+            lineHeight: '2.5rem',
+            border: 'none',
+            outline: 'none',
 
-          '&.react-aria-Header': {
-            pl: '1.75rem',
-          },
-        })}
+            '&.react-aria-Header': {
+              pl: '1.75rem',
+            },
+          })}
         >
-          {
-            arr.map((item, i) => (
-              <ListBoxItem
-                key={i}
-                className={css({
-                  p: '0 0.75rem 0 1.75rem',
-                  borderRadius: 'sm',
-                  _selected: {
-                    '&::before': {
-                      content: "'✓' / ''",
-                      pos: 'absolute',
-                      left: '0.5rem',
-                      fontWeight: 'bold',
-                      color: 'teal.400',
-                    },
+          {item => (
+            <ListBoxItem
+              key={item.id}
+              id={item.id}
+              textValue={item.itemStr}
+              className={css({
+                p: '0 0.75rem 0 1.75rem',
+                borderRadius: 'sm',
+                _selected: {
+                  '&::before': {
+                    content: "'✓' / ''",
+                    pos: 'absolute',
+                    left: '0.5rem',
+                    fontWeight: 'bold',
+                    color: 'teal.400',
                   },
-                  '&[data-focused], &[data-pressed]': {
-                    color: '#fff',
-                    bgColor: 'violet.700',
-                  },
-                })}
-              >
-                {item}
-              </ListBoxItem>
-            ))
-          }
+                },
+                '&[data-focused], &[data-pressed]': {
+                  color: '#fff',
+                  bgColor: 'violet.700',
+                },
+              })}
+            >
+              {item.itemStr}
+            </ListBoxItem>
+          )}
         </ListBox>
       </Popover>
     </ComboBox>

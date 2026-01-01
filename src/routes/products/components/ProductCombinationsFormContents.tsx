@@ -1,4 +1,4 @@
-import { useFormContext } from 'react-hook-form';
+import { Controller, useFormContext } from 'react-hook-form';
 import { TbPencilPlus, TbTrash } from 'react-icons/tb';
 
 import ComboField from '@/components/ui/ComboField';
@@ -8,6 +8,8 @@ import TooltipWrapper from '@/components/ui/TooltipWrapper';
 import { css } from 'styled-system/css';
 
 import type { PostReqNewSetProduct } from '../products.types';
+
+import { useFetchSingleProducts } from './hooks/useFetchSingleProducts';
 
 interface Props {
   index: number;
@@ -26,8 +28,17 @@ export default function ProductCombinationsFormContents({
 }: Props) {
   const {
     register,
+    control,
     formState: { errors },
   } = useFormContext<PostReqNewSetProduct>();
+  const { singleProducts } = useFetchSingleProducts();
+  const singleProductsStrListObj = singleProducts.map((product) => {
+    return {
+      id: product.product_id,
+      itemStr: `${product.product_short_name} ${product.internal_code}`,
+    };
+  });
+  const label = (i => `セット内訳（構成物${i.toString().replace(/\d/g, s => String.fromCharCode(s.charCodeAt(0) + 0xFEE0))}） PRODUCT-ID`)(index + 1);
 
   return (
     <div className={css({
@@ -40,15 +51,19 @@ export default function ProductCombinationsFormContents({
     })}
     >
       <label htmlFor={`combinations.${index}.item_product_id`}>
-        {(i => `セット内訳（構成物${i.toString().replace(/\d/g, s => String.fromCharCode(s.charCodeAt(0) + 0xFEE0))}） PRODUCT-ID`)(index + 1)}
-        <ComboField placeholder="セット内訳 PRODUCT-ID" />
-        {/* <Input
-          {...register(`combinations.${index}.item_product_id` as const)}
-          id={`combinations.${index}.item_product_id`}
-          type="number"
-          placeholder="セット内訳 PRODUCT-ID"
-          className={css({ w: '10.25rem' })}
-        /> */}
+        {label}
+        <Controller
+          control={control}
+          name={`combinations.${index}.item_product_id`}
+          render={({ field }) => (
+            <ComboField
+              {...field}
+              itemsList={singleProductsStrListObj}
+              placeholder="セット内訳 PRODUCT-ID"
+              ariaLabel={label}
+            />
+          )}
+        />
         <FormErrorMessage message={errors.combinations?.[index]?.item_product_id?.message} />
       </label>
       <label htmlFor={`combinations.${index}.quantity`}>
