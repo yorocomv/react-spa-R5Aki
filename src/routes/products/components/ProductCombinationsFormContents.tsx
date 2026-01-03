@@ -9,14 +9,16 @@ import { css } from 'styled-system/css';
 
 import type { PostReqNewSetProduct } from '../products.types';
 
-import { useFetchSingleProducts } from './hooks/useFetchSingleProducts';
-
 interface Props {
   index: number;
   remove: (index: number) => void;
   append: (data: PostReqNewSetProduct['combinations'][0]) => void;
   defaultCombination: PostReqNewSetProduct['combinations'][0];
   isTail: boolean;
+  singleProductsStrListObj: {
+    id: number;
+    itemStr: string;
+  }[];
 }
 
 export default function ProductCombinationsFormContents({
@@ -25,19 +27,13 @@ export default function ProductCombinationsFormContents({
   append,
   defaultCombination,
   isTail,
+  singleProductsStrListObj,
 }: Props) {
   const {
     register,
     control,
     formState: { errors },
   } = useFormContext<PostReqNewSetProduct>();
-  const { singleProducts } = useFetchSingleProducts();
-  const singleProductsStrListObj = singleProducts.map((product) => {
-    return {
-      id: product.product_id,
-      itemStr: `${product.product_short_name} ${product.internal_code}`,
-    };
-  });
   const label = (i => `セット内訳（構成物${i.toString().replace(/\d/g, s => String.fromCharCode(s.charCodeAt(0) + 0xFEE0))}） PRODUCT-ID`)(index + 1);
 
   return (

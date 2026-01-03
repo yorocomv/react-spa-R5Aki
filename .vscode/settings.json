@@ -1,5 +1,5 @@
 {
-  "cSpell.words": ["ejpc", "dismissable", "hoge", "fuga", "jaconv", "oklch", "piyo", "preinstall", "tanstack", "vstack"],
+  "cSpell.words": ["ejpc", "dismissable", "hoge", "fuga", "jaconv", "oklch", "piyo", "preinstall", "skus", "tanstack", "vstack"],
 
   // Disable the default formatter, use eslint instead
   "prettier.enable": false,

@@ -34,8 +34,8 @@ export default function ProductSkusFormContents({ drawContents }: Props) {
       {drawContents?.product_id
         ? (
             <label htmlFor="product_id">
-              ＰＲＯＤＵＣＴ－ＩＤ
-              <Input {...register('product_id')} id="product_id" placeholder="ＰＲＯＤＵＣＴ－ＩＤ" />
+              PRODUCT-ID
+              <Input {...register('product_id')} id="product_id" placeholder="PRODUCT-ID" />
               <FormErrorMessage message={errors.product_id?.message} />
             </label>
           )
@@ -172,9 +172,9 @@ export default function ProductSkusFormContents({ drawContents }: Props) {
         />
         <FormErrorMessage message={errors.inner_carton_weight_g?.message} />
       </label>
-      <label {...register('priority')} htmlFor="priority">
+      <label htmlFor="priority">
         在庫チェック重要レベル
-        <Select id="priority">
+        <Select {...register('priority')} id="priority">
           <option key="A" value="A">Ａ</option>
           <option key="B" value="B">Ｂ</option>
           <option key="C" value="C">Ｃ</option>

@@ -15,6 +15,7 @@ import type { NewProductCommonDefaultValues, PostReqNewProduct, PostReqNewSetPro
 
 import BasicProductFormContents from './components/BasicProductFormContents';
 import { useFetchProductsOptions } from './components/hooks/useFetchProductsOptions';
+import { useFetchSingleProducts } from './components/hooks/useFetchSingleProducts';
 import { useRegisterProducts } from './components/hooks/useRegisterProducts';
 import ProductCombinationsFormContents from './components/ProductCombinationsFormContents';
 import ProductComponentsFormContents from './components/ProductComponentsFormContents';
@@ -47,19 +48,24 @@ export default function RegisterProduct() {
   const [isSet, setIsSet] = useState<'0' | '1'>('0');
   const [packagingTypeText, setPackagingTypeText] = useState<string>('未分類');
   const { productsOptions } = useFetchProductsOptions();
+  const { singleProducts } = useFetchSingleProducts();
+  const singleProductsStrListObj = singleProducts.map((product) => {
+    return {
+      id: product.product_id,
+      itemStr: `${product.product_short_name} <${product.internal_code}> ${product.category_name} ${product.component_amount}${product.component_unit_name} ${product.packaging_type}`,
+    };
+  });
 
   const determineDefaultValue = (isSetMode: '0' | '1', values?: PostReqNewUnifiedProduct): PostReqNewUnifiedProduct => {
     const v = values ?? commonDefaultValues;
     if (isSetMode === '0') {
       return {
         ...v,
-        is_set_product: '0',
         components: [componentDefaultValues],
       } as unknown as PostReqNewProduct;
     }
     return {
       ...v,
-      is_set_product: '1',
       combinations: [combinationDefaultValues],
     } as unknown as PostReqNewSetProduct;
   };
@@ -71,8 +77,8 @@ export default function RegisterProduct() {
   });
 
   useEffect(() => {
-    const newDefault = determineDefaultValue(isSet, methods.getValues());
-    methods.reset(newDefault);
+    const currentValuesCopy = determineDefaultValue(isSet, methods.getValues());
+    methods.reset(currentValuesCopy);
   }, [isSet, methods]);
 
   const componentsArray = useFieldArray({
@@ -132,41 +138,45 @@ export default function RegisterProduct() {
 
             <ProductFormContents isSet={isSet} setIsSet={setIsSet} packagingTypeText={packagingTypeText} drawContents={{ basic_id: false, product_name: false }} selectOptions={{ suppliers: productsOptions.suppliers }} />
 
-            {isSet === '0'
-              ? (
-                  componentsArray.fields.map((field, index) => {
-                    const isTail = index === componentsArray.fields.length - 1;
-                    return (
-                      <ProductComponentsFormContents
-                        key={field.id}
-                        index={index}
-                        remove={componentsArray.remove}
-                        append={componentsArray.append}
-                        defaultComponent={{ title: '', symbol: '', amount: 0, unit_type_id: 1, pieces: 1, inner_packaging_type_id: 1 }}
-                        isTail={isTail}
-                        selectOptions={{
-                          unit_types: productsOptions.unit_types,
-                          product_inner_packaging_types: productsOptions.product_inner_packaging_types,
-                        }}
-                      />
-                    );
-                  })
-                )
-              : (
-                  setsArray.fields.map((field, index) => {
-                    const isTail = index === setsArray.fields.length - 1;
-                    return (
-                      <ProductCombinationsFormContents
-                        key={field.id}
-                        index={index}
-                        remove={setsArray.remove}
-                        append={setsArray.append}
-                        defaultCombination={{ item_product_id: 0, quantity: 1 }}
-                        isTail={isTail}
-                      />
-                    );
-                  })
-                )}
+            <div className={css({ minH: '12.9rem' })}>
+              {isSet === '0'
+                ? (
+                    componentsArray.fields.map((field, index) => {
+                      const isTail = index === componentsArray.fields.length - 1;
+                      return (
+                        <ProductComponentsFormContents
+                          key={field.id}
+                          index={index}
+                          remove={componentsArray.remove}
+                          append={componentsArray.append}
+                          defaultComponent={componentDefaultValues}
+                          isTail={isTail}
+                          selectOptions={{
+                            unit_types: productsOptions.unit_types,
+                            product_inner_packaging_types: productsOptions.product_inner_packaging_types,
+                          }}
+                        />
+                      );
+                    })
+                  )
+                : (
+                    setsArray.fields.map((field, index) => {
+                      const isTail = index === setsArray.fields.length - 1;
+                      return (
+                        <ProductCombinationsFormContents
+                          key={field.id}
+                          index={index}
+                          remove={setsArray.remove}
+                          append={setsArray.append}
+                          defaultCombination={combinationDefaultValues}
+                          isTail={isTail}
+                          singleProductsStrListObj={singleProductsStrListObj}
+                        />
+                      );
+                    })
+                  )}
+            </div>
+
             <ProductSkusFormContents drawContents={{ skus_name: false, product_id: false }} />
             <div className={css({ mt: 4 })}>
               <Button type="submit">登録</Button>
