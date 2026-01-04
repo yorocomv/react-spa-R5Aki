@@ -21,6 +21,7 @@
     "@internationalized/date": "^3.7.0",
     "@tanstack/react-query": "^5.45.1",
     "axios": "^1.6.3",
+    "gtin-validator": "^1.0.0",
     "html-react-parser": "^5.1.1",
     "jaconv": "github:TokunaKimochi/jaconv",
     "react": "^19.1.0",

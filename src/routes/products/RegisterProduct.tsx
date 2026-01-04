@@ -43,8 +43,18 @@ const commonDefaultValues: NewProductCommonDefaultValues = {
   supplier_id: 1,
   priority: 'A',
 };
+interface Gtin {
+  jan: string | undefined;
+  itf1: string | undefined;
+  itf2: string | undefined;
+}
 
 export default function RegisterProduct() {
+  const [gtinObj, setGtinObj] = useState<Gtin>({
+    jan: undefined,
+    itf1: undefined,
+    itf2: undefined,
+  });
   const [isSet, setIsSet] = useState<'0' | '1'>('0');
   const [packagingTypeText, setPackagingTypeText] = useState<string>('未分類');
   const { productsOptions } = useFetchProductsOptions();
@@ -129,6 +139,7 @@ export default function RegisterProduct() {
           <form onSubmit={onPromise(methods.handleSubmit(onSubmit))}>
             <BasicProductFormContents
               setPackagingTypeText={setPackagingTypeText}
+              janCode={gtinObj.jan}
               selectOptions={{
                 product_sourcing_types: productsOptions.product_sourcing_types,
                 product_categories: productsOptions.product_categories,
@@ -136,7 +147,7 @@ export default function RegisterProduct() {
               }}
             />
 
-            <ProductFormContents isSet={isSet} setIsSet={setIsSet} packagingTypeText={packagingTypeText} drawContents={{ basic_id: false, product_name: false }} selectOptions={{ suppliers: productsOptions.suppliers }} />
+            <ProductFormContents janCode={gtinObj.jan} setGtinObj={setGtinObj} isSet={isSet} setIsSet={setIsSet} packagingTypeText={packagingTypeText} drawContents={{ basic_id: false, product_name: false }} selectOptions={{ suppliers: productsOptions.suppliers }} />
 
             <div className={css({ minH: '12.9rem' })}>
               {isSet === '0'
@@ -177,7 +188,11 @@ export default function RegisterProduct() {
                   )}
             </div>
 
-            <ProductSkusFormContents drawContents={{ skus_name: false, product_id: false }} />
+            <ProductSkusFormContents
+              drawContents={{ skus_name: false, product_id: false }}
+              itf1={gtinObj.itf1}
+              itf2={gtinObj.itf2}
+            />
             <div className={css({ mt: 4 })}>
               <Button type="submit">登録</Button>
             </div>

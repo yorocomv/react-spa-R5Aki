@@ -3,6 +3,7 @@ import { useFormContext } from 'react-hook-form';
 import Input from '@/components/ui/elements/Input';
 import Select from '@/components/ui/elements/Select';
 import FormErrorMessage from '@/components/ui/elementSwitchers/FormErrorMessage';
+import FormSuggestion from '@/components/ui/elementSwitchers/FormSuggestion';
 import { css } from 'styled-system/css';
 
 import type { PostReqNewProductSku } from '../products.types';
@@ -12,9 +13,11 @@ interface Props {
     skus_name?: boolean;
     product_id?: boolean;
   };
+  itf1: string | undefined;
+  itf2: string | undefined;
 }
 
-export default function ProductSkusFormContents({ drawContents }: Props) {
+export default function ProductSkusFormContents({ drawContents, itf1, itf2 }: Props) {
   const {
     register,
     formState: { errors },
@@ -59,6 +62,7 @@ export default function ProductSkusFormContents({ drawContents }: Props) {
           placeholder="ＩＴＦコード（ケース）"
           className={css({ w: '12.75rem' })}
         />
+        <FormSuggestion suggestion={itf1} />
         <FormErrorMessage message={errors.itf_case_code?.message} />
       </label>
       <fieldset>
@@ -125,6 +129,7 @@ export default function ProductSkusFormContents({ drawContents }: Props) {
           placeholder="ＩＴＦコード（ボール）"
           className={css({ w: '12.75rem' })}
         />
+        <FormSuggestion suggestion={itf2} />
         <FormErrorMessage message={errors.itf_inner_carton_code?.message} />
       </label>
       <fieldset>

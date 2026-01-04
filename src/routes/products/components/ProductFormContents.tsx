@@ -1,9 +1,12 @@
+import { calculateCheckDigitForGTIN } from 'gtin-validator';
 import { useFormContext } from 'react-hook-form';
+import { z } from 'zod';
 
 import Input from '@/components/ui/elements/Input';
 import Select from '@/components/ui/elements/Select';
 import TextArea from '@/components/ui/elements/TextArea';
 import FormErrorMessage from '@/components/ui/elementSwitchers/FormErrorMessage';
+import env from '@/env';
 import { css } from 'styled-system/css';
 
 import type { ProductOptionsIdAndName } from '../options/options.types';
@@ -17,16 +20,44 @@ interface Props {
   selectOptions: {
     suppliers: ProductOptionsIdAndName[];
   };
+  janCode: string | undefined;
+  setGtinObj: React.Dispatch<React.SetStateAction<{
+    jan: string | undefined;
+    itf1: string | undefined;
+    itf2: string | undefined;
+  }>>;
   isSet: '0' | '1';
   setIsSet: React.Dispatch<React.SetStateAction<'0' | '1'>>;
   packagingTypeText: string;
 }
 
-export default function ProductFormContents({ drawContents, selectOptions, isSet, setIsSet, packagingTypeText }: Props) {
+export default function ProductFormContents({ drawContents, selectOptions, janCode, setGtinObj, isSet, setIsSet, packagingTypeText }: Props) {
   const {
     register,
     formState: { errors },
   } = useFormContext<PostReqProductVariant>();
+  const handleSetGtinCode = (e: React.ChangeEvent<HTMLInputElement>) => {
+    try {
+      const v = e.target.value;
+      if (janCode === undefined && v.length !== 5)
+        return;
+      const schema = z.string().length(5).regex(/\d/);
+      const result = schema.safeParse(v);
+      if (!result.success) {
+        setGtinObj({ jan: undefined, itf1: undefined, itf2: undefined });
+      }
+      else {
+        const gs1 = env.VITE_GS1_COMPANY_PREFIX;
+        const jan = gs1 + result.data + calculateCheckDigitForGTIN(gs1 + result.data);
+        const itf1 = `1${gs1}${result.data}${calculateCheckDigitForGTIN(`1${gs1}${result.data}`)}`;
+        const itf2 = `2${gs1}${result.data}${calculateCheckDigitForGTIN(`2${gs1}${result.data}`)}`;
+        setGtinObj({ jan, itf1, itf2 });
+      }
+    }
+    catch (err) {
+      console.error(err);
+    }
+  };
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => setIsSet(e.target.value as unknown as '0' | '1');
 
   return (
@@ -73,7 +104,12 @@ export default function ProductFormContents({ drawContents, selectOptions, isSet
       </label>
       <label htmlFor="internal_code">
         発注コード（社内コード）
-        <Input {...register('internal_code')} id="internal_code" placeholder="発注コード（社内コード）" />
+        <Input
+          {...register('internal_code')}
+          onChange={handleSetGtinCode}
+          id="internal_code"
+          placeholder="発注コード（社内コード）"
+        />
         <FormErrorMessage message={errors.internal_code?.message} />
       </label>
       <label htmlFor="is_set_product">

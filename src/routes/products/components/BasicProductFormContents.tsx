@@ -3,6 +3,7 @@ import { useFormContext } from 'react-hook-form';
 import Input from '@/components/ui/elements/Input';
 import Select from '@/components/ui/elements/Select';
 import FormErrorMessage from '@/components/ui/elementSwitchers/FormErrorMessage';
+import FormSuggestion from '@/components/ui/elementSwitchers/FormSuggestion';
 import { css } from 'styled-system/css';
 
 import type { ProductOptionsIdAndName } from '../options/options.types';
@@ -14,10 +15,11 @@ interface Props {
     product_categories: ProductOptionsIdAndName[];
     product_packaging_types: ProductOptionsIdAndName[];
   };
+  janCode: string | undefined;
   setPackagingTypeText: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export default function BasicProductFormContents({ selectOptions, setPackagingTypeText }: Props) {
+export default function BasicProductFormContents({ selectOptions, janCode, setPackagingTypeText }: Props) {
   const {
     register,
     formState: { errors },
@@ -44,6 +46,7 @@ export default function BasicProductFormContents({ selectOptions, setPackagingTy
           placeholder="ＪＡＮコード"
           className={css({ w: '12.75rem' })}
         />
+        <FormSuggestion suggestion={janCode} />
         <FormErrorMessage message={errors.jan_code?.message} />
       </label>
       <label htmlFor="sourcing_type_id">
