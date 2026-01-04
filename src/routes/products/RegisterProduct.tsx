@@ -121,6 +121,10 @@ export default function RegisterProduct() {
       console.error('💥💥💥 ', err, ' 💀💀💀');
     }
   };
+  const handleReset: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.preventDefault();
+    methods.reset();
+  };
 
   return (
     <>
@@ -194,7 +198,17 @@ export default function RegisterProduct() {
               itf2={gtinObj.itf2}
             />
             <div className={css({ mt: 4 })}>
-              <Button type="submit">登録</Button>
+              <Button disabled={methods.formState.isSubmitting} type="submit">登録</Button>
+              <Button
+                onClick={handleReset}
+                disabled={methods.formState.isSubmitting}
+                variant="redo"
+                className={css({
+                  ml: 1,
+                })}
+              >
+                クリア
+              </Button>
             </div>
           </form>
         </FormProvider>
