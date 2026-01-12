@@ -49,14 +49,6 @@ export const shippingInstructionCorrectionSchema = shippingInstructionPrintInput
     non_fk_customer_id: true,
   });
 
-export const findShippingInstructionsQuerySchema = z
-  .object({
-    category: z.enum(['delivery_date', 'printed_at', 'shipping_date']),
-    dateA: z.coerce.date().optional(),
-    dateB: z.coerce.date().optional(),
-  })
-  .brand<'FindShippingInstructionsQuery'>();
-
 export const shippingInstructionPrintIDSchema = z
   .object({
     delivery_date: z.coerce

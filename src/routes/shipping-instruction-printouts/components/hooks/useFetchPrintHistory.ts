@@ -6,35 +6,52 @@ import { useState } from 'react';
 
 import axiosInst from '@/util/axiosInstance';
 
-import type {
-  FindShippingInstructionsQueryCategory,
-  ShippingInstructionHistoryTbRow,
-} from '../../shippingInstructionPrintouts.types';
+import type { ShippingInstructionHistoryTbRow } from '../../shippingInstructionPrintouts.types';
+
+export interface useFetchPrintHistoryStates {
+  category: 'delivery_date' | 'shipping_date' | 'printed_at';
+  non_fk_customer_id: number | null;
+  dateA: CalendarDate | null;
+  dateB: CalendarDate | null;
+}
 
 export function useFetchPrintHistory() {
-  const [selectCategory, setSelectCategory] = useState<FindShippingInstructionsQueryCategory>('printed_at');
-  const [dateA, setDateA] = useState<CalendarDate | null>(null);
-  const [dateB, setDateB] = useState<CalendarDate | null>(null);
+  const [customerId, setCustomerId] = useState<useFetchPrintHistoryStates['non_fk_customer_id']>(null);
+  const [selectCategory, setSelectCategory] = useState<useFetchPrintHistoryStates['category']>('printed_at');
+  const [dateA, setDateA] = useState<useFetchPrintHistoryStates['dateA']>(null);
+  const [dateB, setDateB] = useState<useFetchPrintHistoryStates['dateB']>(null);
 
   const fetchPrintHistoryFn = async () => {
+    // 印刷日時が選ばれたらカスタマーIDを強制的に null
+    if (selectCategory === 'printed_at') {
+      setCustomerId(null);
+    }
     if (dateA && dateB) {
       const diff = dateB.toDate('Asia/Tokyo').getTime() - dateA.toDate('Asia/Tokyo').getTime();
-      // ７日間を超える問い合わせはしない
-      if (Math.abs(diff) > 7 * 24 * 60 * 60 * 1000) {
+      const rangeDays = customerId !== null && selectCategory !== 'printed_at' ? 731 : 31;
+      if (Math.abs(diff) > rangeDays * 24 * 60 * 60 * 1000) {
         return [];
       }
     }
     const result: void | AxiosResponse<ShippingInstructionHistoryTbRow[]> = await axiosInst
       .get(
-        `/shipping-instruction-printouts?category=${selectCategory}${dateA ? `&dateA=${dateA.toString()}` : ''}${
+        `/shipping-instruction-printouts?category=${selectCategory}${
+          dateA ? `&dateA=${dateA.toString()}` : ''
+        }${
           dateB ? `&dateB=${dateB.toString()}` : ''
+        }${
+          customerId !== null && selectCategory !== 'printed_at' ? `&non_fk_customer_id=${customerId}` : ''
         }`,
       )
       .catch((err: string) => {
         console.error(
           `💥💥💥 /shipping-instruction-printouts?category=${selectCategory}${
             dateA ? `&dateA=${dateA.toString()}` : ''
-          }${dateB ? `&dateB=${dateB.toString()}` : ''} からのエラーをキャッチ❢ ${err} 💀💀💀`,
+          }${
+            dateB ? `&dateB=${dateB.toString()}` : ''
+          }${
+            customerId !== null && selectCategory !== 'printed_at' ? `&non_fk_customer_id=${customerId}` : ''
+          } からのエラーをキャッチ❢ ${err} 💀💀💀`,
         );
         return Promise.reject(new Error(err));
       });
@@ -45,9 +62,9 @@ export function useFetchPrintHistory() {
     return result.data;
   };
   const { data: printHistories } = useSuspenseQuery({
-    queryKey: ['shipping-instruction-printouts', selectCategory, dateA, dateB],
+    queryKey: ['shipping-instruction-printouts', customerId, selectCategory, dateA, dateB],
     queryFn: fetchPrintHistoryFn,
   });
 
-  return { selectCategory, setSelectCategory, dateA, setDateA, dateB, setDateB, printHistories };
+  return { customerId, setCustomerId, selectCategory, setSelectCategory, dateA, setDateA, dateB, setDateB, printHistories };
 }

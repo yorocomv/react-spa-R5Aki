@@ -59,12 +59,12 @@ export default function PrintHistoryTableTr({
       </td>
       <td className={css({ [smallScreen]: { display: 'none' } })}>{po.page_num_str}</td>
       <td
-        className={css({
+        className={`customer-id-and-name ${css({
           maxW: '16rem',
           overflow: 'hidden',
           textOverflow: 'ellipsis',
           [hdScreen]: { maxW: '11rem' },
-        })}
+        })}`}
       >
         <data value={po.non_fk_customer_id}>{po.customer_name}</data>
       </td>

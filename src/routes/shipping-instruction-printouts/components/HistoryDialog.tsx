@@ -1,14 +1,18 @@
+import { today } from '@internationalized/date';
 import React from 'react';
 import { Button, Dialog, Heading, Modal } from 'react-aria-components';
 import { IoCloseOutline } from 'react-icons/io5';
-import { Link } from 'react-router';
+import { VscGoToSearch } from 'react-icons/vsc';
+import { Link, useNavigate } from 'react-router';
 
 import CommonFloatingDeleteButton from '@/components/ui/CommonFloatingDeleteButton';
+
+import '@/components/ui/reactAriaModalOverlay.css';
+
 import { css } from 'styled-system/css';
 
 import type { ShippingInstructionHistoryTbRow } from '../shippingInstructionPrintouts.types';
-
-import '@/components/ui/reactAriaModalOverlay.css';
+import type { useFetchPrintHistoryStates } from './hooks/useFetchPrintHistory';
 
 import { useDeletePrintHistory } from './hooks/useDeletePrintHistory';
 
@@ -42,6 +46,25 @@ export default function HistoryDialog({ oneHistory: p, isOpen, closeModal }: His
     timeZone: 'Asia/Tokyo',
   }).format(shippingJsDate);
   const formattedShippingDate = shippingJsDate.toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo', dateStyle: 'short' });
+
+  const navigate = useNavigate();
+  const todayDate = today('Asia/Tokyo');
+  const handleNavigatePrintHistoryWithCustomerId = () => {
+    // https://github.com/remix-run/react-router/issues/12348
+    Promise.resolve(
+      navigate('/shipping-instruction-printouts', {
+        relative: 'path',
+        state: {
+          category: 'delivery_date',
+          non_fk_customer_id: p.non_fk_customer_id,
+          dateA: todayDate.add({ weeks: 2 }),
+          dateB: todayDate.subtract({ years: 1 }),
+        } as useFetchPrintHistoryStates,
+      }),
+    ).catch((err: string) => {
+      throw new Error(err);
+    });
+  };
 
   return (
     <Modal isDismissable isOpen={isOpen} onOpenChange={() => closeModal(-1)}>
@@ -167,7 +190,27 @@ export default function HistoryDialog({ oneHistory: p, isOpen, closeModal }: His
                 <td>{p.page_num_str}</td>
               </tr>
               <tr>
-                <th>得意先名</th>
+                <th className={css({
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '1rem',
+                })}
+                >
+                  得意先名
+                  <VscGoToSearch
+                    onClick={handleNavigatePrintHistoryWithCustomerId}
+                    role="button"
+                    className={css({
+                      fontSize: '1.125rem',
+                      color: 'teal.900',
+                      _hover: {
+                        color: 'teal.600',
+                        filter: 'drop-shadow(1px -1px 0 #99f6e4)',
+                        cursor: 'pointer',
+                      },
+                    })}
+                  />
+                </th>
                 <td>
                   <pre className={css({ overflowWrap: 'break-word' })}>{p.customer_name}</pre>
                 </td>

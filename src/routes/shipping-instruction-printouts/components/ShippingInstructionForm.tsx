@@ -1,6 +1,7 @@
 import type { SubmitHandler } from 'react-hook-form';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { parseDate } from '@internationalized/date';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useLocation, useNavigate } from 'react-router';
@@ -14,6 +15,7 @@ import onPromise from '@/libs/onPromise';
 import { css } from 'styled-system/css';
 
 import type { ShippingInstructionCorrection, ShippingInstructionHistoryTbRow } from '../shippingInstructionPrintouts.types';
+import type { useFetchPrintHistoryStates } from './hooks/useFetchPrintHistory';
 
 import { shippingInstructionCorrectionSchema } from '../shippingInstructionPrintouts.schemas';
 import { useCorrectPrintHistory } from './hooks/useCorrectPrintHistory';
@@ -46,7 +48,15 @@ export default function ShippingInstructionForm() {
       const response = await correctPrintHistory(values);
       console.log(response);
       // https://github.com/remix-run/react-router/issues/12348
-      Promise.resolve(navigate('/shipping-instruction-printouts'))
+      Promise.resolve(navigate('/shipping-instruction-printouts', {
+        relative: 'path',
+        state: {
+          category: 'shipping_date',
+          non_fk_customer_id: null,
+          dateA: parseDate(response.shipping_date),
+          dateB: null,
+        } as useFetchPrintHistoryStates,
+      }))
         .catch((err: string) => {
           throw new Error(err);
         });

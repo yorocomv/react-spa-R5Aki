@@ -1,6 +1,8 @@
 import { today } from '@internationalized/date';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { GiPin } from 'react-icons/gi';
 import { LuArrowLeftRight } from 'react-icons/lu';
+import { useLocation } from 'react-router';
 
 import DatePickerInput from '@/components/ui/DatePickerInput';
 import Select from '@/components/ui/elements/Select';
@@ -9,7 +11,7 @@ import SpotField from '@/components/ui/SpotField';
 import TooltipWrapper from '@/components/ui/TooltipWrapper';
 import { css } from 'styled-system/css';
 
-import type { FindShippingInstructionsQueryCategory } from './shippingInstructionPrintouts.types';
+import type { useFetchPrintHistoryStates } from './components/hooks/useFetchPrintHistory';
 
 import SupIcon from './components/elements/SupFilterIcon';
 import HistoryDialog from './components/HistoryDialog';
@@ -19,18 +21,54 @@ import PrintHistoryTableTr from './components/PrintHistoryTableTr';
 import ThReverseButton from './components/ThReverseButton';
 
 export default function PrintHistoryList() {
-  const { selectCategory, setSelectCategory, dateA, setDateA, dateB, setDateB, printHistories } =
+  const fetchParams = useLocation().state as useFetchPrintHistoryStates | null;
+  const { customerId, setCustomerId, selectCategory, setSelectCategory, dateA, setDateA, dateB, setDateB, printHistories } =
     useFetchPrintHistory();
+
   const { filterString, setFilterString, filteredPrintHistories } = useFilterPrintHistory(printHistories);
-  const historyCategories: { label: string; category: FindShippingInstructionsQueryCategory }[] = [
-    { label: '印刷日時', category: 'printed_at' },
-    { label: '着日', category: 'delivery_date' },
-    { label: '出荷予定日', category: 'shipping_date' },
-  ];
+  const historyCategories: { label: string; category: useFetchPrintHistoryStates['category'] }[] = customerId
+    ? [
+        { label: '着日', category: 'delivery_date' },
+        { label: '出荷予定日', category: 'shipping_date' },
+      ]
+    : [
+        { label: '印刷日時', category: 'printed_at' },
+        { label: '着日', category: 'delivery_date' },
+        { label: '出荷予定日', category: 'shipping_date' },
+      ];
   const [isReverse, setIsReverse] = useState(true);
   const [selectedHistory, setSelectedHistory] = useState(-1);
 
+  useEffect(() => {
+    // ページ遷移後ステートを引き継ぎ
+    // else 無し。直接アクセス時は何もしない
+    if (fetchParams) {
+      if (fetchParams.non_fk_customer_id) {
+        setCustomerId(fetchParams.non_fk_customer_id);
+        fetchParams.non_fk_customer_id = null;
+      }
+      // useFetchPrintHistory のデフォルトと違う場合
+      if (fetchParams.category !== 'printed_at') {
+        setSelectCategory(fetchParams.category);
+        fetchParams.category = 'printed_at';
+      }
+      if (fetchParams.dateA) {
+        setDateA(fetchParams.dateA);
+        fetchParams.dateA = null;
+      }
+      if (fetchParams.dateB) {
+        setDateB(fetchParams.dateB);
+        fetchParams.dateB = null;
+      }
+      return () => {
+        setSelectedHistory(-1);
+      };
+    }
+  }, [fetchParams, setCustomerId, setDateA, setDateB, setSelectCategory]);
+
   const todayDate = today('Asia/Tokyo');
+  // 全ての顧客対象ではバックエンドのリミットよりもより小さい値に設定
+  const rangeDays = customerId !== null && selectCategory !== 'printed_at' ? 731 : 14;
 
   // Panda CSS で使用する変数
   const smallScreen = '@media(width < 960px)';
@@ -62,8 +100,8 @@ export default function PrintHistoryList() {
           })}
         >
           <Select
+            onChange={e => setSelectCategory(e.target.value as useFetchPrintHistoryStates['category'])}
             value={selectCategory}
-            onChange={e => setSelectCategory(e.target.value as FindShippingInstructionsQueryCategory)}
             className={css({ maxH: '2.175rem', w: 'fit-content' })}
           >
             {historyCategories.map(({ label, category }) => (
@@ -76,8 +114,8 @@ export default function PrintHistoryList() {
             value={dateA}
             setValue={setDateA}
             todayDate={todayDate}
-            minValue={dateB ? dateB.subtract({ days: 7 }) : null}
-            maxValue={dateB ? dateB.add({ days: 7 }) : null}
+            minValue={dateB ? dateB.subtract({ days: rangeDays }) : null}
+            maxValue={dateB ? dateB.add({ days: rangeDays }) : null}
           >
             <PopoverCalendar todayDate={todayDate} />
           </DatePickerInput>
@@ -89,6 +127,7 @@ export default function PrintHistoryList() {
             <LuArrowLeftRight
               size="1.3rem"
               onClick={() => {
+                setCustomerId(null);
                 setSelectCategory('printed_at');
                 setDateA(todayDate);
                 setDateB(null);
@@ -100,8 +139,8 @@ export default function PrintHistoryList() {
           <DatePickerInput
             value={dateB}
             setValue={setDateB}
-            minValue={dateA ? dateA.subtract({ days: 7 }) : null}
-            maxValue={dateA ? dateA.add({ days: 7 }) : null}
+            minValue={dateA ? dateA.subtract({ days: rangeDays }) : null}
+            maxValue={dateA ? dateA.add({ days: rangeDays }) : null}
           >
             <PopoverCalendar todayDate={todayDate} />
           </DatePickerInput>
@@ -183,8 +222,20 @@ export default function PrintHistoryList() {
             borderCollapse: 'collapse',
             whiteSpace: 'nowrap',
             overflowX: 'hidden',
-            '& tr': { boxShadow: 'inset 0 -1px #d6d3d1' },
+            '& tr': {
+              textAlign: 'center',
+              boxShadow: 'inset 0 -1px #d6d3d1',
+            },
             '& tbody tr:last-child': { boxShadow: 'none' },
+            '&:has(.selected-customer) td.customer-id-and-name': {
+              maxW: '12.5rem',
+              fontWeight: 'bold',
+              bg: 'linear-gradient(90deg in oklch shorter hue, oklch(0.7049 0.1867 47.6 / 60%), oklch(0.903 0.0732 319.62 / 30%))',
+              clipPath: 'polygon(6% 0, 100% 0, 100% 100%, 0 100%, 0 15%)',
+            },
+            '&:has(.selected-customer) tr:hover td.customer-id-and-name': {
+              color: 'pink.600',
+            },
           })}
         >
           <thead
@@ -217,8 +268,31 @@ export default function PrintHistoryList() {
               </th>
               <th className={css({ [smallScreen]: { display: 'none' } })}>印刷頁</th>
               <th>
-                得意先名
-                <SupIcon />
+                {customerId !== null
+                  ? (
+                      <>
+                        <span className={`selected-customer ${css({
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '0.2rem',
+                        })}`}
+                        >
+                          得意先名
+                          <GiPin className={css({
+                            color: 'teal.600',
+                            filter: 'drop-shadow(1px -1px 0 #99f6e4)',
+                          })}
+                          />
+                        </span>
+                        <SupIcon />
+                      </>
+                    )
+                  : (
+                      <>
+                        得意先名
+                        <SupIcon />
+                      </>
+                    )}
               </th>
               <th className={css({ [hdScreen]: { display: 'none' } })}>
                 住所
@@ -288,15 +362,15 @@ export default function PrintHistoryList() {
                 )
               : (
                   <tr>
-                    <td>7日間以内</td>
+                    <td>{`${rangeDays} 日間以内`}</td>
                     <td className={css({ [smallScreen]: { display: 'none' } })}> - </td>
-                    <td>7日間以内</td>
+                    <td>{`${rangeDays} 日間以内`}</td>
                     <td className={css({ [smallScreen]: { display: 'none' } })}> - </td>
                     <td>該当なし</td>
                     <td className={css({ [hdScreen]: { display: 'none' } })}> - </td>
                     <td className={css({ [smallScreen]: { display: 'none' } })}> - </td>
                     <td className={css({ [hdScreen]: { display: 'none' } })}> - </td>
-                    <td>7日間以内</td>
+                    <td>{`${rangeDays} 日間以内`}</td>
                     <td> - </td>
                     <td> - </td>
                     <td> - </td>
