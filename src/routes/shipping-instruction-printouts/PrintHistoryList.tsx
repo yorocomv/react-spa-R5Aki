@@ -60,9 +60,6 @@ export default function PrintHistoryList() {
         setDateB(fetchParams.dateB);
         fetchParams.dateB = null;
       }
-      return () => {
-        setSelectedHistory(-1);
-      };
     }
   }, [fetchParams, setCustomerId, setDateA, setDateB, setSelectCategory]);
 
@@ -114,6 +111,7 @@ export default function PrintHistoryList() {
             value={dateA}
             setValue={setDateA}
             todayDate={todayDate}
+            isSuppressAutoToday={fetchParams?.dateA !== null}
             minValue={dateB ? dateB.subtract({ days: rangeDays }) : null}
             maxValue={dateB ? dateB.add({ days: rangeDays }) : null}
           >
@@ -227,11 +225,21 @@ export default function PrintHistoryList() {
               boxShadow: 'inset 0 -1px #d6d3d1',
             },
             '& tbody tr:last-child': { boxShadow: 'none' },
-            '&:has(.selected-customer) td.customer-id-and-name': {
-              maxW: '12.5rem',
-              fontWeight: 'bold',
-              bg: 'linear-gradient(90deg in oklch shorter hue, oklch(0.7049 0.1867 47.6 / 60%), oklch(0.903 0.0732 319.62 / 30%))',
-              clipPath: 'polygon(6% 0, 100% 0, 100% 100%, 0 100%, 0 15%)',
+            '&:has(.selected-customer)': {
+              '& td.printed-at': {
+                maxW: '6rem',
+              },
+              '& td.customer-id-and-name': {
+                maxW: '12.5rem',
+                fontWeight: 'bold',
+                bg: 'linear-gradient(90deg in oklch shorter hue, oklch(0.7049 0.1867 47.6 / 60%), oklch(0.903 0.0732 319.62 / 30%))',
+                clipPath: 'polygon(6% 0, 100% 0, 100% 100%, 0 100%, 0 15%)',
+                pos: 'relative',
+                zIndex: '0',
+              },
+              '& td.items-of-order': {
+                maxW: '21rem',
+              },
             },
             '&:has(.selected-customer) tr:hover td.customer-id-and-name': {
               color: 'pink.600',
@@ -241,6 +249,8 @@ export default function PrintHistoryList() {
           <thead
             className={css({
               pos: 'sticky',
+              // tbody の td で clip-path を使って必要になった
+              zIndex: '1',
               top: 0,
               bgColor: 'stone.200',
               borderRadius: 'lg',
@@ -390,6 +400,11 @@ export default function PrintHistoryList() {
                   oneHistory={po}
                   isOpen={selectedHistory === i}
                   closeModal={setSelectedHistory}
+                  customerId={customerId}
+                  setCustomerId={setCustomerId}
+                  setSelectCategory={setSelectCategory}
+                  setDateA={setDateA}
+                  setDateB={setDateB}
                 />
               ))
           : filteredPrintHistories.map((po, i) => (
@@ -398,6 +413,11 @@ export default function PrintHistoryList() {
                 oneHistory={po}
                 isOpen={selectedHistory === i}
                 closeModal={setSelectedHistory}
+                customerId={customerId}
+                setCustomerId={setCustomerId}
+                setSelectCategory={setSelectCategory}
+                setDateA={setDateA}
+                setDateB={setDateB}
               />
             ))
         : null}

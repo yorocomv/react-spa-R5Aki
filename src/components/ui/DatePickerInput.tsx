@@ -14,6 +14,7 @@ export default function DatePickerInput({
   minValue = null,
   maxValue = null,
   setValue,
+  isSuppressAutoToday = false,
 }: {
   children: React.ReactNode;
   todayDate?: CalendarDate | null;
@@ -21,10 +22,12 @@ export default function DatePickerInput({
   minValue?: DateValue | null | undefined;
   maxValue?: DateValue | null | undefined;
   setValue: React.Dispatch<React.SetStateAction<CalendarDate | null>>;
+  isSuppressAutoToday?: boolean;
 }): React.JSX.Element {
   // 初回のみ実行
   useEffect(() => {
-    if (!value && todayDate) {
+    // value が無く、オートトゥデイ抑制が「偽」で、トゥデイが渡されたら
+    if (!value && !isSuppressAutoToday && todayDate) {
       setValue(todayDate);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
