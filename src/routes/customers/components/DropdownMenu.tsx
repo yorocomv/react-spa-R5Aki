@@ -1,6 +1,8 @@
 import { Menu, MenuItem, MenuTrigger, Popover } from 'react-aria-components';
 import { useNavigate } from 'react-router';
 
+import type { useFetchPrintHistoryStates } from '@/routes/shipping-instruction-printouts/components/hooks/useFetchPrintHistory';
+
 import type { SystemStyleObject } from '../../../../styled-system/types';
 import type { CustomersTbRow } from '../customers.types';
 
@@ -13,7 +15,7 @@ interface DropdownMenuProps {
   menuItems: {
     label: string;
     toRelativePath: string;
-    state: CustomersTbRow;
+    state: CustomersTbRow | useFetchPrintHistoryStates;
   }[];
 }
 

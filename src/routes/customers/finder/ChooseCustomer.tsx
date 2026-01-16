@@ -1,3 +1,4 @@
+import { today } from '@internationalized/date';
 import parse from 'html-react-parser';
 import { useEffect } from 'react';
 import { useLocation, useParams } from 'react-router';
@@ -5,10 +6,10 @@ import { useLocation, useParams } from 'react-router';
 import CustomerNotesList from '@/routes/customers/components/CustomerNotesList';
 import DropdownMenu from '@/routes/customers/components/DropdownMenu';
 import InvoiceNameSwitcher from '@/routes/customers/components/elementSwitchers/InvoiceNameSwitcher';
-import { useCreateCustomerTsv } from '@/routes/customers/components/hooks/useCreateCustomerTsv';
 
 import '@/routes/customers/customers.css';
 
+import { useCreateCustomerTsv } from '@/routes/customers/components/hooks/useCreateCustomerTsv';
 import { css } from 'styled-system/css';
 
 import type { CustomersTbRow, RequiredChooseCustomer } from '../customers.types';
@@ -17,6 +18,7 @@ export default function ChooseCustomer(): React.JSX.Element {
   const customer = useLocation().state as CustomersTbRow;
   const { id: customerId } = useParams();
   const { createCustomerTsv } = useCreateCustomerTsv();
+  const todayDate = today('Asia/Tokyo');
 
   if (customerId && customerId !== customer.id.toString())
     throw new Error('不正なルートでのアクセスを検知しました❢');
@@ -141,11 +143,17 @@ export default function ChooseCustomer(): React.JSX.Element {
           </div>
         </div>
         <DropdownMenu
-          label="編集 / メモを追加"
+          label="編集・その他の操作"
           mergeStyles={css.raw({ margin: '0 0 1.5rem auto' })}
           menuItems={[
             { label: '編集', toRelativePath: '../edit', state: customer },
             { label: 'メモを追加', toRelativePath: '../take-a-note', state: customer },
+            { label: '発送履歴を検索', toRelativePath: '/shipping-instruction-printouts', state: {
+              category: 'delivery_date',
+              non_fk_customer_id: customer.id,
+              dateA: todayDate.add({ weeks: 2 }),
+              dateB: todayDate.subtract({ years: 1 }),
+            } },
           ]}
         />
       </section>

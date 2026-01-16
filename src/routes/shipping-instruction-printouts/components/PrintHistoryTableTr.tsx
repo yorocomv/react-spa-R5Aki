@@ -49,11 +49,11 @@ export default function PrintHistoryTableTr({
       </td>
       <td className={css({ [smallScreen]: { display: 'none' } })}>{po.delivery_time_str}</td>
       <td
-        className={css({
+        className={`printed-at ${css({
           maxW: '8rem',
           overflow: 'hidden',
           textOverflow: 'ellipsis',
-        })}
+        })}`}
       >
         {po.printed_at}
       </td>
@@ -103,12 +103,12 @@ export default function PrintHistoryTableTr({
       <td>{po.carrier}</td>
       <td>{po.package_count}</td>
       <td
-        className={css({
+        className={`items-of-order ${css({
           maxW: '16rem',
           overflow: 'hidden',
           textOverflow: 'ellipsis',
           [hdScreen]: { maxW: '11rem' },
-        })}
+        })}`}
       >
         {po.items_of_order}
       </td>

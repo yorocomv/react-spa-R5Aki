@@ -1,9 +1,11 @@
+import type { CalendarDate } from '@internationalized/date';
+
 import { today } from '@internationalized/date';
 import React from 'react';
 import { Button, Dialog, Heading, Modal } from 'react-aria-components';
 import { IoCloseOutline } from 'react-icons/io5';
 import { VscGoToSearch } from 'react-icons/vsc';
-import { Link, useNavigate } from 'react-router';
+import { Link } from 'react-router';
 
 import CommonFloatingDeleteButton from '@/components/ui/CommonFloatingDeleteButton';
 
@@ -12,7 +14,6 @@ import '@/components/ui/reactAriaModalOverlay.css';
 import { css } from 'styled-system/css';
 
 import type { ShippingInstructionHistoryTbRow } from '../shippingInstructionPrintouts.types';
-import type { useFetchPrintHistoryStates } from './hooks/useFetchPrintHistory';
 
 import { useDeletePrintHistory } from './hooks/useDeletePrintHistory';
 
@@ -20,9 +21,23 @@ interface HistoryDialogProps {
   oneHistory: ShippingInstructionHistoryTbRow;
   isOpen: boolean;
   closeModal: React.Dispatch<React.SetStateAction<number>>;
+  customerId: number | null;
+  setCustomerId: React.Dispatch<React.SetStateAction<number | null>>;
+  setSelectCategory: React.Dispatch<React.SetStateAction<'delivery_date' | 'shipping_date' | 'printed_at'>>;
+  setDateA: React.Dispatch<React.SetStateAction<CalendarDate | null>>;
+  setDateB: React.Dispatch<React.SetStateAction<CalendarDate | null>>;
 }
 
-export default function HistoryDialog({ oneHistory: p, isOpen, closeModal }: HistoryDialogProps): React.JSX.Element {
+export default function HistoryDialog({
+  oneHistory: p,
+  isOpen,
+  closeModal,
+  customerId,
+  setCustomerId,
+  setSelectCategory,
+  setDateA,
+  setDateB,
+}: HistoryDialogProps): React.JSX.Element {
   const { deletePrintHistory } = useDeletePrintHistory({ delivery_date: p.delivery_date, printed_at: p.printed_at });
   const handleClickDelete = async () => {
     try {
@@ -47,23 +62,14 @@ export default function HistoryDialog({ oneHistory: p, isOpen, closeModal }: His
   }).format(shippingJsDate);
   const formattedShippingDate = shippingJsDate.toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo', dateStyle: 'short' });
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const todayDate = today('Asia/Tokyo');
-  const handleNavigatePrintHistoryWithCustomerId = () => {
-    // https://github.com/remix-run/react-router/issues/12348
-    Promise.resolve(
-      navigate('/shipping-instruction-printouts', {
-        relative: 'path',
-        state: {
-          category: 'delivery_date',
-          non_fk_customer_id: p.non_fk_customer_id,
-          dateA: todayDate.add({ weeks: 2 }),
-          dateB: todayDate.subtract({ years: 1 }),
-        } as useFetchPrintHistoryStates,
-      }),
-    ).catch((err: string) => {
-      throw new Error(err);
-    });
+  const handleSearchPrintHistoryWithCustomerId = () => {
+    setCustomerId(p.non_fk_customer_id);
+    setSelectCategory('delivery_date');
+    setDateA(todayDate.add({ weeks: 2 }));
+    setDateB(todayDate.subtract({ years: 1 }));
+    closeModal(-1);
   };
 
   return (
@@ -190,27 +196,36 @@ export default function HistoryDialog({ oneHistory: p, isOpen, closeModal }: His
                 <td>{p.page_num_str}</td>
               </tr>
               <tr>
-                <th className={css({
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '1rem',
-                })}
-                >
-                  得意先名
-                  <VscGoToSearch
-                    onClick={handleNavigatePrintHistoryWithCustomerId}
-                    role="button"
-                    className={css({
-                      fontSize: '1.125rem',
-                      color: 'teal.900',
-                      _hover: {
-                        color: 'teal.600',
-                        filter: 'drop-shadow(1px -1px 0 #99f6e4)',
-                        cursor: 'pointer',
-                      },
-                    })}
-                  />
-                </th>
+                {
+                  customerId !== null
+                    ? (
+                        <th>得意先名</th>
+                      )
+                    : (
+                        <th className={css({
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '1rem',
+                        })}
+                        >
+                          得意先名
+                          <VscGoToSearch
+                            title="🔎発送履歴を検索"
+                            onClick={handleSearchPrintHistoryWithCustomerId}
+                            role="button"
+                            className={css({
+                              fontSize: '1.125rem',
+                              color: 'teal.900',
+                              _hover: {
+                                color: 'teal.600',
+                                filter: 'drop-shadow(1px -1px 0 #99f6e4)',
+                                cursor: 'pointer',
+                              },
+                            })}
+                          />
+                        </th>
+                      )
+                }
                 <td>
                   <pre className={css({ overflowWrap: 'break-word' })}>{p.customer_name}</pre>
                 </td>
