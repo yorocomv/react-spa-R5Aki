@@ -236,9 +236,11 @@ export default function PrintHistoryList() {
                 clipPath: 'polygon(6% 0, 100% 0, 100% 100%, 0 100%, 0 15%)',
                 pos: 'relative',
                 zIndex: '0',
+                [hdScreen]: { maxW: '11rem' },
               },
               '& td.items-of-order': {
-                maxW: '21rem',
+                maxW: '21.5rem',
+                [hdScreen]: { maxW: '13rem' },
               },
             },
             '&:has(.selected-customer) tr:hover td.customer-id-and-name': {
