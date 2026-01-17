@@ -1,3 +1,5 @@
+import type { CalendarDate } from '@internationalized/date';
+
 import { today } from '@internationalized/date';
 import { useEffect, useState } from 'react';
 import { GiPin } from 'react-icons/gi';
@@ -22,7 +24,7 @@ import ThReverseButton from './components/ThReverseButton';
 
 export default function PrintHistoryList() {
   const fetchParams = useLocation().state as useFetchPrintHistoryStates | null;
-  const { customerId, setCustomerId, selectCategory, setSelectCategory, dateA, setDateA, dateB, setDateB, printHistories } =
+  const { customerId, setCustomerId, selectCategory, setSelectCategory, dateA, setDateA, setDateAImmediate, dateB, setDateB, setDateBImmediate, printHistories } =
     useFetchPrintHistory();
 
   const { filterString, setFilterString, filteredPrintHistories } = useFilterPrintHistory(printHistories);
@@ -53,15 +55,15 @@ export default function PrintHistoryList() {
         fetchParams.category = 'printed_at';
       }
       if (fetchParams.dateA) {
-        setDateA(fetchParams.dateA);
+        setDateAImmediate(fetchParams.dateA);
         fetchParams.dateA = null;
       }
       if (fetchParams.dateB) {
-        setDateB(fetchParams.dateB);
+        setDateBImmediate(fetchParams.dateB);
         fetchParams.dateB = null;
       }
     }
-  }, [fetchParams, setCustomerId, setDateA, setDateB, setSelectCategory]);
+  }, [fetchParams, setCustomerId, setDateAImmediate, setDateBImmediate, setSelectCategory]);
 
   const todayDate = today('Asia/Tokyo');
   // 全ての顧客対象ではバックエンドのリミットよりもより小さい値に設定
@@ -115,7 +117,7 @@ export default function PrintHistoryList() {
             minValue={dateB ? dateB.subtract({ days: rangeDays }) : null}
             maxValue={dateB ? dateB.add({ days: rangeDays }) : null}
           >
-            <PopoverCalendar todayDate={todayDate} />
+            <PopoverCalendar onChange={e => setDateAImmediate(e as CalendarDate)} todayDate={todayDate} />
           </DatePickerInput>
           <TooltipWrapper
             text="リセット"
@@ -140,7 +142,7 @@ export default function PrintHistoryList() {
             minValue={dateA ? dateA.subtract({ days: rangeDays }) : null}
             maxValue={dateA ? dateA.add({ days: rangeDays }) : null}
           >
-            <PopoverCalendar todayDate={todayDate} />
+            <PopoverCalendar onChange={e => setDateBImmediate(e as CalendarDate)} todayDate={todayDate} />
           </DatePickerInput>
         </nav>
         <section

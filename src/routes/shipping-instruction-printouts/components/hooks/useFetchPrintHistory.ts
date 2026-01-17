@@ -2,7 +2,7 @@ import type { CalendarDate } from '@internationalized/date';
 import type { AxiosResponse } from 'axios';
 
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import axiosInst from '@/util/axiosInstance';
 
@@ -18,14 +18,49 @@ export interface useFetchPrintHistoryStates {
 export function useFetchPrintHistory() {
   const [customerId, setCustomerId] = useState<useFetchPrintHistoryStates['non_fk_customer_id']>(null);
   const [selectCategory, setSelectCategory] = useState<useFetchPrintHistoryStates['category']>('printed_at');
+
+  // UI表示用の即時ステート
   const [dateA, setDateA] = useState<useFetchPrintHistoryStates['dateA']>(null);
   const [dateB, setDateB] = useState<useFetchPrintHistoryStates['dateB']>(null);
+
+  // キーボード入力を考慮したデータ取得用のデバウンス（遅延）ステート
+  const [debouncedDateA, setDebouncedDateA] = useState<useFetchPrintHistoryStates['dateA']>(dateA);
+  const [debouncedDateB, setDebouncedDateB] = useState<useFetchPrintHistoryStates['dateB']>(dateB);
+
+  // マウス操作用、即時更新用関数（カレンダー選択用）
+  // UI上の日付(dateA)と、クエリ用日付(debouncedDateA)を同時に更新することで、待機時間をスキップします
+  const setDateAImmediate = (date: CalendarDate | null) => {
+    setDateA(date);
+    setDebouncedDateA(date);
+  };
+  const setDateBImmediate = (date: CalendarDate | null) => {
+    setDateB(date);
+    setDebouncedDateB(date);
+  };
+
+  // dateA, dateB が変更されたら、一定ミリ秒待ってから debounced 側を更新する
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedDateA(dateA);
+      setDebouncedDateB(dateB);
+    }, 2500); // 遅延時間（ミリ秒）
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [dateA, dateB]);
 
   const fetchPrintHistoryFn = async () => {
     // 印刷日時が選ばれたらカスタマーIDを強制的に null
     if (selectCategory === 'printed_at') {
       setCustomerId(null);
     }
+
+    // --- Gemini 3 コメント ---
+    // APIコール時は、実際にトリガーとなった debouncedDateA/B を使う、
+    // またはこの関数が実行される時点での dateA/B (closure) は既に更新されているためそのまま利用可能です。
+    // ここでは念の為、stateの不整合を防ぐためロジック上は dateA/B のままで問題ありません。
+    // (クエリが走るタイミングが遅れるだけなので、走った時点での dateA は最新です)
     if (dateA && dateB) {
       const diff = dateB.toDate('Asia/Tokyo').getTime() - dateA.toDate('Asia/Tokyo').getTime();
       const rangeDays = customerId !== null && selectCategory !== 'printed_at' ? 731 : 31;
@@ -62,9 +97,11 @@ export function useFetchPrintHistory() {
     return result.data;
   };
   const { data: printHistories } = useSuspenseQuery({
-    queryKey: ['shipping-instruction-printouts', customerId, selectCategory, dateA, dateB],
+    // queryKey には即時反映の dateA/B ではなく、デバウンス済みの変数を使用する
+    queryKey: ['shipping-instruction-printouts', customerId, selectCategory, debouncedDateA, debouncedDateB],
     queryFn: fetchPrintHistoryFn,
   });
 
-  return { customerId, setCustomerId, selectCategory, setSelectCategory, dateA, setDateA, dateB, setDateB, printHistories };
+  // UI側には即時更新用の setDateA / setDateB を渡す
+  return { customerId, setCustomerId, selectCategory, setSelectCategory, dateA, setDateA, setDateAImmediate, dateB, setDateB, setDateBImmediate, printHistories };
 }
