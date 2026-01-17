@@ -10,7 +10,7 @@ function Home() {
   const handleNavigatePrintHistory = () => {
     // https://github.com/remix-run/react-router/issues/12348
     Promise.resolve(
-      navigate('/shipping-instruction-printouts', {
+      navigate('./shipping-instruction-printouts', {
         relative: 'path',
         state: {
           category: 'printed_at',

@@ -24,8 +24,8 @@ interface HistoryDialogProps {
   customerId: number | null;
   setCustomerId: React.Dispatch<React.SetStateAction<number | null>>;
   setSelectCategory: React.Dispatch<React.SetStateAction<'delivery_date' | 'shipping_date' | 'printed_at'>>;
-  setDateA: React.Dispatch<React.SetStateAction<CalendarDate | null>>;
-  setDateB: React.Dispatch<React.SetStateAction<CalendarDate | null>>;
+  setDateAImmediate: (date: CalendarDate | null) => void;
+  setDateBImmediate: (date: CalendarDate | null) => void;
 }
 
 export default function HistoryDialog({
@@ -35,8 +35,8 @@ export default function HistoryDialog({
   customerId,
   setCustomerId,
   setSelectCategory,
-  setDateA,
-  setDateB,
+  setDateAImmediate,
+  setDateBImmediate,
 }: HistoryDialogProps): React.JSX.Element {
   const { deletePrintHistory } = useDeletePrintHistory({ delivery_date: p.delivery_date, printed_at: p.printed_at });
   const handleClickDelete = async () => {
@@ -67,8 +67,8 @@ export default function HistoryDialog({
   const handleSearchPrintHistoryWithCustomerId = () => {
     setCustomerId(p.non_fk_customer_id);
     setSelectCategory('delivery_date');
-    setDateA(todayDate.add({ weeks: 2 }));
-    setDateB(todayDate.subtract({ years: 1 }));
+    setDateAImmediate(todayDate.add({ weeks: 2 }));
+    setDateBImmediate(todayDate.subtract({ years: 1 }));
     closeModal(-1);
   };
 

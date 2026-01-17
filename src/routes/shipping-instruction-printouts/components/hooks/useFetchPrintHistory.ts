@@ -56,13 +56,8 @@ export function useFetchPrintHistory() {
       setCustomerId(null);
     }
 
-    // --- Gemini 3 コメント ---
-    // APIコール時は、実際にトリガーとなった debouncedDateA/B を使う、
-    // またはこの関数が実行される時点での dateA/B (closure) は既に更新されているためそのまま利用可能です。
-    // ここでは念の為、stateの不整合を防ぐためロジック上は dateA/B のままで問題ありません。
-    // (クエリが走るタイミングが遅れるだけなので、走った時点での dateA は最新です)
-    if (dateA && dateB) {
-      const diff = dateB.toDate('Asia/Tokyo').getTime() - dateA.toDate('Asia/Tokyo').getTime();
+    if (debouncedDateA && debouncedDateB) {
+      const diff = debouncedDateB.toDate('Asia/Tokyo').getTime() - debouncedDateA.toDate('Asia/Tokyo').getTime();
       const rangeDays = customerId !== null && selectCategory !== 'printed_at' ? 731 : 31;
       if (Math.abs(diff) > rangeDays * 24 * 60 * 60 * 1000) {
         return [];
@@ -71,9 +66,9 @@ export function useFetchPrintHistory() {
     const result: void | AxiosResponse<ShippingInstructionHistoryTbRow[]> = await axiosInst
       .get(
         `/shipping-instruction-printouts?category=${selectCategory}${
-          dateA ? `&dateA=${dateA.toString()}` : ''
+          debouncedDateA ? `&dateA=${debouncedDateA.toString()}` : ''
         }${
-          dateB ? `&dateB=${dateB.toString()}` : ''
+          debouncedDateB ? `&dateB=${debouncedDateB.toString()}` : ''
         }${
           customerId !== null && selectCategory !== 'printed_at' ? `&non_fk_customer_id=${customerId}` : ''
         }`,
@@ -81,9 +76,9 @@ export function useFetchPrintHistory() {
       .catch((err: string) => {
         console.error(
           `💥💥💥 /shipping-instruction-printouts?category=${selectCategory}${
-            dateA ? `&dateA=${dateA.toString()}` : ''
+            debouncedDateA ? `&dateA=${debouncedDateA.toString()}` : ''
           }${
-            dateB ? `&dateB=${dateB.toString()}` : ''
+            debouncedDateB ? `&dateB=${debouncedDateB.toString()}` : ''
           }${
             customerId !== null && selectCategory !== 'printed_at' ? `&non_fk_customer_id=${customerId}` : ''
           } からのエラーをキャッチ❢ ${err} 💀💀💀`,
