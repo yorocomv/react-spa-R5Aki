@@ -1,5 +1,6 @@
 import { Link, useLocation, useParams } from 'react-router';
 
+import BubbleTailHeading from '@/components/ui/elements/BubbleTailHeading';
 import FormContainer from '@/components/ui/elements/FormContainer';
 import CustomerNoteForm from '@/routes/customers/components/CustomerNoteForm';
 import FloatingLinkIcon from '@/routes/customers/components/FloatingLinkIcon';
@@ -21,13 +22,13 @@ export default function TakeANoteAboutCustomer(): React.JSX.Element {
 
   return (
     <>
-      <h2
-        className={css({
-          mx: 'auto',
+      <BubbleTailHeading
+        level={2}
+        lineColor="emerald.400"
+        mergedStyles={css.raw({
           p: 2,
-          textAlign: 'center',
           fontWeight: 'bold',
-          fontSize: 'lg',
+          fontSize: '2xl',
           textWrap: 'balance',
         })}
       >
@@ -35,7 +36,7 @@ export default function TakeANoteAboutCustomer(): React.JSX.Element {
           {/* eslint-disable-next-line no-irregular-whitespace */}
           {`${customer.name1}　${customer.name2}`}
         </Link>
-      </h2>
+      </BubbleTailHeading>
       <FloatingLinkIcon relativePath="/customers" size="2rem" />
       <div
         className={css({
