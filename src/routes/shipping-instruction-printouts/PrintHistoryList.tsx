@@ -1,7 +1,7 @@
 import type { CalendarDate } from '@internationalized/date';
 
 import { today } from '@internationalized/date';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { GiPin } from 'react-icons/gi';
 import { LuArrowLeftRight } from 'react-icons/lu';
 import { useLocation } from 'react-router';
@@ -47,7 +47,32 @@ export default function PrintHistoryList() {
   const [isReverse, setIsReverse] = useState(true);
   const [selectedHistory, setSelectedHistory] = useState(-1);
 
+  // 動的スタイリング用に printed_at をキーとして DOM ノードを Map に保持する
+  const filteredPrintHistoriesRef = useRef(new Map());
+  const [lastOpenedPrintHistory, setLastOpenedPrintHistory] = useState<string | null>(null);
+  const addRefMap = (id: string, node: HTMLTableRowElement | null) => {
+    filteredPrintHistoriesRef.current.set(id, node);
+    return () => {
+      filteredPrintHistoriesRef.current.delete(id);
+    };
+  };
+
+  const handleSetStates = (index: number, printedAt: string) => {
+    if (lastOpenedPrintHistory && filteredPrintHistoriesRef.current.size) {
+      const node = filteredPrintHistoriesRef.current.get(lastOpenedPrintHistory) as HTMLTableRowElement;
+      if (node)
+        node.classList.remove('last-opened-highlight');
+    }
+    setSelectedHistory(index);
+    setLastOpenedPrintHistory(printedAt);
+  };
+
   useEffect(() => {
+    if (lastOpenedPrintHistory && filteredPrintHistoriesRef.current.size) {
+      const node = filteredPrintHistoriesRef.current.get(lastOpenedPrintHistory) as HTMLTableRowElement;
+      if (node)
+        node.classList.add('last-opened-highlight');
+    }
     // ページ遷移後ステートを引き継ぎ
     // else 無し。直接アクセス時は何もしない
     if (fetchParams) {
@@ -69,7 +94,7 @@ export default function PrintHistoryList() {
         fetchParams.dateB = null;
       }
     }
-  }, [fetchParams, setCustomerId, setDateAImmediate, setDateBImmediate, setSelectCategory]);
+  }, [fetchParams, lastOpenedPrintHistory, setCustomerId, setDateAImmediate, setDateBImmediate, setSelectCategory]);
 
   const todayDate = today('Asia/Tokyo');
   // 全ての顧客対象ではバックエンドのリミットよりもより小さい値に設定
@@ -348,7 +373,13 @@ export default function PrintHistoryList() {
               </th>
             </tr>
           </thead>
-          <tbody className={css({ '& >tr': { _hover: { color: 'teal.950', bgColor: 'teal.50/75' } } })}>
+          <tbody className={css({
+            '& >tr': {
+              '&.last-opened-highlight': { bg: 'teal.500/25' },
+              _hover: { color: 'teal.950', bgColor: 'teal.50/75' },
+            },
+          })}
+          >
             { }
             {filteredPrintHistories?.length
               ? (
@@ -358,9 +389,10 @@ export default function PrintHistoryList() {
                           .reverse()
                           .map((po, i) => (
                             <PrintHistoryTableTr
+                              addRefMap={addRefMap}
                               key={po.printed_at}
                               oneHistory={po}
-                              toggleModal={setSelectedHistory}
+                              handleSetStates={handleSetStates}
                               currentIndex={i}
                               parentMediaQuerySmall={smallScreen}
                               parentMediaQueryHd={hdScreen}
@@ -370,9 +402,10 @@ export default function PrintHistoryList() {
                     : (
                         filteredPrintHistories.map((po, i) => (
                           <PrintHistoryTableTr
+                            addRefMap={addRefMap}
                             key={po.printed_at}
                             oneHistory={po}
-                            toggleModal={setSelectedHistory}
+                            handleSetStates={handleSetStates}
                             currentIndex={i}
                             parentMediaQuerySmall={smallScreen}
                             parentMediaQueryHd={hdScreen}

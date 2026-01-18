@@ -6,18 +6,20 @@ import type { ShippingInstructionHistoryTbRow } from '../shippingInstructionPrin
 
 interface PrintHistoryTableTrProps {
   oneHistory: ShippingInstructionHistoryTbRow;
-  toggleModal: React.Dispatch<React.SetStateAction<number>>;
   currentIndex: number;
   parentMediaQuerySmall: string;
   parentMediaQueryHd: string;
+  addRefMap: (id: string, node: HTMLTableRowElement | null) => void;
+  handleSetStates: (index: number, printedAt: string) => void;
 }
 
 export default function PrintHistoryTableTr({
   oneHistory: po,
-  toggleModal,
   currentIndex,
   parentMediaQuerySmall,
   parentMediaQueryHd,
+  addRefMap,
+  handleSetStates,
 }: PrintHistoryTableTrProps): React.JSX.Element {
   // Panda CSS で使用する変数
   const smallScreen = '@media(width < 960px)';
@@ -31,8 +33,9 @@ export default function PrintHistoryTableTr({
 
   return (
     <tr
-      onClick={() => toggleModal(currentIndex)}
-      onKeyDown={() => toggleModal(currentIndex)}
+      ref={node => addRefMap(po.printed_at, node)}
+      onClick={() => handleSetStates(currentIndex, po.printed_at)}
+      onKeyDown={() => handleSetStates(currentIndex, po.printed_at)}
       role="button"
       className={css({ _even: { color: 'slate.950', bgColor: 'slate.200' }, cursor: 'pointer' })}
     >
