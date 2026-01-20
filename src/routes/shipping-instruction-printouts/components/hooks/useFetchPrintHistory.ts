@@ -13,9 +13,14 @@ export interface useFetchPrintHistoryStates {
   non_fk_customer_id: number | null;
   dateA: CalendarDate | null;
   dateB: CalendarDate | null;
+  _lastOpenedPrintHistory?: string | null;
 }
 
 export function useFetchPrintHistory() {
+  // 最後に確認や編集した履歴の printed_at を管理
+  // 直接データ取得とは関係ないがセットで利用されるのでここで定義したほうが便利
+  const [_lastOpenedPrintHistory, set_LastOpenedPrintHistory] = useState<useFetchPrintHistoryStates['_lastOpenedPrintHistory']>(null);
+
   const [customerId, setCustomerId] = useState<useFetchPrintHistoryStates['non_fk_customer_id']>(null);
   const [selectCategory, setSelectCategory] = useState<useFetchPrintHistoryStates['category']>('printed_at');
 
@@ -98,5 +103,5 @@ export function useFetchPrintHistory() {
   });
 
   // UI側には即時更新用の setDateA / setDateB を渡す
-  return { customerId, setCustomerId, selectCategory, setSelectCategory, dateA, setDateA, setDateAImmediate, dateB, setDateB, setDateBImmediate, printHistories };
+  return { customerId, setCustomerId, selectCategory, setSelectCategory, dateA, setDateA, setDateAImmediate, dateB, setDateB, setDateBImmediate, printHistories, _lastOpenedPrintHistory, set_LastOpenedPrintHistory };
 }

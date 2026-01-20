@@ -55,6 +55,7 @@ export default function ShippingInstructionForm() {
           non_fk_customer_id: null,
           dateA: parseDate(response.shipping_date),
           dateB: null,
+          _lastOpenedPrintHistory: response.printed_at,
         } as useFetchPrintHistoryStates,
       }))
         .catch((err: string) => {
