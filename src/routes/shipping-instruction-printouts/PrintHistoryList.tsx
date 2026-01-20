@@ -24,7 +24,7 @@ import ThReverseButton from './components/ThReverseButton';
 
 export default function PrintHistoryList() {
   const fetchParams = useLocation().state as useFetchPrintHistoryStates | null;
-  const { customerId, setCustomerId, selectCategory, setSelectCategory, dateA, setDateA, setDateAImmediate, dateB, setDateB, setDateBImmediate, printHistories } =
+  const { customerId, setCustomerId, selectCategory, setSelectCategory, dateA, setDateA, setDateAImmediate, dateB, setDateB, setDateBImmediate, printHistories, _lastOpenedPrintHistory, set_LastOpenedPrintHistory } =
     useFetchPrintHistory();
 
   const { filterString, setFilterString, filteredPrintHistories } = useFilterPrintHistory(printHistories);
@@ -43,7 +43,6 @@ export default function PrintHistoryList() {
 
   // 動的スタイリング用に printed_at をキーとして DOM ノードを Map に保持する
   const filteredPrintHistoriesRef = useRef(new Map());
-  const [lastOpenedPrintHistory, setLastOpenedPrintHistory] = useState<string | null>(null);
   const addRefMap = (id: string, node: HTMLTableRowElement | null) => {
     filteredPrintHistoriesRef.current.set(id, node);
     return () => {
@@ -52,18 +51,18 @@ export default function PrintHistoryList() {
   };
 
   const handleSetStates = (index: number, printedAt: string) => {
-    if (lastOpenedPrintHistory && filteredPrintHistoriesRef.current.size) {
-      const node = filteredPrintHistoriesRef.current.get(lastOpenedPrintHistory) as HTMLTableRowElement;
+    if (_lastOpenedPrintHistory && filteredPrintHistoriesRef.current.size) {
+      const node = filteredPrintHistoriesRef.current.get(_lastOpenedPrintHistory) as HTMLTableRowElement;
       if (node)
         node.classList.remove('last-opened-highlight');
     }
     setSelectedHistory(index);
-    setLastOpenedPrintHistory(printedAt);
+    set_LastOpenedPrintHistory(printedAt);
   };
 
   useEffect(() => {
-    if (lastOpenedPrintHistory && filteredPrintHistoriesRef.current.size) {
-      const node = filteredPrintHistoriesRef.current.get(lastOpenedPrintHistory) as HTMLTableRowElement;
+    if (_lastOpenedPrintHistory && filteredPrintHistoriesRef.current.size) {
+      const node = filteredPrintHistoriesRef.current.get(_lastOpenedPrintHistory) as HTMLTableRowElement;
       if (node)
         node.classList.add('last-opened-highlight');
     }
@@ -87,8 +86,12 @@ export default function PrintHistoryList() {
         setDateBImmediate(fetchParams.dateB);
         fetchParams.dateB = null;
       }
+      if (fetchParams._lastOpenedPrintHistory) {
+        set_LastOpenedPrintHistory(fetchParams._lastOpenedPrintHistory);
+        fetchParams._lastOpenedPrintHistory = null;
+      }
     }
-  }, [fetchParams, lastOpenedPrintHistory, setCustomerId, setDateAImmediate, setDateBImmediate, setSelectCategory]);
+  }, [_lastOpenedPrintHistory, fetchParams, setCustomerId, setDateAImmediate, setDateBImmediate, setSelectCategory, set_LastOpenedPrintHistory]);
 
   const todayDate = today('Asia/Tokyo');
   // 全ての顧客対象ではバックエンドのリミットよりもより小さい値に設定
@@ -371,8 +374,8 @@ export default function PrintHistoryList() {
           </thead>
           <tbody className={css({
             '& >tr': {
-              '&.last-opened-highlight': { bg: 'teal.500/25' },
-              _hover: { color: 'teal.950', bgColor: 'teal.50/75' },
+              '&.last-opened-highlight': { bg: 'teal.500/25', boxShadow: 'inset 0 -1px #0d9488' },
+              _hover: { color: 'teal.950', bgColor: 'teal.50/75', boxShadow: 'inset 0 -1px #d6d3d1' },
             },
           })}
           >
