@@ -1,7 +1,7 @@
 import type { CalendarDate } from '@internationalized/date';
 
 import { today } from '@internationalized/date';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { GiPin } from 'react-icons/gi';
 import { LuArrowLeftRight } from 'react-icons/lu';
 import { useLocation } from 'react-router';
@@ -27,13 +27,7 @@ export default function PrintHistoryList() {
   const { customerId, setCustomerId, selectCategory, setSelectCategory, dateA, setDateA, setDateAImmediate, dateB, setDateB, setDateBImmediate, printHistories } =
     useFetchPrintHistory();
 
-  // UI 用のステートと API コール用のステートが同じ内容で連続して更新されるので
-  // 再レンダリングの抑制を図る
-  const printHistoriesMemo = useMemo(() => {
-    return printHistories;
-  }, [printHistories]);
-
-  const { filterString, setFilterString, filteredPrintHistories } = useFilterPrintHistory(printHistoriesMemo);
+  const { filterString, setFilterString, filteredPrintHistories } = useFilterPrintHistory(printHistories);
   const historyCategories: { label: string; category: useFetchPrintHistoryStates['category'] }[] = customerId
     ? [
         { label: '着日', category: 'delivery_date' },
@@ -143,8 +137,9 @@ export default function PrintHistoryList() {
           <DatePickerInput
             value={dateA}
             setValue={setDateA}
+            setValueImmediate={setDateAImmediate}
             todayDate={todayDate}
-            isSuppressAutoToday={fetchParams?.dateA !== null}
+            isSuppressAutoToday={!!fetchParams?.dateA}
             minValue={dateB ? dateB.subtract({ days: rangeDays }) : null}
             maxValue={dateB ? dateB.add({ days: rangeDays }) : null}
           >
@@ -170,6 +165,7 @@ export default function PrintHistoryList() {
           <DatePickerInput
             value={dateB}
             setValue={setDateB}
+            setValueImmediate={setDateBImmediate}
             minValue={dateA ? dateA.subtract({ days: rangeDays }) : null}
             maxValue={dateA ? dateA.add({ days: rangeDays }) : null}
           >
