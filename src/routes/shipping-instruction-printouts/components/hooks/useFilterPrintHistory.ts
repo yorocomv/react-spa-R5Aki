@@ -5,6 +5,10 @@ import type { ShippingInstructionHistoryTbRow } from '../../shippingInstructionP
 
 export function useFilterPrintHistory(printHistory: ShippingInstructionHistoryTbRow[]) {
   const [filterString, setFilterString] = useState('');
+  const escapeRegExp = (str: string) => {
+    // $& はマッチした部分文字列全体
+    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  };
 
   function recursiveFilter(
     objArr: ShippingInstructionHistoryTbRow[],
@@ -26,6 +30,7 @@ export function useFilterPrintHistory(printHistory: ShippingInstructionHistoryTb
       filterCopy = jaconv.toKatakana(filterCopy);
       filterCopy = jaconv.normalize(filterCopy);
       filterCopy = filterCopy.toUpperCase();
+      filterCopy = escapeRegExp(filterCopy);
 
       const regex = new RegExp(filterCopy);
 
