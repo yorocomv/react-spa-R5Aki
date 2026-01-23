@@ -56,6 +56,13 @@ export function useFetchPrintHistory() {
   }, [dateA, dateB]);
 
   const fetchPrintHistoryFn = async () => {
+    const dateAString = debouncedDateA?.toString();
+    const dateBString = debouncedDateB?.toString();
+    // React Aria の CalendarDate 型は
+    // （特にパースで文字列から作られた場合）リロードで壊れることがある
+    if (dateAString === '[object Object]' || dateBString === '[object Object]') {
+      return [];
+    }
     // 印刷日時が選ばれたらカスタマーIDを強制的に null
     if (selectCategory === 'printed_at') {
       setCustomerId(null);
@@ -71,9 +78,9 @@ export function useFetchPrintHistory() {
     const result: void | AxiosResponse<ShippingInstructionHistoryTbRow[]> = await axiosInst
       .get(
         `/shipping-instruction-printouts?category=${selectCategory}${
-          debouncedDateA ? `&dateA=${debouncedDateA.toString()}` : ''
+          debouncedDateA ? `&dateA=${dateAString}` : ''
         }${
-          debouncedDateB ? `&dateB=${debouncedDateB.toString()}` : ''
+          debouncedDateB ? `&dateB=${dateBString}` : ''
         }${
           customerId !== null && selectCategory !== 'printed_at' ? `&non_fk_customer_id=${customerId}` : ''
         }`,
@@ -81,9 +88,9 @@ export function useFetchPrintHistory() {
       .catch((err: string) => {
         console.error(
           `💥💥💥 /shipping-instruction-printouts?category=${selectCategory}${
-            debouncedDateA ? `&dateA=${debouncedDateA.toString()}` : ''
+            debouncedDateA ? `&dateA=${dateAString}` : ''
           }${
-            debouncedDateB ? `&dateB=${debouncedDateB.toString()}` : ''
+            debouncedDateB ? `&dateB=${dateBString}` : ''
           }${
             customerId !== null && selectCategory !== 'printed_at' ? `&non_fk_customer_id=${customerId}` : ''
           } からのエラーをキャッチ❢ ${err} 💀💀💀`,

@@ -137,14 +137,17 @@ export default function PrintHistoryList() {
               </option>
             ))}
           </Select>
+          {/* Why [object Object]
+                React Aria の CalendarDate 型は
+                （特にパースで文字列から作られた場合）リロードで壊れることがある */}
           <DatePickerInput
-            value={dateA}
+            value={dateA && dateA.toString() !== '[object Object]' ? dateA : null}
             setValue={setDateA}
             setValueImmediate={setDateAImmediate}
             todayDate={todayDate}
             isSuppressAutoToday={!!fetchParams?.dateA}
-            minValue={dateB ? dateB.subtract({ days: rangeDays }) : null}
-            maxValue={dateB ? dateB.add({ days: rangeDays }) : null}
+            minValue={dateB && dateB.toString() !== '[object Object]' ? dateB.subtract({ days: rangeDays }) : null}
+            maxValue={dateB && dateB.toString() !== '[object Object]' ? dateB.add({ days: rangeDays }) : null}
           >
             <PopoverCalendar onChange={e => setDateAImmediate(e as CalendarDate)} todayDate={todayDate} />
           </DatePickerInput>
@@ -166,11 +169,11 @@ export default function PrintHistoryList() {
             />
           </TooltipWrapper>
           <DatePickerInput
-            value={dateB}
+            value={dateB && dateB.toString() !== '[object Object]' ? dateB : null}
             setValue={setDateB}
             setValueImmediate={setDateBImmediate}
-            minValue={dateA ? dateA.subtract({ days: rangeDays }) : null}
-            maxValue={dateA ? dateA.add({ days: rangeDays }) : null}
+            minValue={dateA && dateA.toString() !== '[object Object]' ? dateA.subtract({ days: rangeDays }) : null}
+            maxValue={dateA && dateA.toString() !== '[object Object]' ? dateA.add({ days: rangeDays }) : null}
           >
             <PopoverCalendar onChange={e => setDateBImmediate(e as CalendarDate)} todayDate={todayDate} />
           </DatePickerInput>
