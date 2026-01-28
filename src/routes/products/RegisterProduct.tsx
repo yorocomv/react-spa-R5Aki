@@ -66,16 +66,21 @@ export default function RegisterProduct() {
     };
   });
 
-  const determineDefaultValue = (isSetMode: '0' | '1', values?: PostReqNewUnifiedProduct): PostReqNewUnifiedProduct => {
+  const determineDefaultValue = (
+    isSetMode: '0' | '1',
+    values?: PostReqNewUnifiedProduct,
+  ): PostReqNewUnifiedProduct => {
     const v = values ?? commonDefaultValues;
     if (isSetMode === '0') {
       return {
         ...v,
+        is_set_product: '0',
         components: [componentDefaultValues],
       } as unknown as PostReqNewProduct;
     }
     return {
       ...v,
+      is_set_product: '1',
       combinations: [combinationDefaultValues],
     } as unknown as PostReqNewSetProduct;
   };
@@ -103,13 +108,26 @@ export default function RegisterProduct() {
   });
   const { registerProducts } = useRegisterProducts();
 
+  const commonResetProcess = () => {
+    setIsSet('0');
+    setGtinObj({
+      jan: undefined,
+      itf1: undefined,
+      itf2: undefined,
+    });
+    methods.reset(determineDefaultValue('0'));
+    if (setsArray.fields.length) {
+      setsArray.replace([]);
+    }
+    methods.setFocus('basic_name');
+  };
+
   const onSubmit: SubmitHandler<PostReqNewUnifiedProduct> = async (values) => {
     try {
       const response = await registerProducts({ url: values.is_set_product === '0' ? '' : '/set-item', values });
       if (response.isRegistered === true) {
         console.log(response);
-        methods.reset(determineDefaultValue('0'));
-        methods.setFocus('basic_name');
+        commonResetProcess();
       }
       else {
         console.error(response);
@@ -123,7 +141,7 @@ export default function RegisterProduct() {
   };
   const handleReset: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
-    methods.reset();
+    commonResetProcess();
   };
 
   return (

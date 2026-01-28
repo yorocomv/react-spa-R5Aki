@@ -102,8 +102,11 @@ export default function ProductFormContents({ drawContents, selectOptions, janCo
         <Input {...register('short_name')} id="short_name" placeholder="商品略称名" />
         <FormErrorMessage message={errors.short_name?.message} />
       </label>
-      <label htmlFor="internal_code">
-        発注コード（社内コード）
+      <label
+        htmlFor="internal_code"
+        className={css({ bg: 'linear-gradient(transparent 40%, oklch(0.9052 0.1657 98.11 / 60%) 40%)' })}
+      >
+        品番（社内コード）
         <Input
           {...register('internal_code')}
           onChange={handleSetGtinCode}
