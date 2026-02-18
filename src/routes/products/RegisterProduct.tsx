@@ -14,7 +14,7 @@ import { css } from 'styled-system/css';
 import type { NewProductCommonDefaultValues, PostReqNewProduct, PostReqNewSetProduct, PostReqNewUnifiedProduct } from './products.types';
 
 import BasicProductFormContents from './components/BasicProductFormContents';
-import { useFetchProductsOptions } from './components/hooks/useFetchProductsOptions';
+import { useFetchProductOptions } from './components/hooks/useFetchProductOptions';
 import { useFetchSingleProducts } from './components/hooks/useFetchSingleProducts';
 import { useRegisterProducts } from './components/hooks/useRegisterProducts';
 import ProductCombinationsFormContents from './components/ProductCombinationsFormContents';
@@ -57,7 +57,7 @@ export default function RegisterProduct() {
   });
   const [isSet, setIsSet] = useState<'0' | '1'>('0');
   const [packagingTypeText, setPackagingTypeText] = useState<string>('未分類');
-  const { productsOptions } = useFetchProductsOptions();
+  const { productOptions } = useFetchProductOptions();
   const { singleProducts } = useFetchSingleProducts();
   const singleProductsStrListObj = singleProducts.map((product) => {
     return {
@@ -163,13 +163,13 @@ export default function RegisterProduct() {
               setPackagingTypeText={setPackagingTypeText}
               janCode={gtinObj.jan}
               selectOptions={{
-                product_sourcing_types: productsOptions.product_sourcing_types,
-                product_categories: productsOptions.product_categories,
-                product_packaging_types: productsOptions.product_packaging_types,
+                product_sourcing_types: productOptions.product_sourcing_types,
+                product_categories: productOptions.product_categories,
+                product_packaging_types: productOptions.product_packaging_types,
               }}
             />
 
-            <ProductFormContents janCode={gtinObj.jan} setGtinObj={setGtinObj} isSet={isSet} setIsSet={setIsSet} packagingTypeText={packagingTypeText} drawContents={{ basic_id: false, product_name: false }} selectOptions={{ suppliers: productsOptions.suppliers }} />
+            <ProductFormContents janCode={gtinObj.jan} setGtinObj={setGtinObj} isSet={isSet} setIsSet={setIsSet} packagingTypeText={packagingTypeText} drawContents={{ basic_id: false, product_name: false }} selectOptions={{ suppliers: productOptions.suppliers }} />
 
             <div className={css({ minH: '12.9rem' })}>
               {isSet === '0'
@@ -185,8 +185,8 @@ export default function RegisterProduct() {
                           defaultComponent={componentDefaultValues}
                           isTail={isTail}
                           selectOptions={{
-                            unit_types: productsOptions.unit_types,
-                            product_inner_packaging_types: productsOptions.product_inner_packaging_types,
+                            unit_types: productOptions.unit_types,
+                            product_inner_packaging_types: productOptions.product_inner_packaging_types,
                           }}
                         />
                       );
