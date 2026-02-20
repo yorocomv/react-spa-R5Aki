@@ -5,6 +5,8 @@ import type { z } from 'zod';
 
 import type {
   viewSingleProductsRowSchema,
+  viewSkuDetailsRowSchema,
 } from './products.dbTable.schemas';
 
 export type ViewSingleProductsRow = z.infer<typeof viewSingleProductsRowSchema>;
+export type ViewSkuDetailsRow = z.infer<typeof viewSkuDetailsRowSchema>;

@@ -1,3 +1,9 @@
+import ProductItem from './components/ProductItem';
+
 export default function ProductList() {
-  return <h1>商品一覧</h1>;
+  return (
+    <main>
+      <ProductItem />
+    </main>
+  );
 }
