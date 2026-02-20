@@ -111,7 +111,7 @@ export default function ProductFormContents({ drawContents, selectOptions, janCo
           {...register('internal_code')}
           onChange={handleSetGtinCode}
           id="internal_code"
-          placeholder="発注コード（社内コード）"
+          placeholder="品番（社内コード）"
         />
         <FormErrorMessage message={errors.internal_code?.message} />
       </label>
