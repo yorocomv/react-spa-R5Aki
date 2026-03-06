@@ -9,14 +9,16 @@ export default function ProductList() {
   return (
     <div className={css({
       display: 'grid',
-      gridTemplateColumns: 'repeat(auto-fit, minmax(17rem, 1fr))',
+      gridTemplateColumns: 'repeat(auto-fit, minmax(13rem, 16rem))',
+      justifyContent: 'center',
       gap: '1rem',
       p: '1rem',
     })}
     >
-      {productSkuDetails.map(detail => (
+      {productSkuDetails.map((detail, i) => (
         <ProductItem
           key={detail.sku_id}
+          index={i}
           {...detail}
         />
       ))}
