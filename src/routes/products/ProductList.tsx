@@ -1,10 +1,12 @@
 import { css } from 'styled-system/css';
 
+import { useFetchProductImages } from './components/hooks/useFetchProductImages';
 import { useFetchProductSkuDetails } from './components/hooks/useFetchProductSkuDetails';
 import ProductItem from './components/ProductItem';
 
 export default function ProductList() {
   const { productSkuDetails } = useFetchProductSkuDetails();
+  const { productImages } = useFetchProductImages();
 
   return (
     <div className={css({
@@ -15,10 +17,10 @@ export default function ProductList() {
       p: '1rem',
     })}
     >
-      {productSkuDetails.map((detail, i) => (
+      {productSkuDetails.map(detail => (
         <ProductItem
           key={detail.sku_id}
-          index={i}
+          imageUrl={detail.ulid_str ? productImages[detail.ulid_str]?.[0] : undefined}
           {...detail}
         />
       ))}
