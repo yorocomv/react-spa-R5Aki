@@ -1,0 +1,52 @@
+.react-aria-ModalOverlay {
+  position: fixed; /* absoluteからfixedに変更しスクロール耐性を向上 */
+  inset: 0; /* top: 0; right: 0; bottom: 0; left: 0; のショートハンド */
+  background: rgba(0 0 0 / 0.3);
+  z-index: 100;
+
+  /* モーダルを下部に配置するためのFlex設定 */
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+
+  &[data-entering] {
+    animation: sheet-transparency 300ms;
+  }
+
+  &[data-exiting] {
+    animation: sheet-transparency 300ms reverse ease-in;
+  }
+}
+
+.react-aria-Modal {
+  &[data-entering] {
+    /* iOSの滑らかな動きに寄せるためのイージング */
+    animation: sheet-slide-up 300ms cubic-bezier(0.32, 0.72, 0, 1);
+  }
+  &[data-exiting] {
+    animation: sheet-slide-up 300ms reverse ease-in;
+  }
+}
+
+@keyframes sheet-transparency {
+  from {
+    background: rgba(0 0 0 / 0);
+    backdrop-filter: blur(0);
+  }
+
+  to {
+    background: rgba(0 0 0 / 0.3);
+    backdrop-filter: blur(10px);
+  }
+}
+
+@keyframes sheet-slide-up {
+  from {
+    /* 右からではなく、下からスライドさせる */
+    transform: translateY(100%);
+  }
+
+  to {
+    transform: translateY(0);
+  }
+}

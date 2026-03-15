@@ -124,9 +124,8 @@ export const viewSkuDetailsRowSchema = z.object({
       'zinc',
       'gray',
       'slate',
-    ])
-    .nullable(),
-  category_color_shade: z.enum(['200', '300', '400', '500', '600', '700', '800']).nullable(),
+    ]),
+  category_color_shade: z.enum(['200', '300', '400', '500', '600', '700', '800']),
 
   // Sourcing Type
   sourcing_type: z.string().min(1).max(32),
