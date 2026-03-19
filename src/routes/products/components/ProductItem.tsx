@@ -27,7 +27,7 @@ export default function ProductItem(p: ViewSkuDetailsRow & {
         aria-expanded="false"
         onClick={() => p.setSelectedItem(p.index)}
         onKeyDown={() => p.setSelectedItem(p.index)}
-        className={css({ display: 'block', textAlign: 'left', w: '100%', h: '100%', p: 0, cursor: 'pointer' })}
+        className={css({ display: 'block', textAlign: 'left', w: '100%', h: 'fit-content', p: 0, cursor: 'pointer' })}
       >
         <figure>
           {p.imageUrl?.startsWith('http')
