@@ -23,7 +23,8 @@ export default function ProductBottomSheet(p: ProductBottomSheetProps) {
           py: '0.725rem',
           bg: 'slate.400',
           color: 'yellow.400',
-          fontWeight: 'bold',
+          fontFamily: '"Noto Sans JP", "BIZ UDPGothic", sans-serif',
+          fontWeight: 'medium',
           textShadow: 'var(--colors-slate-600) 0.5px -1px',
           outline: 'none',
           borderTopRadius: '1rem',
@@ -35,7 +36,7 @@ export default function ProductBottomSheet(p: ProductBottomSheetProps) {
         })}
         >
           <section className={css({ display: 'grid', placeItems: 'center' })}>
-            <h1 className={css({ fontSize: '2xl' })}>
+            <h1 className={css({ fontSize: '2xl', fontWeight: 'black' })}>
               {p.sku_name}
               <span className={css({ fontSize: '0.625em', ml: '1rem' })}>(ＳＫＵ別・略称)</span>
             </h1>
