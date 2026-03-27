@@ -11,7 +11,6 @@ export default function ProductList() {
   const { productSkuDetails } = useFetchProductSkuDetails();
   const { productImages } = useFetchProductImages();
   const [selectedItem, setSelectedItem] = useState(-1);
-  console.log(selectedItem);
 
   return (
     <>

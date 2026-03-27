@@ -15,7 +15,7 @@
   }
 
   &[data-exiting] {
-    animation: modal-fade 150ms reverse ease-in;
+    animation: modal-fade 150ms reverse ease-in forwards;
   }
 }
 

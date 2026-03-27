@@ -43,12 +43,24 @@ export default function ProductComponentsFormContents({
       borderColor: '#fefefe',
       borderRadius: 'lg',
       shadow: 'inset-md',
+
+      '& mark': {
+        px: '0.25rem',
+        fontWeight: 'normal',
+        bg: 'linear-gradient(transparent 40%, oklch(from var(--colors-fuchsia-400) l c h / 60%) 40%)',
+      },
     })}
     >
       <label htmlFor={`components.${index}.title`}>
         内容物
         {(i => `（${i.toString().replace(/\d/g, s => String.fromCharCode(s.charCodeAt(0) + 0xFEE0))}）`)(index + 1)}
         名
+        {' '}
+        （
+        <mark>粉末</mark>
+        か
+        <mark>顆粒</mark>
+        か分かる場合は明記）
         <Input
           {...register(`components.${index}.title` as const)}
           id={`components.${index}.title`}
