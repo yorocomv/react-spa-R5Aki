@@ -1,9 +1,13 @@
-import { Dialog, Modal, ModalOverlay } from 'react-aria-components';
+import { Suspense } from 'react';
 import '@/components/ui/reactAriaModalOverlayBottomSheet.css';
+import { Dialog, Heading, Modal, ModalOverlay } from 'react-aria-components';
+import { FaStar } from 'react-icons/fa6';
 
 import { css } from 'styled-system/css';
 
 import type { ViewSkuDetailsRow } from '../products.dbTable.types';
+
+import ProductCompositionItems from './ProductCompositionItems';
 
 type ProductBottomSheetProps = ViewSkuDetailsRow & {
   setSelectedItem: React.Dispatch<React.SetStateAction<number>>;
@@ -12,6 +16,7 @@ type ProductBottomSheetProps = ViewSkuDetailsRow & {
 
 export default function ProductBottomSheet(p: ProductBottomSheetProps) {
   const isOpen = p.isOpen ?? false;
+
   return (
     <ModalOverlay isDismissable isOpen={isOpen} onOpenChange={() => p.setSelectedItem(-1)}>
       <Modal>
@@ -32,17 +37,49 @@ export default function ProductBottomSheet(p: ProductBottomSheetProps) {
           overflow: 'scroll',
           scrollbarWidth: 'none',
 
-          '& ul': { pl: '40px' },
+          '& ul': { pl: '2.25rem' },
         })}
         >
           <section className={css({ display: 'grid', placeItems: 'center' })}>
-            <h1 className={css({ fontSize: '2xl', fontWeight: 'black' })}>
+            <Heading slot="title" className={css({ display: 'flex', alignItems: 'center', fontSize: '2xl', fontWeight: 'black' })}>
               {p.sku_name}
-              <span className={css({ fontSize: '0.625em', ml: '1rem' })}>(ＳＫＵ別・略称)</span>
-            </h1>
-            <ul className={css({ '& em': { color: 'green.300', fontStyle: 'normal' } })}>
+              <span className={css({ display: 'flex', alignItems: 'center', fontSize: '0.625em', ml: '1rem' })}>
+                (ＳＫＵ別・略称)
+                <span className={css({
+                  display: 'flex',
+                  alignItems: 'center',
+                  fontSize: '1.125rem',
+                  fontWeight: 'bold',
+                  color: 'orange.400',
+                  textShadow: 'none',
+                })}
+                >
+                  <FaStar className={css({ ml: '0.5rem', mr: '0.125rem' })} />
+                  {p.priority}
+                </span>
+              </span>
+            </Heading>
+            <ul className={css({
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(13rem, 16rem))',
+              justifyContent: 'center',
+              gap: '1rem',
+
+              '&>li': {
+                display: 'contents',
+                maxH: '50px',
+                overflow: 'hidden',
+              },
+              '& em': { color: 'green.300', fontStyle: 'normal' },
+            })}
+            >
               <li>
                 単品詳細
+                <span className={css({ color: 'slate.600', fontSize: '0.75em', fontWeight: 'normal', ml: '0.75rem', textShadow: 'none' })}>
+                  [
+                  {` ${p.ulid_str} `}
+                  ]
+                </span>
                 <ul>
                   <li>
                     商品カタログ掲載名
@@ -90,9 +127,30 @@ export default function ProductBottomSheet(p: ProductBottomSheetProps) {
                     先代商品ＩＤ
                     <ul><li>{p.predecessor_id ?? 'null'}</li></ul>
                   </li>
-                  <li>
-                    {p.is_set_product ? 'セット内容' : '内容内訳'}
-                  </li>
+                  {/* ここで追加の Fetch */}
+                  <Suspense fallback={
+                    p.is_set_product
+                      ? (
+                          <li>
+                            セット内容
+                            <ul>
+                              <li>Loading...</li>
+                              <li>Loading...</li>
+                            </ul>
+                          </li>
+                        )
+                      : (
+                          <li>
+                            内容内訳
+                            <ul>
+                              <li>Loading...</li>
+                            </ul>
+                          </li>
+                        )
+                  }
+                  >
+                    <ProductCompositionItems productId={p.product_id} isSetProduct={p.is_set_product} />
+                  </Suspense>
                 </ul>
               </li>
               <li>
