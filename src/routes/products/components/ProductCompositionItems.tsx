@@ -16,7 +16,7 @@ export default function ProductCompositionItems({
   return (
     <li>
       {isSetProduct ? 'セット内容' : '内容内訳'}
-      <ul>
+      <ol>
         {isSetProduct
           ? productCombinations.map(item => (
               <li key={item.combination_id}>
@@ -34,7 +34,7 @@ export default function ProductCompositionItems({
                 </span>
               </li>
             ))}
-      </ul>
+      </ol>
     </li>
   );
 }

@@ -27,7 +27,7 @@ export default function ProductBottomSheet(p: ProductBottomSheetProps) {
           px: '0.5rem',
           py: '0.725rem',
           bg: 'slate.400',
-          color: 'yellow.400',
+          color: 'yellow.200',
           fontFamily: '"Noto Sans JP", "BIZ UDPGothic", sans-serif',
           fontWeight: 'medium',
           textShadow: 'var(--colors-slate-600) 0.5px -1px',
@@ -36,14 +36,12 @@ export default function ProductBottomSheet(p: ProductBottomSheetProps) {
           shadow: '0 -0.5rem 1.25rem rgba(0 0 0 / 0.1)',
           overflow: 'scroll',
           scrollbarWidth: 'none',
-
-          '& ul': { pl: '2.25rem' },
         })}
         >
           <section className={css({ display: 'grid', placeItems: 'center' })}>
-            <Heading slot="title" className={css({ display: 'flex', alignItems: 'center', fontSize: '2xl', fontWeight: 'black' })}>
+            <Heading slot="title" className={css({ display: 'flex', alignItems: 'center', fontSize: '2xl', fontWeight: 'black', mb: '2rem' })}>
               {p.sku_name}
-              <span className={css({ display: 'flex', alignItems: 'center', fontSize: '0.625em', ml: '1rem' })}>
+              <span className={css({ display: 'flex', alignItems: 'center', fontSize: '0.625em', ml: '1rem', color: 'yellow.300' })}>
                 (ＳＫＵ別・略称)
                 <span className={css({
                   display: 'flex',
@@ -60,17 +58,28 @@ export default function ProductBottomSheet(p: ProductBottomSheetProps) {
               </span>
             </Heading>
             <ul className={css({
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(13rem, 16rem))',
-              justifyContent: 'center',
-              gap: '1rem',
+              display: 'flex',
+              flexWrap: 'wrap', // 溢れたら折り返す
+              gap: '1.5rem',
 
               '&>li': {
-                display: 'contents',
-                maxH: '50px',
-                overflow: 'hidden',
+                maxW: '25rem',
+                mx: 'auto',
+                // 中身が1行に収まりきらなくなると、その要素が次の行へ落ちる
+                flex: 'auto', // flex-grow: 1, flex-shrink: 1, flex-basis: auto
+                color: 'yellow.400',
               },
-              '& em': { color: 'green.300', fontStyle: 'normal' },
+
+              '& ul, & ol': {
+                pl: '2.125rem',
+
+                '&>li': {
+                  color: 'yellow.300',
+
+                  '&>ul>li, &>ol>li': { color: 'yellow.200' },
+                },
+              },
+              '& strong': { color: 'green.300', fontStyle: 'normal' },
             })}
             >
               <li>
@@ -102,7 +111,7 @@ export default function ProductBottomSheet(p: ProductBottomSheetProps) {
                     <ul>
                       <li>
                         {p.category_name}
-                        {p.is_set_product ? <em className={css({ ml: '1rem' })}>（セット商品）</em> : null}
+                        {p.is_set_product ? <strong className={css({ ml: '1rem' })}>（セット商品）</strong> : null}
                       </li>
                     </ul>
                   </li>
@@ -133,18 +142,18 @@ export default function ProductBottomSheet(p: ProductBottomSheetProps) {
                       ? (
                           <li>
                             セット内容
-                            <ul>
+                            <ol>
                               <li>Loading...</li>
                               <li>Loading...</li>
-                            </ul>
+                            </ol>
                           </li>
                         )
                       : (
                           <li>
                             内容内訳
-                            <ul>
+                            <ol>
                               <li>Loading...</li>
-                            </ul>
+                            </ol>
                           </li>
                         )
                   }
