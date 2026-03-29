@@ -8,10 +8,14 @@ import { css } from 'styled-system/css';
 import type { ViewSkuDetailsRow } from '../products.dbTable.types';
 
 import ProductCompositionItems from './ProductCompositionItems';
+import ProductImageIcons from './ProductImageIcons';
 
 type ProductBottomSheetProps = ViewSkuDetailsRow & {
   setSelectedItem: React.Dispatch<React.SetStateAction<number>>;
   isOpen?: boolean;
+} & {
+  images?: string[];
+  setImgOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export default function ProductBottomSheet(p: ProductBottomSheetProps) {
@@ -39,7 +43,17 @@ export default function ProductBottomSheet(p: ProductBottomSheetProps) {
         })}
         >
           <section className={css({ display: 'grid', placeItems: 'center' })}>
-            <Heading slot="title" className={css({ display: 'flex', alignItems: 'center', fontSize: '2xl', fontWeight: 'black', mb: '2rem' })}>
+            <Heading
+              slot="title"
+              className={css({
+                display: 'flex',
+                alignItems: 'center',
+                fontSize: '2xl',
+                fontWeight: 'black',
+
+                '& + :not(:has(img))': { mt: '2rem' },
+              })}
+            >
               {p.sku_name}
               <span className={css({ display: 'flex', alignItems: 'center', fontSize: '0.625em', ml: '1rem', color: 'yellow.300' })}>
                 (ＳＫＵ別・略称)
@@ -57,6 +71,7 @@ export default function ProductBottomSheet(p: ProductBottomSheetProps) {
                 </span>
               </span>
             </Heading>
+            {p.images ? <ProductImageIcons imageUrls={p.images} setIsOpen={p.setImgOpen} /> : null}
             <ul className={css({
               display: 'flex',
               flexWrap: 'wrap', // 溢れたら折り返す
