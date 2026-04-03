@@ -4,7 +4,6 @@ import { css } from 'styled-system/css';
 
 import { useFetchProductImages } from './components/hooks/useFetchProductImages';
 import { useFetchProductSkuDetails } from './components/hooks/useFetchProductSkuDetails';
-import LightBoxWrapper from './components/LightBoxWrapper';
 import ProductBottomSheet from './components/ProductBottomSheet';
 import ProductItem from './components/ProductItem';
 
@@ -12,7 +11,6 @@ export default function ProductList() {
   const { productSkuDetails } = useFetchProductSkuDetails();
   const { productImages } = useFetchProductImages();
   const [selectedItem, setSelectedItem] = useState(-1);
-  const [imgOpen, setImgOpen] = useState(false);
 
   return (
     <>
@@ -39,12 +37,6 @@ export default function ProductList() {
         setSelectedItem={setSelectedItem}
         images={selectedItem !== -1 ? productImages[productSkuDetails[selectedItem].ulid_str ?? ''] : undefined}
         {...productSkuDetails[selectedItem]}
-        setImgOpen={setImgOpen}
-      />
-      <LightBoxWrapper
-        urls={selectedItem !== -1 ? productImages[productSkuDetails[selectedItem].ulid_str ?? ''] : undefined}
-        isOpen={imgOpen}
-        setIsOpen={setImgOpen}
       />
     </>
   );

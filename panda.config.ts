@@ -167,6 +167,34 @@ export default defineConfig({
           ], true),
         },
       },
+      keyframes: {
+        depthFadeIn: {
+          '0%': {
+            opacity: 0,
+            transform: 'translateZ(-40px) scale(0.96)',
+            filter: 'blur(8px)',
+          },
+          '60%': {
+            opacity: 1,
+            transform: 'translateZ(0) scale(1.02)',
+            filter: 'blur(0)',
+          },
+          '100%': {
+            transform: 'scale(1)',
+          },
+        },
+        depthFadeOut: {
+          '0%': {
+            opacity: 1,
+            transform: 'scale(1)',
+          },
+          '100%': {
+            opacity: 0,
+            transform: 'translateZ(-30px) scale(0.95)',
+            filter: 'blur(6px)',
+          },
+        },
+      },
     },
   },
 
