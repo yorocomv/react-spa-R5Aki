@@ -15,7 +15,6 @@ type ProductBottomSheetProps = ViewSkuDetailsRow & {
   isOpen?: boolean;
 } & {
   images?: string[];
-  setImgOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export default function ProductBottomSheet(p: ProductBottomSheetProps) {
@@ -71,7 +70,7 @@ export default function ProductBottomSheet(p: ProductBottomSheetProps) {
                 </span>
               </span>
             </Heading>
-            {p.images ? <ProductImageIcons imageUrls={p.images} setIsOpen={p.setImgOpen} /> : null}
+            {p.images ? <ProductImageIcons imageUrls={p.images} /> : null}
             <ul className={css({
               display: 'flex',
               flexWrap: 'wrap', // 溢れたら折り返す
