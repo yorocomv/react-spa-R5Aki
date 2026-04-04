@@ -1,1 +1,3 @@
-minimumReleaseAgeExclude: '8640'
+minimumReleaseAge: 8640
+
+trustPolicy: no-downgrade
