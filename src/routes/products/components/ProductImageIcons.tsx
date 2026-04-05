@@ -1,15 +1,14 @@
 import { useState } from 'react';
 
+import Lightbox from '@/routes/products/components/Lightbox';
 import { css } from 'styled-system/css';
-
-import HogeFuga from './HogeFuga';
 
 export default function ProductImageIcons({
   imageUrls,
 }: {
   imageUrls: string[];
 }) {
-  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+  const [isLightboxOpen, setIsLightboxOpen] = useState(-1);
   const diameter = '4rem';
 
   return (
@@ -35,7 +34,9 @@ export default function ProductImageIcons({
           >
             <button
               type="button"
-              onClick={() => setIsLightboxOpen(true)}
+              onClick={() => {
+                setIsLightboxOpen(i);
+              }}
             >
               <img
                 alt={`image-${i}`}
@@ -51,7 +52,20 @@ export default function ProductImageIcons({
           </div>
         ))}
       </div>
-      <HogeFuga isOpen={isLightboxOpen} setIsOpen={setIsLightboxOpen} imgUrls={imageUrls} />
+      {/*
+        embla-carousel-react の useEmblaCarousel({ startSnap }) の
+        即時性がイマイチなので、light-box も map() で展開
+        が、効果なし？
+       */}
+      {imageUrls.map((url, i) => (
+        <Lightbox
+          key={url}
+          isOpen={isLightboxOpen === i}
+          setIsOpen={setIsLightboxOpen}
+          imgUrls={imageUrls}
+          startSnap={i}
+        />
+      ))}
     </>
   );
 }

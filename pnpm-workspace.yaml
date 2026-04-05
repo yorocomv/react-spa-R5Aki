@@ -1,3 +1,6 @@
 minimumReleaseAge: 8640
 
 trustPolicy: no-downgrade
+
+trustPolicyExclude:
+  - chokidar@4.0.3
