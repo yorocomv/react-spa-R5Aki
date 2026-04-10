@@ -7,6 +7,7 @@ import { css } from 'styled-system/css';
 
 import type { ViewSkuDetailsRow } from '../products.dbTable.types';
 
+import NIl from './NIl';
 import ProductCompositionItems from './ProductCompositionItems';
 import ProductImageIcons from './ProductImageIcons';
 
@@ -192,46 +193,54 @@ export default function ProductBottomSheet(p: ProductBottomSheetProps) {
                     発注方法／メモ
                     <ul><li>{p.supplier_note || 'なし'}</li></ul>
                   </li>
-                  <li>
-                    商品サイズ mm（縦・横・高さ）
-                    <ul><li>{p.depth_mm ? `${p.depth_mm} × ${p.width_mm} × ${p.height_mm}` : '未登録'}</li></ul>
-                  </li>
-                  <li>
-                    商品重量 g
-                    <ul><li>{p.weight_g ? `${p.weight_g}g` : '未登録'}</li></ul>
-                  </li>
-                  <li>
+                  <NIl contents={p.height_mm}>
+                    商品サイズ（
+                    {p.diameter_mm ? '直径' : '縦・横'}
+                    ・高さ）
+                    <ul>
+                      <li>
+                        {p.diameter_mm
+                          ? `${p.diameter_mm} mm × ${p.height_mm} mm`
+                          : `${p.depth_mm} mm × ${p.width_mm} mm × ${p.height_mm} mm`}
+                      </li>
+                    </ul>
+                  </NIl>
+                  <NIl contents={p.weight_g}>
+                    商品重量
+                    <ul><li>{`${p.weight_g} g`}</li></ul>
+                  </NIl>
+                  <NIl contents={p.case_quantity}>
                     ケース入数
                     <ul><li>{p.case_quantity}</li></ul>
-                  </li>
-                  <li>
+                  </NIl>
+                  <NIl contents={p.itf_case_code}>
                     ＩＴＦコード（ケース）
                     <ul><li>{p.itf_case_code}</li></ul>
-                  </li>
-                  <li>
-                    ケースサイズ mm（縦・横・高さ）
-                    <ul><li>{p.case_depth_mm ? `${p.case_depth_mm} × ${p.case_width_mm} × ${p.case_height_mm}` : '未登録'}</li></ul>
-                  </li>
-                  <li>
-                    ケース重量 g
-                    <ul><li>{p.case_weight_g ? `${p.case_weight_g}g` : '未登録'}</li></ul>
-                  </li>
-                  <li>
+                  </NIl>
+                  <NIl contents={p.case_depth_mm}>
+                    ケースサイズ（縦・横・高さ）
+                    <ul><li>{`${p.case_depth_mm} mm × ${p.case_width_mm} mm × ${p.case_height_mm} mm`}</li></ul>
+                  </NIl>
+                  <NIl contents={p.case_weight_g}>
+                    ケース重量
+                    <ul><li>{`${p.case_weight_g} g`}</li></ul>
+                  </NIl>
+                  <NIl contents={p.inner_carton_quantity}>
                     ボール入数
                     <ul><li>{p.inner_carton_quantity}</li></ul>
-                  </li>
-                  <li>
+                  </NIl>
+                  <NIl contents={p.itf_inner_carton_code}>
                     ＩＴＦコード（ボール）
                     <ul><li>{p.itf_inner_carton_code}</li></ul>
-                  </li>
-                  <li>
-                    ボールサイズ mm（縦・横・高さ）
-                    <ul><li>{p.inner_carton_depth_mm ? `${p.inner_carton_depth_mm} × ${p.inner_carton_width_mm} × ${p.inner_carton_height_mm}` : '未登録'}</li></ul>
-                  </li>
-                  <li>
-                    ボール重量 g
-                    <ul><li>{p.inner_carton_weight_g ? `${p.inner_carton_weight_g}g` : '未登録'}</li></ul>
-                  </li>
+                  </NIl>
+                  <NIl contents={p.inner_carton_depth_mm}>
+                    ボールサイズ（縦・横・高さ）
+                    <ul><li>{`${p.inner_carton_depth_mm} mm × ${p.inner_carton_width_mm} mm × ${p.inner_carton_height_mm} mm`}</li></ul>
+                  </NIl>
+                  <NIl contents={p.inner_carton_weight_g}>
+                    ボール重量
+                    <ul><li>{`${p.inner_carton_weight_g} g`}</li></ul>
+                  </NIl>
                 </ul>
               </li>
             </ul>
