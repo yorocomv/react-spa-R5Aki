@@ -28,7 +28,7 @@ export default function ProductCompositionItems({
             ))
           : productComponents.map(comp => (
               <li key={comp.component_id}>
-                {`${comp.title} ${comp.amount.replace(/\.00$/, '')}${comp.unit_name} × ${comp.pieces}`}
+                {`${comp.title} ${comp.amount.replace(/\.00$/, '')} ${comp.unit_name} × ${comp.pieces}`}
                 <span className={css({ color: 'slate.600', fontWeight: 'normal', ml: '0.75rem', textShadow: 'none' })}>
                   {`(内装：${comp.inner_packaging_type})`}
                 </span>

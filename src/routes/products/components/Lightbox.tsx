@@ -13,26 +13,31 @@ interface LightboxProps {
   isOpen?: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<number>>;
   imgUrls: string[];
-  startSnap: number;
+  goToIndex: number;
 };
 
 export default function Lightbox({
   isOpen = false,
   setIsOpen,
   imgUrls,
-  startSnap,
+  goToIndex,
 }: LightboxProps) {
-  // useEmblaCarousel({ loop: false }) は不安定😫💦
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, startSnap });
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, slidesToScroll: 1 });
   const [isZoomed, setIsZoomed] = useState(false);
-  // 次のスライドがあるか？
-  const [prevBtnDisabled, setPrevBtnDisabled] = useState(startSnap === 0);
-  const [nextBtnDisabled, setNextBtnDisabled] = useState(
-    imgUrls.length <= 1 || startSnap === imgUrls.length - 1,
-  );
+  // <button> の disabled 属性値。useEffect の中で使うのでリンターへの挨拶が一回で済むように一行にまとめた
+  const [[prevBtnDisabled, nextBtnDisabled], setBtnDisabled] = useState([true, true]);
+  // ドラッグ時のカーソル制御
+  const [isGrabbing, setIsGrabbing] = useState(false);
 
   // 各スライドの TransformWrapper の参照（ref）を保存
   const transformRefs = useRef<(TransformWrapperRef | null)[]>([]);
+
+  // ボタンの有効・無効を制御
+  type EmblaCarouselType = ReturnType<typeof useEmblaCarousel>[1];
+  const handleDisabledAttr = useCallback((emblaApi: EmblaCarouselType) => {
+    // eslint-disable-next-line react-hooks-extra/no-direct-set-state-in-use-effect
+    setBtnDisabled([!emblaApi?.canGoToPrev(), !emblaApi?.canGoToNext()]);
+  }, []);
 
   // ズーム状態が変化したときに発火する関数
   const handleTransformed = useCallback((ref: TransformWrapperRef) => {
@@ -56,10 +61,9 @@ export default function Lightbox({
   }, [emblaApi, isZoomed]);
 
   // スライドの「切り替えが始まった」時の処理
-  // ボタンの有効・無効を更新 と ズームのリセット
+  // ボタンの有効・無効の更新 と ズームのリセット
   const onSelect = useCallback(() => {
-    setPrevBtnDisabled(!emblaApi?.canGoToPrev());
-    setNextBtnDisabled(!emblaApi?.canGoToNext());
+    handleDisabledAttr(emblaApi);
 
     transformRefs.current.forEach((wrapperRef) => {
       if (wrapperRef && wrapperRef.resetTransform) {
@@ -69,7 +73,18 @@ export default function Lightbox({
     // ズームフラグのみを解除。reInit は、、、
     setIsZoomed(false);
     // 🚨 注意: ここで reInit を呼ぶとアニメーションが止まるので絶対に呼ばない！
-  }, [emblaApi]);
+  }, [emblaApi, handleDisabledAttr]);
+
+  // 親(呼び出し元)で管理しているインデックスステートを監視
+  // -1 以外の値になればスライド位置が指定されてモーダルがオープンされる
+  useEffect (() => {
+    if (!emblaApi)
+      return;
+    if (goToIndex > 0)
+      emblaApi.goTo(goToIndex, true);
+    // スライド位置決定後にボタンを更新
+    handleDisabledAttr(emblaApi);
+  }, [emblaApi, goToIndex, handleDisabledAttr]);
 
   // スライドの切り替わり
   useEffect(() => {
@@ -109,15 +124,15 @@ export default function Lightbox({
     color: '#fff',
 
     '&>svg': {
-      w: '6lvw',
-      h: '6lvw',
-      p: '1.5lvw',
+      w: 'min(6lvw, 96px)',
+      h: 'min(6lvw, 96px)',
+      p: 'min(1.5lvw, 24px)',
       bg: {
         base: 'color-mix(in oklab, #fff 30%, transparent)',
         _hover: 'color-mix(in oklab, #fff 40%, transparent)',
       },
       borderRadius: '50%',
-      _active: { translate: '0 3lvw' },
+      _active: { translate: '0 min(3lvw, 48px)' },
     },
   });
   const spanStyles = css.raw({
@@ -144,6 +159,8 @@ export default function Lightbox({
         w: '100lvw',
         h: 'var(--visual-viewport-height)',
         bg: 'transparent',
+        bgImage: 'linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.7))',
+        backdropFilter: 'blur(10px)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -163,6 +180,9 @@ export default function Lightbox({
             alignItems: 'center',
             justifyContent: 'center',
           })}
+          style={{
+            '--button-offset': 'calc(-7lvw + max(0px, 6lvw - 96px))',
+          } as React.CSSProperties}
         >
           <div ref={emblaRef} className={css({ overflow: 'hidden' })}>
             <div className={css({ display: 'flex', touchAction: 'pan-y pinch-zoom', maxW: '84lvw' })}>
@@ -185,8 +205,12 @@ export default function Lightbox({
                     onTransformed={handleTransformed}
                     panning={{ disabled: !isZoomed }}
                     doubleClick={{ mode: 'reset' }}
+                    // パン開始時にgrabbing状態にする
+                    onPanningStart={() => setIsGrabbing(true)}
+                    // パン終了時に元の状態に戻す
+                    onPanningStop={() => setIsGrabbing(false)}
                   >
-                    <TransformComponent>
+                    <TransformComponent wrapperStyle={{ cursor: isGrabbing ? 'grabbing' : 'grab' }}>
                       <img
                         src={url}
                         alt="写真"
@@ -205,7 +229,7 @@ export default function Lightbox({
           <button
             type="button"
             onClick={() => setIsOpen(-1)}
-            className={css(buttonStyles, { top: 0, right: '-7lvw' })}
+            className={css(buttonStyles, { top: 0, right: 'var(--button-offset)' })}
           >
             <RxCross2 />
             <span className={css(spanStyles)}>
@@ -216,7 +240,7 @@ export default function Lightbox({
             type="button"
             onClick={goToPrev}
             disabled={prevBtnDisabled}
-            className={css(buttonStyles, { left: '-7lvw' })}
+            className={css(buttonStyles, { left: 'var(--button-offset)', transform: 'translate(0, -50%)' })}
           >
             <RxChevronLeft />
             <span className={css(spanStyles)}>
@@ -227,7 +251,7 @@ export default function Lightbox({
             type="button"
             onClick={goToNext}
             disabled={nextBtnDisabled}
-            className={css(buttonStyles, { right: '-7lvw' })}
+            className={css(buttonStyles, { right: 'var(--button-offset)', transform: 'translate(0, -50%)' })}
           >
             <RxChevronRight />
             <span className={css(spanStyles)}>

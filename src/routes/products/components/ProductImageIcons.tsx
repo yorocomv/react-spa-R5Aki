@@ -8,7 +8,7 @@ export default function ProductImageIcons({
 }: {
   imageUrls: string[];
 }) {
-  const [isLightboxOpen, setIsLightboxOpen] = useState(-1);
+  const [lightboxOpen, setLightboxOpen] = useState(-1);
   const diameter = '4rem';
 
   return (
@@ -35,7 +35,7 @@ export default function ProductImageIcons({
             <button
               type="button"
               onClick={() => {
-                setIsLightboxOpen(i);
+                setLightboxOpen(i);
               }}
             >
               <img
@@ -52,20 +52,12 @@ export default function ProductImageIcons({
           </div>
         ))}
       </div>
-      {/*
-        embla-carousel-react の useEmblaCarousel({ startSnap }) の
-        即時性がイマイチなので、light-box も map() で展開
-        が、効果なし？
-       */}
-      {imageUrls.map((url, i) => (
-        <Lightbox
-          key={url}
-          isOpen={isLightboxOpen === i}
-          setIsOpen={setIsLightboxOpen}
-          imgUrls={imageUrls}
-          startSnap={i}
-        />
-      ))}
+      <Lightbox
+        isOpen={lightboxOpen !== -1}
+        setIsOpen={setLightboxOpen}
+        imgUrls={imageUrls}
+        goToIndex={lightboxOpen}
+      />
     </>
   );
 }
