@@ -53,7 +53,7 @@ function Home() {
         🖨️出荷指示書印刷履歴
       </button>
 
-      <Link to="./products/new" relative="path">
+      <Link to="./products" relative="path">
         <div
           className={css({
             bg: '#edebe8',

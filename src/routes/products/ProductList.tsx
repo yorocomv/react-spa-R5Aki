@@ -1,7 +1,9 @@
 import { useState } from 'react';
+import { Link } from 'react-router';
 
 import { css } from 'styled-system/css';
 
+import FloatingAddButton from './components/FloatingAddButton';
 import { useFetchProductImages } from './components/hooks/useFetchProductImages';
 import { useFetchProductSkuDetails } from './components/hooks/useFetchProductSkuDetails';
 import ProductBottomSheet from './components/ProductBottomSheet';
@@ -38,6 +40,9 @@ export default function ProductList() {
         images={selectedItem !== -1 ? productImages[productSkuDetails[selectedItem].ulid_str ?? ''] : undefined}
         {...productSkuDetails[selectedItem]}
       />
+      <Link to="./new" relative="path">
+        <FloatingAddButton text="新規登録" />
+      </Link>
     </>
   );
 }
