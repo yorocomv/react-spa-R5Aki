@@ -168,8 +168,8 @@ export default function Lightbox({
       })}
     >
       <Modal className={css({
-        '&[data-entering]': { animation: 'depthFadeIn 480ms cubic-bezier(.16, 1, .3, 1)' },
-        '&[data-exiting]': { animation: 'depthFadeOut 360ms cubic-bezier(.4, 0, .2, 1)' },
+        '&[data-entering]': { animation: 'depthFadeIn 450ms cubic-bezier(.16, 1, .3, 1)' },
+        '&[data-exiting]': { animation: 'depthFadeOut 250ms cubic-bezier(.4, 0, .2, 1)' },
       })}
       >
         <Dialog
