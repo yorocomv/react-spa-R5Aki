@@ -162,6 +162,7 @@ export default function RegisterProduct() {
             <BasicProductFormContents
               setPackagingTypeText={setPackagingTypeText}
               janCode={gtinObj.jan}
+              setGtinObj={setGtinObj}
               selectOptions={{
                 product_sourcing_types: productOptions.product_sourcing_types,
                 product_categories: productOptions.product_categories,
@@ -169,7 +170,7 @@ export default function RegisterProduct() {
               }}
             />
 
-            <ProductFormContents janCode={gtinObj.jan} setGtinObj={setGtinObj} isSet={isSet} setIsSet={setIsSet} packagingTypeText={packagingTypeText} drawContents={{ basic_id: false, product_name: false }} selectOptions={{ suppliers: productOptions.suppliers }} />
+            <ProductFormContents isSet={isSet} setIsSet={setIsSet} packagingTypeText={packagingTypeText} drawContents={{ basic_id: false, product_name: false }} selectOptions={{ suppliers: productOptions.suppliers }} />
 
             <div className={css({ minH: '12.9rem' })}>
               {isSet === '0'

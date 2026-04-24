@@ -12,6 +12,7 @@ export const commonProductsSchema = z.object({
 
 const basicProductsSchema = z.object({
   basic_name: z.string().trim().min(1).max(32),
+  internal_code: z.preprocess(v => (v === '' ? undefined : v), z.string().trim().min(5).max(10).optional()),
   jan_code: z.preprocess(v => (v === '' ? undefined : v), z.string().trim().length(13).regex(/\d/).optional()),
   sourcing_type_id: z.coerce.number().int().positive(),
   category_id: z.coerce.number().int().positive(),
@@ -26,7 +27,6 @@ const productsSchema = z.object({
   supplier_id: z.coerce.number().int().positive(),
   product_name: z.string().trim().min(1).max(32),
   short_name: z.string().trim().min(1).max(32),
-  internal_code: z.preprocess(v => (v === '' ? undefined : v), z.string().trim().min(5).max(10).optional()),
   is_set_product: z.enum(['0', '1']),
   depth_mm: z.preprocess(v => (v === '' ? undefined : v), z.coerce.number().int().positive().optional()),
   width_mm: z.preprocess(v => (v === '' ? undefined : v), z.coerce.number().int().positive().optional()),
