@@ -53,6 +53,7 @@ const productComponentsSchema = z.object({
     .array(
       z.object({
         title: z.string().trim().min(1).max(32),
+        category_id: z.coerce.number().int().positive(),
         symbol: z.string().trim().min(1).max(8),
         amount: z.coerce.number().positive(),
         unit_type_id: z.coerce.number().int().positive(),

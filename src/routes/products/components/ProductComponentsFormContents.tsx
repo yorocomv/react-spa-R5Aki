@@ -17,6 +17,7 @@ interface Props {
   defaultComponent: PostReqNewProduct['components'][0];
   isTail: boolean;
   selectOptions: {
+    product_categories: ProductOptionsIdAndName[];
     unit_types: ProductOptionsIdAndName[];
     product_inner_packaging_types: ProductOptionsIdAndName[];
   };
@@ -34,6 +35,7 @@ export default function ProductComponentsFormContents({
     register,
     formState: { errors },
   } = useFormContext<PostReqNewProduct>();
+  const serialNumberStr = (i => i.toString().replace(/\d/g, s => String.fromCharCode(s.charCodeAt(0) + 0xFEE0)))(index + 1);
 
   return (
     <div className={css({
@@ -52,9 +54,9 @@ export default function ProductComponentsFormContents({
     })}
     >
       <label htmlFor={`components.${index}.title`}>
-        内容物
-        {(i => `（${i.toString().replace(/\d/g, s => String.fromCharCode(s.charCodeAt(0) + 0xFEE0))}）`)(index + 1)}
-        名
+        内容物（
+        {serialNumberStr}
+        ）名
         {' '}
         （
         <mark>粉末</mark>
@@ -67,6 +69,22 @@ export default function ProductComponentsFormContents({
           placeholder="内容物名"
         />
         <FormErrorMessage message={errors.components?.[index]?.title?.message} />
+      </label>
+      <label htmlFor={`components.${index}.category_id`}>
+        内容物（
+        {serialNumberStr}
+        ）カテゴリー
+        <Select
+          {...register(`components.${index}.category_id` as const)}
+          id={`components.${index}.category_id`}
+        >
+          {selectOptions.product_categories.map(({ id, name }) => (
+            <option key={id} value={id}>
+              {name}
+            </option>
+          ))}
+        </Select>
+        <FormErrorMessage message={errors.components?.[index]?.category_id?.message} />
       </label>
       <label htmlFor={`components.${index}.symbol`}>
         記号

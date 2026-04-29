@@ -25,6 +25,7 @@ import { postReqNewUnifiedProductSchema } from './products.schemas';
 
 const componentDefaultValues: PostReqNewProduct['components'][0] = {
   title: '',
+  category_id: 1,
   symbol: '',
   amount: 0,
   unit_type_id: 1,
@@ -186,6 +187,7 @@ export default function RegisterProduct() {
                           defaultComponent={componentDefaultValues}
                           isTail={isTail}
                           selectOptions={{
+                            product_categories: productOptions.product_categories,
                             unit_types: productOptions.unit_types,
                             product_inner_packaging_types: productOptions.product_inner_packaging_types,
                           }}

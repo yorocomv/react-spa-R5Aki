@@ -168,6 +168,7 @@ export const viewProductComponentsRowSchema = z.object({
   product_short_name: z.string().min(1).max(32),
   component_id: z.number().int().positive(),
   title: z.string().min(1).max(32),
+  component_category_name: z.string().min(1).max(32),
   symbol: z.string().min(1).max(8),
   amount: z.string().regex(/^\+?(?:[1-9]\d{0,5}|0)(?:\.\d{1,2})?$/),
   unit_name: z.string().min(1).max(8),
