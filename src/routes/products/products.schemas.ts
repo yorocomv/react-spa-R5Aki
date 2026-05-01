@@ -28,6 +28,7 @@ const productsSchema = z.object({
   product_name: z.string().trim().min(1).max(32),
   short_name: z.string().trim().min(1).max(32),
   is_set_product: z.enum(['0', '1']),
+  // * cached_category_id はバックエンドで他の入力項目から自動取得
   depth_mm: z.preprocess(v => (v === '' ? undefined : v), z.coerce.number().int().positive().optional()),
   width_mm: z.preprocess(v => (v === '' ? undefined : v), z.coerce.number().int().positive().optional()),
   diameter_mm: z.preprocess(v => (v === '' ? undefined : v), z.coerce.number().int().positive().optional()),
