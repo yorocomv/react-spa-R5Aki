@@ -12,8 +12,8 @@ export default function FloatingAddButton({
     <div
       className={css({
         pos: 'fixed',
-        bottom: '0.725rem',
-        right: '0.725rem',
+        bottom: 'min(4.375rem, 10lvh)',
+        right: '1.375rem',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -33,7 +33,7 @@ export default function FloatingAddButton({
             display: 'inline-flex',
             alignItems: 'center',
             justifyContent: 'center',
-            p: '0.625rem',
+            p: '0.75rem',
             borderWidth: '1px',
             borderRadius: '50%',
             shadow: 'sm',
@@ -49,7 +49,7 @@ export default function FloatingAddButton({
             borderColor: { base: 'violet.600', _disabled: 'stone.300' },
           })}
         >
-          <RxPlus size="1.75rem" className={css({ display: 'inline-block', filter: 'drop-shadow(1px 1px rgba(0, 0, 0, 0.2))' })} />
+          <RxPlus size="1.5rem" className={css({ display: 'inline-block', filter: 'drop-shadow(1px 1px rgba(0, 0, 0, 0.2))' })} />
         </button>
       </TooltipWrapper>
     </div>

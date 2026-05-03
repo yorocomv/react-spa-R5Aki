@@ -4,7 +4,7 @@
   left: 0;
   width: 100vw;
   height: var(--visual-viewport-height);
-  background: rgba(0 0 0 / 0.5);
+  background: rgb(0 0 0 / 0.4);
   display: flex;
   align-items: center;
   justify-content: center;

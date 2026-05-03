@@ -20,7 +20,8 @@ export default function ProductCompositionItems({
         {isSetProduct
           ? productCombinations.map(item => (
               <li key={item.combination_id}>
-                {`${item.item_product_name} × ${item.quantity}`}
+                {/* 商品名が全角カッコで終わった場合余分なスペースを出力しない */}
+                {item.item_product_name.endsWith('）') ? `${item.item_product_name}× ${item.quantity}` : `${item.item_product_name} × ${item.quantity}`}
                 <span className={css({ color: 'slate.600', fontWeight: 'normal', ml: '0.75rem', textShadow: 'none' })}>
                   {`(${item.item_product_short_name})`}
                 </span>

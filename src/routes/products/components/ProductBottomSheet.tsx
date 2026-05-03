@@ -78,7 +78,7 @@ export default function ProductBottomSheet(p: ProductBottomSheetProps) {
               gap: '1.5rem',
 
               '&>li': {
-                maxW: '25rem',
+                maxW: '27rem',
                 mx: 'auto',
                 // 中身が1行に収まりきらなくなると、その要素が次の行へ落ちる
                 flex: 'auto', // flex-grow: 1, flex-shrink: 1, flex-basis: auto
