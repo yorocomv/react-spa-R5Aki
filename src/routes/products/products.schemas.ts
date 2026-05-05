@@ -15,7 +15,6 @@ const basicProductsSchema = z.object({
   internal_code: z.preprocess(v => (v === '' ? undefined : v), z.string().trim().min(5).max(10).optional()),
   jan_code: z.preprocess(v => (v === '' ? undefined : v), z.string().trim().length(13).regex(/\d/).optional()),
   sourcing_type_id: z.coerce.number().int().positive(),
-  category_id: z.coerce.number().int().positive(),
   packaging_type_id: z.coerce.number().int().positive(),
   expiration_value: z.coerce.number().int().positive(),
   expiration_unit: z.enum(['D', 'M', 'Y']),
@@ -28,7 +27,9 @@ const productsSchema = z.object({
   product_name: z.string().trim().min(1).max(32),
   short_name: z.string().trim().min(1).max(32),
   is_set_product: z.enum(['0', '1']),
-  // * cached_category_id はバックエンドで他の入力項目から自動取得
+  // * cached_category_id
+  // * display_category_name
+  // * is_assorted はバックエンドで他の入力項目から導出
   depth_mm: z.preprocess(v => (v === '' ? undefined : v), z.coerce.number().int().positive().optional()),
   width_mm: z.preprocess(v => (v === '' ? undefined : v), z.coerce.number().int().positive().optional()),
   diameter_mm: z.preprocess(v => (v === '' ? undefined : v), z.coerce.number().int().positive().optional()),
@@ -222,7 +223,6 @@ export const postReqNewProductSkuSchema = productSkusSchema;
 export const newProductCommonDefaultValuesSchema = z.object({
   ...basicProductsSchema.pick({
     sourcing_type_id: true,
-    category_id: true,
     packaging_type_id: true,
     expiration_unit: true,
   }).shape,

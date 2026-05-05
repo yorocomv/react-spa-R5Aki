@@ -102,16 +102,6 @@ export default function BasicProductFormContents({ selectOptions, janCode, setGt
           ))}
         </Select>
       </label>
-      <label htmlFor="category_id">
-        商品カテゴリー
-        <Select {...register('category_id')} id="category_id">
-          {selectOptions.product_categories.map(({ id, name }) => (
-            <option key={id} value={id}>
-              {name}
-            </option>
-          ))}
-        </Select>
-      </label>
       <label htmlFor="packaging_type_id">
         商品パッケージタイプ
         <Select

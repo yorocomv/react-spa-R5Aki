@@ -38,7 +38,6 @@ const combinationDefaultValues: PostReqNewSetProduct['combinations'][0] = {
 };
 const commonDefaultValues: NewProductCommonDefaultValues = {
   sourcing_type_id: 1,
-  category_id: 1,
   packaging_type_id: 1,
   expiration_unit: 'Y',
   supplier_id: 1,
@@ -63,7 +62,7 @@ export default function RegisterProduct() {
   const singleProductsStrListObj = singleProducts.map((product) => {
     return {
       id: product.product_id,
-      itemStr: `${product.product_short_name} <${product.internal_code}> ${product.category_name} ${product.component_amount}${product.component_unit_name} ${product.packaging_type}`,
+      itemStr: `${product.product_short_name} <${product.internal_code}> ${product.display_category_name} ${product.component_amount}${product.component_unit_name} ${product.packaging_type}`,
     };
   });
 

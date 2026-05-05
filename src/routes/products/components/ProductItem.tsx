@@ -110,7 +110,7 @@ export default function ProductItem(p: ViewSkuDetailsRow & {
         >
           <h2 className={css({ fontSize: '1.25rem', fontWeight: 'bold' })}>
             {p.sku_name}
-            <span className={css({ bgColor: 'var(--cat-color-light)', verticalAlign: 'super', fontSize: '0.625em', ml: '0.25em', px: '0.25em', py: '0.125em' })}>{p.category_name}</span>
+            <span className={css({ bgColor: 'var(--cat-color-light)', verticalAlign: 'super', fontSize: '0.625em', ml: '0.25em', px: '0.25em', py: '0.125em' })}>{p.display_category_name}</span>
           </h2>
           <p>{p.product_name}</p>
         </div>
