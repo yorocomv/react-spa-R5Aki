@@ -4,6 +4,7 @@ import type { ZodType } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState } from 'react';
 import { FormProvider, useFieldArray, useForm } from 'react-hook-form';
+import { useLocation, useParams } from 'react-router';
 
 import BubbleTailHeading from '@/components/ui/elements/BubbleTailHeading';
 import Button from '@/components/ui/elements/Button';
@@ -51,6 +52,13 @@ interface Gtin {
 }
 
 export default function RegisterProduct() {
+  const location = useLocation();
+  const unifiedProduct = location.state as PostReqNewUnifiedProduct & { id: number } || {};
+  const { id: productId } = useParams();
+
+  if (productId && productId !== unifiedProduct.id.toString())
+    throw new Error('不正なルートでのアクセスを検知しました❢');
+
   const [gtinObj, setGtinObj] = useState<Gtin>({
     jan: undefined,
     itf1: undefined,
