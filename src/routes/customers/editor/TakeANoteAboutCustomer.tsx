@@ -2,8 +2,8 @@ import { Link, useLocation, useParams } from 'react-router';
 
 import BubbleTailHeading from '@/components/ui/elements/BubbleTailHeading';
 import FormContainer from '@/components/ui/elements/FormContainer';
+import FloatingLinkIcon from '@/components/ui/FloatingLinkIcon';
 import CustomerNoteForm from '@/routes/customers/components/CustomerNoteForm';
-import FloatingLinkIcon from '@/routes/customers/components/FloatingLinkIcon';
 import { useFetchNotes } from '@/routes/customers/components/hooks/useFetchNotes';
 import ListOfSummaryNotesAboutCustomer from '@/routes/customers/components/ListOfSummaryNotesAboutCustomer';
 
@@ -37,7 +37,7 @@ export default function TakeANoteAboutCustomer(): React.JSX.Element {
           {`${customer.name1}　${customer.name2}`}
         </Link>
       </BubbleTailHeading>
-      <FloatingLinkIcon relativePath="/customers" size="2rem" />
+      <FloatingLinkIcon relativePath="/customers" size="2rem" title="🔎検索画面に戻る" iconType="goToSearch" />
       <div
         className={css({
           display: 'grid',

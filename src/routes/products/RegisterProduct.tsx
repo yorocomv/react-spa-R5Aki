@@ -8,6 +8,7 @@ import { FormProvider, useFieldArray, useForm } from 'react-hook-form';
 import BubbleTailHeading from '@/components/ui/elements/BubbleTailHeading';
 import Button from '@/components/ui/elements/Button';
 import FormContainer from '@/components/ui/elements/FormContainer';
+import FloatingLinkIcon from '@/components/ui/FloatingLinkIcon';
 import onPromise from '@/libs/onPromise';
 import { css } from 'styled-system/css';
 
@@ -156,6 +157,7 @@ export default function RegisterProduct() {
       >
         商品情報の登録
       </BubbleTailHeading>
+      <FloatingLinkIcon relativePath="/products" size="2rem" title="商品一覧に戻る" iconType="eye" />
       <FormContainer mergedStyles={css.raw({ px: '5rem', borderRadius: '2xl' })}>
         <FormProvider {...methods}>
           <form onSubmit={onPromise(methods.handleSubmit(onSubmit))}>

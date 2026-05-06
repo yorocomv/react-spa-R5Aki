@@ -25,7 +25,7 @@ export default function FloatingAddButton({
         placement="top start"
         hasButton={true}
         fillColor="violet.500"
-        className={css({ color: 'violet.50', bgColor: 'violet.500', textShadow: 'rgba(0, 0, 0, 0.2) 10px 10px', shadow: '2xl' })}
+        className={css({ color: 'violet.50', bgColor: 'violet.500', shadow: '2xl' })}
       >
         <button
           type="button"

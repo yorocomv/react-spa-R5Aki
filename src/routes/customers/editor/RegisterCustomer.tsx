@@ -1,7 +1,7 @@
 import BubbleTailHeading from '@/components/ui/elements/BubbleTailHeading';
 import FormContainer from '@/components/ui/elements/FormContainer';
+import FloatingLinkIcon from '@/components/ui/FloatingLinkIcon';
 import CustomerForm from '@/routes/customers/components/CustomerForm';
-import FloatingLinkIcon from '@/routes/customers/components/FloatingLinkIcon';
 import { css } from 'styled-system/css';
 
 export default function RegisterCustomer() {
@@ -18,7 +18,7 @@ export default function RegisterCustomer() {
       >
         得意先情報の登録
       </BubbleTailHeading>
-      <FloatingLinkIcon relativePath="/customers" size="2rem" />
+      <FloatingLinkIcon relativePath="/customers" size="2rem" title="🔎検索画面に戻る" iconType="goToSearch" />
       <FormContainer>
         <CustomerForm />
       </FormContainer>
