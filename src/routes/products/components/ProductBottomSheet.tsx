@@ -1,12 +1,16 @@
 import { Suspense } from 'react';
 import '@/components/ui/reactAriaModalOverlayBottomSheet.css';
 import { Dialog, Heading, Modal, ModalOverlay } from 'react-aria-components';
-import { FaStar } from 'react-icons/fa6';
+import { FaPenClip, FaStar } from 'react-icons/fa6';
+import { RxCross1 } from 'react-icons/rx';
+import { useNavigate } from 'react-router';
 
 import { css } from 'styled-system/css';
 
 import type { ViewSkuDetailsRow } from '../products.dbTable.types';
 
+import { useFetchProductCombinations } from './hooks/useFetchProductCombinations';
+import { useFetchProductComponents } from './hooks/useFetchProductComponents';
 import NIl from './NIl';
 import ProductCompositionItems from './ProductCompositionItems';
 import ProductImageIcons from './ProductImageIcons';
@@ -19,10 +23,13 @@ type ProductBottomSheetProps = ViewSkuDetailsRow & {
 };
 
 export default function ProductBottomSheet(p: ProductBottomSheetProps) {
-  const isOpen = p.isOpen ?? false;
+  const { setSelectedItem, isOpen = false, images, is_set_product, ...skuDetails } = p;
+  const { productCombinations } = useFetchProductCombinations({ productId: p.product_id, earlyReturn: !p.is_set_product });
+  const { productComponents } = useFetchProductComponents({ productId: p.product_id, earlyReturn: p.is_set_product });
+  const navigate = useNavigate();
 
   return (
-    <ModalOverlay isDismissable isOpen={isOpen} onOpenChange={() => p.setSelectedItem(-1)}>
+    <ModalOverlay isDismissable isOpen={isOpen} onOpenChange={() => setSelectedItem(-1)}>
       <Modal>
         <div className={css({ pos: 'relative' })}>
           <div className={css({
@@ -31,40 +38,51 @@ export default function ProductBottomSheet(p: ProductBottomSheetProps) {
             right: '1rem',
             display: 'flex',
             gap: '0.75rem',
+
+            '&>button': {
+              w: '2.5rem',
+              h: '2.5rem',
+              borderRadius: 'full',
+              shadow: 'lg',
+              display: 'grid',
+              placeItems: 'center',
+              transition: 'transform 0.1s',
+
+              _hover: {
+                transform: 'scale(1.2)',
+              },
+            },
           })}
           >
             <button
               type="button"
-              onClick={() => alert('hoge')}
+              onClick={() => {
+                Promise.resolve(
+                  navigate(`/products/sku/${p.sku_id}`, {
+                    relative: 'path',
+                    state: is_set_product
+                      ? { ...skuDetails, is_set_product: '1', combinations: [...productCombinations] }
+                      : { ...skuDetails, is_set_product: '0', components: [...productComponents] },
+                  }),
+                ).catch((err: string) => { throw new Error(err); });
+              }}
               className={css({
-                w: '2.5rem',
-                h: '2.5rem',
                 bg: 'slate.700',
                 color: 'slate.50',
-                borderRadius: 'full',
-                shadow: 'lg',
-                display: 'grid',
-                placeItems: 'center',
               })}
             >
-              ✎
+              <FaPenClip />
             </button>
             <button
               type="button"
-              onClick={() => alert('hoge')}
+              onClick={() => setSelectedItem(-1)}
               className={css({
-                w: '2.5rem',
-                h: '2.5rem',
                 bg: 'slate.50',
                 color: 'slate.900',
-                borderRadius: 'full',
-                shadow: 'lg',
-                display: 'grid',
-                placeItems: 'center',
                 fontWeight: 'bold',
               })}
             >
-              ✕
+              <RxCross1 strokeWidth=".0625rem" />
             </button>
           </div>
           <Dialog className={css({
@@ -114,7 +132,7 @@ export default function ProductBottomSheet(p: ProductBottomSheetProps) {
                   </span>
                 </span>
               </Heading>
-              {p.images ? <ProductImageIcons imageUrls={p.images} /> : null}
+              {images ? <ProductImageIcons imageUrls={images} /> : null}
               <ul className={css({
                 display: 'flex',
                 flexWrap: 'wrap', // 溢れたら折り返す
@@ -194,7 +212,6 @@ export default function ProductBottomSheet(p: ProductBottomSheetProps) {
                       先代商品ＩＤ
                       <ul><li>{p.predecessor_id ?? 'null'}</li></ul>
                     </li>
-                    {/* ここで追加の Fetch */}
                     <Suspense fallback={
                       p.is_set_product
                         ? (
@@ -216,7 +233,7 @@ export default function ProductBottomSheet(p: ProductBottomSheetProps) {
                           )
                     }
                     >
-                      <ProductCompositionItems productId={p.product_id} isSetProduct={p.is_set_product} />
+                      <ProductCompositionItems isSetProduct={p.is_set_product} productCombinations={productCombinations} productComponents={productComponents} />
                     </Suspense>
                   </ul>
                 </li>

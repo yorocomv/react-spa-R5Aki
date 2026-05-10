@@ -1,18 +1,16 @@
 import { css } from 'styled-system/css';
 
-import { useFetchProductCombinations } from './hooks/useFetchProductCombinations';
-import { useFetchProductComponents } from './hooks/useFetchProductComponents';
+import type { ViewProductCombinationsArray, ViewProductComponentsArray } from '../products.dbTable.types';
 
 export default function ProductCompositionItems({
-  productId,
   isSetProduct,
+  productCombinations,
+  productComponents,
 }: {
-  productId: number;
   isSetProduct: boolean;
+  productCombinations: ViewProductCombinationsArray;
+  productComponents: ViewProductComponentsArray;
 }) {
-  const { productCombinations } = useFetchProductCombinations({ productId, earlyReturn: !isSetProduct });
-  const { productComponents } = useFetchProductComponents({ productId, earlyReturn: isSetProduct });
-
   return (
     <li>
       {isSetProduct ? 'セット内容' : '内容内訳'}

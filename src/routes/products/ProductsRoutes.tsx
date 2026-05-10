@@ -8,6 +8,7 @@ export default function ProductsRoutes() {
     <Routes>
       <Route path="/" element={<ProductList />} />
       <Route path="/new" element={<RegisterProduct />} />
+      <Route path="/sku/:id" element={<RegisterProduct />} />
     </Routes>
   );
 }

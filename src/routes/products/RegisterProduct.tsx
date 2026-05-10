@@ -13,6 +13,7 @@ import FloatingLinkIcon from '@/components/ui/FloatingLinkIcon';
 import onPromise from '@/libs/onPromise';
 import { css } from 'styled-system/css';
 
+import type { ViewProductCombinationsArray, ViewProductComponentsArray, ViewSkuDetailsRow } from './products.dbTable.types';
 import type { NewProductCommonDefaultValues, PostReqNewProduct, PostReqNewSetProduct, PostReqNewUnifiedProduct } from './products.types';
 
 import BasicProductFormContents from './components/BasicProductFormContents';
@@ -50,13 +51,53 @@ interface Gtin {
   itf1: string | undefined;
   itf2: string | undefined;
 }
+type LocationState = Omit<ViewSkuDetailsRow, 'is_set_product'> & { is_set_product: '0' } & ViewProductComponentsArray |
+  Omit<ViewSkuDetailsRow, 'is_set_product'> & { is_set_product: '1' } & ViewProductCombinationsArray;
 
 export default function RegisterProduct() {
   const location = useLocation();
-  const unifiedProduct = location.state as PostReqNewUnifiedProduct & { id: number } || {};
-  const { id: productId } = useParams();
+  const url = location.pathname;
+  const locationState = location.state as LocationState;
+  const reqBodyProduct: PostReqNewUnifiedProduct = {
+    basic_name: locationState.basic_product_name,
+    // sourcing_type_id: number,
+    // packaging_type_id: number,
+    // expiration_value: number,
+    // expiration_unit: "D" | "M" | "Y",
+    // supplier_id: number,
+    // short_name: string,
+    // is_set_product: "0",
+    // components: { ... 7 more }[],
+    // priority: "A" | "B" | "C",
+    // internal_code: string | undefined,
+    // jan_code: string | undefined,
+    // predecessor_id: number | undefined,
+    // depth_mm: number | undefined,
+    // width_mm: number | undefined,
+    // diameter_mm: number | undefined,
+    // height_mm: number | undefined,
+    // weight_g: number | undefined,
+    // available_date: Date | undefined,
+    // discontinued_date: Date | undefined,
+    // note: string | undefined,
+    // case_quantity: number | undefined,
+    // inner_carton_quantity: number | undefined,
+    // itf_case_code: string | undefined,
+    // itf_inner_carton_code: string | undefined,
+    // case_height_mm: number | undefined,
+    // case_width_mm: number | undefined,
+    // case_depth_mm: number | undefined,
+    // case_weight_g: number | undefined,
+    // inner_carton_height_mm: number | undefined,
+    // inner_carton_width_mm: number | undefined,
+    // inner_carton_weight_g: number | undefined,
+    // inner_carton_depth_mm: number | undefined,
+  };
+  const { id: skuId } = useParams();
 
-  if (productId && productId !== unifiedProduct.id.toString())
+  if (!locationState?.sku_id && url !== '/products/new')
+    throw new Error('不正なルートでのアクセスを検知しました❢');
+  if (skuId && skuId !== locationState?.sku_id.toString())
     throw new Error('不正なルートでのアクセスを検知しました❢');
 
   const [gtinObj, setGtinObj] = useState<Gtin>({
@@ -79,6 +120,8 @@ export default function RegisterProduct() {
     isSetMode: '0' | '1',
     values?: PostReqNewUnifiedProduct,
   ): PostReqNewUnifiedProduct => {
+    if (reqBodyProduct)
+      return reqBodyProduct;
     const v = values ?? commonDefaultValues;
     if (isSetMode === '0') {
       return {
