@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import { Link } from 'react-router';
 
+import SvgSpinnersLoader5 from '@/components/ui/elements/svgSpinnersLoader5';
 import { css } from 'styled-system/css';
 
 import FloatingAddButton from './components/FloatingAddButton';
@@ -34,12 +35,28 @@ export default function ProductList() {
           />
         ))}
       </div>
-      <ProductBottomSheet
-        isOpen={selectedItem !== -1}
-        setSelectedItem={setSelectedItem}
-        images={selectedItem !== -1 ? productImages[productSkuDetails[selectedItem].ulid_str ?? ''] : undefined}
-        {...productSkuDetails[selectedItem]}
-      />
+      <Suspense fallback={(
+        <div className={css({
+          pos: 'absolute',
+          w: '100lvw',
+          h: '100lvh',
+          top: '50%',
+          left: '50%',
+          display: 'grid',
+          placeItems: 'center',
+        })}
+        >
+          <SvgSpinnersLoader5 />
+        </div>
+      )}
+      >
+        <ProductBottomSheet
+          isOpen={selectedItem !== -1}
+          setSelectedItem={setSelectedItem}
+          images={selectedItem !== -1 ? productImages[productSkuDetails[selectedItem].ulid_str ?? ''] : undefined}
+          {...productSkuDetails[selectedItem]}
+        />
+      </Suspense>
       <Link to="./new" relative="path">
         <FloatingAddButton text="新規登録" />
       </Link>
