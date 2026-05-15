@@ -1,4 +1,3 @@
-import { Suspense } from 'react';
 import '@/components/ui/reactAriaModalOverlayBottomSheet.css';
 import { Dialog, Heading, Modal, ModalOverlay } from 'react-aria-components';
 import { FaPenClip, FaStar } from 'react-icons/fa6';
@@ -212,29 +211,7 @@ export default function ProductBottomSheet(p: ProductBottomSheetProps) {
                       先代商品ＩＤ
                       <ul><li>{p.predecessor_id ?? 'null'}</li></ul>
                     </li>
-                    <Suspense fallback={
-                      p.is_set_product
-                        ? (
-                            <li>
-                              セット内容
-                              <ol>
-                                <li>Loading...</li>
-                                <li>Loading...</li>
-                              </ol>
-                            </li>
-                          )
-                        : (
-                            <li>
-                              内容内訳
-                              <ol>
-                                <li>Loading...</li>
-                              </ol>
-                            </li>
-                          )
-                    }
-                    >
-                      <ProductCompositionItems isSetProduct={p.is_set_product} productCombinations={productCombinations} productComponents={productComponents} />
-                    </Suspense>
+                    <ProductCompositionItems isSetProduct={p.is_set_product} productCombinations={productCombinations} productComponents={productComponents} />
                   </ul>
                 </li>
                 <li>
