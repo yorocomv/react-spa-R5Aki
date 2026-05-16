@@ -1,7 +1,7 @@
 import { Suspense, useState } from 'react';
 import { Link } from 'react-router';
 
-import SvgSpinnersLoader5 from '@/components/ui/elements/svgSpinnersLoader5';
+import SvgSpinnersLoader5 from '@/components/ui/elements/SvgSpinnersLoader5';
 import { css } from 'styled-system/css';
 
 import FloatingAddButton from './components/FloatingAddButton';
@@ -37,16 +37,13 @@ export default function ProductList() {
       </div>
       <Suspense fallback={(
         <div className={css({
-          pos: 'absolute',
-          w: '100lvw',
-          h: '100lvh',
-          top: '50%',
-          left: '50%',
-          display: 'grid',
-          placeItems: 'center',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          color: 'violet.500',
         })}
         >
-          <SvgSpinnersLoader5 />
+          <SvgSpinnersLoader5 size="9rem" />
         </div>
       )}
       >
