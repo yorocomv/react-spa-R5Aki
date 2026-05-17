@@ -1,4 +1,5 @@
 import { calculateCheckDigitForGTIN } from 'gtin-validator';
+import { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -9,7 +10,7 @@ import FormSuggestion from '@/components/ui/elementSwitchers/FormSuggestion';
 import env from '@/env';
 import { css } from 'styled-system/css';
 
-import type { ProductOptionsIdAndName } from '../options/options.types';
+import type { ProductOptionsIdAndName, ProductPackagingTypeFlags } from '../options/options.types';
 import type { PostReqNewProduct } from '../products.types';
 
 interface Props {
@@ -18,19 +19,21 @@ interface Props {
     product_categories: ProductOptionsIdAndName[];
     product_packaging_types: ProductOptionsIdAndName[];
   };
+  packagingMap?: Map<number, ProductPackagingTypeFlags>;
   janCode: string | undefined;
   setGtinObj: React.Dispatch<React.SetStateAction<{
     jan: string | undefined;
     itf1: string | undefined;
     itf2: string | undefined;
   }>>;
-  setPackagingTypeText: React.Dispatch<React.SetStateAction<string>>;
+  setPackagingFlags?: (flags: { has_depth: boolean; has_width: boolean; has_diameter: boolean }) => void;
 }
 
-export default function BasicProductFormContents({ selectOptions, janCode, setGtinObj, setPackagingTypeText }: Props) {
+export default function BasicProductFormContents({ selectOptions, packagingMap, janCode, setGtinObj, setPackagingFlags }: Props) {
   const {
     register,
     formState: { errors },
+    watch,
   } = useFormContext<PostReqNewProduct>();
   const handleSetGtinCode = (e: React.ChangeEvent<HTMLInputElement>) => {
     try {
@@ -54,7 +57,28 @@ export default function BasicProductFormContents({ selectOptions, janCode, setGt
       console.error(err);
     }
   };
-  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => setPackagingTypeText(e.target.selectedOptions[0].text);
+
+  // packaging_type_id の変更を監視して packagingMap からフラグをセット
+  const selectedPackagingTypeId = watch('packaging_type_id');
+  useEffect(() => {
+    if (!setPackagingFlags)
+      return;
+    const id = Number(selectedPackagingTypeId);
+    const found = packagingMap?.get(id);
+    if (found) {
+      setPackagingFlags({
+        has_depth: !!found.has_depth,
+        has_width: !!found.has_width,
+        has_diameter: !!found.has_diameter,
+      });
+    }
+    else {
+      setPackagingFlags({ has_depth: false, has_width: false, has_diameter: false });
+    }
+  }, [selectedPackagingTypeId, packagingMap, setPackagingFlags]);
+
+  // 表示用の options: packagingMap があればそれを優先、なければ既存の selectOptions を使う
+  const packagingOptions = packagingMap ? Array.from(packagingMap.values()) : selectOptions.product_packaging_types;
 
   return (
     <>
@@ -104,12 +128,8 @@ export default function BasicProductFormContents({ selectOptions, janCode, setGt
       </label>
       <label htmlFor="packaging_type_id">
         商品パッケージタイプ
-        <Select
-          {...register('packaging_type_id')}
-          onChange={handleChange}
-          id="packaging_type_id"
-        >
-          {selectOptions.product_packaging_types.map(({ id, name }) => (
+        <Select {...register('packaging_type_id')} id="packaging_type_id">
+          {packagingOptions.map(({ id, name }) => (
             <option key={id} value={id}>
               {name}
             </option>

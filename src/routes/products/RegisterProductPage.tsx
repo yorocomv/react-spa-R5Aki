@@ -68,6 +68,8 @@ export default function RegisterProductPage() {
     mode: 'all',
     resolver: zodResolver(postReqNewUnifiedProductSchema as ZodType<PostReqNewUnifiedProduct>),
     defaultValues: determineDefaultValue('0'),
+    // 📢重要：アンマウントされたフィールドの値をフォームから除去
+    shouldUnregister: true,
   });
 
   useEffect(() => {

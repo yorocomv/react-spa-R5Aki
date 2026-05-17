@@ -1,6 +1,6 @@
 import type { SubmitHandler, UseFieldArrayReturn, UseFormReturn } from 'react-hook-form';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
 
 import BubbleTailHeading from '@/components/ui/elements/BubbleTailHeading';
@@ -10,11 +10,13 @@ import FloatingLinkIcon from '@/components/ui/FloatingLinkIcon';
 import onPromise from '@/libs/onPromise';
 import { css } from 'styled-system/css';
 
+import type { ProductPackagingTypeFlags } from '../options/options.types';
 import type { PostReqNewProduct, PostReqNewSetProduct, PostReqNewUnifiedProduct } from '../products.types';
 import type { Gtin } from '../RegisterProductPage';
 
 import BasicProductFormContents from './BasicProductFormContents';
 import { useFetchProductOptions } from './hooks/useFetchProductOptions';
+import { useFetchProductPackagingTypeFlags } from './hooks/useFetchProductPackagingTypeFlags';
 import { useFetchSingleProducts } from './hooks/useFetchSingleProducts';
 import ProductCombinationsFormContents from './ProductCombinationsFormContents';
 import ProductComponentsFormContents from './ProductComponentsFormContents';
@@ -39,13 +41,28 @@ interface Props {
 export default function ProductEntryForm({ heading, isSet, setIsSet, gtinObj, setGtinObj, methods, componentsArray, setsArray, onSubmit, handleReset, componentDefaultValues, combinationDefaultValues }: Props) {
   const { productOptions } = useFetchProductOptions();
   const { singleProducts } = useFetchSingleProducts();
+  const { productPackagingTypeFlags } = useFetchProductPackagingTypeFlags();
+
+  const [packagingFlags, setPackagingFlags] = useState({
+    has_depth: false,
+    has_width: false,
+    has_diameter: false,
+  });
+
+  // packagingRows を Map にして高速参照できるようにする
+  const packagingMap = useMemo(() => {
+    const m = new Map<number, ProductPackagingTypeFlags>();
+    (productPackagingTypeFlags ?? []).forEach(r => m.set(r.id, r));
+    return m;
+  }, [productPackagingTypeFlags]);
+
+  // singleProducts の表示文字列
   const singleProductsStrListObj = singleProducts.map((product) => {
     return {
       id: product.product_id,
       itemStr: `${product.product_short_name} <${product.internal_code}> ${product.display_category_name} ${product.component_amount}${product.component_unit_name} ${product.packaging_type}`,
     };
   });
-  const [packagingTypeText, setPackagingTypeText] = useState<string>('未分類');
 
   return (
     <>
@@ -64,17 +81,24 @@ export default function ProductEntryForm({ heading, isSet, setIsSet, gtinObj, se
         <FormProvider {...methods}>
           <form onSubmit={onPromise(methods.handleSubmit(onSubmit))}>
             <BasicProductFormContents
-              setPackagingTypeText={setPackagingTypeText}
               janCode={gtinObj.jan}
               setGtinObj={setGtinObj}
+              packagingMap={packagingMap}
               selectOptions={{
                 product_sourcing_types: productOptions.product_sourcing_types,
                 product_categories: productOptions.product_categories,
                 product_packaging_types: productOptions.product_packaging_types,
               }}
+              setPackagingFlags={setPackagingFlags}
             />
 
-            <ProductFormContents isSet={isSet} setIsSet={setIsSet} packagingTypeText={packagingTypeText} drawContents={{ basic_id: false, product_name: false }} selectOptions={{ suppliers: productOptions.suppliers }} />
+            <ProductFormContents
+              isSet={isSet}
+              setIsSet={setIsSet}
+              packagingFlags={packagingFlags}
+              drawContents={{ basic_id: false, product_name: false }}
+              selectOptions={{ suppliers: productOptions.suppliers }}
+            />
 
             <div className={css({ minH: '12.9rem' })}>
               {isSet === '0'

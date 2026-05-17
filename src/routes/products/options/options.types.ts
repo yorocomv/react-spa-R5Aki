@@ -2,7 +2,12 @@
 
 import type { z } from 'zod';
 
-import type { optionTypesSchemas, productOptionsIdAndNameSchemas } from './options.schemas';
+import type {
+  optionTypesSchemas,
+  productOptionsIdAndNameSchemas,
+  productPackagingTypeFlagsSchemas,
+} from './options.schemas';
 
 export type ProductOptionsIdAndName = z.infer<typeof productOptionsIdAndNameSchemas>;
 export type OptionTypes = z.infer<typeof optionTypesSchemas>;
+export type ProductPackagingTypeFlags = z.infer<typeof productPackagingTypeFlagsSchemas>;
