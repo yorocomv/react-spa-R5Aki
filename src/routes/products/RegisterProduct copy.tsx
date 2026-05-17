@@ -4,6 +4,7 @@ import type { ZodType } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState } from 'react';
 import { FormProvider, useFieldArray, useForm } from 'react-hook-form';
+import { useLocation, useParams } from 'react-router';
 
 import BubbleTailHeading from '@/components/ui/elements/BubbleTailHeading';
 import Button from '@/components/ui/elements/Button';
@@ -12,6 +13,7 @@ import FloatingLinkIcon from '@/components/ui/FloatingLinkIcon';
 import onPromise from '@/libs/onPromise';
 import { css } from 'styled-system/css';
 
+import type { ViewProductCombinationsArray, ViewProductComponentsArray, ViewSkuDetailsRow } from './products.dbTable.types';
 import type { NewProductCommonDefaultValues, PostReqNewProduct, PostReqNewSetProduct, PostReqNewUnifiedProduct } from './products.types';
 
 import BasicProductFormContents from './components/BasicProductFormContents';
@@ -49,8 +51,94 @@ interface Gtin {
   itf1: string | undefined;
   itf2: string | undefined;
 }
+type LocationState = Omit<ViewSkuDetailsRow, 'is_set_product'> & { is_set_product: '0' } & { components: ViewProductComponentsArray } |
+  Omit<ViewSkuDetailsRow, 'is_set_product'> & { is_set_product: '1' } & { combinations: ViewProductCombinationsArray };
 
 export default function RegisterProduct() {
+  const location = useLocation();
+  const url = location.pathname;
+  const locationState = location.state as LocationState;
+
+  const arrValue = locationState?.is_set_product === '1'
+    ? locationState?.combinations.map(({ item_product_id, quantity }) => ({
+      item_product_id,
+      quantity,
+    }))
+    : locationState?.components.map(({ symbol, category_id, title, amount, unit_type_id, pieces, inner_packaging_type_id }) => ({
+      symbol,
+      category_id,
+      title,
+      amount: Number.parseFloat(amount),
+      unit_type_id,
+      pieces,
+      inner_packaging_type_id,
+    }));
+
+  const productCommonReqBody = {
+    basic_name: locationState?.basic_product_name,
+    sourcing_type_id: locationState?.sourcing_type_id,
+    packaging_type_id: locationState?.packaging_type_id,
+    expiration_value: locationState?.expiration_value ?? undefined,
+    expiration_unit: locationState?.expiration_unit ?? undefined,
+    supplier_id: locationState?.supplier_id,
+    short_name: locationState?.product_short_name,
+    is_set_product: locationState?.is_set_product,
+    priority: locationState?.priority,
+    internal_code: locationState?.internal_code ?? undefined,
+    jan_code: locationState?.jan_code ?? undefined,
+    predecessor_id: locationState?.predecessor_id ?? undefined,
+    depth_mm: locationState?.depth_mm ?? undefined,
+    width_mm: locationState?.width_mm ?? undefined,
+    diameter_mm: locationState?.diameter_mm ?? undefined,
+    height_mm: locationState?.height_mm ?? undefined,
+    weight_g: locationState?.weight_g ?? undefined,
+    available_date: locationState?.available_date,
+    discontinued_date: locationState?.discontinued_date,
+    note: locationState?.product_note ?? undefined,
+    case_quantity: locationState?.case_quantity ?? undefined,
+    inner_carton_quantity: locationState?.inner_carton_quantity ?? undefined,
+    itf_case_code: locationState?.itf_case_code ?? undefined,
+    itf_inner_carton_code: locationState?.itf_inner_carton_code ?? undefined,
+    case_height_mm: locationState?.case_height_mm ?? undefined,
+    case_width_mm: locationState?.case_width_mm ?? undefined,
+    case_depth_mm: locationState?.case_depth_mm ?? undefined,
+    case_weight_g: locationState?.case_weight_g ?? undefined,
+    inner_carton_height_mm: locationState?.inner_carton_height_mm ?? undefined,
+    inner_carton_width_mm: locationState?.inner_carton_width_mm ?? undefined,
+    inner_carton_depth_mm: locationState?.inner_carton_depth_mm ?? undefined,
+    inner_carton_weight_g: locationState?.inner_carton_weight_g ?? undefined,
+  } as const;
+  interface CombinationItem { item_product_id: number; quantity: number }
+  interface ComponentItem {
+    symbol: string;
+    category_id: number;
+    title: string;
+    amount: number;
+    unit_type_id: number;
+    pieces: number;
+    inner_packaging_type_id: number;
+  }
+  const createPutReqBody = (isSetProduct: '0' | '1'): PostReqNewUnifiedProduct => {
+    if (isSetProduct === '1') {
+      return {
+        ...productCommonReqBody,
+        is_set_product: '1',
+        combinations: arrValue as CombinationItem[],
+      };
+    }
+    return {
+      ...productCommonReqBody,
+      is_set_product: '0',
+      components: arrValue as ComponentItem[],
+    };
+  };
+  const { id: skuId } = useParams();
+
+  if (!locationState?.sku_id && url !== '/products/new')
+    throw new Error('不正なルートでのアクセスを検知しました❢');
+  if (skuId && skuId !== locationState?.sku_id.toString())
+    throw new Error('不正なルートでのアクセスを検知しました❢');
+
   const [gtinObj, setGtinObj] = useState<Gtin>({
     jan: undefined,
     itf1: undefined,
@@ -67,12 +155,17 @@ export default function RegisterProduct() {
     };
   });
 
-  const determineDefaultValue = (
-    isSetMode: '0' | '1',
-    values?: PostReqNewUnifiedProduct,
+  const determineDefaultValue = (args: {
+    isSetMode: '0' | '1';
+    values?: PostReqNewUnifiedProduct;
+  } | {
+    putReqBody: PostReqNewUnifiedProduct;
+  },
   ): PostReqNewUnifiedProduct => {
-    const v = values ?? commonDefaultValues;
-    if (isSetMode === '0') {
+    if ('putReqBody' in args)
+      return args.putReqBody;
+    const v = args.values ?? commonDefaultValues;
+    if (args.isSetMode === '0') {
       return {
         ...v,
         is_set_product: '0',
@@ -89,11 +182,13 @@ export default function RegisterProduct() {
   const methods = useForm<PostReqNewUnifiedProduct>({
     mode: 'all',
     resolver: zodResolver(postReqNewUnifiedProductSchema as ZodType<PostReqNewUnifiedProduct>),
-    defaultValues: determineDefaultValue('0'),
+    defaultValues: skuId === locationState?.sku_id.toString()
+      ? determineDefaultValue({ putReqBody: createPutReqBody(locationState?.is_set_product) })
+      : determineDefaultValue({ isSetMode: '0' }),
   });
 
   useEffect(() => {
-    const currentValuesCopy = determineDefaultValue(isSet, methods.getValues());
+    const currentValuesCopy = determineDefaultValue({ isSetMode: isSet, values: methods.getValues() });
     methods.reset(currentValuesCopy);
   }, [isSet, methods]);
 
@@ -116,7 +211,7 @@ export default function RegisterProduct() {
       itf1: undefined,
       itf2: undefined,
     });
-    methods.reset(determineDefaultValue('0'));
+    methods.reset(determineDefaultValue({ isSetMode: '0' }));
     if (setsArray.fields.length) {
       setsArray.replace([]);
     }

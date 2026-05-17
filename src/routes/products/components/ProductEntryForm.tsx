@@ -1,3 +1,5 @@
+import type { SubmitHandler, UseFieldArrayReturn, UseFormReturn } from 'react-hook-form';
+
 import { useState } from 'react';
 import { FormProvider } from 'react-hook-form';
 
@@ -5,7 +7,11 @@ import BubbleTailHeading from '@/components/ui/elements/BubbleTailHeading';
 import Button from '@/components/ui/elements/Button';
 import FormContainer from '@/components/ui/elements/FormContainer';
 import FloatingLinkIcon from '@/components/ui/FloatingLinkIcon';
+import onPromise from '@/libs/onPromise';
 import { css } from 'styled-system/css';
+
+import type { PostReqNewProduct, PostReqNewSetProduct, PostReqNewUnifiedProduct } from '../products.types';
+import type { Gtin } from '../RegisterProductPage';
 
 import BasicProductFormContents from './BasicProductFormContents';
 import { useFetchProductOptions } from './hooks/useFetchProductOptions';
@@ -17,17 +23,20 @@ import ProductSkusFormContents from './ProductSkusFormContents';
 
 interface Props {
   heading: string;
+  isSet: '0' | '1';
+  setIsSet: React.Dispatch<React.SetStateAction<'0' | '1'>>;
+  gtinObj: Gtin;
+  setGtinObj: React.Dispatch<React.SetStateAction<Gtin>>;
+  methods: UseFormReturn<PostReqNewUnifiedProduct>;
+  componentsArray: UseFieldArrayReturn<PostReqNewUnifiedProduct>;
+  setsArray: UseFieldArrayReturn<PostReqNewUnifiedProduct>;
+  onSubmit: SubmitHandler<PostReqNewUnifiedProduct>;
+  handleReset: React.MouseEventHandler<HTMLButtonElement>;
+  componentDefaultValues: PostReqNewProduct['components'][0];
+  combinationDefaultValues: PostReqNewSetProduct['combinations'][0];
 }
 
-interface Gtin {
-  jan: string | undefined;
-  itf1: string | undefined;
-  itf2: string | undefined;
-}
-
-export default function ProductEntryForm({ heading }: Props) {
-  const [isSet, setIsSet] = useState<'0' | '1'>('0');
-  const [packagingTypeText, setPackagingTypeText] = useState<string>('未分類');
+export default function ProductEntryForm({ heading, isSet, setIsSet, gtinObj, setGtinObj, methods, componentsArray, setsArray, onSubmit, handleReset, componentDefaultValues, combinationDefaultValues }: Props) {
   const { productOptions } = useFetchProductOptions();
   const { singleProducts } = useFetchSingleProducts();
   const singleProductsStrListObj = singleProducts.map((product) => {
@@ -36,11 +45,7 @@ export default function ProductEntryForm({ heading }: Props) {
       itemStr: `${product.product_short_name} <${product.internal_code}> ${product.display_category_name} ${product.component_amount}${product.component_unit_name} ${product.packaging_type}`,
     };
   });
-  const [gtinObj, setGtinObj] = useState<Gtin>({
-    jan: undefined,
-    itf1: undefined,
-    itf2: undefined,
-  });
+  const [packagingTypeText, setPackagingTypeText] = useState<string>('未分類');
 
   return (
     <>
