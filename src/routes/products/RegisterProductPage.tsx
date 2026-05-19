@@ -2,7 +2,7 @@ import type { SubmitHandler } from 'react-hook-form';
 import type { ZodType } from 'zod';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 
 import type { NewProductCommonDefaultValues, PostReqNewProduct, PostReqNewSetProduct, PostReqNewUnifiedProduct } from './products.types';
@@ -43,7 +43,6 @@ export default function RegisterProductPage() {
     itf1: undefined,
     itf2: undefined,
   });
-  const [isSet, setIsSet] = useState<'0' | '1'>('0');
 
   const determineDefaultValue = (
     isSetMode: '0' | '1',
@@ -71,11 +70,7 @@ export default function RegisterProductPage() {
     // 📢重要：アンマウントされたフィールドの値をフォームから除去
     shouldUnregister: true,
   });
-
-  useEffect(() => {
-    const currentValuesCopy = determineDefaultValue(isSet, methods.getValues());
-    methods.reset(currentValuesCopy);
-  }, [isSet, methods]);
+  const isSet = methods.watch('is_set_product') || '0';
 
   const componentsArray = useFieldArray({
     name: 'components',
@@ -90,7 +85,6 @@ export default function RegisterProductPage() {
   const { registerProducts } = useRegisterProducts();
 
   const commonResetProcess = () => {
-    setIsSet('0');
     setGtinObj({
       jan: undefined,
       itf1: undefined,
@@ -124,12 +118,26 @@ export default function RegisterProductPage() {
     e.preventDefault();
     commonResetProcess();
   };
+  // セット品か否かで毎回実行するクレンジング＆初期化
+  const handleProductTypeChange = (nextType: '0' | '1') => {
+    methods.setValue('is_set_product', nextType);
+
+    // 切り替え先に応じて、FieldArray（配列）の中身を入れ替える
+    if (nextType === '0') {
+      setsArray.replace([]);
+      componentsArray.replace([componentDefaultValues]);
+    }
+    else {
+      componentsArray.replace([]);
+      setsArray.replace([combinationDefaultValues]);
+    }
+  };
 
   return (
     <ProductEntryForm
       heading="商品情報の登録"
       isSet={isSet}
-      setIsSet={setIsSet}
+      onTypeChange={handleProductTypeChange}
       gtinObj={gtinObj}
       setGtinObj={setGtinObj}
       methods={methods}
