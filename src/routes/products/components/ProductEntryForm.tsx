@@ -26,7 +26,7 @@ import ProductSkusFormContents from './ProductSkusFormContents';
 interface Props {
   heading: string;
   isSet: '0' | '1';
-  setIsSet: React.Dispatch<React.SetStateAction<'0' | '1'>>;
+  onTypeChange: (t: '0' | '1') => void;
   gtinObj: Gtin;
   setGtinObj: React.Dispatch<React.SetStateAction<Gtin>>;
   methods: UseFormReturn<PostReqNewUnifiedProduct>;
@@ -38,7 +38,7 @@ interface Props {
   combinationDefaultValues: PostReqNewSetProduct['combinations'][0];
 }
 
-export default function ProductEntryForm({ heading, isSet, setIsSet, gtinObj, setGtinObj, methods, componentsArray, setsArray, onSubmit, handleReset, componentDefaultValues, combinationDefaultValues }: Props) {
+export default function ProductEntryForm({ heading, isSet, onTypeChange, gtinObj, setGtinObj, methods, componentsArray, setsArray, onSubmit, handleReset, componentDefaultValues, combinationDefaultValues }: Props) {
   const { productOptions } = useFetchProductOptions();
   const { singleProducts } = useFetchSingleProducts();
   const { productPackagingTypeFlags } = useFetchProductPackagingTypeFlags();
@@ -94,7 +94,7 @@ export default function ProductEntryForm({ heading, isSet, setIsSet, gtinObj, se
 
             <ProductFormContents
               isSet={isSet}
-              setIsSet={setIsSet}
+              onTypeChange={onTypeChange}
               packagingFlags={packagingFlags}
               drawContents={{ basic_id: false, product_name: false }}
               selectOptions={{ suppliers: productOptions.suppliers }}

@@ -18,7 +18,7 @@ interface Props {
     suppliers: ProductOptionsIdAndName[];
   };
   isSet: '0' | '1';
-  setIsSet: React.Dispatch<React.SetStateAction<'0' | '1'>>;
+  onTypeChange: (type: '0' | '1') => void;
   packagingFlags: {
     has_depth: boolean;
     has_width: boolean;
@@ -26,12 +26,12 @@ interface Props {
   };
 }
 
-export default function ProductFormContents({ drawContents, selectOptions, isSet, setIsSet, packagingFlags }: Props) {
+export default function ProductFormContents({ drawContents, selectOptions, isSet, onTypeChange, packagingFlags }: Props) {
   const {
     register,
     formState: { errors },
   } = useFormContext<PostReqProductVariant>();
-  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => setIsSet(e.target.value as unknown as '0' | '1');
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => onTypeChange(e.target.value as unknown as '0' | '1');
   // 直径パターンかどうかを判定
   const isDiameterPattern = packagingFlags.has_diameter;
 
