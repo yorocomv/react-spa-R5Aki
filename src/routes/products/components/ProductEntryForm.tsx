@@ -12,7 +12,6 @@ import { css } from 'styled-system/css';
 
 import type { ProductPackagingTypeFlags } from '../options/options.types';
 import type { PostReqNewProduct, PostReqNewSetProduct, PostReqNewUnifiedProduct } from '../products.types';
-import type { Gtin } from '../RegisterProductPage';
 
 import BasicProductFormContents from './BasicProductFormContents';
 import { useFetchProductOptions } from './hooks/useFetchProductOptions';
@@ -27,22 +26,30 @@ interface Props {
   heading: string;
   isSet: '0' | '1';
   onTypeChange: (t: '0' | '1') => void;
-  gtinObj: Gtin;
-  setGtinObj: React.Dispatch<React.SetStateAction<Gtin>>;
   methods: UseFormReturn<PostReqNewUnifiedProduct>;
   componentsArray: UseFieldArrayReturn<PostReqNewUnifiedProduct>;
   setsArray: UseFieldArrayReturn<PostReqNewUnifiedProduct>;
-  onSubmit: SubmitHandler<PostReqNewUnifiedProduct>;
-  handleReset: React.MouseEventHandler<HTMLButtonElement>;
+  submitProcess: (val: PostReqNewUnifiedProduct) => Promise<boolean>;
+  resetProcess: () => void;
   componentDefaultValues: PostReqNewProduct['components'][0];
   combinationDefaultValues: PostReqNewSetProduct['combinations'][0];
 }
+export interface Gtin {
+  jan: string | undefined;
+  itf1: string | undefined;
+  itf2: string | undefined;
+}
 
-export default function ProductEntryForm({ heading, isSet, onTypeChange, gtinObj, setGtinObj, methods, componentsArray, setsArray, onSubmit, handleReset, componentDefaultValues, combinationDefaultValues }: Props) {
+export default function ProductEntryForm({ heading, isSet, onTypeChange, methods, componentsArray, setsArray, submitProcess, resetProcess, componentDefaultValues, combinationDefaultValues }: Props) {
   const { productOptions } = useFetchProductOptions();
   const { singleProducts } = useFetchSingleProducts();
   const { productPackagingTypeFlags } = useFetchProductPackagingTypeFlags();
 
+  const [gtinObj, setGtinObj] = useState<Gtin>({
+    jan: undefined,
+    itf1: undefined,
+    itf2: undefined,
+  });
   const [packagingFlags, setPackagingFlags] = useState({
     has_depth: false,
     has_width: false,
@@ -63,6 +70,17 @@ export default function ProductEntryForm({ heading, isSet, onTypeChange, gtinObj
       itemStr: `${product.product_short_name} <${product.internal_code}> ${product.display_category_name} ${product.component_amount}${product.component_unit_name} ${product.packaging_type}`,
     };
   });
+  const handleSubmit: SubmitHandler<PostReqNewUnifiedProduct> = async (val) => {
+    const isSuccess = await submitProcess(val);
+    if (isSuccess) {
+      setGtinObj({ jan: undefined, itf1: undefined, itf2: undefined });
+    }
+  };
+  const handleReset: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.preventDefault();
+    resetProcess();
+    setGtinObj({ jan: undefined, itf1: undefined, itf2: undefined });
+  };
 
   return (
     <>
@@ -79,7 +97,7 @@ export default function ProductEntryForm({ heading, isSet, onTypeChange, gtinObj
       <FloatingLinkIcon relativePath="/products" size="2rem" title="商品一覧に戻る" iconType="eye" />
       <FormContainer mergedStyles={css.raw({ px: '5rem', borderRadius: '2xl' })}>
         <FormProvider {...methods}>
-          <form onSubmit={onPromise(methods.handleSubmit(onSubmit))}>
+          <form onSubmit={onPromise(methods.handleSubmit(handleSubmit))}>
             <BasicProductFormContents
               janCode={gtinObj.jan}
               setGtinObj={setGtinObj}

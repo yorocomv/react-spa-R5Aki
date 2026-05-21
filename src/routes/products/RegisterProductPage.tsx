@@ -1,8 +1,6 @@
-import type { SubmitHandler } from 'react-hook-form';
 import type { ZodType } from 'zod';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 
 import type { NewProductCommonDefaultValues, PostReqNewProduct, PostReqNewSetProduct, PostReqNewUnifiedProduct } from './products.types';
@@ -31,19 +29,8 @@ const commonDefaultValues: NewProductCommonDefaultValues = {
   supplier_id: 1,
   priority: 'A',
 };
-export interface Gtin {
-  jan: string | undefined;
-  itf1: string | undefined;
-  itf2: string | undefined;
-}
 
 export default function RegisterProductPage() {
-  const [gtinObj, setGtinObj] = useState<Gtin>({
-    jan: undefined,
-    itf1: undefined,
-    itf2: undefined,
-  });
-
   const determineDefaultValue = (
     isSetMode: '0' | '1',
     values?: PostReqNewUnifiedProduct,
@@ -84,12 +71,7 @@ export default function RegisterProductPage() {
   });
   const { registerProducts } = useRegisterProducts();
 
-  const commonResetProcess = () => {
-    setGtinObj({
-      jan: undefined,
-      itf1: undefined,
-      itf2: undefined,
-    });
+  const resetProcess = () => {
     methods.reset(determineDefaultValue('0'));
     if (setsArray.fields.length) {
       setsArray.replace([]);
@@ -97,26 +79,25 @@ export default function RegisterProductPage() {
     methods.setFocus('basic_name');
   };
 
-  const onSubmit: SubmitHandler<PostReqNewUnifiedProduct> = async (values) => {
+  const submitProcess = async (values: PostReqNewUnifiedProduct): Promise<boolean> => {
     try {
       const response = await registerProducts({ url: values.is_set_product === '0' ? '' : '/set-item', values });
       if (response.isRegistered === true) {
         console.log(response);
-        commonResetProcess();
+        resetProcess();
+        return true;
       }
       else {
         console.error(response);
         // eslint-disable-next-line no-alert
         alert(`💥エラー⁉️\n${response.uniqueConstraintError.key}: ${response.uniqueConstraintError.value}\nは登録済みです`);
+        return false;
       }
     }
     catch (err) {
       console.error('💥💥💥 ', err, ' 💀💀💀');
+      return false;
     }
-  };
-  const handleReset: React.MouseEventHandler<HTMLButtonElement> = (e) => {
-    e.preventDefault();
-    commonResetProcess();
   };
   // セット品か否かで毎回実行するクレンジング＆初期化
   const handleProductTypeChange = (nextType: '0' | '1') => {
@@ -138,13 +119,11 @@ export default function RegisterProductPage() {
       heading="商品情報の登録"
       isSet={isSet}
       onTypeChange={handleProductTypeChange}
-      gtinObj={gtinObj}
-      setGtinObj={setGtinObj}
       methods={methods}
       componentsArray={componentsArray}
       setsArray={setsArray}
-      onSubmit={onSubmit}
-      handleReset={handleReset}
+      submitProcess={submitProcess}
+      resetProcess={resetProcess}
       componentDefaultValues={componentDefaultValues}
       combinationDefaultValues={combinationDefaultValues}
     />
