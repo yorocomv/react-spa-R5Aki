@@ -12,6 +12,7 @@ import { css } from 'styled-system/css';
 
 import type { ProductOptionsIdAndName, ProductPackagingTypeFlags } from '../options/options.types';
 import type { PostReqNewProduct } from '../products.types';
+import type { Gtin } from './ProductEntryForm';
 
 interface Props {
   selectOptions: {
@@ -21,11 +22,7 @@ interface Props {
   };
   packagingMap?: Map<number, ProductPackagingTypeFlags>;
   janCode: string | undefined;
-  setGtinObj: React.Dispatch<React.SetStateAction<{
-    jan: string | undefined;
-    itf1: string | undefined;
-    itf2: string | undefined;
-  }>>;
+  setGtinObj: React.Dispatch<React.SetStateAction<Gtin>>;
   setPackagingFlags?: (flags: { has_depth: boolean; has_width: boolean; has_diameter: boolean }) => void;
 }
 
