@@ -1,6 +1,11 @@
 {
   "cSpell.words": ["ejpc", "embla", "gtin", "dismissable", "hoge", "fuga", "jaconv", "oklch", "piyo", "preinstall", "reinit", "skus", "tanstack", "vstack"],
 
+  "prettify-ts.maxCharacters": 40000,
+  "prettify-ts.maxDepth": 2,
+  "prettify-ts.maxProperties": 2000,
+  "prettify-ts.maxUnionMembers": 30,
+
   // Disable the default formatter, use eslint instead
   "prettier.enable": false,
   "editor.formatOnSave": false,

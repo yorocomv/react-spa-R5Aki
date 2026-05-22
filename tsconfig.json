@@ -22,7 +22,10 @@
     "noUnusedParameters": true,
     "noEmit": true,
     "isolatedModules": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+
+    // エラーメッセージを（型定義ホバーも）省略しない
+    "noErrorTruncation": true
   },
   "references": [{ "path": "./tsconfig.node.json" }],
   "include": ["src"]

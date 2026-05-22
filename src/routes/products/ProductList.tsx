@@ -37,6 +37,9 @@ export default function ProductList() {
       </div>
       <Suspense fallback={(
         <div className={css({
+          pos: 'absolute',
+          top: 'calc(50dvh - 4.5rem)',
+          left: 'calc(50dvw - 4.5rem)',
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
