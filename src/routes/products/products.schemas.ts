@@ -237,3 +237,43 @@ export const newProductSummarySchema = z.object({
   product_name: z.string().trim().min(1).max(32),
   short_name: z.string().trim().min(1).max(32),
 });
+
+// 編集（網羅型）
+export const putReqProductFormValuesSchema = basicProductsSchema.extend({
+  ...productsSchema.shape,
+  components: productComponentsSchema.shape.components.element.extend({
+    component_id: z.number().int().positive(),
+  }).array().min(1).optional(),
+  combinations: productCombinationsSchema.shape.combinations.element.extend({
+    combination_id: z.number().int().positive(),
+  }).array().min(1).optional(),
+  ...productSkusSchema.shape,
+  sku_id: z.number().int().positive(),
+});
+
+// 通常商品の編集
+export const putReqProductSchema = basicProductsSchema.extend({
+  ...productsSchema.extend({ is_set_product: z.literal('0') }).shape,
+  components: productComponentsSchema.shape.components.element.extend({
+    component_id: z.number().int().positive(),
+  }).array().min(1),
+  ...productSkusSchema.shape,
+  sku_id: z.number().int().positive(),
+});
+
+// セット商品の編集
+export const putReqSetProductSchema = basicProductsSchema.extend({
+  ...productsSchema.extend({ is_set_product: z.literal('1') }).shape,
+  combinations: productCombinationsSchema.shape.combinations.element.extend({
+    combination_id: z.number().int().positive(),
+  }).array().min(1),
+  ...productSkusSchema.shape,
+  sku_id: z.number().int().positive(),
+});
+
+// 商品編集ユニオン型
+export const putReqUnifiedProductSchema = z.discriminatedUnion('is_set_product', [
+  putReqProductSchema,
+  putReqSetProductSchema,
+]);
+export type hoge = z.infer<typeof putReqUnifiedProductSchema>;

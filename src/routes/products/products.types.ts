@@ -11,6 +11,7 @@ import type {
   postReqNewUnifiedProductSchema,
   postReqProductVariantSchema,
   postReqSetProductVariantSchema,
+  putReqProductFormValuesSchema,
 } from './products.schemas';
 
 export type PostReqNewProduct = z.infer<typeof postReqNewProductSchema>;
@@ -19,6 +20,7 @@ export type PostReqNewUnifiedProduct = z.infer<typeof postReqNewUnifiedProductSc
 export type PostReqProductVariant = z.infer<typeof postReqProductVariantSchema>;
 export type PostReqSetProductVariant = z.infer<typeof postReqSetProductVariantSchema>;
 export type PostReqNewProductSku = z.infer<typeof postReqNewProductSkuSchema>;
+export type PutReqProductFormValues = z.infer<typeof putReqProductFormValuesSchema>;
 export type NewProductCommonDefaultValues = z.infer<typeof newProductCommonDefaultValuesSchema>;
 
 type NewProductSummary = z.infer<typeof newProductSummarySchema>;
