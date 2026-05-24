@@ -116,6 +116,7 @@ export default function RegisterProductPage() {
 
   return (
     <ProductEntryForm
+      mode="new"
       heading="商品情報の登録"
       isSet={isSet}
       onTypeChange={handleProductTypeChange}

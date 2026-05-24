@@ -23,16 +23,17 @@ import ProductFormContents from './ProductFormContents';
 import ProductSkusFormContents from './ProductSkusFormContents';
 
 interface Props {
+  mode: 'new' | 'edit';
   heading: string;
   isSet: '0' | '1';
-  onTypeChange: (t: '0' | '1') => void;
+  onTypeChange?: (t: '0' | '1') => void;
   methods: UseFormReturn<PostReqNewUnifiedProduct>;
   componentsArray: UseFieldArrayReturn<PostReqNewUnifiedProduct>;
   setsArray: UseFieldArrayReturn<PostReqNewUnifiedProduct>;
   submitProcess: (val: PostReqNewUnifiedProduct) => Promise<boolean>;
   resetProcess: () => void;
-  componentDefaultValues: PostReqNewProduct['components'][0];
-  combinationDefaultValues: PostReqNewSetProduct['combinations'][0];
+  componentDefaultValues?: PostReqNewProduct['components'][0];
+  combinationDefaultValues?: PostReqNewSetProduct['combinations'][0];
 }
 export interface Gtin {
   jan: string | undefined;
@@ -40,7 +41,7 @@ export interface Gtin {
   itf2: string | undefined;
 }
 
-export default function ProductEntryForm({ heading, isSet, onTypeChange, methods, componentsArray, setsArray, submitProcess, resetProcess, componentDefaultValues, combinationDefaultValues }: Props) {
+export default function ProductEntryForm({ mode, heading, isSet, onTypeChange, methods, componentsArray, setsArray, submitProcess, resetProcess, componentDefaultValues, combinationDefaultValues }: Props) {
   const { productOptions } = useFetchProductOptions();
   const { singleProducts } = useFetchSingleProducts();
   const { productPackagingTypeFlags } = useFetchProductPackagingTypeFlags();
@@ -111,6 +112,7 @@ export default function ProductEntryForm({ heading, isSet, onTypeChange, methods
             />
 
             <ProductFormContents
+              mode={mode}
               isSet={isSet}
               onTypeChange={onTypeChange}
               packagingFlags={packagingFlags}

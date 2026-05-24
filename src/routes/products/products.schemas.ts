@@ -4,6 +4,8 @@
 
 import { z } from 'zod';
 
+import { isEmpty, zNullDate, zNullPosInteger, zNullString, zOptDate, zOptPosInteger, zOptString } from '@/libs/zodDistributeEmpties';
+
 export const commonProductsSchema = z.object({
   id: z.coerce.number().int().positive(),
   created_at: z.string().trim().max(40),
@@ -12,13 +14,13 @@ export const commonProductsSchema = z.object({
 
 const basicProductsSchema = z.object({
   basic_name: z.string().trim().min(1).max(32),
-  internal_code: z.preprocess(v => (v === '' ? undefined : v), z.string().trim().min(5).max(10).optional()),
-  jan_code: z.preprocess(v => (v === '' ? undefined : v), z.string().trim().length(13).regex(/\d/).optional()),
+  internal_code: z.preprocess(v => (isEmpty(v) ? undefined : v), z.string().trim().min(5).max(10).optional()),
+  jan_code: z.preprocess(v => (isEmpty(v) ? undefined : v), z.string().trim().length(13).regex(/\d/).optional()),
   sourcing_type_id: z.coerce.number().int().positive(),
   packaging_type_id: z.coerce.number().int().positive(),
-  expiration_value: z.preprocess(v => (v === '' ? undefined : v), z.coerce.number().int().positive().optional()),
-  expiration_unit: z.enum(['D', 'M', 'Y']).optional(),
-  predecessor_id: z.preprocess(v => (v === '' ? undefined : v), z.coerce.number().int().positive().optional()),
+  expiration_value: zOptPosInteger,
+  expiration_unit: z.preprocess(v => (isEmpty(v) ? undefined : v), z.enum(['D', 'M', 'Y']).optional()),
+  predecessor_id: zOptPosInteger,
 });
 
 const productsSchema = z.object({
@@ -30,24 +32,14 @@ const productsSchema = z.object({
   // * cached_category_id
   // * display_category_name
   // * is_assorted はバックエンドで他の入力項目から導出
-  depth_mm: z.preprocess(v => (v === '' ? undefined : v), z.coerce.number().int().positive().optional()),
-  width_mm: z.preprocess(v => (v === '' ? undefined : v), z.coerce.number().int().positive().optional()),
-  diameter_mm: z.preprocess(v => (v === '' ? undefined : v), z.coerce.number().int().positive().optional()),
-  height_mm: z.preprocess(v => (v === '' ? undefined : v), z.coerce.number().int().positive().optional()),
-  weight_g: z.preprocess(v => (v === '' ? undefined : v), z.coerce.number().int().positive().optional()),
-  available_date: z.preprocess(
-    v => (v === '' ? undefined : v),
-    z.coerce
-      .date()
-      .optional(),
-  ),
-  discontinued_date: z.preprocess(
-    v => (v === '' ? undefined : v),
-    z.coerce
-      .date()
-      .optional(),
-  ),
-  note: z.string().optional(),
+  depth_mm: zOptPosInteger,
+  width_mm: zOptPosInteger,
+  diameter_mm: zOptPosInteger,
+  height_mm: zOptPosInteger,
+  weight_g: zOptPosInteger,
+  available_date: zOptDate,
+  discontinued_date: zOptDate,
+  note: zOptString,
 });
 
 const productComponentsSchema = z.object({
@@ -80,21 +72,18 @@ const productCombinationsSchema = z.object({
 const productSkusSchema = z.object({
   skus_name: z.string().trim().min(1).max(32),
   product_id: z.coerce.number().int().positive(),
-  case_quantity: z.preprocess(v => (v === '' ? undefined : v), z.coerce.number().int().positive().optional()),
-  inner_carton_quantity: z.preprocess(v => (v === '' ? undefined : v), z.coerce.number().int().positive().optional()),
-  itf_case_code: z.preprocess(v => (v === '' ? undefined : v), z.string().trim().length(14).regex(/\d/).optional()),
-  itf_inner_carton_code: z.preprocess(v => (v === '' ? undefined : v), z.string().trim().length(14).regex(/\d/).optional()),
-  case_height_mm: z.preprocess(v => (v === '' ? undefined : v), z.coerce.number().int().positive().optional()),
-  case_width_mm: z.preprocess(v => (v === '' ? undefined : v), z.coerce.number().int().positive().optional()),
-  case_depth_mm: z.preprocess(v => (v === '' ? undefined : v), z.coerce.number().int().positive().optional()),
-  case_weight_g: z.preprocess(v => (v === '' ? undefined : v), z.coerce.number().int().positive().optional()),
-  inner_carton_height_mm: z.preprocess(
-    v => (v === '' ? undefined : v),
-    z.coerce.number().int().positive().optional(),
-  ),
-  inner_carton_width_mm: z.preprocess(v => (v === '' ? undefined : v), z.coerce.number().int().positive().optional()),
-  inner_carton_depth_mm: z.preprocess(v => (v === '' ? undefined : v), z.coerce.number().int().positive().optional()),
-  inner_carton_weight_g: z.preprocess(v => (v === '' ? undefined : v), z.coerce.number().int().positive().optional()),
+  case_quantity: zOptPosInteger,
+  inner_carton_quantity: zOptPosInteger,
+  itf_case_code: z.preprocess(v => (isEmpty(v) ? undefined : v), z.string().trim().length(14).regex(/\d/).optional()),
+  itf_inner_carton_code: z.preprocess(v => (isEmpty(v) ? undefined : v), z.string().trim().length(14).regex(/\d/).optional()),
+  case_height_mm: zOptPosInteger,
+  case_width_mm: zOptPosInteger,
+  case_depth_mm: zOptPosInteger,
+  case_weight_g: zOptPosInteger,
+  inner_carton_height_mm: zOptPosInteger,
+  inner_carton_width_mm: zOptPosInteger,
+  inner_carton_depth_mm: zOptPosInteger,
+  inner_carton_weight_g: zOptPosInteger,
   priority: z.enum(['A', 'B', 'C']),
 });
 
@@ -239,7 +228,7 @@ export const newProductSummarySchema = z.object({
 });
 
 // 編集（網羅型）
-export const putReqProductFormValuesSchema = basicProductsSchema.extend({
+/* export const putReqProductFormValuesSchema = basicProductsSchema.extend({
   ...productsSchema.shape,
   components: productComponentsSchema.shape.components.element.extend({
     component_id: z.number().int().positive(),
@@ -249,7 +238,7 @@ export const putReqProductFormValuesSchema = basicProductsSchema.extend({
   }).array().min(1).optional(),
   ...productSkusSchema.shape,
   sku_id: z.number().int().positive(),
-});
+}); */
 
 // 通常商品の編集
 export const putReqProductSchema = basicProductsSchema.extend({
@@ -276,4 +265,40 @@ export const putReqUnifiedProductSchema = z.discriminatedUnion('is_set_product',
   putReqProductSchema,
   putReqSetProductSchema,
 ]);
-export type hoge = z.infer<typeof putReqUnifiedProductSchema>;
+
+// RHF の defaultValues 用 undefined -> null
+const nullableFields = {
+  internal_code: z.preprocess(v => (isEmpty(v) ? null : v), z.string().trim().min(5).max(10).nullable()),
+  jan_code: z.preprocess(v => (isEmpty(v) ? null : v), z.string().trim().length(13).regex(/\d/).nullable()),
+  expiration_value: zNullPosInteger,
+  expiration_unit: z.preprocess(v => (isEmpty(v) ? null : v), z.enum(['D', 'M', 'Y']).nullable()),
+  predecessor_id: zNullPosInteger,
+  depth_mm: zNullPosInteger,
+  width_mm: zNullPosInteger,
+  diameter_mm: zNullPosInteger,
+  height_mm: zNullPosInteger,
+  weight_g: zNullPosInteger,
+  available_date: zNullDate,
+  discontinued_date: zNullDate,
+  note: zNullString,
+  case_quantity: zNullPosInteger,
+  inner_carton_quantity: zNullPosInteger,
+  itf_case_code: z.preprocess(v => (isEmpty(v) ? undefined : v), z.string().trim().length(14).regex(/\d/).nullable()),
+  itf_inner_carton_code: z.preprocess(v => (isEmpty(v) ? undefined : v), z.string().trim().length(14).regex(/\d/).nullable()),
+  case_height_mm: zNullPosInteger,
+  case_width_mm: zNullPosInteger,
+  case_depth_mm: zNullPosInteger,
+  case_weight_g: zNullPosInteger,
+  inner_carton_height_mm: zNullPosInteger,
+  inner_carton_width_mm: zNullPosInteger,
+  inner_carton_depth_mm: zNullPosInteger,
+  inner_carton_weight_g: zNullPosInteger,
+};
+export const putReqDefaultValuesSchema = z.discriminatedUnion('is_set_product', [
+  putReqProductSchema.extend({
+    ...nullableFields,
+  }),
+  putReqSetProductSchema.extend({
+    ...nullableFields,
+  }),
+]);

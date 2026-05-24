@@ -10,6 +10,7 @@ import type { ProductOptionsIdAndName } from '../options/options.types';
 import type { PostReqProductVariant } from '../products.types';
 
 interface Props {
+  mode: 'new' | 'edit';
   drawContents?: {
     basic_id?: boolean;
     product_name?: boolean;
@@ -18,7 +19,7 @@ interface Props {
     suppliers: ProductOptionsIdAndName[];
   };
   isSet: '0' | '1';
-  onTypeChange: (type: '0' | '1') => void;
+  onTypeChange?: (type: '0' | '1') => void;
   packagingFlags: {
     has_depth: boolean;
     has_width: boolean;
@@ -26,12 +27,14 @@ interface Props {
   };
 }
 
-export default function ProductFormContents({ drawContents, selectOptions, isSet, onTypeChange, packagingFlags }: Props) {
+export default function ProductFormContents({ mode, drawContents, selectOptions, isSet, onTypeChange, packagingFlags }: Props) {
   const {
     register,
     formState: { errors },
   } = useFormContext<PostReqProductVariant>();
-  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => onTypeChange(e.target.value as unknown as '0' | '1');
+  const handleChange = onTypeChange
+    ? (e: React.ChangeEvent<HTMLSelectElement>) => onTypeChange(e.target.value as unknown as '0' | '1')
+    : null;
   // 直径パターンかどうかを判定
   const isDiameterPattern = packagingFlags.has_diameter;
 
@@ -77,19 +80,25 @@ export default function ProductFormContents({ drawContents, selectOptions, isSet
         <Input {...register('short_name')} id="short_name" placeholder="商品略称名" />
         <FormErrorMessage message={errors.short_name?.message} />
       </label>
-      <label htmlFor="is_set_product">
-        セット商品（ｎ／Ｙ）
-        <Select
-          value={isSet}
-          {...register('is_set_product')}
-          onChange={handleChange}
-          id="is_set_product"
-        >
-          <option key="false" value="0">ＮＯ</option>
-          <option key="true" value="1">ＹＥＳ</option>
-        </Select>
-        <FormErrorMessage message={errors.is_set_product?.message} />
-      </label>
+      {mode === 'new' && handleChange
+        ? (
+            <label htmlFor="is_set_product">
+              セット商品（ｎ／Ｙ）
+              <Select
+                value={isSet}
+                {...register('is_set_product')}
+                onChange={handleChange}
+                id="is_set_product"
+              >
+                <option key="false" value="0">ＮＯ</option>
+                <option key="true" value="1">ＹＥＳ</option>
+              </Select>
+              <FormErrorMessage message={errors.is_set_product?.message} />
+            </label>
+          )
+        : isSet === '0'
+          ? <div>通常商品</div>
+          : <div>セット商品</div>}
       {isDiameterPattern && !Number(isSet)
         ? (
             <fieldset>

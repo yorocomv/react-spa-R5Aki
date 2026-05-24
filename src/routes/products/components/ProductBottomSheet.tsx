@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router';
 import { css } from 'styled-system/css';
 
 import type { ViewSkuDetailsRow } from '../products.dbTable.types';
+import type { PutReqUnifiedProductWithNull } from '../products.types';
 
 import { useFetchProductCombinations } from './hooks/useFetchProductCombinations';
 import { useFetchProductComponents } from './hooks/useFetchProductComponents';
@@ -26,6 +27,55 @@ export default function ProductBottomSheet(p: ProductBottomSheetProps) {
   const { productCombinations } = useFetchProductCombinations({ productId: p.product_id, earlyReturn: !p.is_set_product });
   const { productComponents } = useFetchProductComponents({ productId: p.product_id, earlyReturn: p.is_set_product });
   const navigate = useNavigate();
+
+  // navigate.options.state 用に加工
+  const {
+    basic_product_id: basic_id,
+    basic_product_name: basic_name,
+    product_note: note,
+    product_short_name: short_name,
+    sku_name: skus_name,
+    ...rest
+  } = skuDetails;
+
+  const skuDetailsState = {
+    basic_id,
+    basic_name,
+    note,
+    short_name,
+    skus_name,
+    ...rest,
+  };
+
+  const combinationsState = productCombinations.map(({
+    combination_id,
+    quantity,
+    item_product_id,
+  }) => ({
+    combination_id,
+    quantity,
+    item_product_id,
+  }));
+
+  const componentsState = productComponents.map(({
+    symbol,
+    component_id,
+    title,
+    category_id,
+    amount,
+    unit_type_id,
+    pieces,
+    inner_packaging_type_id,
+  }) => ({
+    symbol,
+    component_id,
+    title,
+    category_id,
+    amount: Number(amount),
+    unit_type_id,
+    pieces,
+    inner_packaging_type_id,
+  }));
 
   return (
     <ModalOverlay isDismissable isOpen={isOpen} onOpenChange={() => setSelectedItem(-1)}>
@@ -59,9 +109,10 @@ export default function ProductBottomSheet(p: ProductBottomSheetProps) {
                 Promise.resolve(
                   navigate(`/products/sku/${p.sku_id}`, {
                     relative: 'path',
-                    state: is_set_product
-                      ? { ...skuDetails, is_set_product: '1', combinations: [...productCombinations] }
-                      : { ...skuDetails, is_set_product: '0', components: [...productComponents] },
+                    state: (is_set_product
+                      ? { ...skuDetailsState, is_set_product: '1', combinations: [...combinationsState] }
+                      // RHF の defaultValues には undefined を渡さない！
+                      : { ...skuDetailsState, is_set_product: '0', components: [...componentsState] }) satisfies PutReqUnifiedProductWithNull,
                   }),
                 ).catch((err: string) => { throw new Error(err); });
               }}

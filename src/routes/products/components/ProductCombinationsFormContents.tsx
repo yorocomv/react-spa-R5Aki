@@ -13,7 +13,7 @@ interface Props {
   index: number;
   remove: (index: number) => void;
   append: (data: PostReqNewSetProduct['combinations'][0]) => void;
-  defaultCombination: PostReqNewSetProduct['combinations'][0];
+  defaultCombination?: PostReqNewSetProduct['combinations'][0];
   isTail: boolean;
   singleProductsStrListObj: {
     id: number;
@@ -73,46 +73,50 @@ export default function ProductCombinationsFormContents({
         />
         <FormErrorMessage message={errors.combinations?.[index]?.quantity?.message} />
       </label>
-      <div className={css({
-        '&:has(svg)': {
-          mt: '1rem',
-          display: 'flex',
-          gap: '0.5rem',
-          alignItems: 'center',
-        },
-      })}
-      >
-        {isTail && index !== 0
-          ? (
-              <TooltipWrapper
-                text="削除"
-                fillColor="rose.500"
-                className={css({ color: 'rose.50', bgColor: 'rose.500', shadow: '2xl' })}
-              >
-                <TbTrash
-                  size="1.3rem"
-                  onClick={() => remove(index)}
-                  className={css({ _hover: { cursor: 'pointer' } })}
-                />
-              </TooltipWrapper>
-            )
-          : null}
-        {isTail
-          ? (
-              <TooltipWrapper
-                text="追加"
-                fillColor="teal.400"
-                className={css({ color: 'teal.950', bgColor: 'teal.400', shadow: '2xl' })}
-              >
-                <TbPencilPlus
-                  size="1.3rem"
-                  onClick={() => append(defaultCombination)}
-                  className={css({ _hover: { cursor: 'pointer' } })}
-                />
-              </TooltipWrapper>
-            )
-          : null}
-      </div>
+      {defaultCombination
+        ? (
+            <div className={css({
+              '&:has(svg)': {
+                mt: '1rem',
+                display: 'flex',
+                gap: '0.5rem',
+                alignItems: 'center',
+              },
+            })}
+            >
+              {isTail && index !== 0
+                ? (
+                    <TooltipWrapper
+                      text="削除"
+                      fillColor="rose.500"
+                      className={css({ color: 'rose.50', bgColor: 'rose.500', shadow: '2xl' })}
+                    >
+                      <TbTrash
+                        size="1.3rem"
+                        onClick={() => remove(index)}
+                        className={css({ _hover: { cursor: 'pointer' } })}
+                      />
+                    </TooltipWrapper>
+                  )
+                : null}
+              {isTail
+                ? (
+                    <TooltipWrapper
+                      text="追加"
+                      fillColor="teal.400"
+                      className={css({ color: 'teal.950', bgColor: 'teal.400', shadow: '2xl' })}
+                    >
+                      <TbPencilPlus
+                        size="1.3rem"
+                        onClick={() => append(defaultCombination)}
+                        className={css({ _hover: { cursor: 'pointer' } })}
+                      />
+                    </TooltipWrapper>
+                  )
+                : null}
+            </div>
+          )
+        : null}
     </div>
   );
 }
