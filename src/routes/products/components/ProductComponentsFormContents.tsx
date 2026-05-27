@@ -1,3 +1,5 @@
+import type { FieldErrorsImpl, FieldValues, Path } from 'react-hook-form';
+
 import { useFormContext } from 'react-hook-form';
 import { TbPencilPlus, TbTrash } from 'react-icons/tb';
 
@@ -8,13 +10,26 @@ import TooltipWrapper from '@/components/ui/TooltipWrapper';
 import { css } from 'styled-system/css';
 
 import type { ProductOptionsIdAndName } from '../options/options.types';
-import type { PostReqNewProduct } from '../products.types';
 
-interface Props {
+interface Props<
+  TForm extends {
+    components: {
+      symbol: string;
+      title: string;
+      category_id: number;
+      amount: number;
+      unit_type_id: number;
+      pieces: number;
+      inner_packaging_type_id: number;
+    }[];
+  },
+  TComponent extends FieldValues,
+> {
+  _typeMeta?: TForm;
   index: number;
   remove: (index: number) => void;
-  append: (data: PostReqNewProduct['components'][0]) => void;
-  defaultComponent?: PostReqNewProduct['components'][0];
+  append: (value: TComponent) => void;
+  defaultComponent?: TComponent;
   isTail: boolean;
   selectOptions: {
     product_categories: ProductOptionsIdAndName[];
@@ -23,18 +38,32 @@ interface Props {
   };
 }
 
-export default function ProductComponentsFormContents({
+export default function ProductComponentsFormContents<
+  TForm extends {
+    components: {
+      symbol: string;
+      title: string;
+      category_id: number;
+      amount: number;
+      unit_type_id: number;
+      pieces: number;
+      inner_packaging_type_id: number;
+    }[];
+  },
+  TComponent extends FieldValues,
+>({
   index,
   remove,
   append,
   defaultComponent,
   isTail,
   selectOptions,
-}: Props) {
+}: Props<TForm, TComponent>) {
   const {
     register,
     formState: { errors },
-  } = useFormContext<PostReqNewProduct>();
+  } = useFormContext<TForm>();
+  const componentErrors = errors.components as FieldErrorsImpl<TForm['components']> | undefined;
   const serialNumberStr = (i => i.toString().replace(/\d/g, s => String.fromCharCode(s.charCodeAt(0) + 0xFEE0)))(index + 1);
 
   return (
@@ -64,18 +93,18 @@ export default function ProductComponentsFormContents({
         <mark>顆粒</mark>
         か分かる場合は明記）
         <Input
-          {...register(`components.${index}.title` as const)}
+          {...register(`components.${index}.title` as Path<TForm>)}
           id={`components.${index}.title`}
           placeholder="内容物名"
         />
-        <FormErrorMessage message={errors.components?.[index]?.title?.message} />
+        <FormErrorMessage message={componentErrors?.[index]?.title?.message} />
       </label>
       <label htmlFor={`components.${index}.category_id`}>
         内容物（
         {serialNumberStr}
         ）カテゴリー
         <Select
-          {...register(`components.${index}.category_id` as const)}
+          {...register(`components.${index}.category_id` as Path<TForm>)}
           id={`components.${index}.category_id`}
         >
           {selectOptions.product_categories.map(({ id, name }) => (
@@ -84,16 +113,16 @@ export default function ProductComponentsFormContents({
             </option>
           ))}
         </Select>
-        <FormErrorMessage message={errors.components?.[index]?.category_id?.message} />
+        <FormErrorMessage message={componentErrors?.[index]?.category_id?.message} />
       </label>
       <label htmlFor={`components.${index}.symbol`}>
         記号
         <Input
-          {...register(`components.${index}.symbol` as const)}
+          {...register(`components.${index}.symbol` as Path<TForm>)}
           id={`components.${index}.symbol`}
           placeholder="記号"
         />
-        <FormErrorMessage message={errors.components?.[index]?.symbol?.message} />
+        <FormErrorMessage message={componentErrors?.[index]?.symbol?.message} />
       </label>
       <div aria-labelledby="expiration">
         <label htmlFor={`components.${index}.amount`}>
@@ -106,14 +135,14 @@ export default function ProductComponentsFormContents({
         })}
         >
           <Input
-            {...register(`components.${index}.amount` as const)}
+            {...register(`components.${index}.amount` as Path<TForm>)}
             id={`components.${index}.amount`}
             type="number"
             placeholder="個別内容量"
             className={css({ w: '10.25rem' })}
           />
           <Select
-            {...register(`components.${index}.unit_type_id` as const)}
+            {...register(`components.${index}.unit_type_id` as Path<TForm>)}
             id={`components.${index}.unit_type_id`}
           >
             {selectOptions.unit_types.map(({ id, name }) => (
@@ -124,20 +153,20 @@ export default function ProductComponentsFormContents({
           </Select>
           ✕
           <Input
-            {...register(`components.${index}.pieces` as const)}
+            {...register(`components.${index}.pieces` as Path<TForm>)}
             id={`components.${index}.pieces`}
             type="number"
             placeholder="商品入数"
             className={css({ w: '10.25rem' })}
           />
         </div>
-        <FormErrorMessage message={errors.components?.[index]?.amount?.message} />
-        <FormErrorMessage message={errors.components?.[index]?.pieces?.message} />
+        <FormErrorMessage message={componentErrors?.[index]?.amount?.message} />
+        <FormErrorMessage message={componentErrors?.[index]?.pieces?.message} />
       </div>
       <label htmlFor={`components.${index}.inner_packaging_type_id`}>
         小分けパッケージタイプ
         <Select
-          {...register(`components.${index}.inner_packaging_type_id` as const)}
+          {...register(`components.${index}.inner_packaging_type_id` as Path<TForm>)}
           id={`components.${index}.inner_packaging_type_id`}
         >
           {selectOptions.product_inner_packaging_types.map(({ id, name }) => (
@@ -146,7 +175,7 @@ export default function ProductComponentsFormContents({
             </option>
           ))}
         </Select>
-        <FormErrorMessage message={errors.components?.[index]?.inner_packaging_type_id?.message} />
+        <FormErrorMessage message={componentErrors?.[index]?.inner_packaging_type_id?.message} />
       </label>
       {defaultComponent
         ? (

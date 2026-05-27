@@ -1,4 +1,4 @@
-import type { SubmitHandler, UseFieldArrayReturn, UseFormReturn } from 'react-hook-form';
+import type { FieldValues, SubmitHandler, UseFieldArrayReturn, UseFormReturn } from 'react-hook-form';
 
 import { useMemo, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
@@ -11,7 +11,7 @@ import onPromise from '@/libs/onPromise';
 import { css } from 'styled-system/css';
 
 import type { ProductPackagingTypeFlags } from '../options/options.types';
-import type { PostReqNewProduct, PostReqNewSetProduct, PostReqNewUnifiedProduct } from '../products.types';
+import type { PostReqNewProduct, PostReqNewSetProduct } from '../products.types';
 
 import BasicProductFormContents from './BasicProductFormContents';
 import { useFetchProductOptions } from './hooks/useFetchProductOptions';
@@ -22,15 +22,19 @@ import ProductComponentsFormContents from './ProductComponentsFormContents';
 import ProductFormContents from './ProductFormContents';
 import ProductSkusFormContents from './ProductSkusFormContents';
 
-interface Props {
+interface Props<
+  TForm extends FieldValues,
+  TComponent extends FieldValues,
+  TCombination extends FieldValues,
+> {
   mode: 'new' | 'edit';
   heading: string;
   isSet: '0' | '1';
   onTypeChange?: (t: '0' | '1') => void;
-  methods: UseFormReturn<PostReqNewUnifiedProduct>;
-  componentsArray: UseFieldArrayReturn<PostReqNewUnifiedProduct>;
-  setsArray: UseFieldArrayReturn<PostReqNewUnifiedProduct>;
-  submitProcess: (val: PostReqNewUnifiedProduct) => Promise<boolean>;
+  methods: UseFormReturn<TForm>;
+  componentsArray: UseFieldArrayReturn<TComponent>;
+  setsArray: UseFieldArrayReturn<TCombination>;
+  submitProcess: (val: TForm) => Promise<boolean>;
   resetProcess: () => void;
   componentDefaultValues?: PostReqNewProduct['components'][0];
   combinationDefaultValues?: PostReqNewSetProduct['combinations'][0];
@@ -41,7 +45,11 @@ export interface Gtin {
   itf2: string | undefined;
 }
 
-export default function ProductEntryForm({ mode, heading, isSet, onTypeChange, methods, componentsArray, setsArray, submitProcess, resetProcess, componentDefaultValues, combinationDefaultValues }: Props) {
+export default function ProductEntryForm<
+  TForm extends FieldValues,
+  TComponent extends FieldValues,
+  TCombination extends FieldValues,
+>({ mode, heading, isSet, onTypeChange, methods, componentsArray, setsArray, submitProcess, resetProcess, componentDefaultValues, combinationDefaultValues }: Props<TForm, TComponent, TCombination>) {
   const { productOptions } = useFetchProductOptions();
   const { singleProducts } = useFetchSingleProducts();
   const { productPackagingTypeFlags } = useFetchProductPackagingTypeFlags();
@@ -71,7 +79,7 @@ export default function ProductEntryForm({ mode, heading, isSet, onTypeChange, m
       itemStr: `${product.product_short_name} <${product.internal_code}> ${product.display_category_name} ${product.component_amount}${product.component_unit_name} ${product.packaging_type}`,
     };
   });
-  const handleSubmit: SubmitHandler<PostReqNewUnifiedProduct> = async (val) => {
+  const handleSubmit: SubmitHandler<TForm> = async (val) => {
     const isSuccess = await submitProcess(val);
     if (isSuccess) {
       setGtinObj({ jan: undefined, itf1: undefined, itf2: undefined });
@@ -130,7 +138,8 @@ export default function ProductEntryForm({ mode, heading, isSet, onTypeChange, m
                           key={field.id}
                           index={index}
                           remove={componentsArray.remove}
-                          append={componentsArray.append}
+                          // eslint-disable-next-line ts/no-unsafe-argument, ts/no-explicit-any
+                          append={v => componentsArray.append(v as any)}
                           defaultComponent={componentDefaultValues}
                           isTail={isTail}
                           selectOptions={{
