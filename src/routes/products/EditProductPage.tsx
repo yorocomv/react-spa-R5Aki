@@ -1,33 +1,54 @@
-import type { z } from 'zod';
+import type { ZodType } from 'zod';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { useEffect } from 'react';
+import { useFieldArray, useForm } from 'react-hook-form';
 import { useLocation } from 'react-router';
+
+import type { PutReqUnifiedProduct } from './products.types';
 
 import { useRegisterProducts } from './components/hooks/useRegisterProducts';
 import ProductEntryForm from './components/ProductEntryForm';
 import { putReqDefaultValuesSchema, putReqUnifiedProductSchema } from './products.schemas';
 
-export type PutInput = z.input<typeof putReqUnifiedProductSchema>;
-export type PutOutput = z.output<typeof putReqUnifiedProductSchema>;
-
 export default function EditProductPage() {
-  const { registerProducts } = useRegisterProducts();
   const location = useLocation();
   const locationState = putReqDefaultValuesSchema.parse(location.state);
 
-  const methods = useForm<PutInput>({
+  const methods = useForm<PutReqUnifiedProduct>({
     mode: 'all',
-    resolver: zodResolver(putReqUnifiedProductSchema),
-    defaultValues: locationState,
+    resolver: zodResolver(putReqUnifiedProductSchema as ZodType<PutReqUnifiedProduct>),
+    defaultValues: locationState as PutReqUnifiedProduct,
   });
+
+  const componentsArray = useFieldArray({
+    name: 'components',
+    control: methods.control,
+    rules: { minLength: 1 },
+  });
+  const setsArray = useFieldArray({
+    name: 'combinations',
+    control: methods.control,
+    rules: { minLength: 1 },
+  });
+
+  useEffect(() => {
+    if (locationState.is_set_product === '0') {
+      componentsArray.replace(locationState.components);
+    }
+    else {
+      setsArray.replace(locationState.combinations);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const resetProcess = () => {
     methods.reset();
     methods.setFocus('basic_name');
   };
 
-  const submitProcess = async (values: PutOutput): Promise<boolean> => {
+  const { registerProducts } = useRegisterProducts();
+  const submitProcess = async (values: PutReqUnifiedProduct): Promise<boolean> => {
     try {
       const response = await registerProducts({ url: values.is_set_product === '0' ? '' : '/set-item', values });
       if (response.isRegistered === true) {
@@ -50,6 +71,7 @@ export default function EditProductPage() {
 
   return (
     <ProductEntryForm
+      mode="edit"
       heading={`${locationState.short_name} 商品情報の修正`}
       isSet={locationState.is_set_product}
       methods={methods}

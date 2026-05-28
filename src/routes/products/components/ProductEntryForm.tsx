@@ -1,4 +1,4 @@
-import type { FieldValues, SubmitHandler, UseFieldArrayReturn, UseFormReturn } from 'react-hook-form';
+import type { FieldArray, FieldValues, SubmitHandler, UseFieldArrayReturn, UseFormReturn } from 'react-hook-form';
 
 import { useMemo, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
@@ -11,7 +11,6 @@ import onPromise from '@/libs/onPromise';
 import { css } from 'styled-system/css';
 
 import type { ProductPackagingTypeFlags } from '../options/options.types';
-import type { PostReqNewProduct, PostReqNewSetProduct } from '../products.types';
 
 import BasicProductFormContents from './BasicProductFormContents';
 import { useFetchProductOptions } from './hooks/useFetchProductOptions';
@@ -36,8 +35,8 @@ interface Props<
   setsArray: UseFieldArrayReturn<TCombination>;
   submitProcess: (val: TForm) => Promise<boolean>;
   resetProcess: () => void;
-  componentDefaultValues?: PostReqNewProduct['components'][0];
-  combinationDefaultValues?: PostReqNewSetProduct['combinations'][0];
+  componentDefaultValues?: FieldArray<TComponent>;
+  combinationDefaultValues?: FieldArray<TCombination>;
 }
 export interface Gtin {
   jan: string | undefined;
@@ -138,8 +137,7 @@ export default function ProductEntryForm<
                           key={field.id}
                           index={index}
                           remove={componentsArray.remove}
-                          // eslint-disable-next-line ts/no-unsafe-argument, ts/no-explicit-any
-                          append={v => componentsArray.append(v as any)}
+                          append={componentsArray.append}
                           defaultComponent={componentDefaultValues}
                           isTail={isTail}
                           selectOptions={{

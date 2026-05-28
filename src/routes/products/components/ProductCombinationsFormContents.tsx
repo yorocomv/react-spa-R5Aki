@@ -1,3 +1,5 @@
+import type { FieldArray, FieldErrorsImpl, FieldValues, Path, UseFieldArrayAppend } from 'react-hook-form';
+
 import { Controller, useFormContext } from 'react-hook-form';
 import { TbPencilPlus, TbTrash } from 'react-icons/tb';
 
@@ -7,13 +9,21 @@ import FormErrorMessage from '@/components/ui/elementSwitchers/FormErrorMessage'
 import TooltipWrapper from '@/components/ui/TooltipWrapper';
 import { css } from 'styled-system/css';
 
-import type { PostReqNewSetProduct } from '../products.types';
-
-interface Props {
+interface Props<
+  TForm extends FieldValues & {
+    combinations: {
+      combination_id?: number;
+      item_product_id: number;
+      quantity: number;
+    }[];
+  },
+  TCombination extends FieldValues,
+> {
+  _typeMeta?: TForm;
   index: number;
   remove: (index: number) => void;
-  append: (data: PostReqNewSetProduct['combinations'][0]) => void;
-  defaultCombination?: PostReqNewSetProduct['combinations'][0];
+  append: UseFieldArrayAppend<TCombination>;
+  defaultCombination?: FieldArray<TCombination>;
   isTail: boolean;
   singleProductsStrListObj: {
     id: number;
@@ -21,19 +31,29 @@ interface Props {
   }[];
 }
 
-export default function ProductCombinationsFormContents({
+export default function ProductCombinationsFormContents<
+  TForm extends FieldValues & {
+    combinations: {
+      combination_id?: number;
+      item_product_id: number;
+      quantity: number;
+    }[];
+  },
+  TCombination extends FieldValues,
+>({
   index,
   remove,
   append,
   defaultCombination,
   isTail,
   singleProductsStrListObj,
-}: Props) {
+}: Props<TForm, TCombination>) {
   const {
     register,
     control,
     formState: { errors },
-  } = useFormContext<PostReqNewSetProduct>();
+  } = useFormContext<TForm>();
+  const combinationErrors = errors.combinations as FieldErrorsImpl<TForm['combinations']>;
   const label = (i => `セット内訳（構成物${i.toString().replace(/\d/g, s => String.fromCharCode(s.charCodeAt(0) + 0xFEE0))}） PRODUCT-ID`)(index + 1);
 
   return (
@@ -50,7 +70,7 @@ export default function ProductCombinationsFormContents({
         {label}
         <Controller
           control={control}
-          name={`combinations.${index}.item_product_id`}
+          name={`combinations.${index}.item_product_id` as Path<TForm>}
           render={({ field }) => (
             <ComboField
               {...field}
@@ -60,18 +80,18 @@ export default function ProductCombinationsFormContents({
             />
           )}
         />
-        <FormErrorMessage message={errors.combinations?.[index]?.item_product_id?.message} />
+        <FormErrorMessage message={combinationErrors?.[index]?.item_product_id?.message} />
       </label>
       <label htmlFor={`combinations.${index}.quantity`}>
         セット内訳入数
         <Input
-          {...register(`combinations.${index}.quantity` as const)}
+          {...register(`combinations.${index}.quantity` as Path<TForm>)}
           id={`combinations.${index}.quantity`}
           type="number"
           placeholder="セット内訳入数"
           className={css({ w: '10.25rem' })}
         />
-        <FormErrorMessage message={errors.combinations?.[index]?.quantity?.message} />
+        <FormErrorMessage message={combinationErrors?.[index]?.quantity?.message} />
       </label>
       {defaultCombination
         ? (

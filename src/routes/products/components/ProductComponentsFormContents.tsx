@@ -1,4 +1,4 @@
-import type { FieldErrorsImpl, FieldValues, Path } from 'react-hook-form';
+import type { FieldArray, FieldErrorsImpl, FieldValues, Path, UseFieldArrayAppend } from 'react-hook-form';
 
 import { useFormContext } from 'react-hook-form';
 import { TbPencilPlus, TbTrash } from 'react-icons/tb';
@@ -12,8 +12,9 @@ import { css } from 'styled-system/css';
 import type { ProductOptionsIdAndName } from '../options/options.types';
 
 interface Props<
-  TForm extends {
+  TForm extends FieldValues & {
     components: {
+      component_id?: number;
       symbol: string;
       title: string;
       category_id: number;
@@ -28,8 +29,8 @@ interface Props<
   _typeMeta?: TForm;
   index: number;
   remove: (index: number) => void;
-  append: (value: TComponent) => void;
-  defaultComponent?: TComponent;
+  append: UseFieldArrayAppend<TComponent>;
+  defaultComponent?: FieldArray<TComponent>;
   isTail: boolean;
   selectOptions: {
     product_categories: ProductOptionsIdAndName[];
@@ -39,7 +40,7 @@ interface Props<
 }
 
 export default function ProductComponentsFormContents<
-  TForm extends {
+  TForm extends FieldValues & {
     components: {
       symbol: string;
       title: string;

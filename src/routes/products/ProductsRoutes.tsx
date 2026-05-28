@@ -1,7 +1,7 @@
 import { Route, Routes } from 'react-router';
 
+import EditProductPage from './EditProductPage';
 import ProductList from './ProductList';
-import RegisterProduct from './RegisterProduct';
 import RegisterProductPage from './RegisterProductPage';
 
 export default function ProductsRoutes() {
@@ -9,7 +9,7 @@ export default function ProductsRoutes() {
     <Routes>
       <Route path="/" element={<ProductList />} />
       <Route path="/new" element={<RegisterProductPage />} />
-      <Route path="/sku/:id" element={<RegisterProduct />} />
+      <Route path="/sku/:id" element={<EditProductPage />} />
     </Routes>
   );
 }
