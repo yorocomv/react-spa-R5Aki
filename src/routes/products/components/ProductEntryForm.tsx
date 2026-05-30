@@ -103,7 +103,7 @@ export default function ProductEntryForm<
         {heading}
       </BubbleTailHeading>
       <FloatingLinkIcon relativePath="/products" size="2rem" title="商品一覧に戻る" iconType="eye" />
-      <FormContainer mergedStyles={css.raw({ px: '5rem', borderRadius: '2xl' })}>
+      <FormContainer mergedStyles={css.raw({ px: '5rem', borderRadius: '2xl', overflowX: 'visible' })}>
         <FormProvider {...methods}>
           <form onSubmit={onPromise(methods.handleSubmit(handleSubmit))}>
             <BasicProductFormContents
@@ -172,8 +172,14 @@ export default function ProductEntryForm<
               itf1={gtinObj.itf1}
               itf2={gtinObj.itf2}
             />
-            <div className={css({ mt: 4 })}>
-              <Button disabled={methods.formState.isSubmitting} type="submit">登録</Button>
+            <div className={css({
+              display: 'flex',
+              justifyContent: 'flex-end',
+              width: 'calc(100% + 3rem)',
+              mt: 4,
+            })}
+            >
+              <Button disabled={methods.formState.isSubmitting} type="submit">{mode === 'new' ? '登録' : '修正'}</Button>
               <Button
                 onClick={handleReset}
                 disabled={methods.formState.isSubmitting}
@@ -182,7 +188,7 @@ export default function ProductEntryForm<
                   ml: 1,
                 })}
               >
-                クリア
+                {mode === 'new' ? 'クリア' : 'リセット'}
               </Button>
             </div>
           </form>

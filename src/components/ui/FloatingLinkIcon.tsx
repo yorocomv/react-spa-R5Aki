@@ -26,6 +26,9 @@ export default function FloatingLinkIcon({ relativePath, size, title, iconType }
       borderRadius: '50%',
       boxShadow: '2xl',
     });
+    const TooltipPos = css.raw({
+      pos: 'fixed!',
+    });
     switch (type) {
       case 'goToSearch':
         return (
@@ -33,7 +36,7 @@ export default function FloatingLinkIcon({ relativePath, size, title, iconType }
             text={title}
             fillColor="teal.400"
             placement="bottom end"
-            className={css({ color: 'teal.950', bgColor: 'teal.400', shadow: '2xl' })}
+            className={css(TooltipPos, { color: 'teal.950', bgColor: 'teal.400', shadow: '2xl' })}
           >
             <VscGoToSearch
               className={css(style, {
@@ -53,7 +56,7 @@ export default function FloatingLinkIcon({ relativePath, size, title, iconType }
             text={title}
             fillColor="violet.500"
             placement="bottom end"
-            className={css({ color: 'violet.50', bgColor: 'violet.500', shadow: '2xl' })}
+            className={css(TooltipPos, { color: 'violet.50', bgColor: 'violet.500', shadow: '2xl' })}
           >
             <FaEye
               className={css(style, {
