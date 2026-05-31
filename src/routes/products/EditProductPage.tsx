@@ -7,7 +7,7 @@ import { useLocation } from 'react-router';
 
 import type { PutReqUnifiedProduct } from './products.types';
 
-import { useRegisterProducts } from './components/hooks/useRegisterProducts';
+import { useUpdateProducts } from './components/hooks/useUpdateProducts';
 import ProductEntryForm from './components/ProductEntryForm';
 import { putReqDefaultValuesSchema, putReqUnifiedProductSchema } from './products.schemas';
 
@@ -47,21 +47,13 @@ export default function EditProductPage() {
     methods.setFocus('basic_name');
   };
 
-  const { registerProducts } = useRegisterProducts();
+  const { updateProducts } = useUpdateProducts();
   const submitProcess = async (values: PutReqUnifiedProduct): Promise<boolean> => {
     try {
-      const response = await registerProducts({ url: values.is_set_product === '0' ? '' : '/set-item', values });
-      if (response.isRegistered === true) {
-        console.log(response);
-        resetProcess();
-        return true;
-      }
-      else {
-        console.error(response);
-        // eslint-disable-next-line no-alert
-        alert(`💥エラー⁉️\n${response.uniqueConstraintError.key}: ${response.uniqueConstraintError.value}\nは登録済みです`);
-        return false;
-      }
+      console.log(values);
+      const response = await updateProducts({ url: values.is_set_product === '0' ? '' : '/set-item', values });
+      console.log(response);
+      return true;
     }
     catch (err) {
       console.error('💥💥💥 ', err, ' 💀💀💀');

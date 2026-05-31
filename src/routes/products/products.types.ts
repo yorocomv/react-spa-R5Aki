@@ -20,7 +20,6 @@ export type PostReqNewUnifiedProduct = z.infer<typeof postReqNewUnifiedProductSc
 export type PostReqProductVariant = z.infer<typeof postReqProductVariantSchema>;
 export type PostReqSetProductVariant = z.infer<typeof postReqSetProductVariantSchema>;
 export type PostReqNewProductSku = z.infer<typeof postReqNewProductSkuSchema>;
-/* export type PutReqProductFormValues = z.infer<typeof putReqProductFormValuesSchema>; */
 export type PutReqUnifiedProduct = z.infer<typeof putReqUnifiedProductSchema>;
 
 // 型レベルで undefined を null に置換する再帰的なマッピング型
