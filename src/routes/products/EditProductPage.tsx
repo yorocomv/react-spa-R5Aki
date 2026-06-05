@@ -50,10 +50,17 @@ export default function EditProductPage() {
   const { updateProducts } = useUpdateProducts();
   const submitProcess = async (values: PutReqUnifiedProduct): Promise<boolean> => {
     try {
-      console.log(values);
       const response = await updateProducts({ url: values.is_set_product === '0' ? '' : '/set-item', values });
-      console.log(response);
-      return true;
+      if (response.isUpdated === true) {
+        console.log(response);
+        return true;
+      }
+      else {
+        console.error(response);
+        // eslint-disable-next-line no-alert
+        alert(`💥エラー⁉️\n${response.uniqueConstraintError.key}: ${response.uniqueConstraintError.value}\nは登録済みです`);
+        return false;
+      }
     }
     catch (err) {
       console.error('💥💥💥 ', err, ' 💀💀💀');

@@ -2,6 +2,7 @@ import type { FieldArray, FieldValues, SubmitHandler, UseFieldArrayReturn, UseFo
 
 import { useMemo, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
+import { useNavigate } from 'react-router';
 
 import BubbleTailHeading from '@/components/ui/elements/BubbleTailHeading';
 import Button from '@/components/ui/elements/Button';
@@ -49,6 +50,8 @@ export default function ProductEntryForm<
   TComponent extends FieldValues,
   TCombination extends FieldValues,
 >({ mode, heading, isSet, onTypeChange, methods, componentsArray, setsArray, submitProcess, resetProcess, componentDefaultValues, combinationDefaultValues }: Props<TForm, TComponent, TCombination>) {
+  const navigate = useNavigate();
+
   const { productOptions } = useFetchProductOptions();
   const { singleProducts } = useFetchSingleProducts();
   const { productPackagingTypeFlags } = useFetchProductPackagingTypeFlags();
@@ -82,6 +85,11 @@ export default function ProductEntryForm<
     const isSuccess = await submitProcess(val);
     if (isSuccess) {
       setGtinObj({ jan: undefined, itf1: undefined, itf2: undefined });
+    }
+    if (mode === 'edit') {
+      Promise.resolve(navigate('/products')).catch((err: string) => {
+        throw new Error(err);
+      });
     }
   };
   const handleReset: React.MouseEventHandler<HTMLButtonElement> = (e) => {

@@ -8,6 +8,7 @@ import Select from '@/components/ui/elements/Select';
 import FormErrorMessage from '@/components/ui/elementSwitchers/FormErrorMessage';
 import FormSuggestion from '@/components/ui/elementSwitchers/FormSuggestion';
 import env from '@/env';
+import checkKeyDown from '@/libs/checkKeyDown';
 import { css } from 'styled-system/css';
 
 import type { ProductOptionsIdAndName, ProductPackagingTypeFlags } from '../options/options.types';
@@ -83,6 +84,7 @@ export default function BasicProductFormContents({ selectOptions, packagingMap, 
         商品カタログ掲載名
         <Input
           {...register('basic_name')}
+          onKeyDown={e => checkKeyDown(e, 'internal_code')}
           id="basic_name"
           placeholder="商品カタログ掲載名"
           className={css({ w: '25rem' })}
@@ -96,6 +98,7 @@ export default function BasicProductFormContents({ selectOptions, packagingMap, 
         品番（社内コード）
         <Input
           {...register('internal_code')}
+          onKeyDown={e => checkKeyDown(e, 'jan_code')}
           onChange={handleSetGtinCode}
           id="internal_code"
           placeholder="品番（社内コード）"
@@ -106,6 +109,7 @@ export default function BasicProductFormContents({ selectOptions, packagingMap, 
         ＪＡＮコード
         <Input
           {...register('jan_code')}
+          onKeyDown={e => checkKeyDown(e, 'expiration_value')}
           id="jan_code"
           placeholder="ＪＡＮコード"
           className={css({ w: '12.75rem' })}
@@ -145,6 +149,7 @@ export default function BasicProductFormContents({ selectOptions, packagingMap, 
         >
           <Input
             {...register('expiration_value')}
+            onKeyDown={e => checkKeyDown(e, 'predecessor_id')}
             id="expiration_value"
             type="number"
             placeholder="賞味期限（期間）"
