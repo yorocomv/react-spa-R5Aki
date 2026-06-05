@@ -234,7 +234,7 @@ export default function ProductBottomSheet(p: ProductBottomSheetProps) {
                       商品カテゴリー
                       <ul>
                         <li>
-                          {p.category_name}
+                          {p.display_category_name}
                           {p.is_set_product ? <strong className={css({ ml: '1rem' })}>（セット商品）</strong> : null}
                         </li>
                       </ul>

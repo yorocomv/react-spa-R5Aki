@@ -54,3 +54,14 @@ export type PostResNewProduct = {
     value: string;
   };
 };
+
+export type PutResProduct = {
+  isUpdated: true;
+  rows: NewProductSummary;
+} | {
+  isUpdated: false;
+  uniqueConstraintError: {
+    key: string;
+    value: string;
+  };
+};

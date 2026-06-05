@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import axiosInstance from '@/util/axiosInstance';
 
-import type { PutReqUnifiedProduct, PutReqUnifiedProductWithNull } from '../../products.types';
+import type { PutReqUnifiedProduct, PutResProduct } from '../../products.types';
 
 interface UseUpdateProductsProps {
   url: '' | '/set-item';
@@ -12,7 +12,7 @@ interface UseUpdateProductsProps {
 }
 
 async function updateProductsMutationFn({ url, values }: UseUpdateProductsProps) {
-  const response: AxiosResponse<PutReqUnifiedProductWithNull> = await axiosInstance.put(`/products${url}`, values).catch((err: string) => {
+  const response: AxiosResponse<PutResProduct> = await axiosInstance.put(`/products${url}`, values).catch((err: string) => {
     console.error(`💥💥💥 /products${url} からのエラーをキャッチ❢ ${err} 💀💀💀`);
     return Promise.reject(new Error(err));
   });
