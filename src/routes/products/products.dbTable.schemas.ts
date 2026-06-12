@@ -3,6 +3,22 @@
 
 import { z } from 'zod';
 
+import { basicProductsSchema, commonProductsSchema } from './products.schemas';
+
+export const basicProductsTbRowSchema = commonProductsSchema
+  .merge(basicProductsSchema)
+  .omit({
+    basic_name: true,
+  })
+  .extend({
+    name: z.string().trim().min(1).max(32),
+    internal_code: z.string().trim().min(5).max(10).nullable(),
+    jan_code: z.string().trim().length(13).regex(/\d/).nullable(),
+    expiration_value: z.number().int().positive().nullable(),
+    expiration_unit: z.enum(['D', 'M', 'Y']).nullable(),
+    predecessor_id: z.number().int().positive().nullable(),
+  });
+
 export const viewSingleProductsRowSchema = z.object({
   // Product (単体商品)
   product_id: z.number().int().positive(),

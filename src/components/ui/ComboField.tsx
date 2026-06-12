@@ -13,7 +13,7 @@ interface ComboFieldProps {
   }[];
   // RHFのControllerから渡される値とハンドラを受け取る
   value?: number | string | null;
-  onChange?: (value: number | string) => void;
+  onChange?: (value: number | string | null) => void;
   ariaLabel?: string;
 }
 
@@ -29,7 +29,7 @@ export default function ComboField({
       selectedKey={value}
       onSelectionChange={(key: Key | null) => {
         // RHF に変更を通知する
-        if (onChange && key !== null) {
+        if (onChange) {
           onChange(key);
         }
       }}

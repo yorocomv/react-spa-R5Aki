@@ -4,6 +4,7 @@ import Input from '@/components/ui/elements/Input';
 import Select from '@/components/ui/elements/Select';
 import FormErrorMessage from '@/components/ui/elementSwitchers/FormErrorMessage';
 import FormSuggestion from '@/components/ui/elementSwitchers/FormSuggestion';
+import checkKeyDown from '@/libs/checkKeyDown';
 import { css } from 'styled-system/css';
 
 import type { PostReqNewProductSku } from '../products.types';
@@ -29,7 +30,7 @@ export default function ProductSkusFormContents({ drawContents, itf1, itf2 }: Pr
         ? (
             <label htmlFor="skus_name">
               ＳＫＵ名
-              <Input {...register('skus_name')} id="skus_name" placeholder="ＳＫＵ名" />
+              <Input {...register('skus_name')} onKeyDown={e => checkKeyDown(e, 'case_quantity')} id="skus_name" placeholder="ＳＫＵ名" />
               <FormErrorMessage message={errors.skus_name?.message} />
             </label>
           )
@@ -38,7 +39,7 @@ export default function ProductSkusFormContents({ drawContents, itf1, itf2 }: Pr
         ? (
             <label htmlFor="product_id">
               PRODUCT-ID
-              <Input {...register('product_id')} id="product_id" placeholder="PRODUCT-ID" />
+              <Input {...register('product_id')} onKeyDown={e => checkKeyDown(e, 'case_quantity')} id="product_id" placeholder="PRODUCT-ID" />
               <FormErrorMessage message={errors.product_id?.message} />
             </label>
           )
@@ -47,6 +48,7 @@ export default function ProductSkusFormContents({ drawContents, itf1, itf2 }: Pr
         ケース入数
         <Input
           {...register('case_quantity')}
+          onKeyDown={e => checkKeyDown(e, 'itf_case_code')}
           id="case_quantity"
           type="number"
           placeholder="ケース入数"
@@ -58,6 +60,7 @@ export default function ProductSkusFormContents({ drawContents, itf1, itf2 }: Pr
         ＩＴＦコード（ケース）
         <Input
           {...register('itf_case_code')}
+          onKeyDown={e => checkKeyDown(e, 'case_depth_mm')}
           id="itf_case_code"
           placeholder="ＩＴＦコード（ケース）"
           className={css({ w: '12.75rem' })}
@@ -75,6 +78,7 @@ export default function ProductSkusFormContents({ drawContents, itf1, itf2 }: Pr
         >
           <Input
             {...register('case_depth_mm')}
+            onKeyDown={e => checkKeyDown(e, 'case_width_mm')}
             id="case_depth_mm"
             type="number"
             placeholder="縦 mm"
@@ -82,6 +86,7 @@ export default function ProductSkusFormContents({ drawContents, itf1, itf2 }: Pr
           />
           <Input
             {...register('case_width_mm')}
+            onKeyDown={e => checkKeyDown(e, 'case_height_mm')}
             id="case_width_mm"
             type="number"
             placeholder="横 mm"
@@ -89,6 +94,7 @@ export default function ProductSkusFormContents({ drawContents, itf1, itf2 }: Pr
           />
           <Input
             {...register('case_height_mm')}
+            onKeyDown={e => checkKeyDown(e, 'case_weight_g')}
             id="case_height_mm"
             type="number"
             placeholder="高さ mm"
@@ -103,6 +109,7 @@ export default function ProductSkusFormContents({ drawContents, itf1, itf2 }: Pr
         ケース重量 g
         <Input
           {...register('case_weight_g')}
+          onKeyDown={e => checkKeyDown(e, 'inner_carton_quantity')}
           id="case_weight_g"
           type="number"
           placeholder="重量 g"
@@ -114,6 +121,7 @@ export default function ProductSkusFormContents({ drawContents, itf1, itf2 }: Pr
         ボール入数
         <Input
           {...register('inner_carton_quantity')}
+          onKeyDown={e => checkKeyDown(e, 'itf_inner_carton_code')}
           id="inner_carton_quantity"
           type="number"
           placeholder="ボール入数"
@@ -125,6 +133,7 @@ export default function ProductSkusFormContents({ drawContents, itf1, itf2 }: Pr
         ＩＴＦコード（ボール）
         <Input
           {...register('itf_inner_carton_code')}
+          onKeyDown={e => checkKeyDown(e, 'inner_carton_depth_mm')}
           id="itf_inner_carton_code"
           placeholder="ＩＴＦコード（ボール）"
           className={css({ w: '12.75rem' })}
@@ -142,6 +151,7 @@ export default function ProductSkusFormContents({ drawContents, itf1, itf2 }: Pr
         >
           <Input
             {...register('inner_carton_depth_mm')}
+            onKeyDown={e => checkKeyDown(e, 'inner_carton_width_mm')}
             id="inner_carton_depth_mm"
             type="number"
             placeholder="縦 mm"
@@ -149,6 +159,7 @@ export default function ProductSkusFormContents({ drawContents, itf1, itf2 }: Pr
           />
           <Input
             {...register('inner_carton_width_mm')}
+            onKeyDown={e => checkKeyDown(e, 'inner_carton_height_mm')}
             id="inner_carton_width_mm"
             type="number"
             placeholder="横 mm"
@@ -156,6 +167,7 @@ export default function ProductSkusFormContents({ drawContents, itf1, itf2 }: Pr
           />
           <Input
             {...register('inner_carton_height_mm')}
+            onKeyDown={e => checkKeyDown(e, 'inner_carton_weight_g')}
             id="inner_carton_height_mm"
             type="number"
             placeholder="高さ mm"
@@ -170,6 +182,7 @@ export default function ProductSkusFormContents({ drawContents, itf1, itf2 }: Pr
         ボール重量 g
         <Input
           {...register('inner_carton_weight_g')}
+          onKeyDown={e => checkKeyDown(e, 'basic_name')}
           id="inner_carton_weight_g"
           type="number"
           placeholder="重量 g"

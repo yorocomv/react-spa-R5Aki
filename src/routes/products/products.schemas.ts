@@ -12,7 +12,7 @@ export const commonProductsSchema = z.object({
   updated_at: z.string().trim().max(40),
 });
 
-const basicProductsSchema = z.object({
+export const basicProductsSchema = z.object({
   basic_name: z.string().trim().min(1).max(32),
   internal_code: z.preprocess(v => (isEmpty(v) ? undefined : v), z.string().trim().min(5).max(10).optional()),
   jan_code: z.preprocess(v => (isEmpty(v) ? undefined : v), z.string().trim().length(13).regex(/\d/).optional()),
@@ -214,6 +214,8 @@ export const newProductCommonDefaultValuesSchema = z.object({
     sourcing_type_id: true,
     packaging_type_id: true,
     expiration_unit: true,
+  }).extend({
+    predecessor_id: z.literal(''),
   }).shape,
   ...productsSchema.pick({ supplier_id: true }).shape,
   ...productSkusSchema.pick({ priority: true }).shape,

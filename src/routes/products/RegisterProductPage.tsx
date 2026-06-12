@@ -26,6 +26,7 @@ const commonDefaultValues: NewProductCommonDefaultValues = {
   sourcing_type_id: 1,
   packaging_type_id: 1,
   expiration_unit: 'Y',
+  predecessor_id: '',
   supplier_id: 1,
   priority: 'A',
 };
