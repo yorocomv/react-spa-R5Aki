@@ -38,6 +38,7 @@ interface Props<
   resetProcess: () => void;
   componentDefaultValues?: FieldArray<TComponent>;
   combinationDefaultValues?: FieldArray<TCombination>;
+  basicId?: number;
 }
 export interface Gtin {
   jan: string | undefined;
@@ -49,7 +50,7 @@ export default function ProductEntryForm<
   TForm extends FieldValues,
   TComponent extends FieldValues,
   TCombination extends FieldValues,
->({ mode, heading, isSet, onTypeChange, methods, componentsArray, setsArray, submitProcess, resetProcess, componentDefaultValues, combinationDefaultValues }: Props<TForm, TComponent, TCombination>) {
+>({ mode, heading, isSet, onTypeChange, methods, componentsArray, setsArray, submitProcess, resetProcess, componentDefaultValues, combinationDefaultValues, basicId }: Props<TForm, TComponent, TCombination>) {
   const navigate = useNavigate();
 
   const { productOptions } = useFetchProductOptions();
@@ -124,6 +125,7 @@ export default function ProductEntryForm<
                 product_packaging_types: productOptions.product_packaging_types,
               }}
               setPackagingFlags={setPackagingFlags}
+              basicId={basicId}
             />
 
             <ProductFormContents

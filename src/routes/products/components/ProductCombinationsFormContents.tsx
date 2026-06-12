@@ -7,6 +7,7 @@ import ComboField from '@/components/ui/ComboField';
 import Input from '@/components/ui/elements/Input';
 import FormErrorMessage from '@/components/ui/elementSwitchers/FormErrorMessage';
 import TooltipWrapper from '@/components/ui/TooltipWrapper';
+import checkKeyDown from '@/libs/checkKeyDown';
 import { css } from 'styled-system/css';
 
 interface Props<
@@ -86,6 +87,7 @@ export default function ProductCombinationsFormContents<
         セット内訳入数
         <Input
           {...register(`combinations.${index}.quantity` as Path<TForm>)}
+          onKeyDown={e => checkKeyDown(e, 'case_quantity')}
           id={`combinations.${index}.quantity`}
           type="number"
           placeholder="セット内訳入数"

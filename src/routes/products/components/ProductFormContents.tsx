@@ -4,6 +4,7 @@ import Input from '@/components/ui/elements/Input';
 import Select from '@/components/ui/elements/Select';
 import TextArea from '@/components/ui/elements/TextArea';
 import FormErrorMessage from '@/components/ui/elementSwitchers/FormErrorMessage';
+import checkKeyDown from '@/libs/checkKeyDown';
 import { css } from 'styled-system/css';
 
 import type { ProductOptionsIdAndName } from '../options/options.types';
@@ -46,6 +47,7 @@ export default function ProductFormContents({ mode, drawContents, selectOptions,
               ＢＡＳＩＣ－ＩＤ
               <Input
                 {...register('basic_id')}
+                onKeyDown={e => checkKeyDown(e, 'short_name')}
                 id="basic_id"
                 type="number"
                 placeholder="ＢＡＳＩＣ－ＩＤ"
@@ -70,14 +72,14 @@ export default function ProductFormContents({ mode, drawContents, selectOptions,
             <label htmlFor="product_name">
               {/* バリエーションがない場合は basic_products.name のコピー */}
               商品名称
-              <Input {...register('product_name')} id="product_name" placeholder="商品名称" />
+              <Input {...register('product_name')} onKeyDown={e => checkKeyDown(e, 'short_name')} id="product_name" placeholder="商品名称" />
               <FormErrorMessage message={errors.product_name?.message} />
             </label>
           )
         : null}
       <label htmlFor="short_name">
         商品略称名
-        <Input {...register('short_name')} id="short_name" placeholder="商品略称名" />
+        <Input {...register('short_name')} onKeyDown={e => checkKeyDown(e, 'height_mm')} id="short_name" placeholder="商品略称名" />
         <FormErrorMessage message={errors.short_name?.message} />
       </label>
       {mode === 'new' && handleChange
@@ -111,6 +113,7 @@ export default function ProductFormContents({ mode, drawContents, selectOptions,
               >
                 <Input
                   {...register('diameter_mm')}
+                  onKeyDown={e => checkKeyDown(e, 'height_mm')}
                   id="diameter_mm"
                   type="number"
                   placeholder="φ mm"
@@ -118,6 +121,7 @@ export default function ProductFormContents({ mode, drawContents, selectOptions,
                 />
                 <Input
                   {...register('height_mm')}
+                  onKeyDown={e => checkKeyDown(e, 'weight_g')}
                   id="height_mm"
                   type="number"
                   placeholder="高さ mm"
@@ -139,6 +143,7 @@ export default function ProductFormContents({ mode, drawContents, selectOptions,
               >
                 <Input
                   {...register('depth_mm')}
+                  onKeyDown={e => checkKeyDown(e, 'width_mm')}
                   id="depth_mm"
                   type="number"
                   placeholder="縦 mm"
@@ -146,6 +151,7 @@ export default function ProductFormContents({ mode, drawContents, selectOptions,
                 />
                 <Input
                   {...register('width_mm')}
+                  onKeyDown={e => checkKeyDown(e, 'height_mm')}
                   id="width_mm"
                   type="number"
                   placeholder="横 mm"
@@ -153,6 +159,7 @@ export default function ProductFormContents({ mode, drawContents, selectOptions,
                 />
                 <Input
                   {...register('height_mm')}
+                  onKeyDown={e => checkKeyDown(e, 'weight_g')}
                   id="height_mm"
                   type="number"
                   placeholder="高さ mm"
@@ -168,6 +175,7 @@ export default function ProductFormContents({ mode, drawContents, selectOptions,
         商品重量 g
         <Input
           {...register('weight_g')}
+          onKeyDown={e => checkKeyDown(e, 'discontinued_date')}
           id="weight_g"
           type="number"
           placeholder="重量 g"
@@ -179,6 +187,7 @@ export default function ProductFormContents({ mode, drawContents, selectOptions,
         終売予定日
         <Input
           {...register('discontinued_date')}
+          onKeyDown={e => checkKeyDown(e, 'case_quantity')}
           id="discontinued_date"
           type="date"
           placeholder="終売予定日"

@@ -1,8 +1,9 @@
 import { calculateCheckDigitForGTIN } from 'gtin-validator';
 import { useEffect } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { Controller, useFormContext } from 'react-hook-form';
 import { z } from 'zod';
 
+import ComboField from '@/components/ui/ComboField';
 import Input from '@/components/ui/elements/Input';
 import Select from '@/components/ui/elements/Select';
 import FormErrorMessage from '@/components/ui/elementSwitchers/FormErrorMessage';
@@ -15,6 +16,8 @@ import type { ProductOptionsIdAndName, ProductPackagingTypeFlags } from '../opti
 import type { PostReqNewProduct } from '../products.types';
 import type { Gtin } from './ProductEntryForm';
 
+import { useFetchBasicProducts } from './hooks/useFetchBasicProducts';
+
 interface Props {
   selectOptions: {
     product_sourcing_types: ProductOptionsIdAndName[];
@@ -25,11 +28,13 @@ interface Props {
   janCode: string | undefined;
   setGtinObj: React.Dispatch<React.SetStateAction<Gtin>>;
   setPackagingFlags?: (flags: { has_depth: boolean; has_width: boolean; has_diameter: boolean }) => void;
+  basicId: number | undefined;
 }
 
-export default function BasicProductFormContents({ selectOptions, packagingMap, janCode, setGtinObj, setPackagingFlags }: Props) {
+export default function BasicProductFormContents({ selectOptions, packagingMap, janCode, setGtinObj, setPackagingFlags, basicId }: Props) {
   const {
     register,
+    control,
     formState: { errors },
     watch,
   } = useFormContext<PostReqNewProduct>();
@@ -75,6 +80,14 @@ export default function BasicProductFormContents({ selectOptions, packagingMap, 
     }
   }, [selectedPackagingTypeId, packagingMap, setPackagingFlags]);
 
+  const { basicProducts } = useFetchBasicProducts(basicId);
+  const basicProductsStrObjList = basicProducts.map((product) => {
+    return {
+      id: product.id,
+      itemStr: `<${product.internal_code}> ${product.name}`,
+    };
+  });
+
   // 表示用の options: packagingMap があればそれを優先、なければ既存の selectOptions を使う
   const packagingOptions = packagingMap ? Array.from(packagingMap.values()) : selectOptions.product_packaging_types;
 
@@ -86,6 +99,8 @@ export default function BasicProductFormContents({ selectOptions, packagingMap, 
           {...register('basic_name')}
           onKeyDown={e => checkKeyDown(e, 'internal_code')}
           id="basic_name"
+          // eslint-disable-next-line jsx-a11y/no-autofocus
+          autoFocus
           placeholder="商品カタログ掲載名"
           className={css({ w: '25rem' })}
         />
@@ -149,7 +164,7 @@ export default function BasicProductFormContents({ selectOptions, packagingMap, 
         >
           <Input
             {...register('expiration_value')}
-            onKeyDown={e => checkKeyDown(e, 'predecessor_id')}
+            onKeyDown={e => checkKeyDown(e, 'short_name')}
             id="expiration_value"
             type="number"
             placeholder="賞味期限（期間）"
@@ -165,12 +180,17 @@ export default function BasicProductFormContents({ selectOptions, packagingMap, 
       </div>
       <label htmlFor="predecessor_id">
         先代商品ＩＤ
-        <Input
-          {...register('predecessor_id')}
-          id="predecessor_id"
-          type="number"
-          placeholder="先代商品ＩＤ"
-          className={css({ w: '10.25rem' })}
+        <Controller
+          control={control}
+          name="predecessor_id"
+          render={({ field }) => (
+            <ComboField
+              {...field}
+              itemsList={basicProductsStrObjList}
+              placeholder="先代商品ＩＤ"
+              ariaLabel="先代商品ＩＤ"
+            />
+          )}
         />
         <FormErrorMessage message={errors.predecessor_id?.message} />
       </label>

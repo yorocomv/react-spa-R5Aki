@@ -78,6 +78,7 @@ export default function EditProductPage() {
       setsArray={setsArray}
       submitProcess={submitProcess}
       resetProcess={resetProcess}
+      basicId={locationState.basic_id}
     />
   );
 }

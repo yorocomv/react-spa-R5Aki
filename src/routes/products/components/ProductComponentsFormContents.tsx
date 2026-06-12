@@ -7,6 +7,7 @@ import Input from '@/components/ui/elements/Input';
 import Select from '@/components/ui/elements/Select';
 import FormErrorMessage from '@/components/ui/elementSwitchers/FormErrorMessage';
 import TooltipWrapper from '@/components/ui/TooltipWrapper';
+import checkKeyDown from '@/libs/checkKeyDown';
 import { css } from 'styled-system/css';
 
 import type { ProductOptionsIdAndName } from '../options/options.types';
@@ -95,6 +96,7 @@ export default function ProductComponentsFormContents<
         か分かる場合は明記）
         <Input
           {...register(`components.${index}.title` as Path<TForm>)}
+          onKeyDown={e => checkKeyDown(e, `components.${index}.symbol`)}
           id={`components.${index}.title`}
           placeholder="内容物名"
         />
@@ -120,6 +122,7 @@ export default function ProductComponentsFormContents<
         記号
         <Input
           {...register(`components.${index}.symbol` as Path<TForm>)}
+          onKeyDown={e => checkKeyDown(e, `components.${index}.amount`)}
           id={`components.${index}.symbol`}
           placeholder="記号"
         />
@@ -137,6 +140,7 @@ export default function ProductComponentsFormContents<
         >
           <Input
             {...register(`components.${index}.amount` as Path<TForm>)}
+            onKeyDown={e => checkKeyDown(e, `components.${index}.pieces`)}
             id={`components.${index}.amount`}
             type="number"
             placeholder="個別内容量"
@@ -155,6 +159,7 @@ export default function ProductComponentsFormContents<
           ✕
           <Input
             {...register(`components.${index}.pieces` as Path<TForm>)}
+            onKeyDown={e => checkKeyDown(e, 'case_quantity')}
             id={`components.${index}.pieces`}
             type="number"
             placeholder="商品入数"
