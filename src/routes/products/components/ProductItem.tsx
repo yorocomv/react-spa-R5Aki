@@ -106,6 +106,7 @@ export default function ProductItem(p: ViewSkuDetailsRow & {
         <div className={css({
           px: '0.5rem',
           py: '0.725rem',
+          fontFamily: '"Yu Gothic UI", "BIZ UDPGothic", sans-serif',
         })}
         >
           <h2 className={css({ fontSize: '1.25rem', fontWeight: 'bold' })}>
