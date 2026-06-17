@@ -37,7 +37,7 @@ export default function ProductFormContents({ mode, drawContents, selectOptions,
     ? (e: React.ChangeEvent<HTMLSelectElement>) => onTypeChange(e.target.value as unknown as '0' | '1')
     : null;
   // 直径パターンかどうかを判定
-  const isDiameterPattern = packagingFlags.has_diameter;
+  const isDiameterPattern = packagingFlags.has_diameter && !Number(isSet);
 
   return (
     <>
@@ -77,9 +77,15 @@ export default function ProductFormContents({ mode, drawContents, selectOptions,
             </label>
           )
         : null}
-      <label htmlFor="short_name">
-        商品略称名
-        <Input {...register('short_name')} onKeyDown={e => checkKeyDown(e, 'height_mm')} id="short_name" placeholder="商品略称名" />
+      <label htmlFor="short_name" className={css({ bg: 'linear-gradient(transparent 40%, oklch(from var(--colors-cyan-300) l c h / 60%) 40%)' })}>
+        商品略称
+        <Input
+          {...register('short_name')}
+          onKeyDown={e => checkKeyDown(e, isDiameterPattern ? 'diameter_mm' : 'depth_mm')}
+          id="short_name"
+          placeholder="商品略称名"
+          className={css({ w: '16rem' })}
+        />
         <FormErrorMessage message={errors.short_name?.message} />
       </label>
       {mode === 'new' && handleChange
@@ -101,7 +107,7 @@ export default function ProductFormContents({ mode, drawContents, selectOptions,
         : isSet === '0'
           ? <div>通常商品</div>
           : <div>セット商品</div>}
-      {isDiameterPattern && !Number(isSet)
+      {isDiameterPattern
         ? (
             <fieldset>
               <legend>商品サイズ mm（直径・高さ）</legend>
@@ -175,7 +181,7 @@ export default function ProductFormContents({ mode, drawContents, selectOptions,
         商品重量 g
         <Input
           {...register('weight_g')}
-          onKeyDown={e => checkKeyDown(e, 'discontinued_date')}
+          onKeyDown={e => checkKeyDown(e, isSet === '0' ? 'components.0.title' : 'combinations.0.item_product_id')}
           id="weight_g"
           type="number"
           placeholder="重量 g"
@@ -187,7 +193,7 @@ export default function ProductFormContents({ mode, drawContents, selectOptions,
         終売予定日
         <Input
           {...register('discontinued_date')}
-          onKeyDown={e => checkKeyDown(e, 'case_quantity')}
+          onKeyDown={e => checkKeyDown(e)}
           id="discontinued_date"
           type="date"
           placeholder="終売予定日"

@@ -108,7 +108,7 @@ export default function BasicProductFormContents({ selectOptions, packagingMap, 
       </label>
       <label
         htmlFor="internal_code"
-        className={css({ bg: 'linear-gradient(transparent 40%, oklch(0.9052 0.1657 98.11 / 60%) 40%)' })}
+        className={css({ bg: 'linear-gradient(transparent 40%, oklch(from var(--colors-yellow-300) l c h / 60%) 40%)' })}
       >
         品番（社内コード）
         <Input
@@ -117,6 +117,7 @@ export default function BasicProductFormContents({ selectOptions, packagingMap, 
           onChange={handleSetGtinCode}
           id="internal_code"
           placeholder="品番（社内コード）"
+          className={css({ w: '10rem' })}
         />
         <FormErrorMessage message={errors.internal_code?.message} />
       </label>
@@ -187,6 +188,8 @@ export default function BasicProductFormContents({ selectOptions, packagingMap, 
             <ComboField
               {...field}
               itemsList={basicProductsStrObjList}
+              nextFocusIdStr="short_name"
+              inputIdStr="predecessor_id"
               placeholder="先代商品ＩＤ"
               ariaLabel="先代商品ＩＤ"
             />
