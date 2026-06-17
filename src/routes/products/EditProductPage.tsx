@@ -71,7 +71,7 @@ export default function EditProductPage() {
   return (
     <ProductEntryForm
       mode="edit"
-      heading={`${locationState.short_name} 商品情報の修正`}
+      heading={`${locationState.skus_name} 商品情報の修正`}
       isSet={locationState.is_set_product}
       methods={methods}
       componentsArray={componentsArray}

@@ -28,9 +28,9 @@ export default function ProductSkusFormContents({ drawContents, itf1, itf2 }: Pr
     <>
       {drawContents?.skus_name
         ? (
-            <label htmlFor="skus_name">
+            <label htmlFor="skus_name" className={css({ bg: 'linear-gradient(transparent 40%, oklch(from var(--colors-lime-400) l c h / 60%) 40%)' })}>
               ＳＫＵ名
-              <Input {...register('skus_name')} onKeyDown={e => checkKeyDown(e, 'case_quantity')} id="skus_name" placeholder="ＳＫＵ名" />
+              <Input {...register('skus_name')} onKeyDown={e => checkKeyDown(e, 'case_quantity')} id="skus_name" placeholder="ＳＫＵ名" className={css({ w: '16rem' })} />
               <FormErrorMessage message={errors.skus_name?.message} />
             </label>
           )

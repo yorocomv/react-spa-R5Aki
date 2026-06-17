@@ -76,6 +76,8 @@ export default function ProductCombinationsFormContents<
             <ComboField
               {...field}
               itemsList={singleProductsStrListObj}
+              nextFocusIdStr={`combinations.${index}.quantity`}
+              inputIdStr={`combinations.${index}.item_product_id`}
               placeholder="セット内訳 PRODUCT-ID"
               ariaLabel={label}
             />

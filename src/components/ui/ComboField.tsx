@@ -3,6 +3,7 @@ import type { Key } from 'react-aria-components';
 import { Button, ComboBox, Group, Input, ListBox, ListBoxItem, Popover } from 'react-aria-components';
 import { MdKeyboardArrowDown } from 'react-icons/md';
 
+import checkKeyDown from '@/libs/checkKeyDown';
 import { css } from 'styled-system/css';
 
 interface ComboFieldProps {
@@ -11,6 +12,8 @@ interface ComboFieldProps {
     id: number;
     itemStr: string;
   }[];
+  inputIdStr: string;
+  nextFocusIdStr: string;
   // RHFのControllerから渡される値とハンドラを受け取る
   value?: number | string | null;
   onChange?: (value: number | string | null) => void;
@@ -20,6 +23,8 @@ interface ComboFieldProps {
 export default function ComboField({
   placeholder = '',
   itemsList,
+  inputIdStr,
+  nextFocusIdStr,
   value,
   onChange,
   ariaLabel,
@@ -59,6 +64,8 @@ export default function ComboField({
       })}
       >
         <Input
+          onKeyDown={e => checkKeyDown(e, nextFocusIdStr)}
+          id={inputIdStr}
           placeholder={placeholder}
           className={css({
             flex: '1',

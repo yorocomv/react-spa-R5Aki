@@ -178,7 +178,7 @@ export default function ProductEntryForm<
             </div>
 
             <ProductSkusFormContents
-              drawContents={{ skus_name: false, product_id: false }}
+              drawContents={{ skus_name: mode === 'edit', product_id: false }}
               itf1={gtinObj.itf1}
               itf2={gtinObj.itf2}
             />
