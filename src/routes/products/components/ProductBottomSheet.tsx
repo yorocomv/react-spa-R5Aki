@@ -1,13 +1,16 @@
 import '@/components/ui/reactAriaModalOverlayBottomSheet.css';
+import { calculateCheckDigitForGTIN } from 'gtin-validator';
 import { Dialog, Heading, Modal, ModalOverlay } from 'react-aria-components';
 import { FaPenClip, FaStar } from 'react-icons/fa6';
 import { RxCross1 } from 'react-icons/rx';
+import { TbPackageExport } from 'react-icons/tb';
 import { useNavigate } from 'react-router';
 
+import env from '@/env';
 import { css } from 'styled-system/css';
 
 import type { ViewSkuDetailsRow } from '../products.dbTable.types';
-import type { PutReqUnifiedProductWithNull } from '../products.types';
+import type { PostReqNewQuantityVariantDefaultValues, PutReqUnifiedProductWithNull } from '../products.types';
 
 import { useFetchProductCombinations } from './hooks/useFetchProductCombinations';
 import { useFetchProductComponents } from './hooks/useFetchProductComponents';
@@ -76,6 +79,20 @@ export default function ProductBottomSheet(p: ProductBottomSheetProps) {
     pieces,
     inner_packaging_type_id,
   }));
+
+  // ITF 予測候補を作成
+  const gtin: {
+    itf1: string | undefined;
+    itf3: string | undefined;
+  } = {
+    itf1: undefined,
+    itf3: undefined,
+  };
+  if (skuDetailsState.internal_code) {
+    const gs1 = env.VITE_GS1_COMPANY_PREFIX;
+    gtin.itf1 = `1${gs1}${skuDetailsState.internal_code}${calculateCheckDigitForGTIN(`1${gs1}${skuDetailsState.internal_code}`)}`;
+    gtin.itf3 = `3${gs1}${skuDetailsState.internal_code}${calculateCheckDigitForGTIN(`3${gs1}${skuDetailsState.internal_code}`)}`;
+  }
 
   return (
     <ModalOverlay isDismissable isOpen={isOpen} onOpenChange={() => setSelectedItem(-1)}>
@@ -166,6 +183,26 @@ export default function ProductBottomSheet(p: ProductBottomSheetProps) {
                 })}
               >
                 {p.sku_name}
+                <button
+                  type="button"
+                  onClick={() => {
+                    Promise.resolve(
+                      navigate('/products/new/quantity-variant', {
+                        relative: 'path',
+                        state: {
+                          product_id: skuDetailsState.product_id,
+                          product_name: skuDetailsState.product_name,
+                          skus_name: skuDetailsState.skus_name,
+                          itf_case_code: gtin.itf1,
+                          itf_inner_carton_code: gtin.itf3,
+                        } satisfies PostReqNewQuantityVariantDefaultValues,
+                      }),
+                    ).catch((err: string) => { throw new Error(err); });
+                  }}
+                  className={css({ ml: '0.625rem', color: 'cyan.300', cursor: 'pointer' })}
+                >
+                  <TbPackageExport size="1.675rem" />
+                </button>
                 <span className={css({ display: 'flex', alignItems: 'center', fontSize: '0.625em', ml: '1rem', color: 'yellow.300' })}>
                   (ＳＫＵ別・略称)
                   <span className={css({

@@ -7,12 +7,16 @@ import type {
   newProductSummarySchema,
   postReqNewProductSchema,
   postReqNewProductSkuSchema,
+  postReqNewQuantityVariantDefaultValuesSchema,
   postReqNewSetProductSchema,
   postReqNewUnifiedProductSchema,
   postReqProductVariantSchema,
   postReqSetProductVariantSchema,
+  productSkusSchema,
   putReqUnifiedProductSchema,
 } from './products.schemas';
+
+export type ProductSkus = z.infer<typeof productSkusSchema>;
 
 export type PostReqNewProduct = z.infer<typeof postReqNewProductSchema>;
 export type PostReqNewSetProduct = z.infer<typeof postReqNewSetProductSchema>;
@@ -41,6 +45,8 @@ type UndefinedToNull<T> = T extends Date
 export type PutReqUnifiedProductWithNull = UndefinedToNull<PutReqUnifiedProduct>;
 
 export type NewProductCommonDefaultValues = z.infer<typeof newProductCommonDefaultValuesSchema>;
+
+export type PostReqNewQuantityVariantDefaultValues = z.infer<typeof postReqNewQuantityVariantDefaultValuesSchema>;
 
 type NewProductSummary = z.infer<typeof newProductSummarySchema>;
 

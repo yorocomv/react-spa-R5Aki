@@ -69,7 +69,7 @@ const productCombinationsSchema = z.object({
     .min(1),
 });
 
-const productSkusSchema = z.object({
+export const productSkusSchema = z.object({
   skus_name: z.string().trim().min(1).max(32),
   product_id: z.coerce.number().int().positive(),
   case_quantity: zOptPosInteger,
@@ -291,3 +291,10 @@ export const putReqDefaultValuesSchema = z.discriminatedUnion('is_set_product', 
     ...nullableFields,
   }),
 ]);
+export const postReqNewQuantityVariantDefaultValuesSchema = z.object({
+  product_id: z.coerce.number().int().positive(),
+  product_name: z.string().trim().min(1).max(32),
+  skus_name: z.string().trim().min(1).max(32),
+  itf_case_code: z.preprocess(v => (isEmpty(v) ? undefined : v), z.string().trim().length(14).regex(/\d/).optional()),
+  itf_inner_carton_code: z.preprocess(v => (isEmpty(v) ? undefined : v), z.string().trim().length(14).regex(/\d/).optional()),
+});
