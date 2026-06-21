@@ -70,6 +70,10 @@ const productCombinationsSchema = z.object({
 });
 
 export const productSkusSchema = z.object({
+  tags: z.array(z.object({
+    value: z.string().min(1).max(32),
+    label: z.string().min(1).max(32),
+  })).optional(),
   skus_name: z.string().trim().min(1).max(32),
   product_id: z.coerce.number().int().positive(),
   case_quantity: zOptPosInteger,

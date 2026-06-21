@@ -1,4 +1,5 @@
-import { useFormContext } from 'react-hook-form';
+import { Controller, useFormContext } from 'react-hook-form';
+import CreatableSelect from 'react-select/creatable';
 
 import Input from '@/components/ui/elements/Input';
 import Select from '@/components/ui/elements/Select';
@@ -20,6 +21,7 @@ interface Props {
 
 export default function ProductSkusFormContents({ drawContents, itf1, itf2 }: Props) {
   const {
+    control,
     register,
     formState: { errors },
   } = useFormContext<PostReqNewProductSku>();
@@ -44,6 +46,19 @@ export default function ProductSkusFormContents({ drawContents, itf1, itf2 }: Pr
             </label>
           )
         : null}
+      <label htmlFor="tags">
+        タグ
+        <Controller
+          control={control}
+          name="tags"
+          render={({ field }) => (
+            <CreatableSelect
+              {...field}
+              isMulti
+            />
+          )}
+        />
+      </label>
       <label htmlFor="case_quantity">
         ケース入数
         <Input
