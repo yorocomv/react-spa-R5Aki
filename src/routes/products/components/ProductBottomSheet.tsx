@@ -14,6 +14,7 @@ import type { PostReqNewQuantityVariantDefaultValues, PutReqUnifiedProductWithNu
 
 import { useFetchProductCombinations } from './hooks/useFetchProductCombinations';
 import { useFetchProductComponents } from './hooks/useFetchProductComponents';
+import { useFetchProductSkuTags } from './hooks/useFetchProductSkuTags';
 import NIl from './NIl';
 import ProductCompositionItems from './ProductCompositionItems';
 import ProductImageIcons from './ProductImageIcons';
@@ -29,6 +30,7 @@ export default function ProductBottomSheet(p: ProductBottomSheetProps) {
   const { setSelectedItem, isOpen = false, images, is_set_product, ...skuDetails } = p;
   const { productCombinations } = useFetchProductCombinations({ productId: p.product_id, earlyReturn: !p.is_set_product });
   const { productComponents } = useFetchProductComponents({ productId: p.product_id, earlyReturn: p.is_set_product });
+  const { productSkuTags } = useFetchProductSkuTags(p.sku_id);
   const navigate = useNavigate();
 
   // navigate.options.state 用に加工
@@ -80,6 +82,13 @@ export default function ProductBottomSheet(p: ProductBottomSheetProps) {
     inner_packaging_type_id,
   }));
 
+  const tagsState = productSkuTags.map(({
+    label,
+  }) => ({
+    label,
+    value: label,
+  }));
+
   // ITF 予測候補を作成
   const gtin: {
     itf1: string | undefined;
@@ -127,9 +136,9 @@ export default function ProductBottomSheet(p: ProductBottomSheetProps) {
                   navigate(`/products/sku/${p.sku_id}`, {
                     relative: 'path',
                     state: (is_set_product
-                      ? { ...skuDetailsState, is_set_product: '1', combinations: [...combinationsState] }
+                      ? { ...skuDetailsState, is_set_product: '1', combinations: [...combinationsState], tags: tagsState.length ? [...tagsState] : null }
                       // RHF の defaultValues には undefined を渡さない！
-                      : { ...skuDetailsState, is_set_product: '0', components: [...componentsState] }) satisfies PutReqUnifiedProductWithNull,
+                      : { ...skuDetailsState, is_set_product: '0', components: [...componentsState], tags: tagsState.length ? [...tagsState] : null }) satisfies PutReqUnifiedProductWithNull,
                   }),
                 ).catch((err: string) => { throw new Error(err); });
               }}

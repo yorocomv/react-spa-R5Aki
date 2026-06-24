@@ -54,6 +54,7 @@ export default function ProductSkusFormContents({ drawContents, itf1, itf2 }: Pr
           render={({ field }) => (
             <CreatableSelect
               {...field}
+              id="tags"
               isMulti
             />
           )}
