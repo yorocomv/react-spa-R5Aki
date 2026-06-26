@@ -274,6 +274,10 @@ const nullableFields = {
   available_date: zNullDate,
   discontinued_date: zNullDate,
   note: zNullString,
+  tags: z.array(z.object({
+    value: z.string().min(1).max(32),
+    label: z.string().min(1).max(32),
+  })).nullable(),
   case_quantity: zNullPosInteger,
   inner_carton_quantity: zNullPosInteger,
   itf_case_code: z.preprocess(v => (isEmpty(v) ? null : v), z.string().trim().length(14).regex(/\d/).nullable()),
