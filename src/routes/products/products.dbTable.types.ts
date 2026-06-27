@@ -9,6 +9,7 @@ import type {
   viewProductCombinationsRowSchema,
   viewProductComponentsArraySchema,
   viewProductComponentsRowSchema,
+  viewProductSkusTagCountsArraySchema,
   viewProductSkuTagsArraySchema,
   viewSingleProductsRowSchema,
   viewSkuDetailsRowSchema,
@@ -21,4 +22,5 @@ export type ViewProductCombinationsRow = z.infer<typeof viewProductCombinationsR
 export type ViewProductCombinationsArray = z.infer<typeof viewProductCombinationsArraySchema>;
 export type ViewProductComponentsRow = z.infer<typeof viewProductComponentsRowSchema>;
 export type ViewProductComponentsArray = z.infer<typeof viewProductComponentsArraySchema>;
+export type ViewProductSkusTagCountsArray = z.infer<typeof viewProductSkusTagCountsArraySchema>;
 export type ViewProductSkuTagsArray = z.infer<typeof viewProductSkuTagsArraySchema>;

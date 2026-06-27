@@ -22,7 +22,6 @@ import ProductImageIcons from './ProductImageIcons';
 type ProductBottomSheetProps = ViewSkuDetailsRow & {
   setSelectedItem: React.Dispatch<React.SetStateAction<number>>;
   isOpen?: boolean;
-} & {
   images?: string[];
 };
 

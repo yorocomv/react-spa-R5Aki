@@ -10,6 +10,8 @@ import { css } from 'styled-system/css';
 
 import type { PostReqNewProductSku } from '../products.types';
 
+import { useFetchAllProductSkuTagsWithCounts } from './hooks/useFetchAllProductSkuTagsWithCounts';
+
 interface Props {
   drawContents?: {
     skus_name?: boolean;
@@ -25,6 +27,14 @@ export default function ProductSkusFormContents({ drawContents, itf1, itf2 }: Pr
     register,
     formState: { errors },
   } = useFormContext<PostReqNewProductSku>();
+
+  const { productSkuTagsWithCounts } = useFetchAllProductSkuTagsWithCounts();
+  const tagSelectOptions = productSkuTagsWithCounts.map(({
+    label,
+  }) => ({
+    label,
+    value: label,
+  }));
 
   return (
     <>
@@ -56,6 +66,7 @@ export default function ProductSkusFormContents({ drawContents, itf1, itf2 }: Pr
               {...field}
               id="tags"
               isMulti
+              options={tagSelectOptions}
             />
           )}
         />
