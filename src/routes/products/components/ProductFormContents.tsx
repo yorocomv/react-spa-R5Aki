@@ -8,7 +8,7 @@ import checkKeyDown from '@/libs/checkKeyDown';
 import { css } from 'styled-system/css';
 
 import type { ProductOptionsIdAndName } from '../options/options.types';
-import type { PostReqProductVariant } from '../products.types';
+import type { Products } from '../products.types';
 
 interface Props {
   mode: 'new' | 'edit';
@@ -32,7 +32,7 @@ export default function ProductFormContents({ mode, drawContents, selectOptions,
   const {
     register,
     formState: { errors },
-  } = useFormContext<PostReqProductVariant>();
+  } = useFormContext<Products>();
   const handleChange = onTypeChange
     ? (e: React.ChangeEvent<HTMLSelectElement>) => onTypeChange(e.target.value as unknown as '0' | '1')
     : null;

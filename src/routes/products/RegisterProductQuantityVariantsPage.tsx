@@ -12,7 +12,7 @@ import FloatingLinkIcon from '@/components/ui/FloatingLinkIcon';
 import onPromise from '@/libs/onPromise';
 import { css } from 'styled-system/css';
 
-import type { PostReqNewProductSku } from './products.types';
+import type { ProductSkus } from './products.types';
 
 import { useRegisterQuantityVariantProducts } from './components/hooks/useRegisterQuantityVariantProducts';
 import ProductSkusFormContents from './components/ProductSkusFormContents';
@@ -23,13 +23,13 @@ export default function RegisterProductQuantityVariantsPage() {
   const location = useLocation();
   const locationState = postReqNewQuantityVariantDefaultValuesSchema.parse(location.state);
 
-  const methods = useForm<PostReqNewProductSku>({
+  const methods = useForm<ProductSkus>({
     mode: 'all',
-    resolver: zodResolver(productSkusSchema as ZodType<PostReqNewProductSku>),
+    resolver: zodResolver(productSkusSchema as ZodType<ProductSkus>),
     defaultValues: { product_id: locationState.product_id, priority: 'A' },
   });
   const { registerProductsSku } = useRegisterQuantityVariantProducts();
-  const handleSubmit: SubmitHandler<PostReqNewProductSku> = async (values) => {
+  const handleSubmit: SubmitHandler<ProductSkus> = async (values) => {
     try {
       const response = await registerProductsSku({ values });
       if (response.isRegistered === true) {

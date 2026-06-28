@@ -8,7 +8,7 @@ import FormSuggestion from '@/components/ui/elementSwitchers/FormSuggestion';
 import checkKeyDown from '@/libs/checkKeyDown';
 import { css } from 'styled-system/css';
 
-import type { PostReqNewProductSku } from '../products.types';
+import type { ProductSkus } from '../products.types';
 
 import { useFetchAllProductSkuTagsWithCounts } from './hooks/useFetchAllProductSkuTagsWithCounts';
 
@@ -26,7 +26,7 @@ export default function ProductSkusFormContents({ drawContents, itf1, itf2 }: Pr
     control,
     register,
     formState: { errors },
-  } = useFormContext<PostReqNewProductSku>();
+  } = useFormContext<ProductSkus>();
 
   const { productSkuTagsWithCounts } = useFetchAllProductSkuTagsWithCounts();
   const tagSelectOptions = productSkuTagsWithCounts.map(({

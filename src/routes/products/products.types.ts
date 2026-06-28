@@ -3,27 +3,29 @@
 import type { z } from 'zod';
 
 import type {
+  basicProductsSchema,
   newProductCommonDefaultValuesSchema,
   newProductSummarySchema,
   postReqNewProductSchema,
-  postReqNewProductSkuSchema,
   postReqNewQuantityVariantDefaultValuesSchema,
   postReqNewSetProductSchema,
   postReqNewUnifiedProductSchema,
-  postReqProductVariantSchema,
-  postReqSetProductVariantSchema,
+  postReqProductRevisionSchema,
+  postReqSetProductRevisionSchema,
   productSkusSchema,
+  productsSchema,
   putReqUnifiedProductSchema,
 } from './products.schemas';
 
+export type BasicProducts = z.infer<typeof basicProductsSchema>;
+export type Products = z.infer<typeof productsSchema>;
 export type ProductSkus = z.infer<typeof productSkusSchema>;
 
 export type PostReqNewProduct = z.infer<typeof postReqNewProductSchema>;
 export type PostReqNewSetProduct = z.infer<typeof postReqNewSetProductSchema>;
 export type PostReqNewUnifiedProduct = z.infer<typeof postReqNewUnifiedProductSchema>;
-export type PostReqProductVariant = z.infer<typeof postReqProductVariantSchema>;
-export type PostReqSetProductVariant = z.infer<typeof postReqSetProductVariantSchema>;
-export type PostReqNewProductSku = z.infer<typeof postReqNewProductSkuSchema>;
+export type PostReqProductRevision = z.infer<typeof postReqProductRevisionSchema>;
+export type PostReqSetProductRevision = z.infer<typeof postReqSetProductRevisionSchema>;
 export type PutReqUnifiedProduct = z.infer<typeof putReqUnifiedProductSchema>;
 
 // 型レベルで undefined を null に置換する再帰的なマッピング型

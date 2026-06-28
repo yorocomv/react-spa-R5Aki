@@ -13,7 +13,7 @@ import checkKeyDown from '@/libs/checkKeyDown';
 import { css } from 'styled-system/css';
 
 import type { ProductOptionsIdAndName, ProductPackagingTypeFlags } from '../options/options.types';
-import type { PostReqNewProduct } from '../products.types';
+import type { BasicProducts } from '../products.types';
 import type { Gtin } from './ProductEntryForm';
 
 import { useFetchBasicProducts } from './hooks/useFetchBasicProducts';
@@ -37,7 +37,7 @@ export default function BasicProductFormContents({ selectOptions, packagingMap, 
     control,
     formState: { errors },
     watch,
-  } = useFormContext<PostReqNewProduct>();
+  } = useFormContext<BasicProducts>();
   const handleSetGtinCode = (e: React.ChangeEvent<HTMLInputElement>) => {
     try {
       const v = e.target.value;
