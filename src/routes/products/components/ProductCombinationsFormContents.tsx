@@ -10,7 +10,36 @@ import TooltipWrapper from '@/components/ui/TooltipWrapper';
 import checkKeyDown from '@/libs/checkKeyDown';
 import { css } from 'styled-system/css';
 
-interface Props<
+interface WithDefaultCombinationsProps<TCombination extends FieldValues> {
+  defaultCombination: FieldArray<TCombination>;
+  isTail: boolean;
+  append: UseFieldArrayAppend<TCombination>;
+  remove: (index: number) => void;
+}
+interface WithoutDefaultCombinationsProps {
+  defaultCombination?: never;
+  isTail?: never;
+  append?: never;
+  remove?: never;
+}
+interface BaseProps<
+  TForm extends FieldValues & {
+    combinations: {
+      combination_id?: number;
+      item_product_id: number;
+      quantity: number;
+    }[];
+  },
+> {
+  _typeMeta?: TForm;
+  index: number;
+  singleProductsStrListObj: {
+    id: number;
+    itemStr: string;
+  }[];
+}
+
+type Props<
   TForm extends FieldValues & {
     combinations: {
       combination_id?: number;
@@ -19,18 +48,9 @@ interface Props<
     }[];
   },
   TCombination extends FieldValues,
-> {
-  _typeMeta?: TForm;
-  index: number;
-  remove: (index: number) => void;
-  append: UseFieldArrayAppend<TCombination>;
-  defaultCombination?: FieldArray<TCombination>;
-  isTail: boolean;
-  singleProductsStrListObj: {
-    id: number;
-    itemStr: string;
-  }[];
-}
+> = BaseProps<TForm> &
+  (WithDefaultCombinationsProps<TCombination> |
+    WithoutDefaultCombinationsProps);
 
 export default function ProductCombinationsFormContents<
   TForm extends FieldValues & {
@@ -41,14 +61,8 @@ export default function ProductCombinationsFormContents<
     }[];
   },
   TCombination extends FieldValues,
->({
-  index,
-  remove,
-  append,
-  defaultCombination,
-  isTail,
-  singleProductsStrListObj,
-}: Props<TForm, TCombination>) {
+>(props: Props<TForm, TCombination>) {
+  const { index, singleProductsStrListObj } = props;
   const {
     register,
     control,
@@ -97,7 +111,7 @@ export default function ProductCombinationsFormContents<
         />
         <FormErrorMessage message={combinationErrors?.[index]?.quantity?.message} />
       </label>
-      {defaultCombination
+      {props.defaultCombination
         ? (
             <div className={css({
               '&:has(svg)': {
@@ -108,7 +122,7 @@ export default function ProductCombinationsFormContents<
               },
             })}
             >
-              {isTail && index !== 0
+              {props.isTail && index !== 0
                 ? (
                     <TooltipWrapper
                       text="削除"
@@ -117,13 +131,13 @@ export default function ProductCombinationsFormContents<
                     >
                       <TbTrash
                         size="1.3rem"
-                        onClick={() => remove(index)}
+                        onClick={() => props.remove(index)}
                         className={css({ _hover: { cursor: 'pointer' } })}
                       />
                     </TooltipWrapper>
                   )
                 : null}
-              {isTail
+              {props.isTail
                 ? (
                     <TooltipWrapper
                       text="追加"
@@ -132,7 +146,7 @@ export default function ProductCombinationsFormContents<
                     >
                       <TbPencilPlus
                         size="1.3rem"
-                        onClick={() => append(defaultCombination)}
+                        onClick={() => props.append(props.defaultCombination)}
                         className={css({ _hover: { cursor: 'pointer' } })}
                       />
                     </TooltipWrapper>

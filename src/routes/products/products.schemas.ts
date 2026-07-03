@@ -187,6 +187,19 @@ export const postReqNewUnifiedProductSchema = z.discriminatedUnion('is_set_produ
   postReqNewSetProductSchema,
 ]);
 
+// 内容量変更などの既存商品のバリエーション（JAN は同じ）
+// のデフォルト値 及び useFieldArray で必要になる配列の長さ
+// 商品パッケージが直径が必要なものか縦横か判断するための id
+export const newUnifiedRevisionDefaultValuesSchema = z.object({
+  basic_id: z.number().int().positive(),
+  basic_name: z.string().trim().min(1).max(32),
+  packaging_type_id: z.number().int().positive(),
+  is_set_product: z.enum(['0', '1']),
+  itf_case_code: z.preprocess(v => (isEmpty(v) ? undefined : v), z.string().trim().length(14).regex(/\d/).optional()),
+  itf_inner_carton_code: z.preprocess(v => (isEmpty(v) ? undefined : v), z.string().trim().length(14).regex(/\d/).optional()),
+  componentsArrayLength: z.number().int().nonnegative(),
+  combinationsArrayLength: z.number().int().nonnegative(),
+});
 // （通常商品の）内容量変更などの既存商品のバリエーション（JAN は同じ）
 export const postReqProductRevisionSchema = productsSchema.extend({
   // ulid_str はサーバ側で計算
@@ -301,7 +314,7 @@ export const putReqDefaultValuesSchema = z.discriminatedUnion('is_set_product', 
     ...nullableFields,
   }),
 ]);
-export const postReqNewQuantityVariantDefaultValuesSchema = z.object({
+export const newQuantityVariantDefaultValuesSchema = z.object({
   product_id: z.coerce.number().int().positive(),
   product_name: z.string().trim().min(1).max(32),
   skus_name: z.string().trim().min(1).max(32),

@@ -16,6 +16,7 @@ interface Props {
     basic_id?: boolean;
     product_name?: boolean;
   };
+  autoFocusOnTop?: boolean;
   selectOptions: {
     suppliers: ProductOptionsIdAndName[];
   };
@@ -28,7 +29,7 @@ interface Props {
   };
 }
 
-export default function ProductFormContents({ mode, drawContents, selectOptions, isSet, onTypeChange, packagingFlags }: Props) {
+export default function ProductFormContents({ mode, drawContents, autoFocusOnTop = false, selectOptions, isSet, onTypeChange, packagingFlags }: Props) {
   const {
     register,
     formState: { errors },
@@ -72,7 +73,14 @@ export default function ProductFormContents({ mode, drawContents, selectOptions,
             <label htmlFor="product_name">
               {/* バリエーションがない場合は basic_products.name のコピー */}
               商品名称
-              <Input {...register('product_name')} onKeyDown={e => checkKeyDown(e, 'short_name')} id="product_name" placeholder="商品名称" />
+              <Input
+                {...register('product_name')}
+                onKeyDown={e => checkKeyDown(e, 'short_name')}
+                id="product_name"
+                // eslint-disable-next-line jsx-a11y/no-autofocus
+                autoFocus={autoFocusOnTop}
+                placeholder="商品名称"
+              />
               <FormErrorMessage message={errors.product_name?.message} />
             </label>
           )

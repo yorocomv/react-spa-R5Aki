@@ -16,12 +16,12 @@ import type { ProductSkus } from './products.types';
 
 import { useRegisterQuantityVariantProducts } from './components/hooks/useRegisterQuantityVariantProducts';
 import ProductSkusFormContents from './components/ProductSkusFormContents';
-import { postReqNewQuantityVariantDefaultValuesSchema, productSkusSchema } from './products.schemas';
+import { newQuantityVariantDefaultValuesSchema, productSkusSchema } from './products.schemas';
 
 export default function RegisterProductQuantityVariantsPage() {
   const navigate = useNavigate();
   const location = useLocation();
-  const locationState = postReqNewQuantityVariantDefaultValuesSchema.parse(location.state);
+  const locationState = newQuantityVariantDefaultValuesSchema.parse(location.state);
 
   const methods = useForm<ProductSkus>({
     mode: 'all',
