@@ -12,7 +12,42 @@ import { css } from 'styled-system/css';
 
 import type { ProductOptionsIdAndName } from '../options/options.types';
 
-interface Props<
+interface WithDefaultComponentProps<TComponent extends FieldValues> {
+  defaultComponent: FieldArray<TComponent>;
+  isTail: boolean;
+  append: UseFieldArrayAppend<TComponent>; // 必須
+  remove: (index: number) => void;
+}
+interface WithoutDefaultComponentProps {
+  defaultComponent?: never;
+  isTail?: never;
+  append?: never;
+  remove?: never;
+}
+interface BaseProps<
+  TForm extends FieldValues & {
+    components: {
+      component_id?: number;
+      symbol: string;
+      title: string;
+      category_id: number;
+      amount: number;
+      unit_type_id: number;
+      pieces: number;
+      inner_packaging_type_id: number;
+    }[];
+  },
+> {
+  _typeMeta?: TForm;
+  index: number;
+  selectOptions: {
+    product_categories: ProductOptionsIdAndName[];
+    unit_types: ProductOptionsIdAndName[];
+    product_inner_packaging_types: ProductOptionsIdAndName[];
+  };
+}
+
+type Props<
   TForm extends FieldValues & {
     components: {
       component_id?: number;
@@ -26,19 +61,7 @@ interface Props<
     }[];
   },
   TComponent extends FieldValues,
-> {
-  _typeMeta?: TForm;
-  index: number;
-  remove: (index: number) => void;
-  append: UseFieldArrayAppend<TComponent>;
-  defaultComponent?: FieldArray<TComponent>;
-  isTail: boolean;
-  selectOptions: {
-    product_categories: ProductOptionsIdAndName[];
-    unit_types: ProductOptionsIdAndName[];
-    product_inner_packaging_types: ProductOptionsIdAndName[];
-  };
-}
+> = BaseProps<TForm> & (WithDefaultComponentProps<TComponent> | WithoutDefaultComponentProps);
 
 export default function ProductComponentsFormContents<
   TForm extends FieldValues & {
@@ -53,14 +76,8 @@ export default function ProductComponentsFormContents<
     }[];
   },
   TComponent extends FieldValues,
->({
-  index,
-  remove,
-  append,
-  defaultComponent,
-  isTail,
-  selectOptions,
-}: Props<TForm, TComponent>) {
+>(props: Props<TForm, TComponent>) {
+  const { index, selectOptions } = props;
   const {
     register,
     formState: { errors },
@@ -183,7 +200,7 @@ export default function ProductComponentsFormContents<
         </Select>
         <FormErrorMessage message={componentErrors?.[index]?.inner_packaging_type_id?.message} />
       </label>
-      {defaultComponent
+      {props.defaultComponent
         ? (
             <div className={css({
               '&:has(svg)': {
@@ -194,7 +211,7 @@ export default function ProductComponentsFormContents<
               },
             })}
             >
-              {isTail && index !== 0
+              {props.isTail && index !== 0
                 ? (
                     <TooltipWrapper
                       text="削除"
@@ -203,13 +220,13 @@ export default function ProductComponentsFormContents<
                     >
                       <TbTrash
                         size="1.3rem"
-                        onClick={() => remove(index)}
+                        onClick={() => props.remove(index)}
                         className={css({ _hover: { cursor: 'pointer' } })}
                       />
                     </TooltipWrapper>
                   )
                 : null}
-              {isTail
+              {props.isTail
                 ? (
                     <TooltipWrapper
                       text="追加"
@@ -218,7 +235,7 @@ export default function ProductComponentsFormContents<
                     >
                       <TbPencilPlus
                         size="1.3rem"
-                        onClick={() => append(defaultComponent)}
+                        onClick={() => props.append(props.defaultComponent)}
                         className={css({ _hover: { cursor: 'pointer' } })}
                       />
                     </TooltipWrapper>
