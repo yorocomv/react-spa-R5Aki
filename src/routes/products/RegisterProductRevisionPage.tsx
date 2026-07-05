@@ -1,9 +1,10 @@
+import type { SubmitHandler } from 'react-hook-form';
 import type { ZodType } from 'zod';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
 import { FormProvider, useFieldArray, useForm } from 'react-hook-form';
-import { useLocation } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 
 import BubbleTailHeading from '@/components/ui/elements/BubbleTailHeading';
 import Button from '@/components/ui/elements/Button';
@@ -17,6 +18,7 @@ import type { PostReqProductRevision, PostReqSetProductRevision, PostReqUnifiedR
 import { useFetchProductOptions } from './components/hooks/useFetchProductOptions';
 import { useFetchProductPackagingTypeFlags } from './components/hooks/useFetchProductPackagingTypeFlags';
 import { useFetchSingleProducts } from './components/hooks/useFetchSingleProducts';
+import { useRegisterNewRevisionProducts } from './components/hooks/useRegisterNewRevisionProducts';
 import ProductCombinationsFormContents from './components/ProductCombinationsFormContents';
 import ProductComponentsFormContents from './components/ProductComponentsFormContents';
 import ProductFormContents from './components/ProductFormContents';
@@ -38,6 +40,7 @@ const combinationDefaultValues: PostReqSetProductRevision['combinations'][0] = {
 };
 
 export default function RegisterProductRevisionPage() {
+  const navigate = useNavigate();
   const location = useLocation();
   const {
     basic_id,
@@ -116,7 +119,27 @@ export default function RegisterProductRevisionPage() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleSubmit = e => console.log(e);
+  const { registerNewRevisionProducts } = useRegisterNewRevisionProducts();
+  const handleSubmit: SubmitHandler<PostReqUnifiedRevision> = async (values) => {
+    try {
+      const response = await registerNewRevisionProducts({ values });
+      if (response.isRegistered === true) {
+        console.log(response);
+      }
+      else {
+        console.error(response);
+        // eslint-disable-next-line no-alert
+        alert(`💥エラー⁉️\n${response.uniqueConstraintError.key}: ${response.uniqueConstraintError.value}\nは登録済みです`);
+      }
+    }
+    catch (err) {
+      console.error('💥💥💥 ', err, ' 💀💀💀');
+      return false;
+    }
+    Promise.resolve(navigate('/products')).catch((err: string) => {
+      throw new Error(err);
+    });
+  };
 
   const handleReset: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
