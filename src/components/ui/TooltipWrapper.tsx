@@ -6,7 +6,7 @@ import '@/components/ui/reactAriaTooltip.css';
 import { css } from 'styled-system/css';
 
 interface TooltipWrapperProps {
-  text: string;
+  text: string | React.JSX.Element;
   delay?: number | undefined;
   placement?: TooltipProps['placement'] | undefined;
   hasButton?: boolean;

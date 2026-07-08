@@ -7,6 +7,7 @@ import { RxCross1 } from 'react-icons/rx';
 import { TbPackageExport } from 'react-icons/tb';
 import { useNavigate } from 'react-router';
 
+import TooltipWrapper from '@/components/ui/TooltipWrapper';
 import env from '@/env';
 import { css } from 'styled-system/css';
 
@@ -195,50 +196,70 @@ export default function ProductBottomSheet(p: ProductBottomSheetProps) {
                   '& + :not(:has(img))': { mt: '2rem' },
                 })}
               >
-                <button
-                  type="button"
-                  onClick={() => {
-                    Promise.resolve(
-                      navigate('/products/new/revision-same-jan', {
-                        relative: 'path',
-                        state: {
-                          basic_id: skuDetailsState.basic_id,
-                          basic_name: skuDetailsState.basic_name,
-                          packaging_type_id: skuDetailsState.packaging_type_id,
-                          is_set_product: skuDetailsState.is_set_product,
-                          itf_case_code: gtin.itf1,
-                          itf_inner_carton_code: gtin.itf2,
-                          componentsArrayLength: componentsState.length,
-                          combinationsArrayLength: combinationsState.length,
-                        } satisfies NewUnifiedRevisionDefaultValues,
-                      }),
-                    ).catch((err: string) => { throw new Error(err); });
-                  }}
-                  className={css({ mr: '0.125rem', color: 'cyan.300', cursor: 'pointer' })}
+                <TooltipWrapper
+                  text={(
+                    <>
+                      ＪＡＮ維持で
+                      <br />
+                      リニューアル
+                    </>
+                  )}
+                  fillColor="orange.400"
+                  placement="top"
+                  className={css({ color: 'orange.950', bgColor: 'orange.400', shadow: '2xl' })}
                 >
-                  <BsStars />
-                </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      Promise.resolve(
+                        navigate('/products/new/revision-same-jan', {
+                          relative: 'path',
+                          state: {
+                            basic_id: skuDetailsState.basic_id,
+                            basic_name: skuDetailsState.basic_name,
+                            packaging_type_id: skuDetailsState.packaging_type_id,
+                            is_set_product: skuDetailsState.is_set_product,
+                            itf_case_code: gtin.itf1,
+                            itf_inner_carton_code: gtin.itf2,
+                            componentsArrayLength: componentsState.length,
+                            combinationsArrayLength: combinationsState.length,
+                          } satisfies NewUnifiedRevisionDefaultValues,
+                        }),
+                      ).catch((err: string) => { throw new Error(err); });
+                    }}
+                    className={css({ mr: '0.125rem', color: 'cyan.300', cursor: 'pointer' })}
+                  >
+                    <BsStars />
+                  </button>
+                </TooltipWrapper>
                 {p.sku_name}
-                <button
-                  type="button"
-                  onClick={() => {
-                    Promise.resolve(
-                      navigate('/products/new/quantity-variant', {
-                        relative: 'path',
-                        state: {
-                          product_id: skuDetailsState.product_id,
-                          product_name: skuDetailsState.product_name,
-                          skus_name: skuDetailsState.skus_name,
-                          itf_case_code: gtin.itf1,
-                          itf_inner_carton_code: gtin.itf3,
-                        } satisfies NewQuantityVariantDefaultValues,
-                      }),
-                    ).catch((err: string) => { throw new Error(err); });
-                  }}
-                  className={css({ ml: '0.125rem', color: 'cyan.300', cursor: 'pointer' })}
+                <TooltipWrapper
+                  text="入数違い📦️新ＳＫＵ"
+                  fillColor="orange.400"
+                  placement="top"
+                  className={css({ color: 'orange.950', bgColor: 'orange.400', shadow: '2xl' })}
                 >
-                  <TbPackageExport size="1.675rem" />
-                </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      Promise.resolve(
+                        navigate('/products/new/quantity-variant', {
+                          relative: 'path',
+                          state: {
+                            product_id: skuDetailsState.product_id,
+                            product_name: skuDetailsState.product_name,
+                            skus_name: skuDetailsState.skus_name,
+                            itf_case_code: gtin.itf1,
+                            itf_inner_carton_code: gtin.itf3,
+                          } satisfies NewQuantityVariantDefaultValues,
+                        }),
+                      ).catch((err: string) => { throw new Error(err); });
+                    }}
+                    className={css({ ml: '0.125rem', color: 'cyan.300', cursor: 'pointer' })}
+                  >
+                    <TbPackageExport size="1.675rem" />
+                  </button>
+                </TooltipWrapper>
                 <span className={css({ display: 'flex', alignItems: 'center', fontSize: '0.625em', ml: '1rem', color: 'yellow.300' })}>
                   (ＳＫＵ別・略称)
                   <span className={css({

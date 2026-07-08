@@ -22,24 +22,38 @@ import ProductComponentsFormContents from './ProductComponentsFormContents';
 import ProductFormContents from './ProductFormContents';
 import ProductSkusFormContents from './ProductSkusFormContents';
 
-interface Props<
+interface NewProductProps<
+  TComponent extends FieldValues,
+  TCombination extends FieldValues,
+> {
+  mode: 'new';
+  onTypeChange?: (t: '0' | '1') => void;
+  componentDefaultValues: FieldArray<TComponent>;
+  combinationDefaultValues: FieldArray<TCombination>;
+}
+interface ExistingProductProps {
+  mode: 'edit';
+  basicId: number;
+}
+interface BaseProps<
   TForm extends FieldValues,
   TComponent extends FieldValues,
   TCombination extends FieldValues,
 > {
-  mode: 'new' | 'edit';
   heading: string;
   isSet: '0' | '1';
-  onTypeChange?: (t: '0' | '1') => void;
   methods: UseFormReturn<TForm>;
   componentsArray: UseFieldArrayReturn<TComponent>;
   setsArray: UseFieldArrayReturn<TCombination>;
   submitProcess: (val: TForm) => Promise<boolean>;
   resetProcess: () => void;
-  componentDefaultValues?: FieldArray<TComponent>;
-  combinationDefaultValues?: FieldArray<TCombination>;
-  basicId?: number;
 }
+
+type Props<
+  TForm extends FieldValues,
+  TComponent extends FieldValues,
+  TCombination extends FieldValues,
+> = BaseProps<TForm, TComponent, TCombination> & (NewProductProps<TComponent, TCombination> | ExistingProductProps);
 export interface Gtin {
   jan: string | undefined;
   itf1: string | undefined;
@@ -50,7 +64,8 @@ export default function ProductEntryForm<
   TForm extends FieldValues,
   TComponent extends FieldValues,
   TCombination extends FieldValues,
->({ mode, heading, isSet, onTypeChange, methods, componentsArray, setsArray, submitProcess, resetProcess, componentDefaultValues, combinationDefaultValues, basicId }: Props<TForm, TComponent, TCombination>) {
+>(props: Props<TForm, TComponent, TCombination>) {
+  const { mode, heading, isSet, methods, componentsArray, setsArray, submitProcess, resetProcess } = props;
   const navigate = useNavigate();
 
   const { productOptions } = useFetchProductOptions();
@@ -125,15 +140,15 @@ export default function ProductEntryForm<
                 product_packaging_types: productOptions.product_packaging_types,
               }}
               setPackagingFlags={setPackagingFlags}
-              basicId={basicId}
+              basicId={'basicId' in props ? props.basicId : undefined}
             />
 
             <ProductFormContents
               mode={mode}
               isSet={isSet}
-              onTypeChange={onTypeChange}
+              onTypeChange={'onTypeChange' in props ? props.onTypeChange : undefined}
               packagingFlags={packagingFlags}
-              drawContents={{ basic_id: false, product_name: false }}
+              drawContents={{ basic_id: false, product_name: mode === 'edit' }}
               selectOptions={{ suppliers: productOptions.suppliers }}
             />
 
@@ -143,19 +158,33 @@ export default function ProductEntryForm<
                     componentsArray.fields.map((field, index) => {
                       const isTail = index === componentsArray.fields.length - 1;
                       return (
-                        <ProductComponentsFormContents
-                          key={field.id}
-                          index={index}
-                          remove={componentsArray.remove}
-                          append={componentsArray.append}
-                          defaultComponent={componentDefaultValues}
-                          isTail={isTail}
-                          selectOptions={{
-                            product_categories: productOptions.product_categories,
-                            unit_types: productOptions.unit_types,
-                            product_inner_packaging_types: productOptions.product_inner_packaging_types,
-                          }}
-                        />
+                        mode === 'new'
+                          ? (
+                              <ProductComponentsFormContents
+                                key={field.id}
+                                index={index}
+                                remove={componentsArray.remove}
+                                append={componentsArray.append}
+                                defaultComponent={props.componentDefaultValues}
+                                isTail={isTail}
+                                selectOptions={{
+                                  product_categories: productOptions.product_categories,
+                                  unit_types: productOptions.unit_types,
+                                  product_inner_packaging_types: productOptions.product_inner_packaging_types,
+                                }}
+                              />
+                            )
+                          : (
+                              <ProductComponentsFormContents
+                                key={field.id}
+                                index={index}
+                                selectOptions={{
+                                  product_categories: productOptions.product_categories,
+                                  unit_types: productOptions.unit_types,
+                                  product_inner_packaging_types: productOptions.product_inner_packaging_types,
+                                }}
+                              />
+                            )
                       );
                     })
                   )
@@ -163,15 +192,25 @@ export default function ProductEntryForm<
                     setsArray.fields.map((field, index) => {
                       const isTail = index === setsArray.fields.length - 1;
                       return (
-                        <ProductCombinationsFormContents
-                          key={field.id}
-                          index={index}
-                          remove={setsArray.remove}
-                          append={setsArray.append}
-                          defaultCombination={combinationDefaultValues}
-                          isTail={isTail}
-                          singleProductsStrListObj={singleProductsStrListObj}
-                        />
+                        mode === 'new'
+                          ? (
+                              <ProductCombinationsFormContents
+                                key={field.id}
+                                index={index}
+                                remove={setsArray.remove}
+                                append={setsArray.append}
+                                defaultCombination={props.combinationDefaultValues}
+                                isTail={isTail}
+                                singleProductsStrListObj={singleProductsStrListObj}
+                              />
+                            )
+                          : (
+                              <ProductCombinationsFormContents
+                                key={field.id}
+                                index={index}
+                                singleProductsStrListObj={singleProductsStrListObj}
+                              />
+                            )
                       );
                     })
                   )}
