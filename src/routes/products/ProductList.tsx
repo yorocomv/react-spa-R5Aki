@@ -1,6 +1,8 @@
 import { Suspense, useState } from 'react';
+import { CheckboxGroup, Label } from 'react-aria-components';
 import { Link } from 'react-router';
 
+import { Checkbox } from '@/components/ui/elements/Checkbox';
 import SvgSpinnersLoader5 from '@/components/ui/elements/SvgSpinnersLoader5';
 import { css } from 'styled-system/css';
 
@@ -8,6 +10,7 @@ import FloatingAddButton from './components/FloatingAddButton';
 import { useFetchProductImages } from './components/hooks/useFetchProductImages';
 import { useFetchProductOptions } from './components/hooks/useFetchProductOptions';
 import { useFetchProductSkuDetails } from './components/hooks/useFetchProductSkuDetails';
+import { useProductFilter } from './components/hooks/useProductFilter';
 import ProductBottomSheet from './components/ProductBottomSheet';
 import ProductItem from './components/ProductItem';
 
@@ -16,9 +19,10 @@ export default function ProductList() {
   const { productImages } = useFetchProductImages();
   const { productOptions } = useFetchProductOptions();
   const [selectedItem, setSelectedItem] = useState(-1);
+  const { filteredProducts, filters, handleCheckboxChange } = useProductFilter(productSkuDetails);
 
   return (
-    <div className={css({ w: '100vw', minH: '100vh' })}>
+    <div className={css({ w: '100vw', minH: '100lvh' })}>
       {/* ===================================================== */}
       {/* ① 上部：2 カラム構成（フィルター + 商品グリッド） */}
       {/* ===================================================== */}
@@ -31,6 +35,7 @@ export default function ProductList() {
           p: '1rem',
           w: '100%',
           maxW: '100vw',
+          minH: { md: '100lvh' },
         })}
       >
         {/* 左カラム：フィルター（Sticky） */}
@@ -50,12 +55,25 @@ export default function ProductList() {
           <h2 className={css({ fontWeight: 'bold', mb: '1rem' })}>フィルター</h2>
 
           {/* フィルター UI */}
-          <div className={css({ display: 'flex', flexDir: 'column', gap: '0.5rem', '&>button': { textAlign: 'left' } })}>
-            <button type="button">全て</button>
-            {productOptions.product_categories.map(category => (
-              <button key={category.id} type="button">{category.name}</button>
-            ))}
+          <div className={css({ display: 'flex', flexDir: 'column', gap: '0.5rem' })}>
+            <CheckboxGroup
+              value={filters.categories}
+              onChange={handleCheckboxChange('categories')}
+              className={css({ display: 'flex', flexDir: 'column', gap: '0.375rem' })}
+            >
+              <Label className={css({ fontSize: 'sm', fontWeight: 'bold', color: 'gray.700', mb: '0.25rem' })}>カテゴリフィルター</Label>
+              <Checkbox value="0">全て</Checkbox>
+              {productOptions.product_categories.map(category => (
+                <Checkbox key={category.id} value={String(category.id)}>
+                  {category.name}
+                </Checkbox>
+              ))}
+            </CheckboxGroup>
           </div>
+          {/* デバッグ用：現在のステートの確認 */}
+          <pre style={{ background: '#f4f4f4', padding: '12px', borderRadius: '4px' }}>
+            {JSON.stringify(filters, null, 2)}
+          </pre>
         </aside>
 
         {/* 右カラム：商品グリッド */}
@@ -68,7 +86,7 @@ export default function ProductList() {
             p: '1rem',
           })}
           >
-            {productSkuDetails.map((detail, i) => (
+            {filteredProducts.map((detail, i) => (
               <ProductItem
                 key={detail.sku_id}
                 index={i}
@@ -84,17 +102,7 @@ export default function ProductList() {
       {/* ===================================================== */}
       {/* ② 下部：HTML フッター（UI はモーダル + 固定ボタン） */}
       {/* ===================================================== */}
-      <footer
-        className={css({
-          w: '100vw',
-          p: '1rem',
-          mt: '2rem',
-          display: 'flex',
-          flexDir: 'column',
-          alignItems: 'center',
-          gap: '1rem',
-        })}
-      >
+      <footer>
         {/* モーダルとして表示される BottomSheet */}
         <Suspense fallback={(
           <div className={css({
@@ -114,8 +122,8 @@ export default function ProductList() {
           <ProductBottomSheet
             isOpen={selectedItem !== -1}
             setSelectedItem={setSelectedItem}
-            images={selectedItem !== -1 ? productImages[productSkuDetails[selectedItem].ulid_str ?? ''] : undefined}
-            {...productSkuDetails[selectedItem]}
+            images={selectedItem !== -1 ? productImages[filteredProducts[selectedItem].ulid_str ?? ''] : undefined}
+            {...filteredProducts[selectedItem]}
           />
         </Suspense>
         <Link to="./new" relative="path">
