@@ -31,7 +31,9 @@ export const productsSchema = z.object({
   is_set_product: z.enum(['0', '1']),
   // * cached_category_id
   // * display_category_name
-  // * is_assorted はバックエンドで他の入力項目から導出
+  // * is_assorted
+  // * max_piece_weight
+  // * max_piece_weight_unit_type_id はバックエンドで他の入力項目から導出
   depth_mm: zOptPosInteger,
   width_mm: zOptPosInteger,
   diameter_mm: zOptPosInteger,
