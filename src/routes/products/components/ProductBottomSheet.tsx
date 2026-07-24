@@ -382,6 +382,9 @@ export default function ProductBottomSheet(p: ProductBottomSheetProps) {
                 </li>
                 <li>
                   荷姿・その他詳細
+                  <span className={css({ color: 'slate.600', fontSize: '0.75em', fontWeight: 'normal', ml: '0.75rem', textShadow: 'none' })}>
+                    {`-${p.sku_ulid_str}-`}
+                  </span>
                   <ul>
                     <li>
                       発注先

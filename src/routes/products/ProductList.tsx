@@ -86,15 +86,25 @@ export default function ProductList() {
             p: '1rem',
           })}
           >
-            {filteredProducts.map((detail, i) => (
-              <ProductItem
-                key={detail.sku_id}
-                index={i}
-                setSelectedItem={setSelectedItem}
-                imageUrl={detail.ulid_str ? productImages[detail.ulid_str]?.[0] : undefined}
-                {...detail}
-              />
-            ))}
+            {filteredProducts.map((detail, i) => {
+              const skuImagesExists = detail.sku_ulid_str in productImages;
+              const productImagesExists = detail.ulid_str in productImages;
+              let imgUrl: string[] = [];
+              if (skuImagesExists)
+                imgUrl = [...productImages[detail.sku_ulid_str]].sort();
+              if (productImagesExists)
+                imgUrl = [...productImages[detail.ulid_str]].sort();
+              console.log(imgUrl);
+              return (
+                <ProductItem
+                  key={detail.sku_id}
+                  index={i}
+                  setSelectedItem={setSelectedItem}
+                  imageUrl={imgUrl ? imgUrl[0] : undefined}
+                  {...detail}
+                />
+              );
+            })}
           </div>
         </div>
       </section>

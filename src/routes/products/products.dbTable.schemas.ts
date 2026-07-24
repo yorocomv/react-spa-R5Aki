@@ -60,6 +60,7 @@ export const viewSkuDetailsRowSchema = z.object({
   // 元テーブルで NOT NULL
   sku_id: z.number().int().positive(),
   sku_name: z.string().min(1).max(32),
+  sku_ulid_str: z.string().ulid(),
   priority: z.enum(['A', 'B', 'C']),
 
   // 元テーブルで NULL 許容
@@ -91,6 +92,7 @@ export const viewSkuDetailsRowSchema = z.object({
   max_piece_weight_unit_type_id: z.number().int().positive(),
   available_date: z.date(),
   discontinued_date: z.date(),
+  ulid_str: z.string().ulid(),
 
   // 元テーブルで NULL 許容
   depth_mm: z.number().int().positive().nullable(),
@@ -98,7 +100,6 @@ export const viewSkuDetailsRowSchema = z.object({
   diameter_mm: z.number().int().positive().nullable(),
   height_mm: z.number().int().positive().nullable(),
   weight_g: z.number().int().positive().nullable(),
-  ulid_str: z.string().ulid().nullable(),
   product_note: z.string().nullable(),
 
   // --- Basic Product (basic_products) ---
