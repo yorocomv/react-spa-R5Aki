@@ -7,6 +7,7 @@ import SvgSpinnersLoader5 from '@/components/ui/elements/SvgSpinnersLoader5';
 import { css } from 'styled-system/css';
 
 import FloatingAddButton from './components/FloatingAddButton';
+import { useFetchAllProductSkuTagsWithCounts } from './components/hooks/useFetchAllProductSkuTagsWithCounts';
 import { useFetchProductImages } from './components/hooks/useFetchProductImages';
 import { useFetchProductOptions } from './components/hooks/useFetchProductOptions';
 import { useFetchProductSkuDetails } from './components/hooks/useFetchProductSkuDetails';
@@ -18,8 +19,9 @@ export default function ProductList() {
   const { productSkuDetails } = useFetchProductSkuDetails();
   const { productImages } = useFetchProductImages();
   const { productOptions } = useFetchProductOptions();
+  const { productSkuTagsWithCounts } = useFetchAllProductSkuTagsWithCounts();
   const [selectedItem, setSelectedItem] = useState(-1);
-  const { filteredProducts, filters, handleCheckboxChange } = useProductFilter(productSkuDetails);
+  const { filteredProducts, filters, handleCheckboxChange } = useProductFilter(productSkuDetails, productSkuTagsWithCounts);
 
   const getSortedProductImages = (
     productImages: Record<string, string[]>,
@@ -82,13 +84,30 @@ export default function ProductList() {
           <h2 className={css({ fontWeight: 'bold', mb: '1rem' })}>フィルター</h2>
 
           {/* フィルター UI */}
-          <div className={css({ display: 'flex', flexDir: 'column', gap: '0.5rem' })}>
+          <div className={css({
+            display: 'flex',
+            flexDir: 'column',
+            gap: '0.5rem',
+
+            '&>div': {
+              display: 'flex',
+              flexDir: 'column',
+              gap: '0.375rem',
+
+              '&>span': {
+                fontSize: 'sm',
+                fontWeight: 'bold',
+                color: 'gray.700',
+                mb: '0.25rem',
+              },
+            },
+          })}
+          >
             <CheckboxGroup
               value={filters.categories}
               onChange={handleCheckboxChange('categories')}
-              className={css({ display: 'flex', flexDir: 'column', gap: '0.375rem' })}
             >
-              <Label className={css({ fontSize: 'sm', fontWeight: 'bold', color: 'gray.700', mb: '0.25rem' })}>カテゴリフィルター</Label>
+              <Label>カテゴリフィルター</Label>
               <Checkbox value="0">全て</Checkbox>
               {productOptions.product_categories.map(category => (
                 <Checkbox key={category.id} value={String(category.id)}>
@@ -99,13 +118,24 @@ export default function ProductList() {
             <CheckboxGroup
               value={filters.maxPieceWeight}
               onChange={handleCheckboxChange('maxPieceWeight')}
-              className={css({ display: 'flex', flexDir: 'column', gap: '0.375rem' })}
             >
-              <Label className={css({ fontSize: 'sm', fontWeight: 'bold', color: 'gray.700', mb: '0.25rem' })}>内容量フィルター</Label>
+              <Label>内容量フィルター</Label>
               <Checkbox value="0">全て</Checkbox>
               <Checkbox value="1">２ｇ以下</Checkbox>
               <Checkbox value="2">２．１ｇ～２９９．９ｇ</Checkbox>
               <Checkbox value="3">３００ｇ以上</Checkbox>
+            </CheckboxGroup>
+            <CheckboxGroup
+              value={filters.tagIds}
+              onChange={handleCheckboxChange('tagIds')}
+            >
+              <Label>タグ・フィルター</Label>
+              <Checkbox value="0">フィルター無し</Checkbox>
+              {productSkuTagsWithCounts.map(tag => (
+                <Checkbox key={tag.tag_id} value={String(tag.tag_id)}>
+                  {`${tag.label} (${tag.tagged_skus_count}) `}
+                </Checkbox>
+              ))}
             </CheckboxGroup>
           </div>
           {/* デバッグ用：現在のステートの確認 */}
