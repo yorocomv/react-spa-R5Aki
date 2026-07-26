@@ -32,44 +32,47 @@ export default function ProductItem(p: ViewSkuDetailsRow & {
         <figure>
           {p.imageUrl?.startsWith('http')
             ? (
-                <div className={css({ w: 'fit-content', mx: 'auto' })}>
+                <div
+                  className={css({
+                    w: 'fit-content',
+                    mx: 'auto',
+                    pos: 'relative',
+
+                    // data-error属性が付与されたら「NO IMAGE」を表示
+                    '&[data-error="true"]::after': {
+                      content: '"NO IMAGE"',
+                      pos: 'absolute',
+                      top: 0,
+                      left: 0,
+                      w: '100%',
+                      h: '100%',
+                      display: 'grid',
+                      placeItems: 'center',
+                      fontFamily: '"Palatino Linotype"',
+                      fontSize: '3rem',
+                      fontWeight: 'bold',
+                      lineHeight: '3rem',
+                      textWrap: 'balance',
+                      textAlign: 'center',
+                    },
+                  })}
+                >
                   <img
                     src={p.imageUrl}
                     alt={p.product_name}
                     onError={(e) => {
-                      const img = e.currentTarget;
-                      img.classList.add('is-load-error');
+                      // 親要素(div)にエラーフラグを立てる
+                      e.currentTarget.parentElement?.setAttribute('data-error', 'true');
+                      // 壊れた画像アイコンを消すために透明GIFに差し替え
+                      e.currentTarget.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
                     }}
                     className={css({
+                      display: 'block',
                       bgColor: 'var(--cat-color-light)',
                       w: '16rem',
                       h: '13rem',
                       objectFit: 'cover',
                       borderTopRadius: 'lg',
-
-                      '&.is-load-error': {
-                        pos: 'relative',
-                        visibility: 'visible',
-                        textIndent: '-100lvh',
-
-                        '&::after': {
-                          pos: 'absolute',
-                          top: 0,
-                          left: 0,
-                          content: '"NO IMAGE"',
-                          textIndent: 0,
-                          w: '100%',
-                          h: '100%',
-                          display: 'grid',
-                          placeItems: 'center',
-                          fontFamily: '"Palatino Linotype"',
-                          fontSize: '3rem',
-                          fontWeight: 'bold',
-                          lineHeight: '3rem',
-                          textWrap: 'balance',
-                          textAlign: 'center',
-                        },
-                      },
                     })}
                   />
                 </div>

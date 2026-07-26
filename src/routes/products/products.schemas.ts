@@ -75,7 +75,7 @@ export const productSkusSchema = z.object({
   tags: z.array(z.object({
     value: z.string().min(1).max(32),
     label: z.string().min(1).max(32),
-  })).optional(),
+  })).nullish().transform(val => val ?? null),
   skus_name: z.string().trim().min(1).max(32),
   product_id: z.coerce.number().int().positive(),
   case_quantity: zOptPosInteger,
@@ -294,7 +294,7 @@ const nullableFields = {
   tags: z.array(z.object({
     value: z.string().min(1).max(32),
     label: z.string().min(1).max(32),
-  })).nullable(),
+  })).nullish().transform(val => val ?? null),
   case_quantity: zNullPosInteger,
   inner_carton_quantity: zNullPosInteger,
   itf_case_code: z.preprocess(v => (isEmpty(v) ? null : v), z.string().trim().length(14).regex(/\d/).nullable()),

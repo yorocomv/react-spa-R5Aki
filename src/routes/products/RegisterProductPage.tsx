@@ -85,7 +85,6 @@ export default function RegisterProductPage() {
       const response = await registerProducts({ url: values.is_set_product === '0' ? '' : '/set-item', values });
       if (response.isRegistered === true) {
         console.log(response);
-        resetProcess();
         return true;
       }
       else {

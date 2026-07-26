@@ -4,14 +4,14 @@ import type { ViewSkuDetailsRow } from '../../products.dbTable.types';
 
 interface FilterState {
   categories: string[];
-  packagingTypes: string[];
+  maxPieceWeight: string[];
 }
 
 export function useProductFilter(productSkuDetails: ViewSkuDetailsRow[]) {
   // 初期値はすべて「'0'（全て）」を指定
   const [filters, setFilters] = useState<FilterState>({
     categories: ['0'],
-    packagingTypes: ['0'],
+    maxPieceWeight: ['0'],
   });
 
   /*
@@ -52,7 +52,28 @@ export function useProductFilter(productSkuDetails: ViewSkuDetailsRow[]) {
     }));
   };
 
-  const filteredProducts = filters.categories.includes('0') ? productSkuDetails : productSkuDetails.filter(product => filters.categories.includes(String(product.category_id)));
+  const filteredByCategories = filters.categories.includes('0') ? productSkuDetails : productSkuDetails.filter(product => filters.categories.includes(String(product.category_id)));
+
+  const filteredProducts = filters.maxPieceWeight.includes('0')
+    ? filteredByCategories
+    : filteredByCategories.filter((product) => {
+        if (filters.maxPieceWeight.includes('1')) {
+          if (product.max_piece_weight <= 2) {
+            return true;
+          }
+        }
+        if (filters.maxPieceWeight.includes('2')) {
+          if (product.max_piece_weight > 2 && product.max_piece_weight < 300) {
+            return true;
+          }
+        }
+        if (filters.maxPieceWeight.includes('3')) {
+          if (product.max_piece_weight >= 300) {
+            return true;
+          }
+        }
+        return false;
+      });
 
   return { filteredProducts, filters, handleCheckboxChange };
 }

@@ -316,6 +316,10 @@ export default function ProductBottomSheet(p: ProductBottomSheetProps) {
                       品番（発注コード）
                       <ul><li>{p.internal_code ?? '未登録'}</li></ul>
                     </li>
+                    <NIl contents={p.product_note}>
+                      🦘運送会社重量📦️／メモ
+                      <ul><li><pre className={css({ whiteSpace: 'pre-wrap', fontWeight: 'bold', color: 'yellow.100' })}>{p.product_note}</pre></li></ul>
+                    </NIl>
                     <li>
                       JAN コード
                       <ul><li>{p.jan_code ?? '未登録'}</li></ul>
@@ -395,10 +399,10 @@ export default function ProductBottomSheet(p: ProductBottomSheetProps) {
                         </li>
                       </ul>
                     </li>
-                    <li>
-                      発注方法／メモ
-                      <ul><li>{p.supplier_note || 'なし'}</li></ul>
-                    </li>
+                    <NIl contents={p.supplier_note}>
+                      📞発注方法📠／メモ
+                      <ul><li><pre className={css({ whiteSpace: 'pre-wrap', fontWeight: 'bold', color: 'yellow.100' })}>{p.supplier_note}</pre></li></ul>
+                    </NIl>
                     <NIl contents={p.height_mm}>
                       商品サイズ（
                       {p.diameter_mm ? '直径' : '縦・横'}

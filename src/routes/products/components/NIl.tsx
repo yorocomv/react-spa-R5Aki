@@ -8,5 +8,8 @@ export default function NIl({
   if (contents === null) {
     return null;
   }
+  if (typeof contents === 'string' && contents.trim().length === 0) {
+    return null;
+  }
   return <li>{children}</li>;
 }

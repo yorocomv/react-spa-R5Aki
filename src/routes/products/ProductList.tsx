@@ -21,6 +21,33 @@ export default function ProductList() {
   const [selectedItem, setSelectedItem] = useState(-1);
   const { filteredProducts, filters, handleCheckboxChange } = useProductFilter(productSkuDetails);
 
+  const getSortedProductImages = (
+    productImages: Record<string, string[]>,
+    skuUlid: string,
+    productUlid: string,
+  ): string[] => {
+    const collected: string[] = [];
+
+    if (skuUlid in productImages) {
+      collected.push(...productImages[skuUlid]);
+    }
+    if (productUlid in productImages) {
+      collected.push(...productImages[productUlid]);
+    }
+
+    if (collected.length === 0)
+      return [];
+
+    const filename = (url: string) => {
+      const idx = url.lastIndexOf('/');
+      return idx === -1 ? url.toLowerCase() : url.substring(idx + 1).toLowerCase();
+    };
+
+    return collected
+      .slice()
+      .sort((a, b) => filename(a).localeCompare(filename(b), undefined, { numeric: true, sensitivity: 'base' }));
+  };
+
   return (
     <div className={css({ w: '100vw', minH: '100lvh' })}>
       {/* ===================================================== */}
@@ -69,6 +96,17 @@ export default function ProductList() {
                 </Checkbox>
               ))}
             </CheckboxGroup>
+            <CheckboxGroup
+              value={filters.maxPieceWeight}
+              onChange={handleCheckboxChange('maxPieceWeight')}
+              className={css({ display: 'flex', flexDir: 'column', gap: '0.375rem' })}
+            >
+              <Label className={css({ fontSize: 'sm', fontWeight: 'bold', color: 'gray.700', mb: '0.25rem' })}>内容量フィルター</Label>
+              <Checkbox value="0">全て</Checkbox>
+              <Checkbox value="1">２ｇ以下</Checkbox>
+              <Checkbox value="2">２．１ｇ～２９９．９ｇ</Checkbox>
+              <Checkbox value="3">３００ｇ以上</Checkbox>
+            </CheckboxGroup>
           </div>
           {/* デバッグ用：現在のステートの確認 */}
           <pre style={{ background: '#f4f4f4', padding: '12px', borderRadius: '4px' }}>
@@ -87,20 +125,13 @@ export default function ProductList() {
           })}
           >
             {filteredProducts.map((detail, i) => {
-              const skuImagesExists = detail.sku_ulid_str in productImages;
-              const productImagesExists = detail.ulid_str in productImages;
-              let imgUrl: string[] = [];
-              if (skuImagesExists)
-                imgUrl = [...productImages[detail.sku_ulid_str]].sort();
-              if (productImagesExists)
-                imgUrl = [...productImages[detail.ulid_str]].sort();
-              console.log(imgUrl);
+              const imgUrl = getSortedProductImages(productImages, detail.sku_ulid_str, detail.ulid_str);
               return (
                 <ProductItem
                   key={detail.sku_id}
                   index={i}
                   setSelectedItem={setSelectedItem}
-                  imageUrl={imgUrl ? imgUrl[0] : undefined}
+                  imageUrl={imgUrl.length ? imgUrl[0] : undefined}
                   {...detail}
                 />
               );
@@ -132,7 +163,13 @@ export default function ProductList() {
           <ProductBottomSheet
             isOpen={selectedItem !== -1}
             setSelectedItem={setSelectedItem}
-            images={selectedItem !== -1 ? productImages[filteredProducts[selectedItem].ulid_str ?? ''] : undefined}
+            images={selectedItem !== -1
+              ? getSortedProductImages(
+                  productImages,
+                  filteredProducts[selectedItem].sku_ulid_str,
+                  filteredProducts[selectedItem].ulid_str,
+                )
+              : undefined}
             {...filteredProducts[selectedItem]}
           />
         </Suspense>
