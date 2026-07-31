@@ -101,10 +101,10 @@ export default function ProductEntryForm<
     const isSuccess = await submitProcess(val);
     if (isSuccess) {
       setGtinObj({ jan: undefined, itf1: undefined, itf2: undefined });
+      Promise.resolve(navigate('/products')).catch((err: string) => {
+        throw new Error(err);
+      });
     }
-    Promise.resolve(navigate('/products')).catch((err: string) => {
-      throw new Error(err);
-    });
   };
   const handleReset: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();

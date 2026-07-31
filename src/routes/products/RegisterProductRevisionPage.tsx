@@ -125,6 +125,9 @@ export default function RegisterProductRevisionPage() {
       const response = await registerNewRevisionProducts({ values });
       if (response.isRegistered === true) {
         console.log(response);
+        Promise.resolve(navigate('/products')).catch((err: string) => {
+          throw new Error(err);
+        });
       }
       else {
         console.error(response);
@@ -136,9 +139,6 @@ export default function RegisterProductRevisionPage() {
       console.error('💥💥💥 ', err, ' 💀💀💀');
       return false;
     }
-    Promise.resolve(navigate('/products')).catch((err: string) => {
-      throw new Error(err);
-    });
   };
 
   const handleReset: React.MouseEventHandler<HTMLButtonElement> = (e) => {
