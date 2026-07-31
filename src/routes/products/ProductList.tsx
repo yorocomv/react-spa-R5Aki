@@ -75,7 +75,10 @@ export default function ProductList() {
             position: { md: 'sticky' },
             top: { md: '6rem' },
             alignSelf: 'flex-start',
-            bgColor: 'white',
+            color: 'stone.950',
+            textShadow: 'rgba(255, 255, 255, 0.3) 1px 1px',
+            bgImage: 'linear-gradient(in oklch 90deg, {colors.stone.300/35}, {colors.slate.100/20})',
+            backdropFilter: 'blur(4px)',
             borderRadius: 'lg',
             shadow: 'md',
             p: '1rem',
@@ -97,9 +100,11 @@ export default function ProductList() {
               '&>span': {
                 fontSize: 'sm',
                 fontWeight: 'bold',
-                color: 'gray.700',
+                color: 'stone.900',
                 mb: '0.25rem',
               },
+
+              '& label': { color: 'stone.950' },
             },
           })}
           >
@@ -129,7 +134,7 @@ export default function ProductList() {
               value={filters.tagIds}
               onChange={handleCheckboxChange('tagIds')}
             >
-              <Label>タグ・フィルター</Label>
+              <Label>タグフィルター</Label>
               <Checkbox value="0">フィルター無し</Checkbox>
               {productSkuTagsWithCounts.map(tag => (
                 <Checkbox key={tag.tag_id} value={String(tag.tag_id)}>
@@ -138,10 +143,6 @@ export default function ProductList() {
               ))}
             </CheckboxGroup>
           </div>
-          {/* デバッグ用：現在のステートの確認 */}
-          <pre style={{ background: '#f4f4f4', padding: '12px', borderRadius: '4px' }}>
-            {JSON.stringify(filters, null, 2)}
-          </pre>
         </aside>
 
         {/* 右カラム：商品グリッド */}
@@ -183,7 +184,7 @@ export default function ProductList() {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            color: 'violet.500',
+            color: 'stone.500',
           })}
           >
             <SvgSpinnersLoader5 size="9rem" />

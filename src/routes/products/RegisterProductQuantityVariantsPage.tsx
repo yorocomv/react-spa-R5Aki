@@ -34,6 +34,9 @@ export default function RegisterProductQuantityVariantsPage() {
       const response = await registerProductsSku({ values });
       if (response.isRegistered === true) {
         console.log(response);
+        Promise.resolve(navigate('/products')).catch((err: string) => {
+          throw new Error(err);
+        });
       }
       else {
         console.error(response);
@@ -45,9 +48,6 @@ export default function RegisterProductQuantityVariantsPage() {
       console.error('💥💥💥 ', err, ' 💀💀💀');
       return false;
     }
-    Promise.resolve(navigate('/products')).catch((err: string) => {
-      throw new Error(err);
-    });
   };
   const handleReset: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();

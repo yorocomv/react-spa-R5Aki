@@ -1,10 +1,10 @@
 import { Controller, useFormContext } from 'react-hook-form';
-import CreatableSelect from 'react-select/creatable';
 
 import Input from '@/components/ui/elements/Input';
 import Select from '@/components/ui/elements/Select';
 import FormErrorMessage from '@/components/ui/elementSwitchers/FormErrorMessage';
 import FormSuggestion from '@/components/ui/elementSwitchers/FormSuggestion';
+import ControlledTagsSelect from '@/components/ui/TagsSelect';
 import checkKeyDown from '@/libs/checkKeyDown';
 import { css } from 'styled-system/css';
 
@@ -62,11 +62,10 @@ export default function ProductSkusFormContents({ drawContents, itf1, itf2 }: Pr
           control={control}
           name="tags"
           render={({ field }) => (
-            <CreatableSelect
-              {...field}
+            <ControlledTagsSelect
+              field={field}
               id="tagsContainer"
               inputId="tags"
-              isMulti
               options={tagSelectOptions}
             />
           )}

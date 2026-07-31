@@ -4,7 +4,7 @@ import { today } from '@internationalized/date';
 import { useEffect, useRef, useState } from 'react';
 import { GiPin } from 'react-icons/gi';
 import { LuArrowLeftRight } from 'react-icons/lu';
-import { useLocation } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 
 import DatePickerInput from '@/components/ui/DatePickerInput';
 import Select from '@/components/ui/elements/Select';
@@ -23,6 +23,7 @@ import PrintHistoryTableTr from './components/PrintHistoryTableTr';
 import ThReverseButton from './components/ThReverseButton';
 
 export default function PrintHistoryList() {
+  const navigate = useNavigate();
   const fetchParams = useLocation().state as useFetchPrintHistoryStates | null;
   const { customerId, setCustomerId, selectCategory, setSelectCategory, dateA, setDateA, setDateAImmediate, dateB, setDateB, setDateBImmediate, printHistories, _lastOpenedPrintHistory, set_LastOpenedPrintHistory } =
     useFetchPrintHistory();
@@ -58,6 +59,29 @@ export default function PrintHistoryList() {
     }
     setSelectedHistory(index);
     set_LastOpenedPrintHistory(printedAt);
+  };
+
+  const categories = [
+    'delivery_date',
+    'shipping_date',
+    'printed_at',
+  ] as const satisfies readonly useFetchPrintHistoryStates['category'][];
+
+  const isCategory = (value: string): value is useFetchPrintHistoryStates['category'] => {
+    return categories.includes(value as useFetchPrintHistoryStates['category']);
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value;
+
+    if (isCategory(value)) {
+      setSelectCategory(value);
+      return;
+    }
+
+    Promise.resolve(navigate(value)).catch((err: string) => {
+      throw new Error(err);
+    });
   };
 
   useEffect(() => {
@@ -127,7 +151,7 @@ export default function PrintHistoryList() {
           })}
         >
           <Select
-            onChange={e => setSelectCategory(e.target.value as useFetchPrintHistoryStates['category'])}
+            onChange={handleChange}
             value={selectCategory}
             className={css({ maxH: '2.175rem', w: 'fit-content' })}
           >
@@ -136,6 +160,8 @@ export default function PrintHistoryList() {
                 {label}
               </option>
             ))}
+            <hr />
+            <option value="/products">🔗商品一覧へ</option>
           </Select>
           {/* Why [object Object]
                 React Aria の CalendarDate 型は
