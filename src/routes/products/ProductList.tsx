@@ -1,8 +1,9 @@
 import { Suspense, useState } from 'react';
 import { CheckboxGroup, Label } from 'react-aria-components';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 
 import { Checkbox } from '@/components/ui/elements/Checkbox';
+import Select from '@/components/ui/elements/Select';
 import SvgSpinnersLoader5 from '@/components/ui/elements/SvgSpinnersLoader5';
 import { css } from 'styled-system/css';
 
@@ -16,6 +17,7 @@ import ProductBottomSheet from './components/ProductBottomSheet';
 import ProductItem from './components/ProductItem';
 
 export default function ProductList() {
+  const navigate = useNavigate();
   const { productSkuDetails } = useFetchProductSkuDetails();
   const { productImages } = useFetchProductImages();
   const { productOptions } = useFetchProductOptions();
@@ -50,6 +52,14 @@ export default function ProductList() {
       .sort((a, b) => filename(a).localeCompare(filename(b), undefined, { numeric: true, sensitivity: 'base' }));
   };
 
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value;
+
+    Promise.resolve(navigate(value)).catch((err: string) => {
+      throw new Error(err);
+    });
+  };
+
   return (
     <div className={css({ w: '100vw', minH: '100lvh' })}>
       {/* ===================================================== */}
@@ -58,22 +68,26 @@ export default function ProductList() {
       <section
         className={css({
           display: 'flex',
-          flexDir: { base: 'column', md: 'row' },
+          flexDir: 'row',
           alignItems: 'flex-start',
           gap: '1.5rem',
           p: '1rem',
           w: '100%',
           maxW: '100vw',
-          minH: { md: '100lvh' },
+          minH: '100lvh',
+
+          '@media(width < 480px)': {
+            flexDir: 'column',
+          },
         })}
       >
         {/* 左カラム：フィルター（Sticky） */}
         <aside
           className={css({
-            w: { base: '100%', md: '16rem' },
+            w: '16rem',
             flexShrink: 0,
-            position: { md: 'sticky' },
-            top: { md: '6rem' },
+            position: 'sticky',
+            top: '2rem',
             alignSelf: 'flex-start',
             color: 'stone.950',
             textShadow: 'rgba(255, 255, 255, 0.3) 1px 1px',
@@ -82,9 +96,20 @@ export default function ProductList() {
             borderRadius: 'lg',
             shadow: 'md',
             p: '1rem',
+
+            '@media(width < 480px)': {
+              w: '90vw',
+              mx: 'auto',
+              pos: 'relative',
+              top: '0.5rem',
+            },
           })}
         >
-          <h2 className={css({ fontWeight: 'bold', mb: '1rem' })}>フィルター</h2>
+          <Select onChange={handleChange} className={css({ mb: '1rem' })}>
+            <option>商品一覧</option>
+            <hr />
+            <option value="/shipping-instruction-printouts">🔗 印刷履歴ページへ</option>
+          </Select>
 
           {/* フィルター UI */}
           <div className={css({
@@ -153,6 +178,10 @@ export default function ProductList() {
             justifyContent: 'center',
             gap: '1rem',
             p: '1rem',
+
+            '@media(width < 480px)': {
+              pt: '0.5rem',
+            },
           })}
           >
             {filteredProducts.map((detail, i) => {
@@ -184,7 +213,7 @@ export default function ProductList() {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            color: 'stone.500',
+            color: 'violet.500',
           })}
           >
             <SvgSpinnersLoader5 size="9rem" />

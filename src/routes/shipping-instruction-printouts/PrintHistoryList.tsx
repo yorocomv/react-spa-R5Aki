@@ -161,7 +161,7 @@ export default function PrintHistoryList() {
               </option>
             ))}
             <hr />
-            <option value="/products">🔗商品一覧へ</option>
+            <option value="/products">🔗 商品一覧ページへ</option>
           </Select>
           {/* Why [object Object]
                 React Aria の CalendarDate 型は
