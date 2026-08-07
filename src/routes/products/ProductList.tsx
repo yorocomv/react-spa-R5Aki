@@ -1,4 +1,4 @@
-import { Suspense, useState } from 'react';
+import { Suspense, useMemo, useState } from 'react';
 import { CheckboxGroup, Label } from 'react-aria-components';
 import { Link, useNavigate } from 'react-router';
 
@@ -24,6 +24,24 @@ export default function ProductList() {
   const { productSkuTagsWithCounts } = useFetchAllProductSkuTagsWithCounts();
   const [selectedItem, setSelectedItem] = useState(-1);
   const { filteredProducts, filters, handleCheckboxChange } = useProductFilter(productSkuDetails, productSkuTagsWithCounts);
+
+  const sortedProducts = useMemo(
+    () => {
+      const now = new Date();
+      const arr = [...filteredProducts].sort((a, b) => {
+        console.log(a.updated_at);
+        if (Math.abs(now.getTime() - a.updated_at.getTime()) <= 3 * 60 * 1000) {
+          return -1;
+        }
+        if (Math.abs(now.getTime() - b.updated_at.getTime()) <= 3 * 60 * 1000) {
+          return 1;
+        }
+        return 0;
+      });
+      return arr;
+    },
+    [filteredProducts],
+  );
 
   const getSortedProductImages = (
     productImages: Record<string, string[]>,
@@ -184,7 +202,7 @@ export default function ProductList() {
             },
           })}
           >
-            {filteredProducts.map((detail, i) => {
+            {sortedProducts.map((detail, i) => {
               const imgUrl = getSortedProductImages(productImages, detail.sku_ulid_str, detail.ulid_str);
               return (
                 <ProductItem
@@ -226,11 +244,11 @@ export default function ProductList() {
             images={selectedItem !== -1
               ? getSortedProductImages(
                   productImages,
-                  filteredProducts[selectedItem].sku_ulid_str,
-                  filteredProducts[selectedItem].ulid_str,
+                  sortedProducts[selectedItem].sku_ulid_str,
+                  sortedProducts[selectedItem].ulid_str,
                 )
               : undefined}
-            {...filteredProducts[selectedItem]}
+            {...sortedProducts[selectedItem]}
           />
         </Suspense>
         <Link to="./new" relative="path">
