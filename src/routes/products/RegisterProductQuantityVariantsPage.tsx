@@ -52,6 +52,7 @@ export default function RegisterProductQuantityVariantsPage() {
   const handleReset: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
     methods.reset();
+    methods.setValue('tags', [], { shouldValidate: true, shouldDirty: true });
     methods.setFocus('skus_name');
   };
 

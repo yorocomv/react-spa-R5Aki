@@ -26,11 +26,15 @@ const Select = styled('select', {
       outline: 'solid 0.1rem #2dd4bf',
     },
 
-    '&>option::checkmark': {
-      content: '""',
-      w: 0,
-      m: 0,
-      display: 'inline-block',
+    '&>option': {
+      pr: '0.5rem',
+
+      '&::checkmark': {
+        content: '""',
+        w: 0,
+        m: 0,
+        display: 'inline-block',
+      },
     },
     '&::picker(select)': {
       appearance: 'base-select',

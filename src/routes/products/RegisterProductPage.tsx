@@ -77,6 +77,7 @@ export default function RegisterProductPage() {
     if (setsArray.fields.length) {
       setsArray.replace([]);
     }
+    methods.setValue('tags', [], { shouldValidate: true, shouldDirty: true });
     methods.setFocus('basic_name');
   };
 
