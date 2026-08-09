@@ -25,16 +25,17 @@ export default function ProductList() {
   const [selectedItem, setSelectedItem] = useState(-1);
   const { filteredProducts, filters, handleCheckboxChange } = useProductFilter(productSkuDetails, productSkuTagsWithCounts);
 
+  const NOW = Date.now();
+
   const sortedProducts = useMemo(() => {
-    const now = Date.now(); // ループ外で1回だけ取得（new Date().getTime() より高速）
     const THREE_MINUTES = 3 * 60 * 1000; // ループ外で1回だけ定義
 
     return [...filteredProducts].sort((a, b) => {
       const timeA = new Date(a.updated_at).getTime();
       const timeB = new Date(b.updated_at).getTime();
 
-      const isNewA = (now - timeA) <= THREE_MINUTES;
-      const isNewB = (now - timeB) <= THREE_MINUTES;
+      const isNewA = (NOW - timeA) <= THREE_MINUTES;
+      const isNewB = (NOW - timeB) <= THREE_MINUTES;
 
       // 「両方3分以内」なら、より新しい方を前にし、
       // 「両方3分以上前」なら、現在の順番を維持
@@ -45,7 +46,7 @@ export default function ProductList() {
       // 片方だけが3分以内なら、それを前に出す
       return isNewA ? -1 : 1;
     });
-  }, [filteredProducts]);
+  }, [NOW, filteredProducts]);
 
   const getSortedProductImages = (
     productImages: Record<string, string[]>,
@@ -214,6 +215,7 @@ export default function ProductList() {
                   index={i}
                   setSelectedItem={setSelectedItem}
                   imageUrl={imgUrl.length ? imgUrl[0] : undefined}
+                  now={NOW}
                   {...detail}
                 />
               );

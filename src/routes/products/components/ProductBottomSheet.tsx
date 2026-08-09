@@ -140,10 +140,26 @@ export default function ProductBottomSheet(p: ProductBottomSheetProps) {
                 Promise.resolve(
                   navigate(`/products/sku/${p.sku_id}`, {
                     relative: 'path',
-                    state: (is_set_product
-                      ? { ...skuDetailsState, is_set_product: '1', combinations: [...combinationsState], tags: tagsState.length ? [...tagsState] : null }
+                    state: (
+                      is_set_product
+                        ? {
+                            ...skuDetailsState,
+                            available_date: skuDetailsState.available_date ? new Date(skuDetailsState.available_date) : null,
+                            discontinued_date: skuDetailsState.discontinued_date ? new Date(skuDetailsState.discontinued_date) : null,
+                            is_set_product: '1',
+                            combinations: [...combinationsState],
+                            tags: tagsState.length ? [...tagsState] : null,
+                          }
                       // RHF の defaultValues には undefined を渡さない！
-                      : { ...skuDetailsState, is_set_product: '0', components: [...componentsState], tags: tagsState.length ? [...tagsState] : null }) satisfies PutReqUnifiedProductWithNull,
+                        : {
+                            ...skuDetailsState,
+                            available_date: skuDetailsState.available_date ? new Date(skuDetailsState.available_date) : null,
+                            discontinued_date: skuDetailsState.discontinued_date ? new Date(skuDetailsState.discontinued_date) : null,
+                            is_set_product: '0',
+                            components: [...componentsState],
+                            tags: tagsState.length ? [...tagsState] : null,
+                          }
+                        ) satisfies PutReqUnifiedProductWithNull,
                   }),
                 ).catch((err: string) => { throw new Error(err); });
               }}

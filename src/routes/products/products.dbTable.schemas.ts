@@ -91,8 +91,8 @@ export const viewSkuDetailsRowSchema = z.object({
   is_assorted: z.boolean(),
   max_piece_weight: z.number().int().positive(),
   max_piece_weight_unit_type_id: z.number().int().positive(),
-  available_date: z.date(),
-  discontinued_date: z.date(),
+  available_date: z.string().datetime(),
+  discontinued_date: z.string().datetime(),
   ulid_str: z.string().ulid(),
 
   // 元テーブルで NULL 許容
@@ -181,8 +181,8 @@ export const viewProductCombinationsRowSchema = z.object({
   item_product_id: z.number().int().positive(),
   item_product_name: z.string().min(1).max(32),
   item_product_short_name: z.string().min(1).max(32),
-  created_at: z.date(),
-  updated_at: z.date(),
+  created_at: z.string().datetime(),
+  updated_at: z.string().datetime(),
 });
 export const viewProductCombinationsArraySchema = z.array(viewProductCombinationsRowSchema);
 
@@ -201,8 +201,8 @@ export const viewProductComponentsRowSchema = z.object({
   pieces: z.number().int().positive(),
   inner_packaging_type_id: z.number().int().positive(),
   inner_packaging_type: z.string().min(1).max(32),
-  created_at: z.date(),
-  updated_at: z.date(),
+  created_at: z.string().datetime(),
+  updated_at: z.string().datetime(),
 });
 export const viewProductComponentsArraySchema = z.array(viewProductComponentsRowSchema);
 
@@ -220,6 +220,6 @@ export const viewProductSkuTagsRowSchema = z.object({
   product_tags_id: z.number().int().positive(),
   label: z.string().min(1).max(32),
   normalized_label: z.string().min(1).max(32),
-  created_at: z.date(),
+  created_at: z.string().datetime(),
 });
 export const viewProductSkuTagsArraySchema = z.array(viewProductSkuTagsRowSchema);

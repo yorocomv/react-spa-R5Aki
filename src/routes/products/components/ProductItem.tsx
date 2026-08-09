@@ -1,12 +1,31 @@
-import { css } from 'styled-system/css';
+import { css, cva } from 'styled-system/css';
 
 import type { ViewSkuDetailsRow } from '../products.dbTable.types';
+
+const imgStyle = cva({
+  base: {
+    display: 'block',
+    bgColor: 'var(--cat-color-light)',
+    w: '16rem',
+    h: '13rem',
+    objectFit: 'cover',
+    borderTopRadius: 'lg',
+  },
+  variants: {
+    discontinued: {
+      t: { filter: 'grayscale(100%)' },
+    },
+  },
+});
 
 export default function ProductItem(p: ViewSkuDetailsRow & {
   index: number;
   setSelectedItem: React.Dispatch<React.SetStateAction<number>>;
   imageUrl?: string;
+  now: number;
 }) {
+  const discontinued = p.now > new Date(p.discontinued_date).getTime() ? { discontinued: 't' } as const : undefined;
+
   return (
     <article
       className={css({
@@ -66,14 +85,7 @@ export default function ProductItem(p: ViewSkuDetailsRow & {
                       // 壊れた画像アイコンを消すために透明GIFに差し替え
                       e.currentTarget.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
                     }}
-                    className={css({
-                      display: 'block',
-                      bgColor: 'var(--cat-color-light)',
-                      w: '16rem',
-                      h: '13rem',
-                      objectFit: 'cover',
-                      borderTopRadius: 'lg',
-                    })}
+                    className={imgStyle(discontinued)}
                   />
                 </div>
               )
