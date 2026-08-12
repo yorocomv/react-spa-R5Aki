@@ -4,7 +4,8 @@
 
 import { z } from 'zod';
 
-import { isEmpty, zNullDate, zNullPosInteger, zNullString, zOptDate, zOptPosInteger, zOptString } from '@/libs/zodDistributeEmpties';
+import { zDateStr } from '@/libs/zodCustomDateSchema';
+import { isEmpty, zNullPosInteger, zNullString, zOptPosInteger, zOptString } from '@/libs/zodDistributeEmpties';
 
 export const commonProductsSchema = z.object({
   id: z.coerce.number().int().positive(),
@@ -39,8 +40,8 @@ export const productsSchema = z.object({
   diameter_mm: zOptPosInteger,
   height_mm: zOptPosInteger,
   weight_g: zOptPosInteger,
-  available_date: zOptDate,
-  discontinued_date: zOptDate,
+  available_date: zDateStr,
+  discontinued_date: zDateStr,
   note: zOptString,
 });
 
@@ -288,8 +289,8 @@ const nullableFields = {
   diameter_mm: zNullPosInteger,
   height_mm: zNullPosInteger,
   weight_g: zNullPosInteger,
-  available_date: zNullDate,
-  discontinued_date: zNullDate,
+  available_date: zDateStr,
+  discontinued_date: zDateStr,
   note: zNullString,
   tags: z.array(z.object({
     value: z.string().min(1).max(32),

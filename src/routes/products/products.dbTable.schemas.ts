@@ -3,6 +3,8 @@
 
 import { z } from 'zod';
 
+import { zDateStr } from '@/libs/zodCustomDateSchema';
+
 import { basicProductsSchema, commonProductsSchema } from './products.schemas';
 
 export const basicProductsTbRowSchema = commonProductsSchema
@@ -25,8 +27,8 @@ export const viewSingleProductsRowSchema = z.object({
   product_name: z.string().min(1).max(32),
   product_short_name: z.string().min(1).max(32),
   display_category_name: z.string().min(1).max(32),
-  available_date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
-  discontinued_date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  available_date: zDateStr,
+  discontinued_date: zDateStr,
   depth_mm: z.number().int().positive().nullable(),
   width_mm: z.number().int().positive().nullable(),
   diameter_mm: z.number().int().positive().nullable(),
@@ -62,7 +64,7 @@ export const viewSkuDetailsRowSchema = z.object({
   sku_name: z.string().min(1).max(32),
   sku_ulid_str: z.string().ulid(),
   priority: z.enum(['A', 'B', 'C']),
-  updated_at: z.string().datetime(),
+  updated_at: zDateStr,
 
   // 元テーブルで NULL 許容
   case_quantity: z.number().int().positive().nullable(),
@@ -91,8 +93,8 @@ export const viewSkuDetailsRowSchema = z.object({
   is_assorted: z.boolean(),
   max_piece_weight: z.number().int().positive(),
   max_piece_weight_unit_type_id: z.number().int().positive(),
-  available_date: z.string().datetime(),
-  discontinued_date: z.string().datetime(),
+  available_date: zDateStr,
+  discontinued_date: zDateStr,
   ulid_str: z.string().ulid(),
 
   // 元テーブルで NULL 許容

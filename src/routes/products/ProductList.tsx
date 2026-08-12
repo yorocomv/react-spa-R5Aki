@@ -31,6 +31,8 @@ export default function ProductList() {
     const THREE_MINUTES = 3 * 60 * 1000; // ループ外で1回だけ定義
 
     return [...filteredProducts].sort((a, b) => {
+      if (!a.updated_at || !b.updated_at)
+        return 0;
       const timeA = new Date(a.updated_at).getTime();
       const timeB = new Date(b.updated_at).getTime();
 

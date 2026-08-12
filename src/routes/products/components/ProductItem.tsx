@@ -24,7 +24,9 @@ export default function ProductItem(p: ViewSkuDetailsRow & {
   imageUrl?: string;
   now: number;
 }) {
-  const discontinued = p.now > new Date(p.discontinued_date).getTime() ? { discontinued: 't' } as const : undefined;
+  const discontinued = p.discontinued_date
+    ? p.now > new Date(p.discontinued_date).getTime() ? { discontinued: 't' } as const : undefined
+    : undefined;
 
   return (
     <article

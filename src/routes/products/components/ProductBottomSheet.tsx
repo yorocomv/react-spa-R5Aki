@@ -144,8 +144,6 @@ export default function ProductBottomSheet(p: ProductBottomSheetProps) {
                       is_set_product
                         ? {
                             ...skuDetailsState,
-                            available_date: skuDetailsState.available_date ? new Date(skuDetailsState.available_date) : null,
-                            discontinued_date: skuDetailsState.discontinued_date ? new Date(skuDetailsState.discontinued_date) : null,
                             is_set_product: '1',
                             combinations: [...combinationsState],
                             tags: tagsState.length ? [...tagsState] : null,
@@ -153,8 +151,6 @@ export default function ProductBottomSheet(p: ProductBottomSheetProps) {
                       // RHF の defaultValues には undefined を渡さない！
                         : {
                             ...skuDetailsState,
-                            available_date: skuDetailsState.available_date ? new Date(skuDetailsState.available_date) : null,
-                            discontinued_date: skuDetailsState.discontinued_date ? new Date(skuDetailsState.discontinued_date) : null,
                             is_set_product: '0',
                             components: [...componentsState],
                             tags: tagsState.length ? [...tagsState] : null,
