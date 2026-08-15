@@ -1,4 +1,20 @@
 Options -MultiViews
 RewriteEngine On
+# Let Apache return a real 404 for files that do not exist.  In particular,
+# returning index.html for a missing JavaScript chunk makes the browser report
+# a misleading MIME/module error.
+RewriteCond %{REQUEST_URI} !^/spa/assets/
 RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^ index.html [QSA,L]
+
+# Vite puts a content hash in every file below assets/.  Those files can be
+# cached indefinitely, while HTML and public files must be revalidated on
+# every visit so they always point at the current set of chunks.
+#
+# Requires mod_headers (LoadModule headers_module modules/mod_headers.so).
+<IfModule mod_headers.c>
+  SetEnvIf Request_URI "^/spa/assets/" vite_hashed_asset
+  Header always set Cache-Control "public, max-age=31536000, immutable" env=vite_hashed_asset
+  Header always set Cache-Control "no-cache, max-age=0, must-revalidate" env=!vite_hashed_asset
+</IfModule>
