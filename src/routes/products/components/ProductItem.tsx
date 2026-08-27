@@ -17,6 +17,19 @@ const imgStyle = cva({
     },
   },
 });
+const markStyle = css.raw({
+  pos: 'absolute',
+  zIndex: 1,
+  top: '0.75rem',
+  right: '0.75rem',
+  lineHeight: '1.75rem',
+  p: '1rem',
+  fontSize: 'xl',
+  fontWeight: 'bold',
+  bgColor: 'zinc.600',
+  color: 'rose.500',
+  borderRadius: 'md',
+});
 
 export default function ProductItem(p: ViewSkuDetailsRow & {
   index: number;
@@ -78,6 +91,9 @@ export default function ProductItem(p: ViewSkuDetailsRow & {
                     },
                   })}
                 >
+                  {discontinued?.discontinued === 't'
+                    ? <mark className={css(markStyle)}>終売</mark>
+                    : null}
                   <img
                     src={p.imageUrl}
                     alt={p.product_name}
@@ -93,6 +109,7 @@ export default function ProductItem(p: ViewSkuDetailsRow & {
               )
             : (
                 <dfn className={css({
+                  pos: 'relative',
                   bgColor: 'var(--cat-color-light)',
                   borderTopRadius: 'lg',
                   display: 'grid',
@@ -107,6 +124,9 @@ export default function ProductItem(p: ViewSkuDetailsRow & {
                 },
                 )}
                 >
+                  {discontinued?.discontinued === 't'
+                    ? <mark className={css(markStyle)}>終売</mark>
+                    : null}
                   <div className={css({
                     px: '0.5rem',
                     py: '0.725rem',
