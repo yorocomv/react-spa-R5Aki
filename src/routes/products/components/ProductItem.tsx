@@ -148,7 +148,7 @@ export default function ProductItem(p: ViewSkuDetailsRow & {
         })}
         >
           <h2 className={css({ fontSize: '1.25rem', fontWeight: 'bold' })}>
-            <span className={css({ textShadow: 'rgba(255, 255, 255, 0.2) 1px 1px', transform: 'rotate(-7.5deg) translateY(-0.125rem)', display: 'inline-block' })}>
+            <span className={css({ textShadow: 'rgba(255, 255, 255, 0.2) 1px 1px', transform: 'rotate(-7.5deg) translateY(-0.2rem)', display: 'inline-block' })}>
               {p.sku_name}
             </span>
             <span className={css({ bgColor: 'var(--cat-color-light)', verticalAlign: 'super', fontSize: '0.625em', ml: '0.25em', px: '0.25em', py: '0.125em' })}>{p.display_category_name}</span>
