@@ -1,3 +1,6 @@
+/* ================================
+   Overlay（暗転）
+================================ */
 .react-aria-ModalOverlay {
   position: fixed; /* absoluteからfixedに変更しスクロール耐性を向上 */
   inset: 0; /* top: 0; right: 0; bottom: 0; left: 0; のショートハンド */
@@ -10,25 +13,42 @@
   justify-content: center;
 
   &[data-entering] {
-    animation: sheet-transparency 400ms;
+    animation: sheet-overlay-in 400ms ease forwards;
   }
 
   &[data-exiting] {
-    animation: sheet-transparency 300ms reverse ease-in forwards;
+    animation: sheet-overlay-out 300ms ease forwards;
   }
 }
 
+/* ================================
+   Bottom Sheet 本体（transform）
+================================ */
 .react-aria-Modal {
+  /* transform アニメーションはここにかける */
   &[data-entering] {
+    will-change: transform; /* entering のときだけ */
     /* iOSの滑らかな動きに寄せるためのイージング */
-    animation: sheet-slide-up 400ms cubic-bezier(0.32, 0.72, 0, 1);
+    animation: sheet-slide-up 400ms cubic-bezier(0.32, 0.72, 0, 1) forwards;
   }
+
   &[data-exiting] {
-    animation: sheet-slide-up 300ms reverse ease-in forwards;
+    animation: sheet-slide-down 300ms ease forwards;
   }
 }
 
-@keyframes sheet-transparency {
+/* ================================
+   React Aria が生成する匿名の overflow:hidden div
+   → Chrome の transform クリッピングバグを回避するためにレイヤー化
+================================ */
+.react-aria-Modal > div {
+  transform: translateZ(0); /* ★ Chrome のクリッピングバグを完全に回避 */
+}
+
+/* ================================
+   Keyframes
+================================ */
+@keyframes sheet-overlay-in {
   from {
     background: rgba(0 0 0 / 0);
   }
@@ -37,13 +57,30 @@
   }
 }
 
+@keyframes sheet-overlay-out {
+  from {
+    background: rgba(0 0 0 / 0.3);
+  }
+  to {
+    background: rgba(0 0 0 / 0);
+  }
+}
+
 @keyframes sheet-slide-up {
   from {
     /* 右からではなく、下からスライドさせる */
-    transform: translateY(100%);
+    transform: translate3d(0, 100%, 0);
   }
-
   to {
-    transform: translateY(0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes sheet-slide-down {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(0, 100%, 0);
   }
 }
