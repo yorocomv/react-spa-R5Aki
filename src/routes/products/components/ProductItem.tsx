@@ -1,3 +1,5 @@
+import { BiSolidGift } from 'react-icons/bi';
+
 import { css, cva } from 'styled-system/css';
 
 import type { ViewSkuDetailsRow } from '../products.dbTable.types';
@@ -145,6 +147,8 @@ export default function ProductItem(p: ViewSkuDetailsRow & {
           py: '0.725rem',
           fontSize: '0.85rem',
           fontWeight: 'bold',
+
+          '& svg': { display: 'inline-block', mr: '0.125rem' },
         })}
         >
           <h2 className={css({ fontSize: '1.25rem', fontWeight: 'bold' })}>
@@ -152,8 +156,14 @@ export default function ProductItem(p: ViewSkuDetailsRow & {
               {p.sku_name}
             </span>
             <span className={css({ bgColor: 'var(--cat-color-light)', verticalAlign: 'super', fontSize: '0.625em', ml: '0.4em', px: '0.25em', py: '0.125em' })}>{p.display_category_name}</span>
+            <span className={css({ ml: '0.25rem' })}>
+              {p.max_piece_weight >= 1000 ? `${p.max_piece_weight / 1000}kg` : `${p.max_piece_weight}g`}
+            </span>
           </h2>
-          <p>{p.product_name}</p>
+          <p className={css({ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' })}>
+            {p.is_set_product ? <BiSolidGift size="1.375em" /> : null}
+            {p.product_name}
+          </p>
         </div>
       </button>
     </article>
