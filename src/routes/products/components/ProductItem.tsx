@@ -46,6 +46,7 @@ export default function ProductItem(p: ViewSkuDetailsRow & {
   return (
     <article
       className={css({
+        pos: 'relative',
         bgColor: 'var(--cat-color)',
         bgImage: 'linear-gradient(90deg in oklch, var(--cat-color), oklch(from var(--cat-color) calc(l + 0.1) c h))',
         borderRadius: 'lg',
@@ -162,7 +163,14 @@ export default function ProductItem(p: ViewSkuDetailsRow & {
           </h2>
           <p className={css({ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' })}>
             {p.is_set_product ? <BiSolidGift size="1.375em" /> : null}
-            {p.product_name}
+            <span>{p.product_name}</span>
+            {p.case_quantity
+              ? (
+                  <span className={css({ pos: 'absolute', display: 'inline-block', bottom: '0.025rem', right: '0.375rem',pointerEvents:'none', fontFamily: '"Time New Roman",sans-serif' })}>
+                    {`[ ${p.case_quantity} ]`}
+                  </span>
+                )
+              : null}
           </p>
         </div>
       </button>

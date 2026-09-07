@@ -26,6 +26,7 @@
 ================================ */
 .react-aria-Modal {
   /* transform アニメーションはここにかける */
+  transform: translateZ(0); /* 初回レイヤー遅延を防ぐ。常時レイヤー化 */
   &[data-entering] {
     will-change: transform; /* entering のときだけ */
     /* iOSの滑らかな動きに寄せるためのイージング */
