@@ -110,6 +110,8 @@ export default function ProductList() {
         <aside
           className={css({
             w: '16rem',
+            maxH: 'calc(100svh - 2rem)',
+            overflowY: 'scroll',
             flexShrink: 0,
             position: 'sticky',
             top: '1rem',
@@ -128,6 +130,9 @@ export default function ProductList() {
               pos: 'relative',
               top: '0.5rem',
             },
+
+            scrollbarWidth: 'none',
+            '&::-webkit-scrollbar': { display: 'none' },
           })}
         >
           <Select onChange={handleChange} className={css({ mb: '1rem' })}>
