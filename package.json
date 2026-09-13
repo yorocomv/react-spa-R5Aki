@@ -25,6 +25,7 @@
     "gtin-validator": "^1.0.0",
     "html-react-parser": "^5.1.1",
     "jaconv": "github:TokunaKimochi/jaconv",
+    "jotai": "^2.20.3",
     "react": "^19.1.0",
     "react-aria-components": "^1.19.0",
     "react-dom": "^19.1.0",
