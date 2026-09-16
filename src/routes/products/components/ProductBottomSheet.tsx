@@ -3,6 +3,7 @@ import { calculateCheckDigitForGTIN } from 'gtin-validator';
 import { Dialog, Heading, Modal, ModalOverlay } from 'react-aria-components';
 import { BsStars } from 'react-icons/bs';
 import { FaPenClip, FaStar } from 'react-icons/fa6';
+import { GiKangaroo } from 'react-icons/gi';
 import { RxCross1 } from 'react-icons/rx';
 import { TbPackageExport } from 'react-icons/tb';
 import { useNavigate } from 'react-router';
@@ -329,7 +330,18 @@ export default function ProductBottomSheet(p: ProductBottomSheetProps) {
                       <ul><li>{p.internal_code ?? '未登録'}</li></ul>
                     </li>
                     <NIl contents={p.product_note}>
-                      🦘運送会社重量📦️／メモ
+                      <span className={css({ display: 'flex', alignItems: 'center' })}>
+                        <GiKangaroo
+                          size="2rem"
+                          className={css({
+                            display: 'inline-block',
+                            mr: '0.1rem',
+                            color: 'fuchsia.400',
+                            filter: 'drop-shadow(1px 1px 0 var(--colors-rose-400))',
+                          })}
+                        />
+                        運送会社重量／メモ
+                      </span>
                       <ul><li><pre className={css({ whiteSpace: 'pre-wrap', fontWeight: 'bold', color: 'yellow.100' })}>{p.product_note}</pre></li></ul>
                     </NIl>
                     <li>
