@@ -86,7 +86,8 @@ export default function ProductList() {
   };
 
   return (
-    <div className={css({ w: '100vw', minH: '100lvh' })}>
+    // ボトムシートのアニメーション対象範囲に高さを明示
+    <div className={css({ w: '100vw', minH: '100svh', maxH: '100lvh', overflowY: 'scroll' })}>
       {/* ===================================================== */}
       {/* ① 上部：2 カラム構成（フィルター + 商品グリッド） */}
       {/* ===================================================== */}
