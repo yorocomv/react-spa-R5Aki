@@ -6,7 +6,8 @@ const globalCss = defineGlobalStyles({
     backgroundColor: '#dcd0c0',
     backgroundImage:
       "linear-gradient(175deg in oklch shorter hue, oklch(1 0 0 / 0%) 0lvh, oklch(0.7157 0.1324 48.77 / 0%) 75lvh, oklch(0.5305 0.2037 17.32 / 35%) 200lvh, oklch(0.2957 0.1699 287.56 / 55%) 300lvh), url('/bg.svg'), url('/bgbg.svg')",
-    backgroundRepeat: 'repeat, repeat, repeat-x',
+    backgroundRepeat: 'repeat, repeat, no-repeat',
+    backgroundSize: 'auto, min(608px, 100svw), max(1920px, 100lvw)',
     backgroundPositionY: 'bottom',
     backgroundAttachment: 'scroll, scroll, fixed',
     color: '#0e0e0e',
