@@ -1,13 +1,16 @@
+import { useAtomValue } from 'jotai';
 import { Suspense, useMemo, useState } from 'react';
 import { CheckboxGroup, Label } from 'react-aria-components';
 import { Link, useNavigate } from 'react-router';
 
+import { selectedProductCountAtom } from '@/atoms/productsAtom';
 import { Checkbox } from '@/components/ui/elements/Checkbox';
 import Select from '@/components/ui/elements/Select';
 import SvgSpinnersLoader5 from '@/components/ui/elements/SvgSpinnersLoader5';
 import { css } from 'styled-system/css';
 
 import FloatingAddButton from './components/FloatingAddButton';
+import FloatingCartButton from './components/FloatingCartButton';
 import { useFetchAllProductSkuTagsWithCounts } from './components/hooks/useFetchAllProductSkuTagsWithCounts';
 import { useFetchProductImages } from './components/hooks/useFetchProductImages';
 import { useFetchProductOptions } from './components/hooks/useFetchProductOptions';
@@ -24,6 +27,8 @@ export default function ProductList() {
   const { productSkuTagsWithCounts } = useFetchAllProductSkuTagsWithCounts();
   const [selectedItem, setSelectedItem] = useState(-1);
   const { filteredProducts, filters, handleCheckboxChange } = useProductFilter(productSkuDetails, productSkuTagsWithCounts);
+
+  const countInCart = useAtomValue(selectedProductCountAtom);
 
   const NOW = Date.now();
 
@@ -265,9 +270,17 @@ export default function ProductList() {
             {...sortedProducts[selectedItem]}
           />
         </Suspense>
-        <Link to="./new" relative="path">
-          <FloatingAddButton text="新規登録" />
-        </Link>
+        {countInCart
+          ? (
+              <Link to="./selection" relative="path">
+                <FloatingCartButton text="商品を選択中" />
+              </Link>
+            )
+          : (
+              <Link to="./new" relative="path">
+                <FloatingAddButton text="新規登録" />
+              </Link>
+            )}
       </footer>
     </div>
   );

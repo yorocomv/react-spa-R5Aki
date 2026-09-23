@@ -1,13 +1,18 @@
 import '@/components/ui/reactAriaModalOverlayBottomSheet.css';
 import { calculateCheckDigitForGTIN } from 'gtin-validator';
+import { useAtomValue, useSetAtom } from 'jotai';
 import { Dialog, Heading, Modal, ModalOverlay } from 'react-aria-components';
-import { BsStars } from 'react-icons/bs';
-import { FaPenClip, FaStar } from 'react-icons/fa6';
+import { BsFillTelephoneForwardFill, BsStars } from 'react-icons/bs';
+import { FaCartArrowDown, FaFax, FaPenClip, FaStar } from 'react-icons/fa6';
 import { GiKangaroo } from 'react-icons/gi';
 import { RxCross1 } from 'react-icons/rx';
 import { TbPackageExport } from 'react-icons/tb';
 import { useNavigate } from 'react-router';
 
+import type { SelectedProduct } from '@/atoms/productsAtom';
+
+import { removeSelectedProductAtom, selectedProductsAtom, selectProductAtom } from '@/atoms/productsAtom';
+import Button from '@/components/ui/elements/Button';
 import TooltipWrapper from '@/components/ui/TooltipWrapper';
 import env from '@/env';
 import { css } from 'styled-system/css';
@@ -34,6 +39,23 @@ export default function ProductBottomSheet(p: ProductBottomSheetProps) {
   const { productComponents } = useFetchProductComponents({ productId: p.product_id, earlyReturn: p.is_set_product });
   const { productSkuTags } = useFetchProductSkuTags(p.sku_id);
   const navigate = useNavigate();
+
+  const selectProduct = useSetAtom(selectProductAtom);
+  const removeProduct = useSetAtom(removeSelectedProductAtom);
+  const selectedProducts = useAtomValue(selectedProductsAtom);
+  const isSelected = selectedProducts.some(product => product.sku_id === p.sku_id);
+
+  const productForSelection: SelectedProduct = is_set_product
+    ? {
+        ...skuDetails,
+        is_set_product: true,
+        combinations: productCombinations,
+      }
+    : {
+        ...skuDetails,
+        is_set_product: false,
+        components: productComponents,
+      };
 
   // navigate.options.state 用に加工
   const {
@@ -138,34 +160,16 @@ export default function ProductBottomSheet(p: ProductBottomSheetProps) {
             <button
               type="button"
               onClick={() => {
-                Promise.resolve(
-                  navigate(`/products/sku/${p.sku_id}`, {
-                    relative: 'path',
-                    state: (
-                      is_set_product
-                        ? {
-                            ...skuDetailsState,
-                            is_set_product: '1',
-                            combinations: [...combinationsState],
-                            tags: tagsState.length ? [...tagsState] : null,
-                          }
-                      // RHF の defaultValues には undefined を渡さない！
-                        : {
-                            ...skuDetailsState,
-                            is_set_product: '0',
-                            components: [...componentsState],
-                            tags: tagsState.length ? [...tagsState] : null,
-                          }
-                        ) satisfies PutReqUnifiedProductWithNull,
-                  }),
-                ).catch((err: string) => { throw new Error(err); });
+                return isSelected
+                  ? removeProduct(p.sku_id)
+                  : selectProduct(productForSelection);
               }}
               className={css({
-                bg: 'slate.700',
-                color: 'slate.50',
+                bg: isSelected ? 'orange.400' : 'slate.700',
+                color: isSelected ? 'orange.950' : 'slate.50',
               })}
             >
-              <FaPenClip />
+              <FaCartArrowDown size="1.175rem" />
             </button>
             <button
               type="button"
@@ -424,7 +428,28 @@ export default function ProductBottomSheet(p: ProductBottomSheetProps) {
                       </ul>
                     </li>
                     <NIl contents={p.supplier_note}>
-                      📞発注方法📠／メモ
+                      <span className={css({ display: 'flex', alignItems: 'center' })}>
+                        <BsFillTelephoneForwardFill
+                          size="1.05rem"
+                          className={css({
+                            display: 'inline-block',
+                            mr: '0.2rem',
+                            color: 'yellow.100',
+                            filter: 'drop-shadow(0.5px -1px 0 var(--colors-slate-600))',
+                          })}
+                        />
+                        発注方法
+                        <FaFax
+                          size="1.05rem"
+                          className={css({
+                            display: 'inline-block',
+                            mx: '0.2rem',
+                            color: 'yellow.100',
+                            filter: 'drop-shadow(0.5px -1px 0 var(--colors-slate-600))',
+                          })}
+                        />
+                        メモ
+                      </span>
                       <ul><li><pre className={css({ whiteSpace: 'pre-wrap', fontWeight: 'bold', color: 'yellow.100' })}>{p.supplier_note}</pre></li></ul>
                     </NIl>
                     <NIl contents={p.height_mm}>
@@ -479,6 +504,55 @@ export default function ProductBottomSheet(p: ProductBottomSheetProps) {
                 </li>
               </ul>
             </section>
+            <div
+              className={css({
+                ml: 'auto',
+                pos: 'fixed',
+                bottom: '1rem',
+                right: '1rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 1,
+              })}
+            >
+              <Button
+                onClick={() => {
+                  Promise.resolve(
+                    navigate(`/products/sku/${p.sku_id}`, {
+                      relative: 'path',
+                      state: (
+                      is_set_product
+                        ? {
+                            ...skuDetailsState,
+                            is_set_product: '1',
+                            combinations: [...combinationsState],
+                            tags: tagsState.length ? [...tagsState] : null,
+                          }
+                      // RHF の defaultValues には undefined を渡さない！
+                        : {
+                            ...skuDetailsState,
+                            is_set_product: '0',
+                            components: [...componentsState],
+                            tags: tagsState.length ? [...tagsState] : null,
+                          }
+                        ) satisfies PutReqUnifiedProductWithNull,
+                    }),
+                  ).catch((err: string) => { throw new Error(err); });
+                }}
+                variant="edit"
+                className={css({
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: 1,
+                  lineHeight: '1.5',
+                })}
+              >
+                <FaPenClip className={css({ display: 'inline-block' })} />
+                編集
+              </Button>
+            </div>
           </Dialog>
         </div>
       </Modal>
