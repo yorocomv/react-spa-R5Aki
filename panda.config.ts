@@ -5,15 +5,22 @@ const globalCss = defineGlobalStyles({
     minHeight: '100lvh',
     backgroundColor: '#dcd0c0',
     backgroundImage:
-      "linear-gradient(175deg in oklch shorter hue, oklch(1 0 0 / 0%) 0lvh, oklch(0.7157 0.1324 48.77 / 0%) 75lvh, oklch(0.5305 0.2037 17.32 / 35%) 200lvh, oklch(0.2957 0.1699 287.56 / 55%) 300lvh), url('/bg.svg'), url('/bgbg.svg')",
-    backgroundRepeat: 'repeat, repeat, no-repeat',
-    backgroundSize: 'auto, min(608px, 100svw), max(1920px, 100lvw)',
-    backgroundPositionY: 'bottom',
-    backgroundAttachment: 'scroll, scroll, fixed',
+      "linear-gradient(175deg in oklch shorter hue, oklch(1 0 0 / 0%) 0lvh, oklch(0.7157 0.1324 48.77 / 0%) 75lvh, oklch(0.5305 0.2037 17.32 / 35%) 200lvh, oklch(0.2957 0.1699 287.56 / 55%) 300lvh), url('/_bg.svg')",
+    backgroundRepeat: 'repeat, repeat',
+    backgroundAttachment: 'scroll, scroll',
     color: '#0e0e0e',
     fontFamily: '"Segoe UI Emoji", "BIZ UDPGothic", sans-serif',
     fontSize: 'clamp(12px, 1.74vw, 16px)',
     lineHeight: '1.75rem',
+
+    '&.cloud-theme': {
+      backgroundImage:
+      "linear-gradient(175deg in oklch shorter hue, oklch(1 0 0 / 0%) 0lvh, oklch(0.7157 0.1324 48.77 / 0%) 75lvh, oklch(0.5305 0.2037 17.32 / 35%) 200lvh, oklch(0.2957 0.1699 287.56 / 55%) 300lvh), url('/bg.svg'), url('/bgbg.svg')",
+      backgroundRepeat: 'repeat, repeat, no-repeat',
+      backgroundSize: 'auto, min(608px, 100svw), max(1920px, 100lvw)',
+      backgroundPositionY: 'bottom',
+      backgroundAttachment: 'scroll, scroll, fixed',
+    },
   },
 });
 
