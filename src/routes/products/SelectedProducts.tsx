@@ -1,22 +1,29 @@
 import type { ZodType } from 'zod';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useAtomValue } from 'jotai';
+import { today } from '@internationalized/date';
+import { useAtomValue, useSetAtom } from 'jotai';
 import { useFieldArray, useForm } from 'react-hook-form';
+import { TbTrash } from 'react-icons/tb';
 import { z } from 'zod';
 
-import { selectedProductsAtom } from '@/atoms/productsAtom';
+import { removeSelectedProductAtom, selectedProductsAtom } from '@/atoms/productsAtom';
+import ComboField from '@/components/ui/ComboField';
+import CommonDataPicker from '@/components/ui/CommonDataPicker';
 import Input from '@/components/ui/elements/Input';
 import Select from '@/components/ui/elements/Select';
 import TextArea from '@/components/ui/elements/TextArea';
+import TooltipWrapper from '@/components/ui/TooltipWrapper';
 import { css } from 'styled-system/css';
 
 import { viewSkuDetailsRowSchema } from './products.dbTable.schemas';
 
 export default function SelectedProducts() {
   const selectedProducts = useAtomValue(selectedProductsAtom);
+  const removeProduct = useSetAtom(removeSelectedProductAtom);
 
   const schema = viewSkuDetailsRowSchema.pick({
+    sku_id: true,
     sku_name: true,
   }).extend({
     remark: z.string().max(32),
@@ -31,7 +38,7 @@ export default function SelectedProducts() {
     mode: 'all',
     resolver: zodResolver(productsSchema as ZodType<ProductsFormValues>),
     defaultValues: { products: selectedProducts.map((p) => {
-      return { sku_name: p.sku_name };
+      return { sku_id: p.sku_id, sku_name: p.sku_name };
     }) },
     // 📢重要：アンマウントされたフィールドの値をフォームから除去
     shouldUnregister: true,
@@ -41,13 +48,27 @@ export default function SelectedProducts() {
     control: methods.control,
     rules: { minLength: 1, maxLength: 7 },
   });
+  const specifiedTimes = [{
+    id: 0,
+    itemStr: '14:00 まで',
+  }, {
+    id: 1,
+    itemStr: '14:30 まで',
+  }, {
+    id: 2,
+    itemStr: '16:00 まで',
+  }];
+  const todayDate = today('Asia/Tokyo');
 
   return (
     <div className={css({ h: '100lvh', display: 'grid', placeItems: 'center' })}>
       <main>
-        {productsArray.fields.map((p, i) => {
+        {productsArray.fields.map((field, i) => {
           return (
-            <div key={p.id}>
+            <div key={field.id}>
+              <div>
+                <input type="hidden" {...methods.register(`products.${i}.sku_id` as const)} />
+              </div>
               <div>
                 <input readOnly {...methods.register(`products.${i}.sku_name` as const)} />
               </div>
@@ -63,10 +84,14 @@ export default function SelectedProducts() {
                   className={css({ w: '10.25rem' })}
                 />
                 <Select>
-                  <option key="Y" value="Y">年</option>
-                  <option key="M" value="M">月</option>
-                  <option key="D" value="D">日</option>
+                  <option key="0" value="0">ケース</option>
+                  <option key="1" value="1">ボール</option>
+                  <option key="2" value="2">バラ</option>
                 </Select>
+              </div>
+              <div>
+                <CommonDataPicker todayDate={todayDate} />
+                <ComboField allowsCustomValue={true} inputIdStr="specified_time" nextFocusIdStr={`products.${i}.remark`} itemsList={specifiedTimes} />
               </div>
               <div>
                 <TextArea
@@ -78,6 +103,30 @@ export default function SelectedProducts() {
                     h: '3.5rem',
                   })}
                 />
+              </div>
+              <div className={css({
+                '&:has(svg)': {
+                  mt: '1rem',
+                  display: 'flex',
+                  gap: '0.5rem',
+                  alignItems: 'center',
+                },
+              })}
+              >
+                <TooltipWrapper
+                  text="削除"
+                  fillColor="rose.500"
+                  className={css({ color: 'rose.50', bgColor: 'rose.500', shadow: '2xl' })}
+                >
+                  <TbTrash
+                    size="1.3rem"
+                    onClick={() => {
+                      productsArray.remove(i);
+                      removeProduct(field.sku_id);
+                    }}
+                    className={css({ _hover: { cursor: 'pointer' } })}
+                  />
+                </TooltipWrapper>
               </div>
             </div>
           );

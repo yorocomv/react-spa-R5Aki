@@ -1,10 +1,16 @@
+import type { CalendarDate } from '@internationalized/date';
+
 import { Button, Calendar, CalendarCell, CalendarGrid, CalendarGridBody, CalendarGridHeader, CalendarHeaderCell, DateInput, DatePicker, DateSegment, Dialog, Group, Heading, Popover } from 'react-aria-components';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6';
 import { RxCalendar } from 'react-icons/rx';
 
 import { css } from 'styled-system/css';
 
-export default function CommonDataPicker() {
+export default function CommonDataPicker({
+  todayDate,
+}: {
+  todayDate: CalendarDate;
+}) {
   const cellStyles = css.raw({
     w: '2rem',
     h: '2rem',
@@ -123,7 +129,7 @@ export default function CommonDataPicker() {
       </Group>
       <Popover className={css({ overflow: 'auto', borderRadius: 'lg', bgColor: 'stone.100', boxShadow: 'lg' })}>
         <Dialog className={css({ p: '1rem', color: 'stone.600' })}>
-          <Calendar onChange={onChange} firstDayOfWeek="sun">
+          <Calendar firstDayOfWeek="sun">
             <header
               className={css({
                 display: 'flex',

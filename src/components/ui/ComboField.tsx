@@ -14,6 +14,7 @@ interface ComboFieldProps {
   }[];
   inputIdStr: string;
   nextFocusIdStr: string;
+  allowsCustomValue?: boolean;
   // RHFのControllerから渡される値とハンドラを受け取る
   value?: number | string | null;
   onChange?: (value: number | string | null) => void;
@@ -25,12 +26,14 @@ export default function ComboField({
   itemsList,
   inputIdStr,
   nextFocusIdStr,
+  allowsCustomValue = false,
   value,
   onChange,
   ariaLabel,
 }: ComboFieldProps) {
   return (
     <ComboBox
+      allowsCustomValue={allowsCustomValue}
       selectedKey={value}
       onSelectionChange={(key: Key | null) => {
         // RHF に変更を通知する
