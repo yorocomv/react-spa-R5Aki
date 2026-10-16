@@ -62,26 +62,43 @@ export default function SelectedProducts() {
 
   return (
     <div className={css({ h: '100lvh', display: 'grid', placeItems: 'center' })}>
-      <main>
+      <main className={css({
+        maxW: 'calc(100svw - 0.6rem)',
+        p: '0.5rem',
+        borderRadius: 'lg',
+        color: '#49274a',
+        bgColor: '#f8eee7',
+        border: 'solid 1px #49274a',
+      })}
+      >
         {productsArray.fields.map((field, i) => {
           return (
-            <div key={field.id}>
+            <div
+              key={field.id}
+              className={css({
+                display: 'grid',
+                gridTemplateColumns: '1fr auto auto 1fr 2.25rem',
+                w: '100%',
+                my: '0.75rem',
+
+                // '&>div': { border: 'solid 1px #000', paddingX: 'auto' },
+              })}
+            >
               <div>
                 <input type="hidden" {...methods.register(`products.${i}.sku_id` as const)} />
-              </div>
-              <div>
-                <input readOnly {...methods.register(`products.${i}.sku_name` as const)} />
+                <input readOnly {...methods.register(`products.${i}.sku_name` as const)} className={css({ w: '100%', fontWeight: 'bold' })} />
               </div>
               <div className={css({
                 display: 'flex',
-                gap: '0.5rem',
+                gap: '0.425rem',
                 alignItems: 'center',
+                justifyContent: 'center',
               })}
               >
                 <Input
                   type="number"
                   placeholder="発注数"
-                  className={css({ w: '10.25rem' })}
+                  className={css({ w: '6rem' })}
                 />
                 <Select>
                   <option key="0" value="0">ケース</option>
@@ -89,9 +106,17 @@ export default function SelectedProducts() {
                   <option key="2" value="2">バラ</option>
                 </Select>
               </div>
-              <div>
+              <div className={css({
+                display: 'flex',
+                flexDir: 'column',
+                gap: '0.35rem',
+                alignItems: 'center',
+                justifyContent: 'center',
+                '& div, & button': { h: '2rem', lineHeight: '1.5rem' },
+              })}
+              >
                 <CommonDataPicker todayDate={todayDate} />
-                <ComboField allowsCustomValue={true} inputIdStr="specified_time" nextFocusIdStr={`products.${i}.remark`} itemsList={specifiedTimes} />
+                <ComboField allowsCustomValue={true} inputIdStr="specified_time" nextFocusIdStr={`products.${i}.remark`} itemsList={specifiedTimes} width="11rem" />
               </div>
               <div>
                 <TextArea
@@ -99,18 +124,19 @@ export default function SelectedProducts() {
                   id={`products.${i}.remark`}
                   placeholder="備考"
                   className={css({
-                    w: '34.5rem',
-                    h: '3.5rem',
+                    w: '100%',
+                    h: '100%',
                   })}
                 />
               </div>
               <div className={css({
-                '&:has(svg)': {
-                  mt: '1rem',
-                  display: 'flex',
-                  gap: '0.5rem',
-                  alignItems: 'center',
-                },
+                // '&:has(svg)': {
+                display: 'flex',
+                flexDir: 'column',
+                gap: '0.35rem',
+                alignItems: 'center',
+                justifyContent: 'center',
+                // },
               })}
               >
                 <TooltipWrapper

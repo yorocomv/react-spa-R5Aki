@@ -60,15 +60,17 @@ export default function CommonDataPicker({
           display: 'flex',
           alignItems: 'center',
           fontFamily: 'Calibri,"Meiryo UI",sans-serif',
-          color: 'slate.700/90',
-          bgColor: 'slate.50/80',
+          fontWeight: 'bold',
+          color: '#0a1612',
+          bgColor: '#f5eeee',
           borderRadius: 'md',
-          boxShadow: 'sm',
+          boxShadow: '2xs',
           pl: '0.625rem',
-          _hover: {
+          '&:hover:not(:focus-within)': {
             outline: 'solid 0.05rem #94a3b8',
           },
-          '&:where([data-rac])[data-focus-within]': { color: 'slate.950', bgColor: 'slate.50' },
+          '&:where([data-rac])[data-focus-within]': { outline: 'solid 0.1rem #2dd4bf' },
+          '[data-open] &': { outline: 'solid 0.1rem #2dd4bf' },
         })}
       >
         <DateInput

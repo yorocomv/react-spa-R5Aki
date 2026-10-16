@@ -19,6 +19,7 @@ interface ComboFieldProps {
   value?: number | string | null;
   onChange?: (value: number | string | null) => void;
   ariaLabel?: string;
+  width?: string;
 }
 
 export default function ComboField({
@@ -30,6 +31,7 @@ export default function ComboField({
   value,
   onChange,
   ariaLabel,
+  width = '24rem',
 }: ComboFieldProps) {
   return (
     <ComboBox
@@ -46,7 +48,7 @@ export default function ComboField({
         display: 'flex',
         flexDir: 'column',
         gap: '1rem',
-        w: '24rem',
+        w: width,
       })}
     >
       <Group className={css({
