@@ -1,5 +1,3 @@
-import type { ZodType } from 'zod';
-
 import { zodResolver } from '@hookform/resolvers/zod';
 import { today } from '@internationalized/date';
 import { useAtomValue, useSetAtom } from 'jotai';
@@ -16,30 +14,77 @@ import TextArea from '@/components/ui/elements/TextArea';
 import TooltipWrapper from '@/components/ui/TooltipWrapper';
 import { css } from 'styled-system/css';
 
-import { viewSkuDetailsRowSchema } from './products.dbTable.schemas';
+import { viewProductCombinationsRowSchema, viewProductComponentsRowSchema, viewSkuDetailsRowSchema } from './products.dbTable.schemas';
 
 export default function SelectedProducts() {
   const selectedProducts = useAtomValue(selectedProductsAtom);
   const removeProduct = useSetAtom(removeSelectedProductAtom);
 
+  const componentsSchema = z.object({
+    components: z.array(
+      viewProductComponentsRowSchema.pick({
+        amount: true,
+        pieces: true,
+      }),
+    ).min(1),
+  });
+  const combinationsSchema = z.object({
+    combinations: z.array(
+      viewProductCombinationsRowSchema.pick({
+        item_product_short_name: true,
+        quantity: true,
+      }),
+    ).min(1),
+  });
   const schema = viewSkuDetailsRowSchema.pick({
     sku_id: true,
     sku_name: true,
   }).extend({
-    remark: z.string().max(32),
+    remark: z.string().max(32).optional(),
+    ...componentsSchema.shape,
+    combinations: z.literal(false),
+  });
+  const setSchema = schema.extend({
+    ...combinationsSchema.shape,
+    components: z.literal(false),
   });
   const productsSchema = z.object({
-    products: z.array(schema).min(1).max(7),
+    products: z.array(z.union([schema, setSchema])).min(1).max(7),
   });
 
   type ProductsFormValues = z.infer<typeof productsSchema>;
 
   const methods = useForm<ProductsFormValues>({
     mode: 'all',
-    resolver: zodResolver(productsSchema as ZodType<ProductsFormValues>),
-    defaultValues: { products: selectedProducts.map((p) => {
-      return { sku_id: p.sku_id, sku_name: p.sku_name };
-    }) },
+    resolver: zodResolver(productsSchema),
+    defaultValues: {
+      products: selectedProducts.map((p) => {
+        if (p.is_set_product) {
+          // --- セット商品（setSchema）の場合 ---
+          return {
+            sku_id: p.sku_id,
+            sku_name: p.sku_name,
+            components: false as const,
+            combinations: p.combinations.map(({ item_product_short_name, quantity }) => ({
+              item_product_short_name,
+              quantity,
+            })),
+          };
+        }
+        else {
+          // --- 通常商品（schema）の場合 ---
+          return {
+            sku_id: p.sku_id,
+            sku_name: p.sku_name,
+            components: p.components.map(({ amount, pieces }) => ({
+              amount,
+              pieces,
+            })),
+            combinations: false as const,
+          };
+        }
+      }),
+    },
     // 📢重要：アンマウントされたフィールドの値をフォームから除去
     shouldUnregister: true,
   });
@@ -48,6 +93,7 @@ export default function SelectedProducts() {
     control: methods.control,
     rules: { minLength: 1, maxLength: 7 },
   });
+  // 納品指定時間
   const specifiedTimes = [{
     id: 0,
     itemStr: '14:00 まで',
@@ -63,30 +109,68 @@ export default function SelectedProducts() {
   return (
     <div className={css({ h: '100lvh', display: 'grid', placeItems: 'center' })}>
       <main className={css({
-        maxW: 'calc(100svw - 0.6rem)',
-        p: '0.5rem',
+        maxW: 'calc(100svw - 1rem)',
         borderRadius: 'lg',
         color: '#49274a',
         bgColor: '#f8eee7',
-        border: 'solid 1px #49274a',
+        border: 'solid 1px #e4dad3',
+        boxShadow: 'lg',
+
+        '&>div:first-child': { borderTopRadius: 'lg' },
+        '&>div:last-child': { borderBottomRadius: 'lg', borderBottom: 'none' },
       })}
       >
         {productsArray.fields.map((field, i) => {
+          const {
+            category_color,
+            category_color_shade,
+            display_category_name,
+          } = selectedProducts.find(sku => sku.sku_id === field.sku_id) ?? {};
           return (
             <div
               key={field.id}
               className={css({
                 display: 'grid',
                 gridTemplateColumns: '1fr auto auto 1fr 2.25rem',
+                alignItems: 'center',
+                gap: '1.25rem',
                 w: '100%',
-                my: '0.75rem',
-
-                // '&>div': { border: 'solid 1px #000', paddingX: 'auto' },
+                p: '1.125rem 1.5rem',
+                borderBottom: 'solid 1px #e4dad3',
+                _hover: { bgColor: '#f6edf5' },
               })}
+              style={{
+                '--cat-color': `var(--colors-${category_color}-${category_color_shade})`,
+                '--cat-color-light': `var(--colors-${category_color}-${Number(category_color_shade) - 100})`,
+                '--cat-text-color': `var(--colors-${category_color}-950)`,
+              } as React.CSSProperties}
             >
               <div>
                 <input type="hidden" {...methods.register(`products.${i}.sku_id` as const)} />
-                <input readOnly {...methods.register(`products.${i}.sku_name` as const)} className={css({ w: '100%', fontWeight: 'bold' })} />
+                <span className={css({
+                  h: '1.6em',
+                  lineHeight: '1.44em',
+                  color: 'var(--cat-text-color)',
+                  bgColor: 'var(--cat-color-light)',
+                  verticalAlign: 'super',
+                  fontSize: '0.625em',
+                  ml: '0.4em',
+                  px: '0.25em',
+                  py: '0.125em',
+                })}
+                >
+                  {display_category_name}
+                </span>
+                <input
+                  readOnly
+                  {...methods.register(`products.${i}.sku_name` as const)}
+                  className={css({
+                    w: '100%',
+                    fontWeight: 'bold',
+                    fontFamily: '"Plus Jakarta Sans", "Noto Sans JP", sans-serif',
+                    fontSize: 'xl',
+                  })}
+                />
               </div>
               <div className={css({
                 display: 'flex',
@@ -116,7 +200,7 @@ export default function SelectedProducts() {
               })}
               >
                 <CommonDataPicker todayDate={todayDate} />
-                <ComboField allowsCustomValue={true} inputIdStr="specified_time" nextFocusIdStr={`products.${i}.remark`} itemsList={specifiedTimes} width="11rem" />
+                <ComboField placeholder="納品指定時間" allowsCustomValue={true} inputIdStr="specified_time" nextFocusIdStr={`products.${i}.remark`} itemsList={specifiedTimes} width="11rem" />
               </div>
               <div>
                 <TextArea
