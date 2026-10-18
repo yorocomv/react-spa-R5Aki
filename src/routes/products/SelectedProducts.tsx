@@ -1,9 +1,10 @@
+import type { z } from 'zod';
+
 import { zodResolver } from '@hookform/resolvers/zod';
 import { today } from '@internationalized/date';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { TbTrash } from 'react-icons/tb';
-import { z } from 'zod';
 
 import { removeSelectedProductAtom, selectedProductsAtom } from '@/atoms/productsAtom';
 import ComboField from '@/components/ui/ComboField';
@@ -14,49 +15,17 @@ import TextArea from '@/components/ui/elements/TextArea';
 import TooltipWrapper from '@/components/ui/TooltipWrapper';
 import { css } from 'styled-system/css';
 
-import { viewProductCombinationsRowSchema, viewProductComponentsRowSchema, viewSkuDetailsRowSchema } from './products.dbTable.schemas';
+import { productsStorageSchema } from './products.storage.schemas';
+
+type ProductsFormValues = z.infer<typeof productsStorageSchema>;
 
 export default function SelectedProducts() {
   const selectedProducts = useAtomValue(selectedProductsAtom);
   const removeProduct = useSetAtom(removeSelectedProductAtom);
 
-  const componentsSchema = z.object({
-    components: z.array(
-      viewProductComponentsRowSchema.pick({
-        amount: true,
-        pieces: true,
-      }),
-    ).min(1),
-  });
-  const combinationsSchema = z.object({
-    combinations: z.array(
-      viewProductCombinationsRowSchema.pick({
-        item_product_short_name: true,
-        quantity: true,
-      }),
-    ).min(1),
-  });
-  const schema = viewSkuDetailsRowSchema.pick({
-    sku_id: true,
-    sku_name: true,
-  }).extend({
-    remark: z.string().max(32).optional(),
-    ...componentsSchema.shape,
-    combinations: z.literal(false),
-  });
-  const setSchema = schema.extend({
-    ...combinationsSchema.shape,
-    components: z.literal(false),
-  });
-  const productsSchema = z.object({
-    products: z.array(z.union([schema, setSchema])).min(1).max(7),
-  });
-
-  type ProductsFormValues = z.infer<typeof productsSchema>;
-
   const methods = useForm<ProductsFormValues>({
     mode: 'all',
-    resolver: zodResolver(productsSchema),
+    resolver: zodResolver(productsStorageSchema),
     defaultValues: {
       products: selectedProducts.map((p) => {
         if (p.is_set_product) {
@@ -65,7 +34,8 @@ export default function SelectedProducts() {
             sku_id: p.sku_id,
             sku_name: p.sku_name,
             components: false as const,
-            combinations: p.combinations.map(({ item_product_short_name, quantity }) => ({
+            combinations: p.combinations.map(({ combination_id, item_product_short_name, quantity }) => ({
+              combination_id,
               item_product_short_name,
               quantity,
             })),
@@ -76,7 +46,8 @@ export default function SelectedProducts() {
           return {
             sku_id: p.sku_id,
             sku_name: p.sku_name,
-            components: p.components.map(({ amount, pieces }) => ({
+            components: p.components.map(({ component_id, amount, pieces }) => ({
+              component_id,
               amount,
               pieces,
             })),
@@ -118,6 +89,7 @@ export default function SelectedProducts() {
 
         '&>div:first-child': { borderTopRadius: 'lg' },
         '&>div:last-child': { borderBottomRadius: 'lg', borderBottom: 'none' },
+        '&>div span, &>div input, &>div textarea, &>div select': { color: '#49274a' },
       })}
       >
         {productsArray.fields.map((field, i) => {
@@ -171,6 +143,30 @@ export default function SelectedProducts() {
                     fontSize: 'xl',
                   })}
                 />
+                <div className={css({ '&>div, &>div>input': { display: 'inline', w: 'fit-content' } })}>
+                  {field.components
+                    ? field.components.map(({ component_id, amount, pieces }, j) => (
+                        <div key={component_id}>
+                          <input type="hidden" {...methods.register(`products.${i}.components.${j}.amount` as const)} />
+                          <span>{amount}</span>
+                          <span>g × </span>
+                          <input type="hidden" {...methods.register(`products.${i}.components.${j}.pieces` as const)} />
+                          <span>{pieces}</span>
+                        </div>
+                      ))
+                    : null}
+                  {field.combinations
+                    ? field.combinations.map(({ combination_id, item_product_short_name, quantity }, j) => (
+                        <div key={combination_id}>
+                          <input type="hidden" {...methods.register(`products.${i}.combinations.${j}.item_product_short_name` as const)} />
+                          <span>{item_product_short_name}</span>
+                          <span>×</span>
+                          <input type="hidden" {...methods.register(`products.${i}.combinations.${j}.quantity` as const)} />
+                          <span>{quantity}</span>
+                        </div>
+                      ))
+                    : null}
+                </div>
               </div>
               <div className={css({
                 display: 'flex',
@@ -200,7 +196,7 @@ export default function SelectedProducts() {
               })}
               >
                 <CommonDataPicker todayDate={todayDate} />
-                <ComboField placeholder="納品指定時間" allowsCustomValue={true} inputIdStr="specified_time" nextFocusIdStr={`products.${i}.remark`} itemsList={specifiedTimes} width="11rem" />
+                <ComboField placeholder="納品指定時間" allowsCustomValue={true} inputIdStr="specified_time" nextFocusIdStr={`products.${i}.remark`} itemsList={specifiedTimes} width="11rem" color="#49274a" />
               </div>
               <div>
                 <TextArea

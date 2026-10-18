@@ -20,6 +20,7 @@ interface ComboFieldProps {
   onChange?: (value: number | string | null) => void;
   ariaLabel?: string;
   width?: string;
+  color?: string;
 }
 
 export default function ComboField({
@@ -32,6 +33,7 @@ export default function ComboField({
   onChange,
   ariaLabel,
   width = '24rem',
+  color = 'unset',
 }: ComboFieldProps) {
   return (
     <ComboBox
@@ -149,6 +151,7 @@ export default function ComboField({
               className={css({
                 p: '0 0.75rem 0 1.75rem',
                 borderRadius: 'sm',
+                color,
                 _selected: {
                   '&::before': {
                     content: "'✓' / ''",
