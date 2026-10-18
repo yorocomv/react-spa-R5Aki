@@ -1,3 +1,4 @@
+import type { SubmitHandler } from 'react-hook-form';
 import type { z } from 'zod';
 
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -13,8 +14,10 @@ import Input from '@/components/ui/elements/Input';
 import Select from '@/components/ui/elements/Select';
 import TextArea from '@/components/ui/elements/TextArea';
 import TooltipWrapper from '@/components/ui/TooltipWrapper';
+import onPromise from '@/libs/onPromise';
 import { css } from 'styled-system/css';
 
+import FloatingPdfButton from './components/FloatingPdfButton';
 import { productsStorageSchema } from './products.storage.schemas';
 
 type ProductsFormValues = z.infer<typeof productsStorageSchema>;
@@ -64,6 +67,20 @@ export default function SelectedProducts() {
     control: methods.control,
     rules: { minLength: 1, maxLength: 7 },
   });
+
+  const onSubmit: SubmitHandler<ProductsFormValues> = /* async */ (values)/* : Promise<void> */ => {
+    try {
+      console.log(values);
+      // https://github.com/remix-run/react-router/issues/12348
+      /* Promise.resolve(navigate(`/customers/${response.id}/decide`, { state: response })).catch((err: string) => {
+        throw new Error(err);
+      }); */
+    }
+    catch (err: unknown) {
+      console.error('💥💥💥 ', err, ' 💀💀💀');
+    }
+  };
+
   // 納品指定時間
   const specifiedTimes = [{
     id: 0,
@@ -143,29 +160,27 @@ export default function SelectedProducts() {
                     fontSize: 'xl',
                   })}
                 />
-                <div className={css({ '&>div, &>div>input': { display: 'inline', w: 'fit-content' } })}>
+                <div className={css({ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: '1.5rem', pl: '0.725rem', fontSize: 'sm' })}>
                   {field.components
                     ? field.components.map(({ component_id, amount, pieces }, j) => (
                         <div key={component_id}>
+                          <input type="hidden" {...methods.register(`products.${i}.components.${j}.component_id` as const)} />
                           <input type="hidden" {...methods.register(`products.${i}.components.${j}.amount` as const)} />
-                          <span>{amount}</span>
-                          <span>g × </span>
                           <input type="hidden" {...methods.register(`products.${i}.components.${j}.pieces` as const)} />
-                          <span>{pieces}</span>
+                          <span>{`${amount}g × ${pieces}`}</span>
                         </div>
                       ))
-                    : null}
+                    : <input type="hidden" {...methods.register(`products.${i}.components` as const)} />}
                   {field.combinations
                     ? field.combinations.map(({ combination_id, item_product_short_name, quantity }, j) => (
                         <div key={combination_id}>
+                          <input type="hidden" {...methods.register(`products.${i}.combinations.${j}.combination_id` as const)} />
                           <input type="hidden" {...methods.register(`products.${i}.combinations.${j}.item_product_short_name` as const)} />
-                          <span>{item_product_short_name}</span>
-                          <span>×</span>
                           <input type="hidden" {...methods.register(`products.${i}.combinations.${j}.quantity` as const)} />
-                          <span>{quantity}</span>
+                          <span>{`${item_product_short_name} × ${quantity}`}</span>
                         </div>
                       ))
-                    : null}
+                    : <input type="hidden" {...methods.register(`products.${i}.combinations` as const)} />}
                 </div>
               </div>
               <div className={css({
@@ -210,13 +225,11 @@ export default function SelectedProducts() {
                 />
               </div>
               <div className={css({
-                // '&:has(svg)': {
                 display: 'flex',
                 flexDir: 'column',
                 gap: '0.35rem',
                 alignItems: 'center',
                 justifyContent: 'center',
-                // },
               })}
               >
                 <TooltipWrapper
@@ -238,6 +251,7 @@ export default function SelectedProducts() {
           );
         })}
       </main>
+      <FloatingPdfButton text="PDF を作成" clickHandler={onPromise(methods.handleSubmit(onSubmit))} />
     </div>
   );
 }
