@@ -1,3 +1,5 @@
+import type { CalendarDate } from '@internationalized/date';
+
 import { z } from 'zod';
 
 import { viewProductCombinationsRowSchema, viewProductComponentsRowSchema, viewSkuDetailsRowSchema } from './products.dbTable.schemas';
@@ -25,6 +27,12 @@ const schema = viewSkuDetailsRowSchema.pick({
   sku_id: true,
   sku_name: true,
 }).extend({
+  order_quantity: z.coerce.number().refine(val => val !== 0, { message: '数を入力してください' }),
+  order_unit: z.enum(['case', 'inner_carton', 'piece']),
+  delivery_date: z.custom<CalendarDate>().refine(val => val !== undefined && val !== null, {
+    message: '納期を指定してください',
+  }), // TODO FIXME
+  delivery_time_slot: z.union([z.string().min(4).max(32), z.number()]).nullable(), // TODO FIXME
   remark: z.string().max(32).optional(),
   ...componentsSchema.shape,
   combinations: z.literal(false),

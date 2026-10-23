@@ -4,15 +4,16 @@ import type { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { today } from '@internationalized/date';
 import { useAtomValue, useSetAtom } from 'jotai';
-import { useFieldArray, useForm } from 'react-hook-form';
+import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { TbTrash } from 'react-icons/tb';
 
 import { removeSelectedProductAtom, selectedProductsAtom } from '@/atoms/productsAtom';
 import ComboField from '@/components/ui/ComboField';
-import CommonDataPicker from '@/components/ui/CommonDataPicker';
+import CommonDatePicker from '@/components/ui/CommonDatePicker';
 import Input from '@/components/ui/elements/Input';
 import Select from '@/components/ui/elements/Select';
 import TextArea from '@/components/ui/elements/TextArea';
+import FormErrorMessage from '@/components/ui/elementSwitchers/FormErrorMessage';
 import TooltipWrapper from '@/components/ui/TooltipWrapper';
 import onPromise from '@/libs/onPromise';
 import { css } from 'styled-system/css';
@@ -81,6 +82,8 @@ export default function SelectedProducts() {
     }
   };
 
+  const productsErrors = methods.formState.errors.products;
+
   // 納品指定時間
   const specifiedTimes = [{
     id: 0,
@@ -107,6 +110,13 @@ export default function SelectedProducts() {
         '&>div:first-child': { borderTopRadius: 'lg' },
         '&>div:last-child': { borderBottomRadius: 'lg', borderBottom: 'none' },
         '&>div span, &>div input, &>div textarea, &>div select': { color: '#49274a' },
+
+        '& div:has(> div[aria-label="date picker"]):has(+ div[class*="error"], + p[class*="error"], + [aria-hidden="true"] + div[class*="error"], + [aria-hidden="true"] + p[class*="error"]) > div[aria-label="date picker"], input:has(+ div[class*="error"], + p[class*="error"])':
+          {
+            borderWidth: 0,
+            bgColor: 'pink.100',
+            outline: 'solid 0.1rem #ec4899',
+          },
       })}
       >
         {productsArray.fields.map((field, i) => {
@@ -152,6 +162,7 @@ export default function SelectedProducts() {
                 </span>
                 <input
                   readOnly
+                  aria-label={`sku name ${i}`}
                   {...methods.register(`products.${i}.sku_name` as const)}
                   className={css({
                     w: '100%',
@@ -170,7 +181,13 @@ export default function SelectedProducts() {
                           <span>{`${amount}g × ${pieces}`}</span>
                         </div>
                       ))
-                    : <input type="hidden" {...methods.register(`products.${i}.components` as const)} />}
+                    : (
+                        <input
+                          type="hidden"
+                          aria-label={`component ${i}`}
+                          {...methods.register(`products.${i}.components` as const)}
+                        />
+                      )}
                   {field.combinations
                     ? field.combinations.map(({ combination_id, item_product_short_name, quantity }, j) => (
                         <div key={combination_id}>
@@ -180,7 +197,13 @@ export default function SelectedProducts() {
                           <span>{`${item_product_short_name} × ${quantity}`}</span>
                         </div>
                       ))
-                    : <input type="hidden" {...methods.register(`products.${i}.combinations` as const)} />}
+                    : (
+                        <input
+                          type="hidden"
+                          aria-label={`combination ${i}`}
+                          {...methods.register(`products.${i}.combinations` as const)}
+                        />
+                      )}
                 </div>
               </div>
               <div className={css({
@@ -188,17 +211,24 @@ export default function SelectedProducts() {
                 gap: '0.425rem',
                 alignItems: 'center',
                 justifyContent: 'center',
+                pos: 'relative',
               })}
               >
                 <Input
+                  aria-label={`products order quantity ${i}`}
+                  {...methods.register(`products.${i}.order_quantity` as const)}
                   type="number"
                   placeholder="発注数"
                   className={css({ w: '6rem' })}
                 />
-                <Select>
-                  <option key="0" value="0">ケース</option>
-                  <option key="1" value="1">ボール</option>
-                  <option key="2" value="2">バラ</option>
+                <FormErrorMessage message={productsErrors?.[i]?.order_quantity?.message} pos="absolute" top="2.75rem" left={0} color="rose.600!" />
+                <Select
+                  aria-label={`products order unit ${i}`}
+                  {...methods.register(`products.${i}.order_unit` as const)}
+                >
+                  <option value="case">ケース</option>
+                  <option value="inner_carton">ボール</option>
+                  <option value="piece">バラ</option>
                 </Select>
               </div>
               <div className={css({
@@ -210,11 +240,34 @@ export default function SelectedProducts() {
                 '& div, & button': { h: '2rem', lineHeight: '1.5rem' },
               })}
               >
-                <CommonDataPicker todayDate={todayDate} />
-                <ComboField placeholder="納品指定時間" allowsCustomValue={true} inputIdStr="specified_time" nextFocusIdStr={`products.${i}.remark`} itemsList={specifiedTimes} width="11rem" color="#49274a" />
+                <CommonDatePicker
+                  name={`products.${i}.delivery_date`}
+                  todayDate={todayDate}
+                  control={methods.control}
+                />
+                <FormErrorMessage message={productsErrors?.[i]?.delivery_date?.message} color="rose.600!" />
+                <Controller
+                  control={methods.control}
+                  name={`products.${i}.delivery_time_slot`}
+                  render={({ field }) => (
+                    <ComboField
+                      {...field}
+                      placeholder="納品指定時間"
+                      allowsCustomValue={true}
+                      inputIdStr={`products.${i}.delivery_time_slot`}
+                      ariaLabel={`delivery time slot ${i}`}
+                      nextFocusIdStr={`products.${i}.remark`}
+                      itemsList={specifiedTimes}
+                      width="11rem"
+                      color="#49274a"
+                    />
+                  )}
+                />
+                <FormErrorMessage message={productsErrors?.[i]?.delivery_time_slot?.message} color="rose.600!" />
               </div>
               <div>
                 <TextArea
+                  aria-label={`products remark ${i}`}
                   {...methods.register(`products.${i}.remark` as const)}
                   id={`products.${i}.remark`}
                   placeholder="備考"
