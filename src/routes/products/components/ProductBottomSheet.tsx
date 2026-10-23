@@ -191,7 +191,7 @@ export default function ProductBottomSheet(p: ProductBottomSheetProps) {
             py: '0.725rem',
             bg: 'slate.400',
             color: 'yellow.200',
-            fontFamily: '"Noto Sans JP", "BIZ UDPGothic", sans-serif',
+            fontFamily: 'Verdana, "Noto Sans JP", "BIZ UDPGothic", sans-serif',
             fontWeight: 'medium',
             textShadow: 'var(--colors-slate-600) 0.5px -1px',
             outline: 'none',
