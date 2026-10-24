@@ -15,12 +15,12 @@ interface ComboFieldProps {
   inputIdStr: string;
   nextFocusIdStr: string;
   allowsCustomValue?: boolean;
-  // RHFのControllerから渡される値とハンドラを受け取る
-  value?: number | string | null;
-  onChange?: (value: number | string | null) => void;
   ariaLabel?: string;
   width?: string;
   color?: string;
+  // RHFのControllerから渡される値とハンドラを受け取る
+  value?: number | string | null;
+  onChange?: (value: number | string | null) => void;
 }
 
 export default function ComboField({
@@ -38,13 +38,29 @@ export default function ComboField({
   return (
     <ComboBox
       allowsCustomValue={allowsCustomValue}
-      selectedKey={value}
-      onSelectionChange={(key: Key | null) => {
-        // RHF に変更を通知する
-        if (onChange) {
-          onChange(key);
-        }
-      }}
+      // allowsCustomValue の有無に応じて、RHF の値を適切なプロパティに割り当てる
+      {...(allowsCustomValue
+        ? {
+            inputValue: (() => {
+              if (allowsCustomValue && value !== null && value !== undefined) {
+                return String(value);
+              }
+              return '';
+            })(),
+            onInputChange: (text: string) => {
+              if (onChange) {
+                onChange(text); // RHF に入力文字列を通知
+              }
+            },
+          }
+        : {
+            value,
+            onChange: (key: Key | null) => {
+              if (onChange) {
+                onChange(key); // RHF に選択された ID を通知
+              }
+            },
+          })}
       aria-label={ariaLabel}
       className={css({
         display: 'flex',
