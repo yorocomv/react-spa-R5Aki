@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { today } from '@internationalized/date';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
-import { TbTrash } from 'react-icons/tb';
+import { TbPencilPlus, TbTrash } from 'react-icons/tb';
 
 import { removeSelectedProductAtom, selectedProductsAtom } from '@/atoms/productsAtom';
 import ComboField from '@/components/ui/ComboField';
@@ -43,6 +43,7 @@ export default function SelectedProducts() {
               item_product_short_name,
               quantity,
             })),
+            delivery_date: null,
           };
         }
         else {
@@ -56,6 +57,7 @@ export default function SelectedProducts() {
               pieces,
             })),
             combinations: false as const,
+            delivery_date: null,
           };
         }
       }),
@@ -111,7 +113,7 @@ export default function SelectedProducts() {
         '&>div:last-child': { borderBottomRadius: 'lg', borderBottom: 'none' },
         '&>div span, &>div input, &>div textarea, &>div select': { color: '#49274a' },
 
-        '& div:has(> div[aria-label="date picker"]):has(+ div[class*="error"], + p[class*="error"], + [aria-hidden="true"] + div[class*="error"], + [aria-hidden="true"] + p[class*="error"]) > div[aria-label="date picker"], input:has(+ div[class*="error"], + p[class*="error"])':
+        '& div:has(> div[aria-label="date picker"]):has(+ div[class*="error"], + p[class*="error"], + [aria-hidden="true"] + div[class*="error"], + [aria-hidden="true"] + p[class*="error"]) > div[aria-label="date picker"], input:has(+ div[class*="error"], + p[class*="error"]), div:has(+ div[class*="error"], + p[class*="error"]) > div':
           {
             borderWidth: 0,
             bgColor: 'pink.100',
@@ -243,6 +245,7 @@ export default function SelectedProducts() {
                 <CommonDatePicker
                   name={`products.${i}.delivery_date`}
                   todayDate={todayDate}
+                  minValue={todayDate}
                   control={methods.control}
                 />
                 <FormErrorMessage message={productsErrors?.[i]?.delivery_date?.message} color="rose.600!" />
@@ -265,7 +268,7 @@ export default function SelectedProducts() {
                 />
                 <FormErrorMessage message={productsErrors?.[i]?.delivery_time_slot?.message} color="rose.600!" />
               </div>
-              <div>
+              <div className={css({ h: 'calc(100% - 0.8rem)' })}>
                 <TextArea
                   aria-label={`products remark ${i}`}
                   {...methods.register(`products.${i}.remark` as const)}
@@ -285,20 +288,87 @@ export default function SelectedProducts() {
                 justifyContent: 'center',
               })}
               >
-                <TooltipWrapper
-                  text="削除"
-                  fillColor="rose.500"
-                  className={css({ color: 'rose.50', bgColor: 'rose.500', shadow: '2xl' })}
+                <div className={css({
+                  p: '0.225rem',
+                  borderRadius: 'full',
+                  _hover: { bgColor: 'rose.300/90' },
+                })}
                 >
-                  <TbTrash
-                    size="1.3rem"
-                    onClick={() => {
-                      productsArray.remove(i);
-                      removeProduct(field.sku_id);
-                    }}
-                    className={css({ _hover: { cursor: 'pointer' } })}
-                  />
-                </TooltipWrapper>
+                  <TooltipWrapper
+                    text="削除"
+                    placement="top"
+                    fillColor="rose.500"
+                    className={css({ color: 'rose.50', bgColor: 'rose.500', shadow: '2xl' })}
+                  >
+                    <TbTrash
+                      size="1.3rem"
+                      onClick={() => {
+                        productsArray.remove(i);
+                        removeProduct(field.sku_id);
+                      }}
+                      className={css({ _hover: { cursor: 'pointer' } })}
+                    />
+                  </TooltipWrapper>
+                </div>
+                {productsArray.fields.length < 7
+                  ? (
+                      <div className={css({
+                        p: '0.225rem',
+                        borderRadius: 'full',
+                        _hover: { bgColor: 'teal.200/90' },
+                      })}
+                      >
+                        <TooltipWrapper
+                          text="追加"
+                          fillColor="teal.400"
+                          className={css({ color: 'teal.950', bgColor: 'teal.400', shadow: '2xl' })}
+                        >
+                          <TbPencilPlus
+                            size="1.3rem"
+                            onClick={() => productsArray.append(
+                              ((field) => {
+                                if (field.components === false) {
+                                // --- セット商品（setSchema）の場合 ---
+                                  return {
+                                    sku_id: field.sku_id,
+                                    sku_name: field.sku_name,
+                                    order_quantity: null,
+                                    order_unit: 'case',
+                                    components: false as const,
+                                    combinations: field.combinations.map(({ combination_id, item_product_short_name, quantity }) => ({
+                                      combination_id,
+                                      item_product_short_name,
+                                      quantity,
+                                    })),
+                                    delivery_date: null,
+                                    delivery_time_slot: '',
+                                  };
+                                }
+                                else {
+                                // --- 通常商品（schema）の場合 ---
+                                  return {
+                                    sku_id: field.sku_id,
+                                    sku_name: field.sku_name,
+                                    order_quantity: null,
+                                    order_unit: 'case',
+                                    components: field.components.map(({ component_id, amount, pieces }) => ({
+                                      component_id,
+                                      amount,
+                                      pieces,
+                                    })),
+                                    combinations: false as const,
+                                    delivery_date: null,
+                                    delivery_time_slot: '',
+                                  };
+                                }
+                              })(field),
+                            )}
+                            className={css({ _hover: { cursor: 'pointer' } })}
+                          />
+                        </TooltipWrapper>
+                      </div>
+                    )
+                  : null}
               </div>
             </div>
           );
