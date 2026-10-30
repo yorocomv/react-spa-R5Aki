@@ -193,6 +193,7 @@ export default function ProductBottomSheet(p: ProductBottomSheetProps) {
             color: 'yellow.200',
             fontFamily: 'Verdana, "Noto Sans JP", "BIZ UDPGothic", sans-serif',
             fontWeight: 'medium',
+            letterSpacing: '0.02em',
             textShadow: 'var(--colors-slate-600) 0.5px -1px',
             outline: 'none',
             borderTopRadius: '1rem',

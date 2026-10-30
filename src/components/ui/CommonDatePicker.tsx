@@ -1,4 +1,5 @@
 import type { CalendarDate } from '@internationalized/date';
+import type { DateValue } from 'react-aria-components';
 import type { Control, FieldValues, Path } from 'react-hook-form';
 
 import { Button, Calendar, CalendarCell, CalendarGrid, CalendarGridBody, CalendarGridHeader, CalendarHeaderCell, DateInput, DatePicker, DateSegment, Dialog, Group, Heading, Popover } from 'react-aria-components';
@@ -12,10 +13,14 @@ export default function CommonDatePicker<T extends FieldValues>({
   todayDate,
   control,
   name,
+  minValue = null,
+  maxValue = null,
 }: {
   todayDate: CalendarDate;
   control: Control<T>;
   name: Path<T>;
+  minValue?: DateValue | null | undefined;
+  maxValue?: DateValue | null | undefined;
 }) {
   const cellStyles = css.raw({
     w: '2rem',
@@ -61,6 +66,9 @@ export default function CommonDatePicker<T extends FieldValues>({
         <DatePicker
           aria-label="date picker"
           {...field}
+          value={field.value ?? null}
+          minValue={minValue}
+          maxValue={maxValue}
           className={css({
             display: 'flex',
             flexDir: 'column',
@@ -93,11 +101,12 @@ export default function CommonDatePicker<T extends FieldValues>({
                 py: '0.315rem',
                 '&[data-invalid]': {
                   color: 'rose.600',
+                  '& > span': { color: 'rose.600' },
                   _after: {
                     content: '"🚫"',
                     flex: '1',
                     textAlign: 'end',
-                    my: '0.125rem',
+                    // my: '0.125rem',
                   },
                 },
               })}
@@ -109,7 +118,7 @@ export default function CommonDatePicker<T extends FieldValues>({
                     fontSize: 'lg',
                     lineHeight: '1.5rem',
                     px: '0.125rem',
-                    my: '0.125rem',
+                    // my: '0.125rem',
                     borderRadius: 'sm',
                     fontVariantNumeric: 'tabular-nums',
                     outline: 'none',

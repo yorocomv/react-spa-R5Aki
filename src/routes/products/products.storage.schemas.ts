@@ -27,12 +27,13 @@ const schema = viewSkuDetailsRowSchema.pick({
   sku_id: true,
   sku_name: true,
 }).extend({
-  order_quantity: z.coerce.number().refine(val => val !== 0, { message: '数を入力してください' }),
+  order_quantity: z.union([z.coerce.number(), z.literal(null)]).refine(val => val !== 0 && val !== null, { message: '数を入力してください' }),
   order_unit: z.enum(['case', 'inner_carton', 'piece']),
-  delivery_date: z.custom<CalendarDate>().refine(val => val !== undefined && val !== null, {
-    message: '納期を指定してください',
-  }), // TODO FIXME
-  delivery_time_slot: z.union([z.string().min(4).max(32), z.number()]).nullable(), // TODO FIXME
+  delivery_date: z.custom<CalendarDate | null>().refine(
+    (val): val is CalendarDate | null => val !== undefined && val !== null,
+    { message: '納期を指定してください' },
+  ),
+  delivery_time_slot: z.string({ message: '時間を指定してください' }).min(4, { message: '時間を指定してください' }).max(32),
   remark: z.string().max(32).optional(),
   ...componentsSchema.shape,
   combinations: z.literal(false),
